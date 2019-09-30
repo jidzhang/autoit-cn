@@ -4,10 +4,13 @@
 #include "Memory.au3"
 #include "SendMessage.au3"
 #include "UDFGlobalID.au3"
+#include "WinAPIConv.au3"
+#include "WinAPIInternals.au3"
+#include "WinAPISysInternals.au3"
 
 ; #INDEX# =======================================================================================================================
 ; Title .........: Animation
-; AutoIt Version : 3.3.13.12
+; AutoIt Version : 3.3.14.5
 ; Language ......: English
 ; Description ...: Functions that assist with AVI control management.
 ;                  An animation control is a window that displays an Audio-Video Interleaved (AVI) clip.  An AVI clip is a series
@@ -67,9 +70,9 @@ EndFunc   ;==>_GUICtrlAVI_Close
 ; Author ........: Paul Campbell (PaulIA)
 ; Modified.......: Gary Frost (Added params, Added Open calls "sets the avi to 1st frame")
 ; ===============================================================================================================================
-Func _GUICtrlAVI_Create($hWnd, $sFile = "", $iSubfileID = -1, $iX = 0, $iY = 0, $iWidth = 0, $iHeight = 0, $iStyle = 0x00000006, $iExStyle = 0x00000000)
+Func _GUICtrlAVI_Create($hWnd, $sFilePath = "", $iSubFileID = -1, $iX = 0, $iY = 0, $iWidth = 0, $iHeight = 0, $iStyle = 0x00000006, $iExStyle = 0x00000000)
 	If Not IsHWnd($hWnd) Then Return SetError(1, 0, 0) ; Invalid Window handle for 1st parameter
-	If Not IsString($sFile) Then Return SetError(2, 0, 0) ; 2nd parameter not a string for _GUICtrlAVI_Create
+	If Not IsString($sFilePath) Then Return SetError(2, 0, 0) ; 2nd parameter not a string for _GUICtrlAVI_Create
 
 	$iStyle = BitOR($iStyle, $__UDFGUICONSTANT_WS_CHILD, $__UDFGUICONSTANT_WS_VISIBLE)
 
@@ -77,10 +80,10 @@ Func _GUICtrlAVI_Create($hWnd, $sFile = "", $iSubfileID = -1, $iX = 0, $iY = 0, 
 	If @error Then Return SetError(@error, @extended, 0)
 
 	Local $hAVI = _WinAPI_CreateWindowEx($iExStyle, $__AVICONSTANT_ClassName, "", $iStyle, $iX, $iY, $iWidth, $iHeight, $hWnd, $nCtrlID)
-	If $iSubfileID <> -1 And $sFile <> "" Then
-		_GUICtrlAVI_OpenEx($hAVI, $sFile, $iSubfileID)
-	ElseIf $sFile <> "" Then
-		_GUICtrlAVI_Open($hAVI, $sFile)
+	If $iSubFileID <> -1 And $sFilePath <> "" Then
+		_GUICtrlAVI_OpenEx($hAVI, $sFilePath, $iSubFileID)
+	ElseIf $sFilePath <> "" Then
+		_GUICtrlAVI_Open($hAVI, $sFilePath)
 	EndIf
 	Return $hAVI
 EndFunc   ;==>_GUICtrlAVI_Create

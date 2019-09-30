@@ -1,17 +1,16 @@
 #include <GUIConstantsEx.au3>
-#include <WindowsConstants.au3>
 #include <GuiScrollBars.au3>
-#include <ScrollBarConstants.au3>
+#include <WindowsConstants.au3>
 
-_Main()
+Example()
 
-Func _Main()
-	Local $GUIMsg, $hGUI
+Func Example()
+	Local $hGUIMsg, $hGUI
 
 	$hGUI = GUICreate("ScrollBar Example", 400, 400, -1, -1, BitOR($WS_MINIMIZEBOX, $WS_CAPTION, $WS_POPUP, $WS_SYSMENU, $WS_SIZEBOX))
 	GUISetBkColor(0x88AABB)
 
-	GUISetState()
+	GUISetState(@SW_SHOW)
 
 	_GUIScrollBars_Init($hGUI)
 
@@ -25,13 +24,13 @@ Func _Main()
 	_GUIScrollBars_ShowScrollBar($hGUI, $SB_VERT)
 
 	While 1
-		$GUIMsg = GUIGetMsg()
+		$hGUIMsg = GUIGetMsg()
 
-		Switch $GUIMsg
+		Switch $hGUIMsg
 			Case $GUI_EVENT_CLOSE;, $nExititem
 				ExitLoop
 		EndSwitch
 	WEnd
 
 	Exit
-EndFunc   ;==>_Main
+EndFunc   ;==>Example

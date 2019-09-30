@@ -1,29 +1,28 @@
-#include <GUIConstantsEx.au3>
 #include <GuiButton.au3>
+#include <GUIConstantsEx.au3>
 #include <WindowsConstants.au3>
-#include <GuiMenu.au3>
 
-Global $btn, $iMemo
+Global $g_idMemo
 
-; Note the controlId from these button(s) can NOT be read with GuiCtrlRead
+; Note the controlID from these button(s) can NOT be read with GUICtrlRead
 
-_Main()
+Example()
 
-Func _Main()
+Func Example()
 	Local $hGUI
 
 	$hGUI = GUICreate("Buttons", 400, 400)
-	$iMemo = GUICtrlCreateEdit("", 10, 65, 390, 325, $WS_VSCROLL)
-	GUICtrlSetFont($iMemo, 9, 400, 0, "Courier New")
+	$g_idMemo = GUICtrlCreateEdit("", 10, 65, 390, 325, $WS_VSCROLL)
+	GUICtrlSetFont($g_idMemo, 9, 400, 0, "Courier New")
 
-	$btn = _GUICtrlButton_Create($hGUI, "Button1", 10, 10, 160, 40, BitOR($BS_COMMANDLINK, $BS_DEFPUSHBUTTON, $BS_PUSHLIKE))
-	_GUICtrlButton_SetNote($btn, "This is a test of Vista")
+	Local $hBtn = _GUICtrlButton_Create($hGUI, "Button1", 10, 10, 160, 40, BitOR($BS_COMMANDLINK, $BS_DEFPUSHBUTTON, $BS_PUSHLIKE))
+	_GUICtrlButton_SetNote($hBtn, "This is a test of Vista")
 
-	GUISetState()
+	GUISetState(@SW_SHOW)
 
-	MemoWrite("Note: " & _GUICtrlButton_GetNote($btn))
-	MemoWrite("Note Length: " & _GUICtrlButton_GetNoteLength($btn))
-	MemoWrite("Button Text: " & _GUICtrlButton_GetText($btn))
+	MemoWrite("Note: " & _GUICtrlButton_GetNote($hBtn))
+	MemoWrite("Note Length: " & _GUICtrlButton_GetNoteLength($hBtn))
+	MemoWrite("Button Text: " & _GUICtrlButton_GetText($hBtn))
 
 	While 1
 		Switch GUIGetMsg()
@@ -33,10 +32,9 @@ Func _Main()
 	WEnd
 
 	Exit
+EndFunc   ;==>Example
 
-EndFunc   ;==>_Main
-
-; 写入一行到 memo 控件
+; Write a line to the memo control
 Func MemoWrite($sMessage)
-	GUICtrlSetData($iMemo, $sMessage & @CRLF, 1)
+	GUICtrlSetData($g_idMemo, $sMessage & @CRLF, 1)
 EndFunc   ;==>MemoWrite

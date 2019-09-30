@@ -3,7 +3,7 @@
 Example()
 
 Func Example()
-	; Set the title of of the AutoIt Hidden Window.
+	; Set the title of the AutoIt Hidden Window.
 	AutoItWinSetTitle("My AutoIt Window")
 
 	; Display AutoIt's Hidden Window.
@@ -17,7 +17,7 @@ Func Example()
 	WEnd
 EndFunc   ;==>Example
 
-; Display AutoIt"s Hidden Window. Returns the handle of the window.
+; Display AutoIt's Hidden Window. Returns the handle of the window.
 Func AutoItWinShow()
 	Local $hWnd = WinGetHandle(AutoItWinGetTitle()) ; Get the handle of the AutoIt Hidden Window by finding out the title of the AutoIt Hidden Window.
 	WinMove($hWnd, "", (@DesktopWidth / 2) - 250, (@DesktopHeight / 2) - 250, 500, 500) ; Move the AutoIt Hidden Window and re-size for a better view.

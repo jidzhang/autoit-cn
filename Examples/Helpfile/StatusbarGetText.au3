@@ -1,3 +1,6 @@
+#include <MsgBoxConstants.au3>
+
 AutoItSetOption("WinTitleMatchMode", 2)
-Local $x = StatusbarGetText("Internet Explorer")
-MsgBox(4096, "Internet Explorer's status bar says:", $x)
+
+Local $sText = StatusbarGetText("Internet Explorer")
+MsgBox($MB_SYSTEMMODAL, "", "Internet Explorer's status bar says: " & $sText)

@@ -1,6 +1,6 @@
 #include <GDIPlus.au3>
 #include <GUIConstantsEx.au3>
-
+#include <WinAPIRes.au3>
 
 Example()
 
@@ -9,9 +9,9 @@ Func Example()
 	_GDIPlus_Startup() ;initialize GDI+
 	Local Const $iWidth = 300, $iHeight = 300, $iBgColor = 0x404040 ;$iBgColor format RRGGBB
 
-	Local $hGUI = GUICreate("GDI+ example", $iWidth, $iHeight) ;create a test GUI
+	Local $hGUI = GUICreate("GDI+ Example (" & @ScriptName & ")", $iWidth, $iHeight) ;create a test GUI
 	GUISetBkColor($iBgColor, $hGUI) ;set GUI background color
-	GUISetState()
+	GUISetState(@SW_SHOW)
 
 	Local $sAut2Exe = StringRegExpReplace(@AutoItExe, "\\\w+.exe", "\\Aut2Exe\\Aut2Exe.exe") ;get path to the Aut2Exe.exe file
 	If @AutoItX64 Then $sAut2Exe = StringRegExpReplace(@AutoItExe, "\\\w+.exe", "\\Aut2Exe\\Aut2Exe_X64.exe")

@@ -1,21 +1,24 @@
-#include <WinAPISys.au3>
 #include <GUIConstantsEx.au3>
+#include <SendMessage.au3>
+#include <WinAPIMem.au3>
+#include <WinAPIMisc.au3>
+#include <WinAPISysWin.au3>
 
 Global Const $WM_MYMESSAGE = _WinAPI_RegisterWindowMessage('MyMessage')
 
 Local $hForm = GUICreate('Test ' & StringReplace(@ScriptName, '.au3', '()'), 400, 93)
-Local $Input = GUICtrlCreateInput('', 20, 20, 360, 20)
-Local $Button = GUICtrlCreateButton('Send', 165, 59, 70, 23)
+Local $idInput = GUICtrlCreateInput('', 20, 20, 360, 20)
+Local $idButton = GUICtrlCreateButton('Send', 165, 59, 70, 23)
 GUIRegisterMsg($WM_MYMESSAGE, 'WM_MYMESSAGE')
-GUISetState()
+GUISetState(@SW_SHOW)
 
 Local $pString
 While 1
 	Switch GUIGetMsg()
 		Case $GUI_EVENT_CLOSE
 			ExitLoop
-		Case $Button
-			$pString = _WinAPI_CreateString(GUICtrlRead($Input))
+		Case $idButton
+			$pString = _WinAPI_CreateString(GUICtrlRead($idInput))
 			_WinAPI_SetMessageExtraInfo($pString)
 			_SendMessage($hForm, $WM_MYMESSAGE, 1, 255)
 			_WinAPI_FreeMemory($pString)

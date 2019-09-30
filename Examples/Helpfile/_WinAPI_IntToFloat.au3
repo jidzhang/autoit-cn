@@ -1,3 +1,4 @@
-#include <WinAPI.au3>
+#include <MsgBoxConstants.au3>
+#include <WinAPIConv.au3>
 
-MsgBox(4096, "", _WinAPI_IntToFloat(12389654))
+MsgBox($MB_SYSTEMMODAL, "", _WinAPI_IntToFloat(12389654))

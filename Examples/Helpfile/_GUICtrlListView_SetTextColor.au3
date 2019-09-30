@@ -1,40 +1,39 @@
+#include <ColorConstants.au3>
 #include <GUIConstantsEx.au3>
 #include <GuiListView.au3>
-#include <Constants.au3>
+#include <MsgBoxConstants.au3>
 
-$Debug_LV = False ; 检查传递给 ListView 函数的类名, 设置为 True 并使用指向另一控件的句柄来检查它是否工作
+Example()
 
-_Main()
-
-Func _Main()
-	Local $hListView
+Func Example()
+	Local $idListview
 
 	GUICreate("ListView Set Text Color", 400, 300)
-	$hListView = GUICtrlCreateListView("", 2, 2, 394, 268)
-	GUISetState()
+	$idListview = GUICtrlCreateListView("", 2, 2, 394, 268)
+	GUISetState(@SW_SHOW)
 
-	; 设置颜色
-	_GUICtrlListView_SetBkColor($hListView, $CLR_MONEYGREEN)
-	_GUICtrlListView_SetTextColor($hListView, $CLR_BLACK)
-	_GUICtrlListView_SetTextBkColor($hListView, $CLR_MONEYGREEN)
+	; Set colors
+	_GUICtrlListView_SetBkColor($idListview, $CLR_MONEYGREEN)
+	_GUICtrlListView_SetTextColor($idListview, $CLR_BLACK)
+	_GUICtrlListView_SetTextBkColor($idListview, $CLR_MONEYGREEN)
 
-	; 添加列
-	_GUICtrlListView_AddColumn($hListView, "Items", 100)
+	; Add columns
+	_GUICtrlListView_AddColumn($idListview, "Items", 100)
 
-	; 添加项目
-	_GUICtrlListView_BeginUpdate($hListView)
+	; Add items
+	_GUICtrlListView_BeginUpdate($idListview)
 	For $iI = 1 To 10
-		_GUICtrlListView_AddItem($hListView, "Item " & $iI)
+		_GUICtrlListView_AddItem($idListview, "Item " & $iI)
 	Next
-	_GUICtrlListView_EndUpdate($hListView)
+	_GUICtrlListView_EndUpdate($idListview)
 
-	; 显示颜色
-	MsgBox(4160, "信息", "Back Color ....: " & _GUICtrlListView_GetBkColor($hListView) & @CRLF & _
-			"Text Color ....: " & _GUICtrlListView_GetTextColor($hListView) & @CRLF & _
-			"Text Back Color: " & _GUICtrlListView_GetTextBkColor($hListView))
+	; Show colors
+	MsgBox($MB_SYSTEMMODAL, "Information", "Back Color ....: " & _GUICtrlListView_GetBkColor($idListview) & @CRLF & _
+			"Text Color ....: " & _GUICtrlListView_GetTextColor($idListview) & @CRLF & _
+			"Text Back Color: " & _GUICtrlListView_GetTextBkColor($idListview))
 
-	; 循环直到用户退出
+	; Loop until the user exits.
 	Do
 	Until GUIGetMsg() = $GUI_EVENT_CLOSE
 	GUIDelete()
-EndFunc   ;==>_Main
+EndFunc   ;==>Example

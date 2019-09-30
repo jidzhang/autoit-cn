@@ -1,5 +1,5 @@
-#include <GUIConstantsEx.au3>
 #include <GDIPlus.au3>
+#include <GUIConstantsEx.au3>
 
 Example()
 
@@ -8,7 +8,7 @@ Func Example()
 
 	; Create GUI
 	$hGUI = GUICreate("GDI+", 520, 160)
-	GUISetState()
+	GUISetState(@SW_SHOW)
 
 	; Draw a string using path
 	_GDIPlus_Startup()
@@ -22,18 +22,16 @@ Func Example()
 	$tLayout = _GDIPlus_RectFCreate() ;Create string bounding rectangle X=0, Y=0
 	_GDIPlus_PathAddString($hPath, "AutoIt rulez!", $tLayout, $hFamily, 0, 72, 0) ;Add the outline of the string to the path
 
-
 	$hMatrix = _GDIPlus_MatrixCreate()
 	_GDIPlus_MatrixShear($hMatrix, 0.8, 0.1)
 	_GDIPlus_PathTransform($hPath, $hMatrix)
-
 
 	_GDIPlus_GraphicsSetSmoothingMode($hGraphic, 2) ;Sets the graphics object rendering quality (antialiasing)
 	_GDIPlus_GraphicsClear($hGraphic, 0xFF000000)
 	_GDIPlus_GraphicsFillPath($hGraphic, $hPath, $hBrush) ;Fill path to graphics handle (GUI)
 	_GDIPlus_GraphicsDrawPath($hGraphic, $hPath, $hPen) ;Draw path to graphics handle (GUI)
 
-	; Loop until user exits
+	; Loop until the user exits.
 	Do
 	Until GUIGetMsg() = $GUI_EVENT_CLOSE
 

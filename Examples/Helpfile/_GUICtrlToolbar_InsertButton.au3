@@ -1,33 +1,30 @@
-#include <GuiToolbar.au3>
 #include <GUIConstantsEx.au3>
+#include <GuiToolbar.au3>
+#include <WinAPIConstants.au3>
 #include <WindowsConstants.au3>
-#include <Constants.au3>
 
-$Debug_TB = False ; 检查传递给函数的类名, 设置为True并输出到一个控件的句柄,用于检查它是否工作
+Example()
 
-_Main()
-
-Func _Main()
+Func Example()
 	Local $hGUI, $hToolbar
-	Local Enum $idNew = 1000, $idOpen, $idSave, $idHelp
+	Local Enum $e_idNew = 1000, $e_idOpen, $e_idSave, $idHelp
 
-	; 创建 GUI
+	; Create GUI
 	$hGUI = GUICreate("Toolbar", 400, 300)
 	$hToolbar = _GUICtrlToolbar_Create($hGUI)
-	GUISetState()
+	GUISetState(@SW_SHOW)
 
-	; 添加标准系统位图
+	; Add standard system bitmaps
 	_GUICtrlToolbar_AddBitmap($hToolbar, 1, -1, $IDB_STD_LARGE_COLOR)
 
-	; 添加按钮
-	_GUICtrlToolbar_InsertButton($hToolbar, 0, $idNew, $STD_FILENEW)
-	_GUICtrlToolbar_InsertButton($hToolbar, 1, $idOpen, $STD_FILEOPEN)
-	_GUICtrlToolbar_InsertButton($hToolbar, 2, $idSave, $STD_FILESAVE)
+	; Add buttons
+	_GUICtrlToolbar_InsertButton($hToolbar, 0, $e_idNew, $STD_FILENEW)
+	_GUICtrlToolbar_InsertButton($hToolbar, 1, $e_idOpen, $STD_FILEOPEN)
+	_GUICtrlToolbar_InsertButton($hToolbar, 2, $e_idSave, $STD_FILESAVE)
 	_GUICtrlToolbar_AddButtonSep($hToolbar)
 	_GUICtrlToolbar_InsertButton($hToolbar, 4, $idHelp, $STD_HELP)
 
-	; 循环直到用户退出
+	; Loop until the user exits.
 	Do
 	Until GUIGetMsg() = $GUI_EVENT_CLOSE
-
-EndFunc   ;==>_Main
+EndFunc   ;==>Example

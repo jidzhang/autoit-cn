@@ -1,6 +1,6 @@
-#include <Constants.au3>
-#include <GUIConstantsEx.au3>
 #include <GDIPlus.au3>
+#include <GUIConstantsEx.au3>
+#include <MsgBoxConstants.au3>
 
 Example()
 
@@ -21,7 +21,7 @@ Func Example()
 	EndIf
 
 	Local $hGUI = GUICreate("GDI+ move mouse over transformed image and watch green cursor", 800, 400)
-	GUISetState()
+	GUISetState(@SW_SHOW)
 
 	_GDIPlus_Startup()
 	Local $hGraphics = _GDIPlus_GraphicsCreateFromHWND($hGUI) ;Create a graphics object from a window handle
@@ -29,7 +29,7 @@ Func Example()
 	Local $hGfx_Buffer = _GDIPlus_ImageGetGraphicsContext($hBmp_Buffer)
 	_GDIPlus_GraphicsClear($hGfx_Buffer, 0xFF000000)
 
-	Global $hImage = _GDIPlus_ImageLoadFromFile($sFile)
+	Local $hImage = _GDIPlus_ImageLoadFromFile($sFile)
 
 	_GDIPlus_GraphicsDrawImage($hGfx_Buffer, $hImage, 550, 100)
 
@@ -45,10 +45,10 @@ Func Example()
 
 	Local $hPen = _GDIPlus_PenCreate(0xFF00FF00, 2)
 	Local $aMouse[2][2] = [[1]]
-	Local $iTimer = TimerInit()
-	; Loop until user exits
+	Local $hTimer = TimerInit()
+	; Loop until the user exits.
 	Do
-		If TimerDiff($iTimer) > 100 Then
+		If TimerDiff($hTimer) > 100 Then
 			$aMouse[1][0] = MouseGetPos(0)
 			$aMouse[1][1] = MouseGetPos(1)
 			_GDIPlus_MatrixTransformPoints($hMatrix, $aMouse) ;Transform Mouseposition by inverted matrix back to original image
@@ -57,7 +57,7 @@ Func Example()
 			_GDIPlus_GraphicsDrawLine($hGraphics, 550 + $aMouse[1][0] - 5, 100 + $aMouse[1][1], 550 + $aMouse[1][0] + 5, 100 + $aMouse[1][1], $hPen)
 			_GDIPlus_GraphicsDrawLine($hGraphics, 550 + $aMouse[1][0], 100 + $aMouse[1][1] - 5, 550 + $aMouse[1][0], 100 + $aMouse[1][1] + 5, $hPen)
 
-			$iTimer = TimerInit()
+			$hTimer = TimerInit()
 		EndIf
 	Until GUIGetMsg() = $GUI_EVENT_CLOSE
 

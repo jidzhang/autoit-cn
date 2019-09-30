@@ -1,7 +1,8 @@
-#include <WinAPISys.au3>
-#include <WindowsConstants.au3>
 #include <GDIPlus.au3>
 #include <Misc.au3>
+#include <WinAPIHObj.au3>
+#include <WinAPISysWin.au3>
+#include <WindowsConstants.au3>
 
 _GDIPlus_Startup()
 Local $hImage = _GDIPlus_ImageLoadFromFile(@ScriptDir & '\Extras\Exclamation.png')
@@ -9,14 +10,14 @@ Local $hForm = GUICreate('Test ' & StringReplace(@ScriptName, '.au3', '()'), _GD
 Local $hBitmap = _GDIPlus_BitmapCreateHBITMAPFromBitmap($hImage)
 _GDIPlus_ImageDispose($hImage)
 _GDIPlus_Shutdown()
-GUISetState()
+GUISetState(@SW_SHOW)
 
-Local $Opacity = 0, $Step = 3
+Local $iOpacity = 0, $iStep = 3
 Do
-	_WinAPI_UpdateLayeredWindowEx($hForm, -1, -1, $hBitmap, $Opacity)
-	$Opacity += $Step
-	If ($Opacity = 0) Or ($Opacity = 255) Then
-		$Step = -$Step
+	_WinAPI_UpdateLayeredWindowEx($hForm, -1, -1, $hBitmap, $iOpacity)
+	$iOpacity += $iStep
+	If ($iOpacity = 0) Or ($iOpacity = 255) Then
+		$iStep = -$iStep
 		Sleep(500)
 	EndIf
 	Sleep(10)

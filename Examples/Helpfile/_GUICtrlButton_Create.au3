@@ -1,34 +1,34 @@
-#include <GUIConstantsEx.au3>
 #include <GuiButton.au3>
+#include <GUIConstantsEx.au3>
 #include <WindowsConstants.au3>
 
-Global $btn, $rdo, $chk, $iMemo
+Global $g_hBtn, $g_hRdo, $g_hChk, $g_idMemo
 
-; Note the controlId from these buttons can NOT be read with GuiCtrlRead
+; Note: The handle from these buttons can NOT be read with GUICtrlRead
 
-_Main()
+Example()
 
-Func _Main()
+Func Example()
 	Local $hGUI
 
 	$hGUI = GUICreate("Buttons", 400, 400)
-	$iMemo = GUICtrlCreateEdit("", 119, 10, 276, 374, $WS_VSCROLL)
-	GUICtrlSetFont($iMemo, 9, 400, 0, "Courier New")
+	$g_idMemo = GUICtrlCreateEdit("", 119, 10, 276, 374, $WS_VSCROLL)
+	GUICtrlSetFont($g_idMemo, 9, 400, 0, "Courier New")
 
-	$btn = _GUICtrlButton_Create($hGUI, "Button1", 10, 10, 90, 50)
+	$g_hBtn = _GUICtrlButton_Create($hGUI, "Button1", 10, 10, 90, 50)
 
-	$rdo = _GUICtrlButton_Create($hGUI, "Radio1", 10, 60, 90, 50, $BS_AUTORADIOBUTTON)
+	$g_hRdo = _GUICtrlButton_Create($hGUI, "Radio1", 10, 60, 90, 50, $BS_AUTORADIOBUTTON)
 
-	$chk = _GUICtrlButton_Create($hGUI, "Check1", 10, 120, 90, 50, $BS_AUTO3STATE)
+	$g_hChk = _GUICtrlButton_Create($hGUI, "Check1", 10, 120, 90, 50, $BS_AUTO3STATE)
 
 	GUIRegisterMsg($WM_COMMAND, "WM_COMMAND")
 	GUIRegisterMsg($WM_NOTIFY, "WM_NOTIFY")
 
-	GUISetState()
+	GUISetState(@SW_SHOW)
 
-	MemoWrite("$btn handle: " & $btn)
-	MemoWrite("$rdo handle: " & $rdo)
-	MemoWrite("$chk handle: " & $chk & @CRLF)
+	MemoWrite("$g_hBtn handle: " & $g_hBtn)
+	MemoWrite("$g_hRdo handle: " & $g_hRdo)
+	MemoWrite("$g_hChk handle: " & $g_hChk & @CRLF)
 
 	While 1
 		Switch GUIGetMsg()
@@ -38,31 +38,29 @@ Func _Main()
 	WEnd
 
 	Exit
+EndFunc   ;==>Example
 
-EndFunc   ;==>_Main
-
-
-; 写入一行到 memo 控件
+; Write a line to the memo control
 Func MemoWrite($sMessage)
-	GUICtrlSetData($iMemo, $sMessage & @CRLF, 1)
+	GUICtrlSetData($g_idMemo, $sMessage & @CRLF, 1)
 EndFunc   ;==>MemoWrite
 
-Func WM_NOTIFY($hWnd, $Msg, $wParam, $lParam)
-	#forceref $hWnd, $Msg, $wParam
+Func WM_NOTIFY($hWnd, $iMsg, $wParam, $lParam)
+	#forceref $hWnd, $iMsg, $wParam
 	Local Const $BCN_HOTITEMCHANGE = -1249
 	Local $tNMBHOTITEM = DllStructCreate("hwnd hWndFrom;int IDFrom;int Code;dword dwFlags", $lParam)
 	Local $nNotifyCode = DllStructGetData($tNMBHOTITEM, "Code")
 	Local $nID = DllStructGetData($tNMBHOTITEM, "IDFrom")
 	Local $hCtrl = DllStructGetData($tNMBHOTITEM, "hWndFrom")
-	Local $dwFlags = DllStructGetData($tNMBHOTITEM, "dwFlags")
+	Local $iFlags = DllStructGetData($tNMBHOTITEM, "dwFlags")
 	Local $sText = ""
 
 	Switch $nNotifyCode
 		Case $BCN_HOTITEMCHANGE ; Win XP and Above
-			If BitAND($dwFlags, 0x10) = 0x10 Then
+			If BitAND($iFlags, 0x10) = 0x10 Then
 				$sText = "$BCN_HOTITEMCHANGE - Entering: " & @CRLF
 
-			ElseIf BitAND($dwFlags, 0x20) = 0x20 Then
+			ElseIf BitAND($iFlags, 0x20) = 0x20 Then
 				$sText = "$BCN_HOTITEMCHANGE - Leaving: " & @CRLF
 			EndIf
 			MemoWrite($sText & _
@@ -78,15 +76,15 @@ Func WM_NOTIFY($hWnd, $Msg, $wParam, $lParam)
 EndFunc   ;==>WM_NOTIFY
 
 ; React on a button click
-Func WM_COMMAND($hWnd, $Msg, $wParam, $lParam)
-	#forceref $hWnd, $Msg
+Func WM_COMMAND($hWnd, $iMsg, $wParam, $lParam)
+	#forceref $hWnd, $iMsg
 	Local $nNotifyCode = BitShift($wParam, 16)
 	Local $nID = BitAND($wParam, 0x0000FFFF)
 	Local $hCtrl = $lParam
 	Local $sText = ""
 
 	Switch $hCtrl
-		Case $btn, $rdo, $chk
+		Case $g_hBtn, $g_hRdo, $g_hChk
 			Switch $nNotifyCode
 				Case $BN_CLICKED
 					$sText = "$BN_CLICKED" & @CRLF

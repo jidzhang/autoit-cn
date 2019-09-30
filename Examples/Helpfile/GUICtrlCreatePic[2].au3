@@ -1,31 +1,34 @@
 #include <GUIConstantsEx.au3>
 #include <WindowsConstants.au3>
 
-Global $gui, $guiPos, $pic, $picPos
+Global $g_hGui, $g_aGuiPos, $g_hPic, $g_aPicPos
 
 Example()
 
 Func Example()
-	Local $msg
-
-	$gui = GUICreate("test transparentpic", 200, 100)
-	$pic = GUICreate("", 68, 71, 10, 20, $WS_POPUp, BitOR($WS_EX_LAYERED, $WS_EX_MDICHILD), $gui)
+	$g_hGui = GUICreate("test transparentpic", 200, 100)
+	$g_hPic = GUICreate("", 68, 71, 10, 20, $WS_POPUp, BitOR($WS_EX_LAYERED, $WS_EX_MDICHILD), $g_hGui)
 	GUICtrlCreatePic("..\GUI\merlin.gif", 0, 0, 0, 0)
 
-	GUISetState(@SW_SHOW, $pic)
-	GUISetState(@SW_SHOW, $gui)
+	GUISetState(@SW_SHOW, $g_hPic)
+	GUISetState(@SW_SHOW, $g_hGui)
 
 	HotKeySet("{ESC}", "Main")
 	HotKeySet("{Left}", "Left")
 	HotKeySet("{Right}", "Right")
 	HotKeySet("{Down}", "Down")
 	HotKeySet("{Up}", "Up")
-	$picPos = WinGetPos($pic)
-	$guiPos = WinGetPos($gui)
+	$g_aPicPos = WinGetPos($g_hPic)
+	$g_aGuiPos = WinGetPos($g_hGui)
 
-	Do
-		$msg = GUIGetMsg()
-	Until $msg = $GUI_EVENT_CLOSE
+	; Loop until the user exits.
+	While 1
+		Switch GUIGetMsg()
+			Case $GUI_EVENT_CLOSE
+				ExitLoop
+
+		EndSwitch
+	WEnd
 
 	HotKeySet("{ESC}")
 	HotKeySet("{Left}")
@@ -35,26 +38,26 @@ Func Example()
 EndFunc   ;==>Example
 
 Func Main()
-	$guiPos = WinGetPos($gui)
-	WinMove($gui, "", $guiPos[0] + 10, $guiPos[1] + 10)
+	$g_aGuiPos = WinGetPos($g_hGui)
+	WinMove($g_hGui, "", $g_aGuiPos[0] + 10, $g_aGuiPos[1] + 10)
 EndFunc   ;==>Main
 
 Func Left()
-	$picPos = WinGetPos($pic)
-	WinMove($pic, "", $picPos[0] - 10, $picPos[1])
+	$g_aPicPos = WinGetPos($g_hPic)
+	WinMove($g_hPic, "", $g_aPicPos[0] - 10, $g_aPicPos[1])
 EndFunc   ;==>Left
 
 Func Right()
-	$picPos = WinGetPos($pic)
-	WinMove($pic, "", $picPos[0] + 10, $picPos[1])
+	$g_aPicPos = WinGetPos($g_hPic)
+	WinMove($g_hPic, "", $g_aPicPos[0] + 10, $g_aPicPos[1])
 EndFunc   ;==>Right
 
 Func Down()
-	$picPos = WinGetPos($pic)
-	WinMove($pic, "", $picPos[0], $picPos[1] + 10)
+	$g_aPicPos = WinGetPos($g_hPic)
+	WinMove($g_hPic, "", $g_aPicPos[0], $g_aPicPos[1] + 10)
 EndFunc   ;==>Down
 
 Func Up()
-	$picPos = WinGetPos($pic)
-	WinMove($pic, "", $picPos[0], $picPos[1] - 10)
+	$g_aPicPos = WinGetPos($g_hPic)
+	WinMove($g_hPic, "", $g_aPicPos[0], $g_aPicPos[1] - 10)
 EndFunc   ;==>Up

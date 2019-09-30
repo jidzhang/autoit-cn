@@ -1,5 +1,6 @@
 #include-once
 
+#include "ArrayDisplayInternals.au3"
 #include "AutoItConstants.au3"
 #include "MsgBoxConstants.au3"
 #include "SendMessage.au3"
@@ -8,7 +9,7 @@
 
 ; #INDEX# =======================================================================================================================
 ; Title .........: Debug
-; AutoIt Version : 3.3.13.12
+; AutoIt Version : 3.3.14.5
 ; Language ......: English
 ; Description ...: Functions to help script debugging.
 ; Author(s) .....: Nutster, Jpm, Valik, guinness, water
@@ -26,11 +27,12 @@ Global $__g_hReportEdit_Debug = 0
 Global $__g_hReportNotepadEdit_Debug = 0
 Global $__g_sReportCallBack_Debug
 Global $__g_bReportTimeStamp_Debug = False
-Global $__g_bComErrorExit_Debug = False, $__g_sComError_Debug = ""
+Global $__g_bComErrorExit_Debug = False, $__g_oComError_Debug = Null
 ; ===============================================================================================================================
 
 ; #CURRENT# =====================================================================================================================
 ; _Assert
+; _DebugArrayDisplay
 ; _DebugBugReportEnv
 ; _DebugCOMError
 ; _DebugOut
@@ -55,20 +57,29 @@ Global $__g_bComErrorExit_Debug = False, $__g_sComError_Debug = ""
 ; Author ........: Valik
 ; Modified.......: jpm
 ; ===============================================================================================================================
-Func _Assert($sCondition, $bExit = True, $nCode = 0x7FFFFFFF, $sLine = @ScriptLineNumber, Const $iCurERR = @error, Const $iCurEXT = @extended)
+Func _Assert($sCondition, $bExit = True, $iCode = 0x7FFFFFFF, $sLine = @ScriptLineNumber, Const $_iCurrentError = @error, Const $_iCurrentExtended = @extended)
 	Local $bCondition = Execute($sCondition)
 	If Not $bCondition Then
 		MsgBox($MB_SYSTEMMODAL, "AutoIt Assert", "Assertion Failed (Line " & $sLine & "): " & @CRLF & @CRLF & $sCondition)
-		If $bExit Then Exit $nCode
+		If $bExit Then Exit $iCode
 	EndIf
-	Return SetError($iCurERR, $iCurEXT, $bCondition)
+	Return SetError($_iCurrentError, $_iCurrentExtended, $bCondition)
 EndFunc   ;==>_Assert
+
+; #FUNCTION# ====================================================================================================================
+; Author ........: Melba23
+; Modified.......: jpm
+; ===============================================================================================================================
+Func _DebugArrayDisplay(Const ByRef $aArray, $sTitle = Default, $sArrayRange = Default, $iFlags = Default, $vUser_Separator = Default, $sHeader = Default, $iMax_ColWidth = Default, $hUser_Function = Default)
+	Local $iRet = __ArrayDisplay_Share($aArray, $sTitle, $sArrayRange, $iFlags, $vUser_Separator, $sHeader, $iMax_ColWidth, $hUser_Function, True)
+	Return SetError(@error, @extended, $iRet)
+EndFunc   ;==>_DebugArrayDisplay
 
 ; #FUNCTION# ====================================================================================================================
 ; Author ........: jpm
 ; Modified.......:
 ; ===============================================================================================================================
-Func _DebugBugReportEnv(Const $iCurERR = @error, Const $iCurEXT = @extended)
+Func _DebugBugReportEnv(Const $_iCurrentError = @error, Const $_iCurrentExtended = @extended)
 	Local $sAutoItX64, $sAdminMode, $sCompiled, $sOsServicePack, $sMUIlang, $sKBLayout, $sCPUArch
 	If @AutoItX64 Then $sAutoItX64 = "/X64"
 	If IsAdmin() Then $sAdminMode = ", AdminMode"
@@ -77,7 +88,7 @@ Func _DebugBugReportEnv(Const $iCurERR = @error, Const $iCurEXT = @extended)
 	If @OSLang <> @MUILang Then $sMUIlang = ", MUILang: " & @MUILang
 	If @OSLang <> StringRight(@KBLayout, 4) Then $sKBLayout = ", Keyboard: " & @KBLayout
 	If @OSArch <> @CPUArch Then $sCPUArch = ", CPUArch: " & @CPUArch
-	Return SetError($iCurERR, $iCurEXT, "AutoIt: " & @AutoItVersion & $sAutoItX64 & $sAdminMode & $sCompiled & _
+	Return SetError($_iCurrentError, $_iCurrentExtended, "AutoIt: " & @AutoItVersion & $sAutoItX64 & $sAdminMode & $sCompiled & _
 			", OS: " & @OSVersion & $sOsServicePack & "/" & @OSArch & _
 			", OSLang: " & @OSLang & $sMUIlang & $sKBLayout & $sCPUArch & _
 			", Script: " & @ScriptFullPath)
@@ -93,23 +104,24 @@ Func _DebugCOMError($iComDebug = Default, $bExit = False)
 	If Not IsInt($iComDebug) Or $iComDebug < -1 Or $iComDebug > 1 Then Return SetError(1, 0, 0)
 	Switch $iComDebug
 		Case -1
-			Return SetError(IsObj($__g_sComError_Debug), $__g_bComErrorExit_Debug, 1)
+			Return SetError(IsObj($__g_oComError_Debug), $__g_bComErrorExit_Debug, 1)
 		Case 0
-			If $__g_sComError_Debug = "" Then SetError(0, 3, 1) ; COM error handler already disabled
-			$__g_sComError_Debug = ""
+			If $__g_oComError_Debug = Null Then SetError(0, 3, 1) ; COM error handler already disabled
+			$__g_oComError_Debug = Null
 			$__g_bComErrorExit_Debug = False
 			Return 1
 		Case Else
 			; A COM error handler will be initialized only if one does not exist
 			$__g_bComErrorExit_Debug = $bExit
-			If ObjEvent("AutoIt.Error") = "" Then
-				$__g_sComError_Debug = ObjEvent("AutoIt.Error", "__Debug_COMErrorHandler") ; Creates a custom error handler
-				If @error <> 0 Then Return SetError(4, @error, 0)
+			Local $vComErrorChecking = ObjEvent("AutoIt.Error")
+			If $vComErrorChecking = "" Then
+				$__g_oComError_Debug = ObjEvent("AutoIt.Error", __Debug_COMErrorHandler) ; Creates a custom error handler
+				If @error Then Return SetError(4, @error, 0)
 				Return SetError(0, 1, 1)
-			ElseIf ObjEvent("AutoIt.Error") = "__Debug_COMErrorHandler" Then
+			ElseIf FuncName($vComErrorChecking) = FuncName(__Debug_COMErrorHandler) Then
 				Return SetError(0, 2, 1) ; COM error handler already set by a previous call to this function
 			Else
-				Return SetError(2, 0, 0) ; COM error handler already set to another function
+				Return SetError(2, 0, 0) ; COM error handler already set to another function - not by this UDF
 			EndIf
 	EndSwitch
 EndFunc   ;==>_DebugCOMError
@@ -118,13 +130,12 @@ EndFunc   ;==>_DebugCOMError
 ; Author ........: Nutster
 ; Modified.......: jpm
 ; ===============================================================================================================================
-Func _DebugOut(Const $sOutput, Const $bActivate = False, Const $iCurERR = @error, Const $iCurEXT = @extended)
-	#forceref $bActivate
+Func _DebugOut(Const $sOutput, Const $_iCurrentError = @error, Const $_iCurrentExtended = @extended)
 	If IsNumber($sOutput) = 0 And IsString($sOutput) = 0 And IsBool($sOutput) = 0 Then Return SetError(1, 0, 0) ; $sOutput can not be printed
 
 	If _DebugReport($sOutput) = 0 Then Return SetError(3, 0, 0) ; _DebugSetup() as not been called.
 
-	Return SetError($iCurERR, $iCurEXT, 1) ; Return @error and @extended as before calling _DebugOut()
+	Return SetError($_iCurrentError, $_iCurrentExtended, 1) ; Return @error and @extended as before calling _DebugOut()
 EndFunc   ;==>_DebugOut
 
 ; #FUNCTION# ====================================================================================================================
@@ -175,24 +186,24 @@ EndFunc   ;==>_DebugSetup
 ; Author ........: jpm
 ; Modified.......:
 ; ===============================================================================================================================
-Func _DebugReport($sData, $bLastError = False, $bExit = False, $iCurERR = @error, $iCurEXT = @extended)
-	If $__g_iReportType_Debug <= 0 Or $__g_iReportType_Debug > 6 Then Return SetError($iCurERR, $iCurEXT, 0)
+Func _DebugReport($sData, $bLastError = False, $bExit = False, Const $_iCurrentError = @error, $_iCurrentExtended = @extended)
+	If $__g_iReportType_Debug <= 0 Or $__g_iReportType_Debug > 6 Then Return SetError($_iCurrentError, $_iCurrentExtended, 0)
 
-	$iCurEXT = __Debug_ReportWrite($sData, $bLastError)
+	$_iCurrentExtended = __Debug_ReportWrite($sData, $bLastError)
 
 	If $bExit Then Exit
 
-	Return SetError($iCurERR, $iCurEXT, 1)
+	Return SetError($_iCurrentError, $_iCurrentExtended, 1)
 EndFunc   ;==>_DebugReport
 
 ; #FUNCTION# ====================================================================================================================
 ; Author ........: jpm
 ; Modified.......:
 ; ===============================================================================================================================
-Func _DebugReportEx($sData, $bLastError = False, $bExit = False, $iCurERR = @error, $iCurEXT = @extended)
-	If $__g_iReportType_Debug <= 0 Or $__g_iReportType_Debug > 6 Then Return SetError($iCurERR, $iCurEXT, 0)
+Func _DebugReportEx($sData, $bLastError = False, $bExit = False, Const $_iCurrentError = @error, $_iCurrentExtended = @extended)
+	If $__g_iReportType_Debug <= 0 Or $__g_iReportType_Debug > 6 Then Return SetError($_iCurrentError, $_iCurrentExtended, 0)
 
-	If IsInt($iCurERR) Then
+	If IsInt($_iCurrentError) Then
 		Local $sTemp = StringSplit($sData, "|", $STR_ENTIRESPLIT + $STR_NOCOUNT)
 		If UBound($sTemp) > 1 Then
 			If $bExit Then
@@ -201,7 +212,7 @@ Func _DebugReportEx($sData, $bLastError = False, $bExit = False, $iCurERR = @err
 				$sData = ">>> "
 			EndIf
 
-			Switch $iCurERR
+			Switch $_iCurrentError
 				Case 0
 					$sData &= "Bad return from " & $sTemp[1] & " in " & $sTemp[0] & ".dll"
 				Case 1
@@ -212,19 +223,19 @@ Func _DebugReportEx($sData, $bLastError = False, $bExit = False, $iCurERR = @err
 		EndIf
 	EndIf
 
-	$iCurEXT = __Debug_ReportWrite($sData, $bLastError)
+	$_iCurrentExtended = __Debug_ReportWrite($sData, $bLastError)
 
 	If $bExit Then Exit
 
-	Return SetError($iCurERR, $iCurEXT, 1)
+	Return SetError($_iCurrentError, $_iCurrentExtended, 1)
 EndFunc   ;==>_DebugReportEx
 
 ; #FUNCTION# ====================================================================================================================
 ; Author ........: jpm
 ; Modified.......:
 ; ===============================================================================================================================
-Func _DebugReportVar($sVarName, $vVar, $bErrExt = False, $iScriptLineNumber = @ScriptLineNumber, $iCurERR = @error, $iCurEXT = @extended)
-	If $__g_iReportType_Debug <= 0 Or $__g_iReportType_Debug > 6 Then Return SetError($iCurERR, $iCurEXT, 0)
+Func _DebugReportVar($sVarName, $vVar, $bErrExt = False, Const $iDebugLineNumber = @ScriptLineNumber, Const $_iCurrentError = @error, Const $_iCurrentExtended = @extended)
+	If $__g_iReportType_Debug <= 0 Or $__g_iReportType_Debug > 6 Then Return SetError($_iCurrentError, $_iCurrentExtended, 0)
 
 	If IsBool($vVar) And IsInt($bErrExt) Then
 		; to kept some compatibility with 3.3.1.3 if really needed for non breaking
@@ -233,7 +244,7 @@ Func _DebugReportVar($sVarName, $vVar, $bErrExt = False, $iScriptLineNumber = @S
 		$sVarName = "???"
 	EndIf
 
-	Local $sData = "@@ Debug(" & $iScriptLineNumber & ") : " & __Debug_DataType($vVar) & " -> " & $sVarName
+	Local $sData = "@@ Debug(" & $iDebugLineNumber & ") : " & __Debug_DataType($vVar) & " -> " & $sVarName
 
 	If IsArray($vVar) Then
 		Local $nDims = UBound($vVar, $UBOUND_DIMENSIONS)
@@ -260,11 +271,11 @@ Func _DebugReportVar($sVarName, $vVar, $bErrExt = False, $iScriptLineNumber = @S
 		$sData &= ' = ' & __Debug_DataFormat($vVar)
 	EndIf
 
-	If $bErrExt Then $sData &= @CRLF & @TAB & "@error=" & $iCurERR & " @extended=0x" & Hex($iCurEXT)
+	If $bErrExt Then $sData &= @CRLF & @TAB & "@error=" & $_iCurrentError & " @extended=0x" & Hex($_iCurrentExtended)
 
 	__Debug_ReportWrite($sData)
 
-	Return SetError($iCurERR, $iCurEXT)
+	Return SetError($_iCurrentError, $_iCurrentExtended)
 EndFunc   ;==>_DebugReportVar
 
 ; #INTERNAL_USE_ONLY#============================================================================================================
@@ -281,17 +292,7 @@ EndFunc   ;==>_DebugReportVar
 ; Example .......:
 ; ===============================================================================================================================
 Func __Debug_COMErrorHandler($oCOMError)
-	Local $sError = "@@ DEBUG COM Error encountered in " & @ScriptName & " (" & $oCOMError.Scriptline & ") :" & @CRLF & _
-			@TAB & "Number        " & @TAB & "= 0x" & Hex($oCOMError.Number, 8) & " (" & $oCOMError.Number & ")" & @CRLF & _
-			@TAB & "WinDescription" & @TAB & "= " & StringStripWS($oCOMError.WinDescription, $STR_STRIPTRAILING) & @CRLF & _
-			@TAB & "Description   " & @TAB & "= " & StringStripWS($oCOMError.Description, $STR_STRIPTRAILING) & @CRLF & _
-			@TAB & "Source        " & @TAB & "= " & $oCOMError.Source & @CRLF & _
-			@TAB & "HelpFile      " & @TAB & "= " & $oCOMError.HelpFile & @CRLF & _
-			@TAB & "HelpContext   " & @TAB & "= " & $oCOMError.HelpContext & @CRLF & _
-			@TAB & "LastDllError  " & @TAB & "= " & $oCOMError.LastDllError & @CRLF & _
-			@TAB & "Retcode       " & @TAB & "= 0x" & Hex($oCOMError.retcode)
-
-	_DebugReport($sError, False, $__g_bComErrorExit_Debug)
+	_DebugReport(__COMErrorFormating($oCOMError), False, $__g_bComErrorExit_Debug)
 EndFunc   ;==>__Debug_COMErrorHandler
 
 ; #INTERNAL_USE_ONLY# ===========================================================================================================
@@ -456,9 +457,7 @@ EndFunc   ;==>__Debug_ReportWindowCreate
 ; Link ..........:
 ; Example .......:
 ; ===============================================================================================================================
-#Au3Stripper_Off
 Func __Debug_ReportWindowWrite($sData)
-	#Au3Stripper_On
 	If $__g_bReportWindowClosed_Debug Then __Debug_ReportWindowCreate()
 
 	Local Const $WM_GETTEXTLENGTH = 0x000E
@@ -553,9 +552,7 @@ EndFunc   ;==>__Debug_ReportNotepadCreate
 ; Link ..........:
 ; Example .......:
 ; ===============================================================================================================================
-#Au3Stripper_Off
 Func __Debug_ReportNotepadWrite($sData)
-	#Au3Stripper_On
 	If $__g_hReportEdit_Debug = 0 Then __Debug_ReportNotepadCreate()
 
 	ControlCommand($__g_hReportEdit_Debug, "", "Edit1", "EditPaste", String($sData))
@@ -566,7 +563,7 @@ EndFunc   ;==>__Debug_ReportNotepadWrite
 ; Description ...: Write on Report
 ; Syntax.........: __Debug_ReportWrite ( $sData [, $bLastError [, $iCurEXT = @extended]} )
 ; Parameters ....:
-; Return values .:
+; Return values .: $iCurEXT
 ; Author ........: jpm
 ; Modified.......:
 ; Remarks .......:

@@ -1,7 +1,7 @@
 ; open SQLite with a specific local file
 
+#include <MsgBoxConstants.au3>
 #include <SQLite.au3>
-#include <Constants.au3>
 
 Local $sLocalSQLiteDll = "local SQLite.dll" ; to be change to an existing .dll to have no error
 

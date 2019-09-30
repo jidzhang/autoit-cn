@@ -1,7 +1,7 @@
 #include <WinAPIShPath.au3>
 
-Local $Url = 'www.microsoft.com'
+Local $sUrl = 'www.microsoft.com'
 
-ConsoleWrite(_WinAPI_UrlApplyScheme($Url) & @CRLF)
+ConsoleWrite(_WinAPI_UrlApplyScheme($sUrl) & @CRLF)
 
 ConsoleWrite(_WinAPI_UrlApplyScheme('') & @CRLF)

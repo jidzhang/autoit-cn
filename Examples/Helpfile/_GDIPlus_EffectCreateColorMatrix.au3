@@ -5,7 +5,7 @@
 _Example()
 
 Func _Example()
-	If Not _GDIPlus_Startup() Then
+    If Not _GDIPlus_Startup() Or @extended < 6 Then
 		MsgBox($MB_SYSTEMMODAL, "ERROR", "GDIPlus.dll v1.1 not available")
 		Return
 	EndIf
@@ -18,9 +18,9 @@ Func _Example()
 	Local $iWidth = 600
 	Local $iHeight = _GDIPlus_ImageGetHeight($hImage) * 600 / _GDIPlus_ImageGetWidth($hImage)
 
-	Local $hGui = GUICreate("GDI+ v1.1", $iWidth, $iHeight)
+	Local $hGui = GUICreate("GDI+ v1.1 (" & @ScriptName & ")", $iWidth, $iHeight)
 	Local $hGraphics = _GDIPlus_GraphicsCreateFromHWND($hGui)
-	GUISetState()
+	GUISetState(@SW_SHOW)
 
 	Local $tColorMatrix = _GDIPlus_ColorMatrixCreateGrayScale()
 

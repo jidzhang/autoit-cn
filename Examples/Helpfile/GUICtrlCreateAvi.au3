@@ -3,30 +3,32 @@
 Example()
 
 Func Example()
-	Local $ani1, $buttonstart, $buttonstop, $msg
+	; Create a GUI with various controls.
+	Local $hGUI = GUICreate("Example", 300, 200)
 
-	GUICreate("My GUI Animation", 360, 200)
-	$ani1 = GUICtrlCreateAvi(@SystemDir & "\shell32.dll", 165, 50, 10)
+	; Create an animation control.
+	Local $idAnimation = GUICtrlCreateAvi(@SystemDir & "\shell32.dll", 165, 15, 0, 300)
+	Local $idStart = GUICtrlCreateButton("Start", 60, 150, 85, 25)
+	Local $idStop = GUICtrlCreateButton("Stop", 160, 150, 85, 25)
 
-	$buttonstart = GUICtrlCreateButton("开始", 100, 150, 70, 22)
-	$buttonstop = GUICtrlCreateButton("停止", 200, 150, 70, 22)
+	; Display the GUI.
+	GUISetState(@SW_SHOW, $hGUI)
 
-	GUISetState()
-
-	; 运行界面,直到窗口被关闭
+	; Loop until the user exits.
 	While 1
-		$msg = GUIGetMsg()
-
-		Select
-			Case $msg = $GUI_EVENT_CLOSE
+		Switch GUIGetMsg()
+			Case $GUI_EVENT_CLOSE
 				ExitLoop
 
-			Case $msg = $buttonstart
-				GUICtrlSetState($ani1, 1)
+			Case $idStart ; Start the animation.
+				GUICtrlSetState($idAnimation, $GUI_AVISTART)
 
-			Case $msg = $buttonstop
-				GUICtrlSetState($ani1, 0)
+			Case $idStop ; Stop the animation.
+				GUICtrlSetState($idAnimation, $GUI_AVISTOP)
 
-		EndSelect
+		EndSwitch
 	WEnd
+
+	; Delete the previous GUI and all controls.
+	GUIDelete($hGUI)
 EndFunc   ;==>Example

@@ -1,1 +1,3 @@
-MsgBox(4096, "测试", "这个消息框将会显示10秒", 10)
+#include <MsgBoxConstants.au3>
+
+MsgBox($MB_SYSTEMMODAL, "Title", "This message box will timeout after 10 seconds or select the OK button.", 10)

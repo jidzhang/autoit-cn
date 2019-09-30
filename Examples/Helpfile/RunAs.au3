@@ -1,3 +1,5 @@
+#include <AutoItConstants.au3>
+
 Example()
 
 Func Example()
@@ -6,7 +8,7 @@ Func Example()
 	Local $sPassword = "Password"
 
 	; Run Notepad with the window maximized. Notepad is run under the user previously specified.
-	Local $iPID = RunAs($sUserName, @ComputerName, $sPassword, 0, "notepad.exe", "", @SW_SHOWMAXIMIZED)
+	Local $iPID = RunAs($sUserName, @ComputerName, $sPassword, $RUN_LOGON_NOPROFILE, "notepad.exe", "", @SW_SHOWMAXIMIZED)
 
 	; Wait 10 seconds for the Notepad window to appear.
 	WinWait("[CLASS:Notepad]", "", 10)

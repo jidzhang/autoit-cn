@@ -2,11 +2,11 @@
 #include <Inet.au3>
 #include <MsgBoxConstants.au3>
 
-Global $aResult, $sResult, $sIP
+Local $aResult, $sResult, $sIp
 
 TCPStartup()
-$sIP = _GetIP()
-$aResult = _TCPIpToName($sIP, 1)
+$sIp = _GetIP()
+$aResult = _TCPIpToName($sIp, 1)
 If @error Then
 	MsgBox($MB_SYSTEMMODAL, "_TCPIpToName()", "@error = " & @error & @CRLF & "@extended = " & @extended)
 Else

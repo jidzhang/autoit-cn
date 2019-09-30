@@ -1,27 +1,28 @@
 #include <File.au3>
+#include <MsgBoxConstants.au3>
 
-Local $find = "BEFORE"
-Local $replace = "AFTER"
+Local $sFind = "BEFORE"
+Local $sReplace = "AFTER"
 
-Local $filename = "C:\_ReplaceStringInFile.test"
+Local $sFileName = "C:\_ReplaceStringInFile.test"
 
-Local $msg = "Hello Test " & $find & " Hello Test" & @CRLF
-$msg &= "Hello Test" & @CRLF
-$msg &= @CRLF
-$msg &= $find
+Local $iMsg = "Hello Test " & $sFind & " Hello Test" & @CRLF
+$iMsg &= "Hello Test" & @CRLF
+$iMsg &= @CRLF
+$iMsg &= $sFind
 
-FileWrite($filename, $msg)
+FileWrite($sFileName, $iMsg)
 
-MsgBox(4096, "BEFORE", $msg)
+MsgBox($MB_SYSTEMMODAL, "BEFORE", $iMsg)
 
-Local $retval = _ReplaceStringInFile($filename, $find, $replace)
-If $retval = -1 Then
-	MsgBox(4096, "´íÎó", "The pattern could not be replaced in file: " & $filename & " Error: " & @error)
+Local $iRetval = _ReplaceStringInFile($sFileName, $sFind, $sReplace)
+If $iRetval = -1 Then
+	MsgBox($MB_SYSTEMMODAL, "ERROR", "The pattern could not be replaced in file: " & $sFileName & " Error: " & @error)
 	Exit
 Else
-	MsgBox(4096, "INFO", "Found " & $retval & " occurances of the pattern: " & $find & " in the file: " & $filename)
+	MsgBox($MB_SYSTEMMODAL, "INFO", "Found " & $iRetval & " occurances of the pattern: " & $sFind & " in the file: " & $sFileName)
 EndIf
 
-$msg = FileRead($filename, 1000)
-MsgBox(4096, "AFTER", $msg)
-FileDelete($filename)
+$iMsg = FileRead($sFileName, 1000)
+MsgBox($MB_SYSTEMMODAL, "AFTER", $iMsg)
+FileDelete($sFileName)

@@ -1,7 +1,5 @@
-; *******************************************************
-; 示例 - 打开带有基本示例的浏览器, 点击页面上的第三个链接
-;				(注, 首个链接的索引为0)
-; *******************************************************
+; Open browser with basic example, click on the 3rd link
+; on the page (note: the first link is index 0)
 
 #include <IE.au3>
 

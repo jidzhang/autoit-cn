@@ -1,5 +1,6 @@
 #include <GDIPlus.au3>
 #include <GUIConstantsEx.au3>
+#include <WinAPIIcons.au3>
 #include <WinAPIShellEx.au3>
 
 Example()
@@ -14,7 +15,6 @@ Func Example()
 	_GDIPlus_Startup()
 	$hGraphic = _GDIPlus_GraphicsCreateFromHWND($hGUI) ;Create a graphics object from a window handle
 	_GDIPlus_GraphicsClear($hGraphic, 0xFFFFFFFF)
-
 
 	$hIcon = _WinAPI_ShellExtractIcon(@SystemDir & '\shell32.dll', 32, 48, 48)
 

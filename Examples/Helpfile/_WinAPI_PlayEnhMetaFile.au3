@@ -1,27 +1,30 @@
-#include <WinAPIGdi.au3>
-#include <WindowsConstants.au3>
 #include <GUIConstantsEx.au3>
-
-Global Const $STM_SETIMAGE = 0x0172
-Global Const $STM_GETIMAGE = 0x0173
+#include <SendMessage.au3>
+#include <StaticConstants.au3>
+#include <WinAPIGdi.au3>
+#include <WinAPIGdiDC.au3>
+#include <WinAPIHObj.au3>
+#include <WinAPIMisc.au3>
+#include <WinAPISysWin.au3>
+#include <WindowsConstants.au3>
 
 ; Load enhanced metafile (.emf) and retrieve it's dimension (x6)
 Local $hEmf = _WinAPI_GetEnhMetaFile(@ScriptDir & '\Extras\Flag.emf')
 Local $tSIZE = _WinAPI_GetEnhMetaFileDimension($hEmf)
-Local $Width = 6 * DllStructGetData($tSIZE, 'X')
-Local $Height = 6 * DllStructGetData($tSIZE, 'Y')
+Local $iWidth = 6 * DllStructGetData($tSIZE, 'X')
+Local $iHeight = 6 * DllStructGetData($tSIZE, 'Y')
 
 ; Create GUI
-Local $hForm = GUICreate('Test ' & StringReplace(@ScriptName, '.au3', '()'), $Width, $Height)
-Local $Pic = GUICtrlCreatePic('', 0, 0, $Width, $Height)
-Local $hPic = GUICtrlGetHandle($Pic)
+Local $hForm = GUICreate('Test ' & StringReplace(@ScriptName, '.au3', '()'), $iWidth, $iHeight)
+Local $idPic = GUICtrlCreatePic('', 0, 0, $iWidth, $iHeight)
+Local $hPic = GUICtrlGetHandle($idPic)
 
 ; Create bitmap from enhanced metafile
 Local $hDC = _WinAPI_GetDC($hPic)
 Local $hMemDC = _WinAPI_CreateCompatibleDC($hDC)
-Local $hBitmap = _WinAPI_CreateCompatibleBitmapEx($hDC, $Width, $Height, _WinAPI_SwitchColor(_WinAPI_GetSysColor($COLOR_3DFACE)))
+Local $hBitmap = _WinAPI_CreateCompatibleBitmapEx($hDC, $iWidth, $iHeight, _WinAPI_SwitchColor(_WinAPI_GetSysColor($COLOR_3DFACE)))
 Local $hMemSv = _WinAPI_SelectObject($hMemDC, $hBitmap)
-Local $tRECT = _WinAPI_CreateRectEx(0, 0, $Width, $Height)
+Local $tRECT = _WinAPI_CreateRectEx(0, 0, $iWidth, $iHeight)
 _WinAPI_PlayEnhMetaFile($hMemDC, $hEmf, $tRECT)
 
 _WinAPI_ReleaseDC($hPic, $hDC)
@@ -38,7 +41,7 @@ If $hObj <> $hBitmap Then
 	_WinAPI_DeleteObject($hBitmap)
 EndIf
 
-GUISetState()
+GUISetState(@SW_SHOW)
 
 Do
 Until GUIGetMsg() = $GUI_EVENT_CLOSE

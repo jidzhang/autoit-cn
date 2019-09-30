@@ -1,13 +1,12 @@
 #include <File.au3>
+#include <MsgBoxConstants.au3>
 
-Local $s_TempFile, $s_FileName
+; Generate a unique filename in @TempDir
+Local $sTempFile_1 = _TempFile()
 
-; 生成@TempDir中唯一的文件名
-$s_TempFile = _TempFile()
+; Generate a unique filename in the @HomeDrive directory and starting with the "prefix" labelled prefix_
+Local $sTempFile_2 = _TempFile(@HomeDrive & "\", "prefix_", ".txt", Default) ; Use the Default keyword to use the default parameters
 
-; 生成给定目录中以tst_开头的唯一文件名
-$s_FileName = _TempFile("C:\", "tst_", ".txt", 7)
-
-MsgBox(4096, "Info", "Names suitable for new temporary file : " & @LF & $s_TempFile & @LF & $s_FileName)
-
-Exit
+MsgBox($MB_SYSTEMMODAL, "", "Names suitable for temporary file usage: " & @CRLF & @CRLF & _
+		"File 1: " & $sTempFile_1 & @CRLF & _
+		"File 2: " & $sTempFile_2)

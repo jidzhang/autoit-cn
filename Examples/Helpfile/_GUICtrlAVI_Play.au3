@@ -1,69 +1,36 @@
-#include <GUIConstantsEx.au3>
+; using AutoIt Function
+
 #include <GuiAVI.au3>
-
-$Debug_AVI = False ; 检查传递给 AVI 函数的类名, 设置为真并使用另一控件的句柄可以看出它是否有效
-
-Global $hAVI
+#include <GUIConstantsEx.au3>
 
 _Example_Internal()
-_Example_External()
 
 Func _Example_Internal()
-	Local $btn_start, $btn_stop
+	Local $idAVI, $id_Start, $id_Stop
 
-	; 创建 GUI
-	GUICreate("(Internal) AVI Play", 300, 200)
-	$hAVI = GUICtrlCreateAvi(@SystemDir & "\shell32.dll", 160, 10, 10)
-	$btn_start = GUICtrlCreateButton("start", 50, 150, 70, 22)
-	$btn_stop = GUICtrlCreateButton("stop", 150, 150, 70, 22)
-	GUISetState()
+	; Create GUI
+	GUICreate("(Internal) AVI Play/Stop", 300, 200)
+	$idAVI = GUICtrlCreateAvi(@SystemDir & "\shell32.dll", 160, 10, 10)
+	$id_Start = GUICtrlCreateButton("start", 50, 150, 70, 22)
+	$id_Stop = GUICtrlCreateButton("stop", 150, 150, 70, 22)
+	GUISetState(@SW_SHOW)
 
-	; 循环直到用户退出
+	; Loop until the user exits.
 	While 1
 		Switch GUIGetMsg()
 			Case $GUI_EVENT_CLOSE
 				ExitLoop
-			Case $btn_start
-				; 播放 AVI 剪辑的一部分
-				_GUICtrlAVI_Play($hAVI)
-			Case $btn_stop
-				; 停止 AVI 剪辑
-				_GUICtrlAVI_Stop($hAVI)
+			Case $id_Start
+				; Play part of the AVI clip
+				_GUICtrlAVI_Play($idAVI)
+			Case $id_Stop
+				; Stop AVI clip
+				_GUICtrlAVI_Stop($idAVI)
 		EndSwitch
 	WEnd
 
-	; 关闭 AVI 剪辑
-	_GUICtrlAVI_Close($hAVI)
+	; Close AVI clip
+	_GUICtrlAVI_Close($idAVI)
 
 	GUIDelete()
 EndFunc   ;==>_Example_Internal
-
-Func _Example_External()
-	Local $hGUI, $btn_start, $btn_stop
-
-	; 创建 GUI
-	$hGUI = GUICreate("(External) AVI Play", 300, 200)
-	$hAVI = _GUICtrlAVI_Create($hGUI, @SystemDir & "\Shell32.dll", 160, 10, 10)
-	$btn_start = GUICtrlCreateButton("start", 50, 150, 70, 22)
-	$btn_stop = GUICtrlCreateButton("stop", 150, 150, 70, 22)
-	GUISetState()
-
-	; 循环直到用户退出
-	While 1
-		Switch GUIGetMsg()
-			Case $GUI_EVENT_CLOSE
-				ExitLoop
-			Case $btn_start
-				; 播放 AVI 剪辑的一部分
-				_GUICtrlAVI_Play($hAVI)
-			Case $btn_stop
-				; 停止 AVI 剪辑
-				_GUICtrlAVI_Stop($hAVI)
-		EndSwitch
-	WEnd
-
-	; 关闭 AVI 剪辑
-	_GUICtrlAVI_Close($hAVI)
-
-	GUIDelete()
-EndFunc   ;==>_Example_External

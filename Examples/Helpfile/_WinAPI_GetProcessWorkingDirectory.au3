@@ -1,10 +1,10 @@
 #RequireAdmin
 
-#include <WinAPIProc.au3>
-#include <WinAPI.au3>
 #include <Array.au3>
+#include <WinAPIHObj.au3>
+#include <WinAPIProc.au3>
 
-Global $aAdjust, $aList = 0
+Local $aAdjust, $aList = 0
 
 ; Enable "SeDebugPrivilege" privilege for obtain full access rights to another processes
 Local $hToken = _WinAPI_OpenProcessToken(BitOR($TOKEN_ADJUST_PRIVILEGES, $TOKEN_QUERY))

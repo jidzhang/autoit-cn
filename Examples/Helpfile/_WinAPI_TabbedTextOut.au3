@@ -1,14 +1,16 @@
-#include <WinAPIGdi.au3>
-#include <WindowsConstants.au3>
 #include <FontConstants.au3>
-
-Global Const $STM_SETIMAGE = 0x0172
-Global Const $STM_GETIMAGE = 0x0173
+#include <SendMessage.au3>
+#include <StaticConstants.au3>
+#include <WinAPIGdi.au3>
+#include <WinAPIGdiDC.au3>
+#include <WinAPIHObj.au3>
+#include <WinAPISysWin.au3>
+#include <WindowsConstants.au3>
 
 ; Create GUI
 Local $hForm = GUICreate('Test ' & StringReplace(@ScriptName, '.au3', '()'), 400, 400)
-Local $Pic = GUICtrlCreatePic('', 0, 0, 400, 400)
-Local $hPic = GUICtrlGetHandle($Pic)
+Local $idPic = GUICtrlCreatePic('', 0, 0, 400, 400)
+Local $hPic = GUICtrlGetHandle($idPic)
 
 ; Create bitmap
 Local $hDev = _WinAPI_GetDC($hPic)
@@ -25,9 +27,9 @@ _WinAPI_SetBkMode($hDC, $TRANSPARENT)
 Local $hFont = _WinAPI_CreateFont(12, 0, 0, 0, $FW_NORMAL, 0, 0, 0, $DEFAULT_CHARSET, $OUT_DEFAULT_PRECIS, $CLIP_DEFAULT_PRECIS, $ANTIALIASED_QUALITY, $DEFAULT_PITCH, 'Arial Black')
 Local $hObj = _WinAPI_SelectObject($hDC, $hFont)
 _WinAPI_TextOut($hDC, 10, 15, 'Simple Text')
-Local $TabbedTextOut = 'Tabbed ' & @TAB & 'Text ' & @TAB & 'Out'
-_WinAPI_TextOut($hDC, 10, 35, $TabbedTextOut)
-_WinAPI_TabbedTextOut($hDC, 10, 65, $TabbedTextOut)
+Local $sTabbedTextOut = 'Tabbed ' & @TAB & 'Text ' & @TAB & 'Out'
+_WinAPI_TextOut($hDC, 10, 35, $sTabbedTextOut)
+_WinAPI_TabbedTextOut($hDC, 10, 65, $sTabbedTextOut)
 _WinAPI_SelectObject($hDC, $hObj)
 _WinAPI_DeleteObject($hFont)
 
@@ -51,7 +53,7 @@ If $hObj <> $hBitmap Then
 	_WinAPI_DeleteObject($hBitmap)
 EndIf
 
-GUISetState()
+GUISetState(@SW_SHOW)
 
 Do
 Until GUIGetMsg() = -3

@@ -1,7 +1,23 @@
-﻿Local $x = ATan(0.5)
-MsgBox(4096, "ATan 函数", "反正切值：" & $x)
+#include <MsgBoxConstants.au3>
 
-Local $pi = 4 * ATan(1) ; 等于 3.14159265358979
-Local $radToDeg = 180 / $pi
-Local $y = ATan(1) * $radToDeg  ; 1的正切值为 45°
-MsgBox(4096, "ATan 函数", "反正切值：" & $y & "°")
+Example()
+
+Func Example()
+	; Assign a Local variable the arcTangent of 0.5.
+	Local $fArcTan1 = ATan(0.5)
+
+	; Display the result.
+	MsgBox($MB_SYSTEMMODAL, "", $fArcTan1 & " rad.")
+
+	; Assign a Local constant variable the approximate PI number.
+	Local Const $PI = 3.141592653589793
+
+	; Assign a Local variable the formula to switch from radian to degree (equals to one radian in degree).
+	Local $fRadToDeg = 180 / $PI
+
+	; Assign a Local variable a number in degree.
+	Local $fArcTan2 = $fRadToDeg * ATan(1)
+
+	; Display the result.
+	MsgBox($MB_SYSTEMMODAL, "", $fArcTan2 & " deg.")
+EndFunc   ;==>Example

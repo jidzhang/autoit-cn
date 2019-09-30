@@ -21,16 +21,16 @@ Func _Main()
 	#forceref $idEdit_1
 
 	;Create window
-	GUICreate("新 GUI", $iGUIWidth, $iGUIHeight)
+	GUICreate("New GUI", $iGUIWidth, $iGUIHeight)
 
 	;Create an edit box with no text in it
 	$idEdit_1 = GUICtrlCreateEdit("", 10, 10, 280, 190)
 
 	;Create an "OK" button
-	$idOK_Btn = GUICtrlCreateButton("确定", 75, 210, 70, 25)
+	$idOK_Btn = GUICtrlCreateButton("OK", 75, 210, 70, 25)
 
 	;Create a "CANCEL" button
-	$idCancel_Btn = GUICtrlCreateButton("取消", 165, 210, 70, 25)
+	$idCancel_Btn = GUICtrlCreateButton("Cancel", 165, 210, 70, 25)
 
 	;Show window/Make the window visible
 	GUISetState(@SW_SHOW)
@@ -54,11 +54,11 @@ Func _Main()
 
 				;Check if user clicked on the "OK" button
 			Case $iMsg = $idOK_Btn
-				  MsgBox(64, "新 GUI", "您单击了[确定]按钮!")
+				MsgBox(64, "New GUI", "You clicked on the OK button!")
 
 				;Check if user clicked on the "CANCEL" button
 			Case $iMsg = $idCancel_Btn
-				MsgBox(64, "新 GUI", "您单击了取消按钮!")
+				MsgBox(64, "New GUI", "You clicked on the Cancel button!")
 
 		EndSelect
 

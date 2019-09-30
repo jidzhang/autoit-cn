@@ -1,3 +1,5 @@
+#include <MsgBoxConstants.au3>
+
 Example()
 
 Func Example()
@@ -11,7 +13,7 @@ Func Example()
 	Local $aClientSize = WinGetClientSize($hWnd)
 
 	; Display the height and width of the client area.
-	MsgBox(4096, "", "Width: " & $aClientSize[0] & @CRLF & "Height: " & $aClientSize[1])
+	MsgBox($MB_SYSTEMMODAL, "", "Width: " & $aClientSize[0] & @CRLF & "Height: " & $aClientSize[1])
 
 	; Close the Notepad window using the handle returned by WinWait.
 	WinClose($hWnd)

@@ -1,20 +1,18 @@
-#include <GuiListBox.au3>
 #include <GUIConstantsEx.au3>
-#include <Constants.au3>
+#include <GuiListBox.au3>
+#include <MsgBoxConstants.au3>
 
-$Debug_LB = False ;检查传递给 ListBox 函数的类名, 设置为True并输出到一个控件的句柄,用于检查它是否工作
+Example()
 
-_Main()
-
-Func _Main()
+Func Example()
 	Local $hGUI, $hListBox
 
-	; 创建 GUI
+	; Create GUI
 	$hGUI = GUICreate("(UDF Created) List Box Destroy", 400, 296)
 	$hListBox = _GUICtrlListBox_Create($hGUI, "", 2, 2, 396, 296)
-	GUISetState()
+	GUISetState(@SW_SHOW)
 
-	; 添加文件
+	; Add files
 	_GUICtrlListBox_BeginUpdate($hListBox)
 	_GUICtrlListBox_ResetContent($hListBox)
 	_GUICtrlListBox_InitStorage($hListBox, 100, 4096)
@@ -24,10 +22,10 @@ Func _Main()
 	_GUICtrlListBox_Dir($hListBox, "", $DDL_DRIVES, False)
 	_GUICtrlListBox_EndUpdate($hListBox)
 
-	MsgBox(4160, "信息", "Destroying ListBox")
+	MsgBox($MB_SYSTEMMODAL, "Information", "Destroying ListBox")
 	_GUICtrlListBox_Destroy($hListBox)
 
-	; 循环直到用户退出
+	; Loop until the user exits.
 	Do
 	Until GUIGetMsg() = $GUI_EVENT_CLOSE
-EndFunc   ;==>_Main
+EndFunc   ;==>Example

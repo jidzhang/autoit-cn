@@ -1,20 +1,37 @@
 #include <GUIConstantsEx.au3>
+#include <MsgBoxConstants.au3>
 
 Example()
 
 Func Example()
-	Local $msg
-	GUICreate("My GUI combo")  ; 创建一个对话框,并居中显示
+	; Create a GUI with various controls.
+	Local $hGUI = GUICreate("Example", 300, 200)
 
-	GUICtrlCreateCombo("item1", 10, 10) ; 创建一个组合列表框(ComboBox)控件
-	GUICtrlSetData(-1, "item2|item3", "item3") ; 在列表框中添加新的项目，并设置一个新的默认值
+	; Create a combobox control.
+	Local $idComboBox = GUICtrlCreateCombo("Item 1", 10, 10, 185, 20)
+	Local $idButton_Close = GUICtrlCreateButton("Close", 210, 170, 85, 25)
 
-	GUISetState()
+	; Add additional items to the combobox.
+	GUICtrlSetData($idComboBox, "Item 2|Item 3", "Item 2")
 
-	; 运行界面,直到窗口被关闭
+	; Display the GUI.
+	GUISetState(@SW_SHOW, $hGUI)
+
+	Local $sComboRead = ""
+
+	; Loop until the user exits.
 	While 1
-		$msg = GUIGetMsg()
+		Switch GUIGetMsg()
+			Case $GUI_EVENT_CLOSE, $idButton_Close
+				ExitLoop
 
-		If $msg = $GUI_EVENT_CLOSE Then ExitLoop
+			Case $idComboBox
+				$sComboRead = GUICtrlRead($idComboBox)
+				MsgBox($MB_SYSTEMMODAL, "", "The combobox is currently displaying: " & $sComboRead, 0, $hGUI)
+
+		EndSwitch
 	WEnd
+
+	; Delete the previous GUI and all controls.
+	GUIDelete($hGUI)
 EndFunc   ;==>Example

@@ -1,107 +1,125 @@
 #include <GUIConstantsEx.au3>
+#include <MsgBoxConstants.au3>
 
-;==============================================
-;==============================================
-;服务端! 服务端启用后,再启用客户端(服务端为接收信息方)
-;==============================================
-;==============================================
+; Start First clicking on "1. Server"
+; Then start a second instance of the script selecting "2. Client"
 
 Example()
 
 Func Example()
-	; 设置一些常用信息
-	; 在这里设置你的公共IP地址 (@IPAddress1).
-	;	Local $szServerPC = @ComputerName
-	;	Local $szIPADDRESS = TCPNameToIP($szServerPC)
-	Local $szIPADDRESS = @IPAddress1;你的公共IP地址
-	Local $nPORT = 33891;端口
-	Local $MainSocket, $edit, $ConnectedSocket, $szIP_Accepted
-	Local $msg, $recv
+	TCPStartup() ; Start the TCP service.
 
-	; 开始 TCP 服务
-	;==============================================
-	TCPStartup()
+	; Register OnAutoItExit to be called when the script is closed.
+	OnAutoItExitRegister("OnAutoItExit")
 
-	; 创建一个监听 "SOCKET".
-	;   使用您的IP地址和端口33891.
-	;==============================================
-	$MainSocket = TCPListen($szIPADDRESS, $nPORT)
+	; Assign Local variables the loopback IP Address and the Port.
+	Local $sIPAddress = "127.0.0.1" ; This IP Address only works for testing on your own computer.
+	Local $iPort = 65432 ; Port used for the connection.
 
-	; 如果套接字创建失败,退出.
-	If $MainSocket = -1 Then Exit
+	#Region GUI
+	Local $sTitle = "TCP Start"
+	Local $hGUI = GUICreate($sTitle, 250, 70)
 
+	Local $idBtnServer = GUICtrlCreateButton("1. Server", 65, 10, 130, 22)
 
-	; 创建一个图形用户界面消息窗
-	;==============================================
-	GUICreate("My Server (IP: " & $szIPADDRESS & ")", 300, 200, 100, 100)
-	$edit = GUICtrlCreateEdit("", 10, 10, 280, 180)
-	GUISetState()
+	Local $idBtnClient = GUICtrlCreateButton("2. Client", 65, 40, 130, 22)
 
+	GUISetState(@SW_SHOW, $hGUI)
 
-	; 初始化一个变量描述连接
-	;==============================================
-	$ConnectedSocket = -1
-
-
-	;等待和接受连接
-	;==============================================
-	Do
-		$ConnectedSocket = TCPAccept($MainSocket)
-	Until $ConnectedSocket <> -1
-
-
-	; 取得连接的客户端的IP
-	$szIP_Accepted = SocketToIP($ConnectedSocket)
-
-	; 循环图形用户界面消息
-	;==============================================
 	While 1
-		$msg = GUIGetMsg()
+		Switch GUIGetMsg()
+			Case $GUI_EVENT_CLOSE
+				ExitLoop
+			Case $idBtnServer
+				WinSetTitle($sTitle, "", "TCP Server started")
+				GUICtrlSetState($idBtnClient, $GUI_HIDE)
+				GUICtrlSetState($idBtnServer, $GUI_DISABLE)
+				If Not MyTCP_Server($sIPAddress, $iPort) Then ExitLoop
+			Case $idBtnClient
+				WinSetTitle($sTitle, "", "TCP Client started")
+				GUICtrlSetState($idBtnServer, $GUI_HIDE)
+				GUICtrlSetState($idBtnClient, $GUI_DISABLE)
+				If Not MyTCP_Client($sIPAddress, $iPort) Then ExitLoop
+		EndSwitch
 
-		; 关闭图形用户界面
-		;--------------------
-		If $msg = $GUI_EVENT_CLOSE Then ExitLoop
-
-		; 尝试接收(最高)2048字节
-		;----------------------------------------------------------------
-		$recv = TCPRecv($ConnectedSocket, 2048)
-
-		; 如果接收失败(@error)将断开连接   
-		;----------------------------------------------------------------
-		If @error Then ExitLoop
-
-		; convert from UTF-8 to AutoIt native UTF-16
-		$recv = BinaryToString($recv, 4)
-
-		; Update the edit control with what we have received
-		;----------------------------------------------------------------
-		If $recv <> "" Then GUICtrlSetData($edit, _
-				$szIP_Accepted & " > " & $recv & @CRLF & GUICtrlRead($edit))
+		Sleep(10)
 	WEnd
 
-
-	If $ConnectedSocket <> -1 Then TCPCloseSocket($ConnectedSocket)
-
-	TCPShutdown()
+	#EndRegion GUI
 EndFunc   ;==>Example
 
-; 函数返回一个连接的套接字的IP地址. 
-;----------------------------------------------------------------------
-Func SocketToIP($SHOCKET)
-	Local $sockaddr, $aRet
+Func MyTCP_Client($sIPAddress, $iPort)
+	; Assign a Local variable the socket and connect to a listening socket with the IP Address and Port specified.
+	Local $iSocket = TCPConnect($sIPAddress, $iPort)
+	Local $iError = 0
 
-	$sockaddr = DllStructCreate("short;ushort;uint;char[8]")
-
-	$aRet = DllCall("Ws2_32.dll", "int", "getpeername", "int", $SHOCKET, _
-			"ptr", DllStructGetPtr($sockaddr), "int*", DllStructGetSize($sockaddr))
-	If Not @error And $aRet[0] = 0 Then
-		$aRet = DllCall("Ws2_32.dll", "str", "inet_ntoa", "int", DllStructGetData($sockaddr, 3))
-		If Not @error Then $aRet = $aRet[0]
-	Else
-		$aRet = 0
+	; If an error occurred display the error code and return False.
+	If @error Then
+		; The server is probably offline/port is not opened on the server.
+		$iError = @error
+		MsgBox(BitOR($MB_SYSTEMMODAL, $MB_ICONHAND), "", "Client:" & @CRLF & "Could not connect, Error code: " & $iError)
+		Return False
 	EndIf
 
-	$sockaddr = 0
+	; Send the string "tata" to the server.
+	TCPSend($iSocket, "tata")
 
-	Return $aRet
-EndFunc   ;==>SocketToIP
+	; If an error occurred display the error code and return False.
+	If @error Then
+		$iError = @error
+		MsgBox(BitOR($MB_SYSTEMMODAL, $MB_ICONHAND), "", "Client:" & @CRLF & "Could not send the data, Error code: " & $iError)
+		Return False
+	EndIf
+
+	; Close the socket.
+	TCPCloseSocket($iSocket)
+EndFunc   ;==>MyTCP_Client
+
+Func MyTCP_Server($sIPAddress, $iPort)
+	; Assign a Local variable the socket and bind to the IP Address and Port specified with a maximum of 100 pending connexions.
+	Local $iListenSocket = TCPListen($sIPAddress, $iPort, 100)
+	Local $iError = 0
+
+	If @error Then
+		; Someone is probably already listening on this IP Address and Port (script already running?).
+		$iError = @error
+		MsgBox(BitOR($MB_SYSTEMMODAL, $MB_ICONHAND), "", "Server:" & @CRLF & "Could not listen, Error code: " & $iError)
+		Return False
+	EndIf
+
+	; Assign a Local variable to be used by the Client socket.
+	Local $iSocket = 0
+
+	Do ; Wait for someone to connect (Unlimited).
+		; Accept incomming connexions if present (Socket to close when finished; one socket per client).
+		$iSocket = TCPAccept($iListenSocket)
+
+		; If an error occurred display the error code and return False.
+		If @error Then
+			$iError = @error
+			MsgBox(BitOR($MB_SYSTEMMODAL, $MB_ICONHAND), "", "Server:" & @CRLF & "Could not accept the incoming connection, Error code: " & $iError)
+			Return False
+		EndIf
+
+		If GUIGetMsg() = $GUI_EVENT_CLOSE Then Return False
+	Until $iSocket <> -1 ;if different from -1 a client is connected.
+
+	; Close the Listening socket to allow afterward binds.
+	TCPCloseSocket($iListenSocket)
+
+	; Assign a Local variable the data received.
+	Local $sReceived = TCPRecv($iSocket, 4) ;we're waiting for the string "tata" OR "toto" (example script TCPRecv): 4 bytes length.
+
+	; Notes: If you don't know how much length will be the data,
+	; use e.g: 2048 for maxlen parameter and call the function until the it returns nothing/error.
+
+	; Display the string received.
+	MsgBox($MB_SYSTEMMODAL, "", "Server:" & @CRLF & "Received: " & $sReceived)
+
+	; Close the socket.
+	TCPCloseSocket($iSocket)
+EndFunc   ;==>MyTCP_Server
+
+Func OnAutoItExit()
+	TCPShutdown() ; Close the TCP service.
+EndFunc   ;==>OnAutoItExit

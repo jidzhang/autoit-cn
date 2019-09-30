@@ -1,6 +1,7 @@
 #include <Math.au3>
+#include <MsgBoxConstants.au3>
 
-Local $degrees = 35
-Local $radians = _Radian($degrees)
+Local $fDegrees = 35
+Local $fRadians = _Radian($fDegrees)
 
-MsgBox(4096, "Degrees to Radians", $degrees & " degrees = " & $radians & " radians")
+MsgBox($MB_SYSTEMMODAL, "Degrees to Radians", $fDegrees & " degrees = " & $fRadians & " radians")

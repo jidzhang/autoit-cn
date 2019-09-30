@@ -241,16 +241,11 @@ $CmdLineRaw
 !IsHWnd 1 1
 !IsInt 1 1
 !IsKeyword 1 1
-!IsMap 1 1
 !IsNumber 1 1
 !IsObj 1 1
 !IsPtr 1 1
 !IsString 1 1
 !Log 1 1
-!MapAppend 2 2
-!MapExists 2 2
-!MapKeys 1 1
-!MapRemove 2 2
 !MemGetStats 0 0
 !Mod 2 2
 !MouseClick 1 5

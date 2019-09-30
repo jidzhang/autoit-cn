@@ -1,15 +1,17 @@
-#include <WinAPI.au3>
-_Main()
+#include <MsgBoxConstants.au3>
+#include <WinAPISysWin.au3>
 
-Func _Main()
-	Local $aWindows, $i, $text
+Example()
+
+Func Example()
+	Local $aWindows, $i, $sText
 	$aWindows = _WinAPI_EnumWindowsTop()
 	For $i = 1 To $aWindows[0][0]
-		$text = "Window Handle: " & $aWindows[$i][0] & @LF
-		$text &= "Window Class: " & $aWindows[$i][1] & @LF
-		$text &= "Window Title: " & WinGetTitle($aWindows[$i][0]) & @LF
-		$text &= "Window Text: " & WinGetText($aWindows[$i][0]) & @LF
-		$text &= "Window Process: " & WinGetProcess($aWindows[$i][0])
-		MsgBox(4096, "Item " & $i & " of " & $aWindows[0][0], $text)
+		$sText = "Window Handle: " & $aWindows[$i][0] & @CRLF
+		$sText &= "Window Class: " & $aWindows[$i][1] & @CRLF
+		$sText &= "Window Title: " & WinGetTitle($aWindows[$i][0]) & @CRLF
+		$sText &= "Window Text: " & WinGetText($aWindows[$i][0]) & @CRLF
+		$sText &= "Window Process: " & WinGetProcess($aWindows[$i][0])
+		MsgBox($MB_SYSTEMMODAL, "Item " & $i & " of " & $aWindows[0][0], $sText)
 	Next
-EndFunc   ;==>_Main
+EndFunc   ;==>Example

@@ -1,51 +1,51 @@
-#include <GUIConstantsEx.au3>
 #include <GuiButton.au3>
+#include <GUIConstantsEx.au3>
 
-Global $btn[6], $iMemo, $iRand
+Global $g_aidBtn[6], $g_idMemo, $g_iRand
 
 HotKeySet("!b", "Clickit")
 
-_Main()
+Example()
 
-Func _Main()
+Func Example()
 	Local $y = 70
 
 	GUICreate("Buttons", 510, 400)
-	$iMemo = GUICtrlCreateEdit("", 119, 10, 376, 374, 0)
-	GUICtrlSetFont($iMemo, 9, 400, 0, "Courier New")
+	$g_idMemo = GUICtrlCreateEdit("", 119, 10, 376, 374, 0)
+	GUICtrlSetFont($g_idMemo, 9, 400, 0, "Courier New")
 
 	MemoWrite("Press Alt+b to Click Button")
 
-	$btn[0] = GUICtrlCreateButton("Button1", 10, 10, 100, 50)
+	$g_aidBtn[0] = GUICtrlCreateButton("Button1", 10, 10, 100, 50)
 
 	For $x = 1 To 5
-		$btn[$x] = GUICtrlCreateButton("Button" & $x + 1, 10, $y, 100, 50)
+		$g_aidBtn[$x] = GUICtrlCreateButton("Button" & $x + 1, 10, $y, 100, 50)
 		$y += 60
 	Next
 
-	$iRand = Random(0, 5, 1)
-	_GUICtrlButton_SetText($btn[$iRand], "New Text" & $iRand + 1)
+	$g_iRand = Random(0, 5, 1)
+	_GUICtrlButton_SetText($g_aidBtn[$g_iRand], "New Text" & $g_iRand + 1)
 
-	GUISetState()
+	GUISetState(@SW_SHOW)
 
 	While 1
 		Switch GUIGetMsg()
 			Case $GUI_EVENT_CLOSE
 				ExitLoop
-			Case $btn[$iRand]
-				MemoWrite(_GUICtrlButton_GetText($btn[$iRand]) & " Clicked")
+			Case $g_aidBtn[$g_iRand]
+				MemoWrite(_GUICtrlButton_GetText($g_aidBtn[$g_iRand]) & " Clicked")
 		EndSwitch
 	WEnd
 
 	Exit
-EndFunc   ;==>_Main
+EndFunc   ;==>Example
 
 Func Clickit()
-	$iRand = Random(0, 5, 1)
-	_GUICtrlButton_Click($btn[$iRand])
+	$g_iRand = Random(0, 5, 1)
+	_GUICtrlButton_Click($g_aidBtn[$g_iRand])
 EndFunc   ;==>Clickit
 
-; 写入一行到 memo 控件
+; Write a line to the memo control
 Func MemoWrite($sMessage)
-	GUICtrlSetData($iMemo, $sMessage & @CRLF, 1)
+	GUICtrlSetData($g_idMemo, $sMessage & @CRLF, 1)
 EndFunc   ;==>MemoWrite

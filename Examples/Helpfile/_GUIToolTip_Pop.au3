@@ -4,23 +4,21 @@
 Example()
 
 Func Example()
-	Local $hGUI = GUICreate(StringTrimRight(@ScriptName, 4), 350, 200)
+	Local $hGUI = GUICreate(StringTrimRight(@ScriptName, StringLen(".exe")), 350, 200)
 
-	Local $iButton = GUICtrlCreateButton(" Button ", 30, 32, 130, 28)
-	Local $hButton = GUICtrlGetHandle($iButton)
+	Local $idButton = GUICtrlCreateButton(" Button ", 30, 32, 130, 28)
+	; Local $hButton = GUICtrlGetHandle($idButton)
 
 	Local $hToolTip = _GUIToolTip_Create($hGUI, $TTS_BALLOON)
 	Local $aPos = MouseGetPos()
 
 	_GUIToolTip_AddTool($hToolTip, 0, " ", 0, 0, 0, 0, 0, 0)
 
-
 	_GUIToolTip_SetTitle($hToolTip, 'Mouse Coordinates', $TTI_INFO)
-	GUISetState()
+	GUISetState(@SW_SHOW)
 	; Find the mouse's position to use as the starting point for tracking
 	_GUIToolTip_TrackPosition($hToolTip, $aPos[0], $aPos[1])
 	_GUIToolTip_TrackActivate($hToolTip, True, 0, 0)
-	Local $msg
 	Local $hTimer = TimerInit()
 	While 1
 		; Read the mouse position
@@ -29,12 +27,13 @@ Func Example()
 		_GUIToolTip_TrackPosition($hToolTip, $aPos[0], $aPos[1])
 		_GUIToolTip_UpdateTipText($hToolTip, 0, 0, "X: " & $aPos[0] & " Y: " & $aPos[1])
 
-		$msg = GUIGetMsg()
-		Switch $msg
+		Switch GUIGetMsg()
 			Case $GUI_EVENT_CLOSE
 				ExitLoop
-        EndSwitch
-        ; 3 seconds after starting, this will remove the tool from displaying
+			Case $idButton
+				; ...
+		EndSwitch
+		; 3 seconds after starting, this will remove the tool from displaying
 		If TimerDiff($hTimer) >= 3000 Then
 			_GUIToolTip_Pop($hToolTip)
 		EndIf

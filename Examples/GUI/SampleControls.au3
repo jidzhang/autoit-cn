@@ -1,132 +1,186 @@
 ; AutoIt GUI Example
 ; Created: 17/01/2005 - CyberSlug
 ; Modifed: 05/12/2011 - guinness
+; Modifed: 09/06/2014 - mLipok
 
-#include <GuiConstantsEx.au3>
+#Region INCLUDE
 #include <AVIConstants.au3>
+#include <GuiConstantsEx.au3>
 #include <TreeViewConstants.au3>
+#EndRegion INCLUDE
 
-; GUI
-GUICreate("GUI例子", 400, 400)
+#Region GUI
+GUICreate("Sample GUI", 400, 400)
 GUISetIcon(@SystemDir & "\mspaint.exe", 0)
+#EndRegion GUI
 
+#Region MENU
+Local $idMenu1 = GUICtrlCreateMenu("Menu &One")
+Local $idMenu2 = GUICtrlCreateMenu("Menu &Two")
+GUICtrlCreateMenu("Menu Th&ree")
+GUICtrlCreateMenu("Menu &Four")
+GUICtrlCreateMenuItem('SubMenu One &A', $idMenu1)
+GUICtrlCreateMenuItem('SubMenu One &B', $idMenu1)
+#EndRegion MENU
 
-; 菜单 
-$menu=GUICtrlCreateMenu("菜单1[&O]")
-GUICtrlCreateMenuItem("下拉菜单[&S]",$menu)
-GUICtrlCreateMenu("菜单2[&T]")
-GUICtrlCreateMenu("菜单3[&R]")
-GUICtrlCreateMenu("菜单4[&F]")
+#Region CONTEXT MENU
+Local $idContextMenu = GUICtrlCreateContextMenu()
+GUICtrlCreateMenuItem("Context Menu", $idContextMenu)
+GUICtrlCreateMenuItem("", $idContextMenu) ; Separator
+GUICtrlCreateMenuItem("&Properties", $idContextMenu)
+#EndRegion CONTEXT MENU
 
-; CONTEXT MENU
-Local $iContextMenu = GUICtrlCreateContextMenu()
-GUICtrlCreateMenuItem("上下文菜单", $iContextMenu)
-GUICtrlCreateMenuItem("", $iContextMenu) ; Separator
-GUICtrlCreateMenuItem("属性[&P]", $iContextMenu)
-
-; PIC
+#Region PIC
 GUICtrlCreatePic("logo4.gif", 0, 0, 169, 68)
-GUICtrlCreateLabel("图片例子:", 75, 1, 53, 15)
+GUICtrlSetTip(-1, '#Region PIC')
+GUICtrlCreateLabel("Sample Pic", 75, 1, 53, 15)
 GUICtrlSetBkColor(-1, $GUI_BKCOLOR_TRANSPARENT)
 GUICtrlSetColor(-1, 0xFFFFFF)
+#EndRegion PIC
 
-
-; AVI
+#Region AVI
 GUICtrlCreateAvi("SampleAVI.avi", 0, 180, 10, 32, 32, $ACS_AUTOPLAY)
-GUICtrlCreateLabel(" Avi例子", 170, 50)
+GUICtrlSetTip(-1, '#Region AVI') ; TODO
+GUICtrlCreateLabel("Sample avi", 175, 50)
+GUICtrlSetTip(-1, '#Region AVI - Label')
+#EndRegion AVI
 
-
-; TAB
+#Region TAB
 GUICtrlCreateTab(240, 0, 150, 70)
-GUICtrlCreateTabItem("第一页")
-GUICtrlCreateLabel("Tab 标签例子", 250, 40)
-GUICtrlCreateTabItem("第二页")
-GUICtrlCreateTabItem("第三页")
+GUICtrlCreateTabItem("One")
+GUICtrlSetTip(-1, '#Region TAB1')
+GUICtrlCreateLabel("Sample Tab with TabItems", 250, 40)
+GUICtrlCreateTabItem("Two")
+GUICtrlSetTip(-1, '#Region TAB2')
+GUICtrlCreateTabItem("Three")
+GUICtrlSetTip(-1, '#Region TAB3')
 GUICtrlCreateTabItem("")
+#EndRegion TAB
 
-; COMBO
-GUICtrlCreateCombo("组合框例子", 250, 80, 120, 100)
+#Region COMBO
+GUICtrlCreateCombo("Sample Combo", 250, 80, 120, 100)
+GUICtrlSetTip(-1, '#Region COMBO')
+#EndRegion COMBO
 
-; PROGRESS
+#Region PROGRESS
 GUICtrlCreateProgress(60, 80, 150, 20)
+GUICtrlSetTip(-1, '#Region PROGRES')
 GUICtrlSetData(-1, 60)
-GUICtrlCreateLabel("进度条例子:", 5, 82)
+GUICtrlCreateLabel("Progress:", 5, 82)
+GUICtrlSetTip(-1, '#Region PROGRES - Label')
+#EndRegion PROGRESS
 
-; EDIT
-GUICtrlCreateEdit(@CRLF & "  编辑框例子", 10, 110, 150, 70)
+#Region EDIT
+GUICtrlCreateEdit(@CRLF & "  Sample Edit Control", 10, 110, 150, 70)
+GUICtrlSetTip(-1, '#Region EDIT')
+#EndRegion EDIT
 
-; LIST
+#Region LIST
 GUICtrlCreateList("", 5, 190, 100, 90)
-GUICtrlSetData(-1, "A.列表|B.例子|C.在|D.这里", "B.列表")
+GUICtrlSetTip(-1, '#Region LIST')
+GUICtrlSetData(-1, "A.Sample|B.List|C.Control|D.Here", "B.List")
+#EndRegion LIST
 
-; ICON
-GUICtrlCreateIcon("shell32.dll", 1, 175, 120)
-GUICtrlCreateLabel("图标", 180, 160, 50, 20)
+#Region ICON
+GUICtrlCreateIcon("explorer.exe", 0, 175, 120)
+GUICtrlSetTip(-1, '#Region ICON')
+GUICtrlCreateLabel("Icon", 180, 160, 50, 20)
+GUICtrlSetTip(-1, '#Region ICON - Label')
+#EndRegion ICON
 
-; LIST VIEW
-Local $iListView = GUICtrlCreateListView("列表查看|例子|", 110, 190, 110, 80)
-GUICtrlCreateListViewItem("A|一", $iListView)
-GUICtrlCreateListViewItem("B|二", $iListView)
-GUICtrlCreateListViewItem("C|三", $iListView)
+#Region LIST VIEW
+Local $idListView = GUICtrlCreateListView("Sample|ListView|", 110, 190, 110, 80)
+GUICtrlSetTip(-1, '#Region LIST VIEW')
+GUICtrlCreateListViewItem("A|One", $idListView)
+GUICtrlCreateListViewItem("B|Two", $idListView)
+GUICtrlCreateListViewItem("C|Three", $idListView)
+#EndRegion LIST VIEW
 
-; GROUP WITH RADIO BUTTONS
-GUICtrlCreateGroup("组例子:", 230, 120)
-GUICtrlCreateRadio("单选1", 250, 140, 80)
+#Region GROUP WITH RADIO BUTTONS
+GUICtrlCreateGroup("Sample Group", 230, 120)
+GUICtrlCreateRadio("Radio One", 250, 140, 80)
+GUICtrlSetTip(-1, '#Region GROUP WITH RADIO BUTTONS- RADIO1')
 GUICtrlSetState(-1, $GUI_CHECKED)
-GUICtrlCreateRadio("单选2", 250, 165, 80)
+GUICtrlCreateRadio("Radio Two", 250, 165, 80)
+GUICtrlSetTip(-1, '#Region GROUP WITH RADIO BUTTONS- RADIO2')
 GUICtrlCreateGroup("", -99, -99, 1, 1) ;close group
+#EndRegion GROUP WITH RADIO BUTTONS
 
-; UPDOWN
-GUICtrlCreateLabel("上下例子", 350, 115)
+#Region UPDOWN
+GUICtrlCreateLabel("UpDown", 350, 115)
+GUICtrlSetTip(-1, '#Region UPDOWN - Label')
 GUICtrlCreateInput("42", 350, 130, 40, 20)
+GUICtrlSetTip(-1, '#Region UPDOWN - Input')
 GUICtrlCreateUpdown(-1)
+GUICtrlSetTip(-1, '#Region UPDOWN - Updown')
+#EndRegion UPDOWN
 
-; LABEL
-GUICtrlCreateLabel("绿色" & @CRLF & "标签例子", 350, 165, 40, 40)
+#Region LABEL
+GUICtrlCreateLabel("Green" & @CRLF & "Label", 350, 165, 40, 40)
+GUICtrlSetTip(-1, '#Region LABEL')
 GUICtrlSetBkColor(-1, 0x00FF00)
+#EndRegion LABEL
 
-; SLIDER
-GUICtrlCreateLabel("滑动条:", 235, 215)
+#Region SLIDER
+GUICtrlCreateLabel("Slider:", 235, 215)
+GUICtrlSetTip(-1, '#Region SLIDER - Label')
 GUICtrlCreateSlider(270, 210, 120, 30)
+GUICtrlSetTip(-1, '#Region SLIDER')
 GUICtrlSetData(-1, 30)
+#EndRegion SLIDER
 
-; INPUT
-GUICtrlCreateInput("输入框例子", 235, 255, 130, 20)
+#Region INPUT
+GUICtrlCreateInput("Sample Input Box", 235, 255, 130, 20)
+GUICtrlSetTip(-1, '#Region INPUT')
+#EndRegion INPUT
 
-; DATE
+#Region DATE
 GUICtrlCreateDate("", 5, 280, 200, 20)
-GUICtrlCreateLabel("(日期选择例子)", 10, 305, 200, 20)
+GUICtrlSetTip(-1, '#Region DATE')
+GUICtrlCreateLabel("(Date control expands into a calendar)", 10, 305, 200, 20)
+GUICtrlSetTip(-1, '#Region DATE - Label')
+#EndRegion DATE
 
-; BUTTON
-GUICtrlCreateButton("按钮例子", 10, 330, 100, 30)
+#Region BUTTON
+GUICtrlCreateButton("Sample Button", 10, 330, 100, 30)
+GUICtrlSetTip(-1, '#Region BUTTON')
+#EndRegion BUTTON
 
-; CHECKBOX
-GUICtrlCreateCheckbox("多选按钮", 130, 335, 80, 20)
+#Region CHECKBOX
+GUICtrlCreateCheckbox("Checkbox", 130, 335, 80, 20)
+GUICtrlSetTip(-1, '#Region CHECKBOX')
 GUICtrlSetState(-1, $GUI_CHECKED)
+#EndRegion CHECKBOX
 
-; TREEVIEW ONE
-Local $iTreeView_1 = GUICtrlCreateTreeView(210, 290, 80, 80)
-Local $iTreeItem = GUICtrlCreateTreeViewItem("树形列表", $iTreeView_1)
-GUICtrlCreateTreeViewItem("项目1", $iTreeItem)
-GUICtrlCreateTreeViewItem("项目2", $iTreeItem)
-GUICtrlCreateTreeViewItem("子项目1", -1)
-GUICtrlSetState($iTreeItem, $GUI_EXPAND)
+#Region TREEVIEW ONE
+Local $idTreeView_1 = GUICtrlCreateTreeView(210, 290, 80, 80)
+GUICtrlSetTip(-1, '#Region TREEVIEW ONE')
+Local $idTreeItem = GUICtrlCreateTreeViewItem("TreeView", $idTreeView_1)
+GUICtrlCreateTreeViewItem("Item1", $idTreeItem)
+GUICtrlCreateTreeViewItem("Item2", $idTreeItem)
+GUICtrlCreateTreeViewItem("Foo", -1)
+GUICtrlSetState($idTreeItem, $GUI_EXPAND)
+#EndRegion TREEVIEW ONE
 
-; TREEVIEW TWO
-Local $iTreeView_2 = GUICtrlCreateTreeView(295, 290, 103, 80, $TVS_CHECKBOXES)
-GUICtrlCreateTreeViewItem("树形列表2", $iTreeView_2)
-GUICtrlCreateTreeViewItem("使用", $iTreeView_2)
-GUICtrlCreateTreeViewItem("多选按钮", $iTreeView_2)
+#Region TREEVIEW TWO
+Local $idTreeView_2 = GUICtrlCreateTreeView(295, 290, 103, 80, $TVS_CHECKBOXES)
+GUICtrlSetTip(-1, '#Region TREEVIEW TWO')
+GUICtrlCreateTreeViewItem("TreeView", $idTreeView_2)
+GUICtrlCreateTreeViewItem("With", $idTreeView_2)
+GUICtrlCreateTreeViewItem("$TVS_CHECKBOXES", $idTreeView_2)
 GUICtrlSetState(-1, $GUI_CHECKED)
-GUICtrlCreateTreeViewItem("样式", $iTreeView_2)
+GUICtrlCreateTreeViewItem("Style", $idTreeView_2)
+#EndRegion TREEVIEW TWO
 
-
-; GUI MESSAGE LOOP
+#Region GUI MESSAGE LOOP
 GUISetState(@SW_SHOW)
 While 1
 	Switch GUIGetMsg()
 		Case $GUI_EVENT_CLOSE
-			Exit
+			ExitLoop
 
 	EndSwitch
 WEnd
+
+GUIDelete()
+#EndRegion GUI MESSAGE LOOP

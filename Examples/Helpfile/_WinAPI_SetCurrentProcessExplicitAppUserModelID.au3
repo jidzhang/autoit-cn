@@ -1,30 +1,30 @@
 #NoTrayIcon
 
-#include <WinAPIShellEx.au3>
-#include <WinAPISys.au3>
 #include <GUIConstantsEx.au3>
 #include <MsgBoxConstants.au3>
+#include <WinAPIShellEx.au3>
+#include <WinAPISys.au3>
 
-If _WinAPI_GetVersion() < '6.1' Then
+If Number(_WinAPI_GetVersion()) < 6.1 Then
 	MsgBox(BitOR($MB_ICONERROR, $MB_SYSTEMMODAL), 'Error', 'Require Windows 7 or later.')
 	Exit
 EndIf
 
-Global Const $sAppID = 'Yashied.WinAPIEx.UDF'
+Local $sAppID = 'Yashied.WinAPIEx.UDF'
 
-Local $Param
+Local $sParam
 If Not $CmdLine[0] Then
 	For $i = 1 To 5
 		Switch $i
 			Case 1 To 2
-				$Param = $sAppID & '.' & $i
+				$sParam = $sAppID & '.' & $i
 			Case Else
-				$Param = $sAppID & '.3'
+				$sParam = $sAppID & '.3'
 		EndSwitch
 		If Not @Compiled Then
-			Run(@AutoItExe & ' "' & @ScriptFullPath & '" ' & $Param)
+			Run(@AutoItExe & ' "' & @ScriptFullPath & '" ' & $sParam)
 		Else
-			Run(@AutoItExe & ' ' & $Param)
+			Run(@AutoItExe & ' ' & $sParam)
 		EndIf
 		Sleep(100)
 	Next

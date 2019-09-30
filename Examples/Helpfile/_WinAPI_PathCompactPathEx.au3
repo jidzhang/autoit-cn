@@ -1,6 +1,6 @@
 #include <WinAPIShPath.au3>
 
-Local $Path = @ScriptFullPath
+Local $sPath = @ScriptFullPath
 
-ConsoleWrite('Before: ' & $Path & @CRLF)
-ConsoleWrite('After : ' & _WinAPI_PathCompactPathEx($Path, 40) & @CRLF)
+ConsoleWrite('Before: ' & $sPath & @CRLF)
+ConsoleWrite('After : ' & _WinAPI_PathCompactPathEx($sPath, 40) & @CRLF)

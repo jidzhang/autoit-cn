@@ -1,36 +1,36 @@
-#include <GUIConstantsEx.au3>
 #include <GuiButton.au3>
-#include <WindowsConstants.au3>
+#include <GUIConstantsEx.au3>
 #include <GuiMenu.au3>
+#include <WindowsConstants.au3>
 
-Global $btn, $iMemo, $btn2
+Global $g_hBtn, $g_idMemo, $g_hBtn2
 
-; Note the controlId from these buttons can NOT be read with GuiCtrlRead
+; Note: The handle from these buttons can NOT be read with GUICtrlRead
 
-_Main()
+Example()
 
-Func _Main()
+Func Example()
 	Local $hGUI, $aInfo
 
 	$hGUI = GUICreate("Buttons", 400, 400)
-	$iMemo = GUICtrlCreateEdit("", 10, 100, 390, 284, $WS_VSCROLL)
-	GUICtrlSetFont($iMemo, 9, 400, 0, "Courier New")
+	$g_idMemo = GUICtrlCreateEdit("", 10, 100, 390, 284, $WS_VSCROLL)
+	GUICtrlSetFont($g_idMemo, 9, 400, 0, "Courier New")
 
-	$btn = _GUICtrlButton_Create($hGUI, "Split Button", 10, 10, 120, 30, $BS_SPLITBUTTON)
-	_GUICtrlButton_SetSplitInfo($btn)
-	$btn2 = _GUICtrlButton_Create($hGUI, "Split Button 2", 10, 50, 120, 30, $BS_SPLITBUTTON)
+	$g_hBtn = _GUICtrlButton_Create($hGUI, "Split Button", 10, 10, 120, 30, $BS_SPLITBUTTON)
+	_GUICtrlButton_SetSplitInfo($g_hBtn)
+	$g_hBtn2 = _GUICtrlButton_Create($hGUI, "Split Button 2", 10, 50, 120, 30, $BS_SPLITBUTTON)
 
 	GUIRegisterMsg($WM_COMMAND, "WM_COMMAND")
 	GUIRegisterMsg($WM_NOTIFY, "WM_NOTIFY")
 
-	GUISetState()
+	GUISetState(@SW_SHOW)
 
-	$aInfo = _GUICtrlButton_GetSplitInfo($btn)
-	MemoWrite("Split Info" & @LF & "----------------")
+	$aInfo = _GUICtrlButton_GetSplitInfo($g_hBtn)
+	MemoWrite("Split Info" & @CRLF & "----------------")
 	For $x = 0 To 3
 		MemoWrite("$ainfo[" & $x & "] = " & $aInfo[$x])
 	Next
-	MemoWrite("Split Info" & @LF & "----------------")
+	MemoWrite("Split Info" & @CRLF & "----------------")
 
 	While 1
 		Switch GUIGetMsg()
@@ -40,30 +40,29 @@ Func _Main()
 	WEnd
 
 	Exit
+EndFunc   ;==>Example
 
-EndFunc   ;==>_Main
-
-; 写入一行到 memo 控件
+; Write a line to the memo control
 Func MemoWrite($sMessage)
-	GUICtrlSetData($iMemo, $sMessage & @CRLF, 1)
+	GUICtrlSetData($g_idMemo, $sMessage & @CRLF, 1)
 EndFunc   ;==>MemoWrite
 
-Func WM_NOTIFY($hWnd, $Msg, $wParam, $lParam)
-	#forceref $hWnd, $Msg, $wParam
+Func WM_NOTIFY($hWnd, $iMsg, $wParam, $lParam)
+	#forceref $hWnd, $iMsg, $wParam
 	Local Const $BCN_HOTITEMCHANGE = -1249
 	Local $tNMBHOTITEM = DllStructCreate("hwnd hWndFrom;int IDFrom;int Code;dword dwFlags", $lParam)
 	Local $nNotifyCode = DllStructGetData($tNMBHOTITEM, "Code")
 	Local $nID = DllStructGetData($tNMBHOTITEM, "IDFrom")
 	Local $hCtrl = DllStructGetData($tNMBHOTITEM, "hWndFrom")
-	Local $dwFlags = DllStructGetData($tNMBHOTITEM, "dwFlags")
+	Local $iFlags = DllStructGetData($tNMBHOTITEM, "dwFlags")
 	Local $sText = ""
 
 	Switch $nNotifyCode
 		Case $BCN_HOTITEMCHANGE ; Win XP and Above
-			If BitAND($dwFlags, 0x10) = 0x10 Then
+			If BitAND($iFlags, 0x10) = 0x10 Then
 				$sText = "$BCN_HOTITEMCHANGE - Entering: " & @CRLF
 
-			ElseIf BitAND($dwFlags, 0x20) = 0x20 Then
+			ElseIf BitAND($iFlags, 0x20) = 0x20 Then
 				$sText = "$BCN_HOTITEMCHANGE - Leaving: " & @CRLF
 			EndIf
 			MemoWrite($sText & _
@@ -83,33 +82,33 @@ EndFunc   ;==>WM_NOTIFY
 
 Func _Popup_Menu($hCtrl)
 	Local $hMenu
-	Local Enum $idOpen = 1000, $idSave, $idInfo
+	Local Enum $e_idOpen = 1000, $e_idSave, $e_idInfo
 	$hMenu = _GUICtrlMenu_CreatePopup()
-	_GUICtrlMenu_InsertMenuItem($hMenu, 0, "Open", $idOpen)
-	_GUICtrlMenu_InsertMenuItem($hMenu, 1, "Save", $idSave)
+	_GUICtrlMenu_InsertMenuItem($hMenu, 0, "Open", $e_idOpen)
+	_GUICtrlMenu_InsertMenuItem($hMenu, 1, "Save", $e_idSave)
 	_GUICtrlMenu_InsertMenuItem($hMenu, 3, "", 0)
-	_GUICtrlMenu_InsertMenuItem($hMenu, 3, "Info", $idInfo)
+	_GUICtrlMenu_InsertMenuItem($hMenu, 3, "Info", $e_idInfo)
 	Switch _GUICtrlMenu_TrackPopupMenu($hMenu, $hCtrl, -1, -1, 1, 1, 2)
-		Case $idOpen
+		Case $e_idOpen
 			MemoWrite("Open - Selected")
-		Case $idSave
+		Case $e_idSave
 			MemoWrite("Save - Selected")
-		Case $idInfo
+		Case $e_idInfo
 			MemoWrite("Info - Selected")
 	EndSwitch
 	_GUICtrlMenu_DestroyMenu($hMenu)
 EndFunc   ;==>_Popup_Menu
 
 ; React on a button click
-Func WM_COMMAND($hWnd, $Msg, $wParam, $lParam)
-	#forceref $hWnd, $Msg
+Func WM_COMMAND($hWnd, $iMsg, $wParam, $lParam)
+	#forceref $hWnd, $iMsg
 	Local $nNotifyCode = BitShift($wParam, 16)
 	Local $nID = BitAND($wParam, 0x0000FFFF)
 	Local $hCtrl = $lParam
 	Local $sText = ""
 
 	Switch $hCtrl
-		Case $btn, $btn2
+		Case $g_hBtn, $g_hBtn2
 			Switch $nNotifyCode
 				Case $BN_CLICKED
 					$sText = "$BN_CLICKED" & @CRLF

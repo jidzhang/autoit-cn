@@ -1,11 +1,12 @@
-#include <WinAPI.au3>
+#include <MsgBoxConstants.au3>
+#include <WinAPIConv.au3>
 
-_Main()
+Example()
 
-Func _Main()
-	Local $float, $text, $INT
-	$float = 10.55
-	$INT = _WinAPI_FloatToInt($float)
-	$text = "The float " & $float & " is converted to the Integer " & $INT & " (Hex = " & Hex($INT) & ")"
-	MsgBox(4096, "_WinAPI_FloatToInt Example Results", $text)
-EndFunc   ;==>_Main
+Func Example()
+	Local $fFloat, $sText, $iInt
+	$fFloat = 10.55
+	$iInt = _WinAPI_FloatToInt($fFloat)
+	$sText = "The float " & $fFloat & " is converted to the Integer " & $iInt & " (Hex = " & Hex($iInt) & ")"
+	MsgBox($MB_SYSTEMMODAL, "_WinAPI_FloatToInt Example Results", $sText)
+EndFunc   ;==>Example

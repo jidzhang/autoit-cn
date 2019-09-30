@@ -1,6 +1,6 @@
-#include <WinAPIMisc.au3>
+#include <WinAPIConv.au3>
 
-Local $Value = 0x1122
+Local $iValue = 0x1122
 
-ConsoleWrite('0x' & Hex($Value, 4) & @CRLF)
-ConsoleWrite('0x' & Hex(_WinAPI_SwapWord($Value), 4) & @CRLF)
+ConsoleWrite('0x' & Hex($iValue, 4) & @CRLF)
+ConsoleWrite('0x' & Hex(_WinAPI_SwapWord($iValue), 4) & @CRLF)

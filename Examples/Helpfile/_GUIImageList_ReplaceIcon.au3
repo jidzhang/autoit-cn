@@ -1,47 +1,48 @@
 #include <GUIConstantsEx.au3>
-#include <WinAPI.au3>
-#include <GuiListView.au3>
 #include <GuiImageList.au3>
+#include <GuiListView.au3>
+#include <WinAPIIcons.au3>
 #include <WindowsConstants.au3>
 
-_Main()
+Example()
 
-Func _Main()
-	Local $listview, $hImage
-	Local $Wow64 = ""
-	If @AutoItX64 Then $Wow64 = "\Wow6432Node"
-	Local $AutoItDir = RegRead("HKEY_LOCAL_MACHINE\SOFTWARE" & $Wow64 & "\AutoIt v3\AutoIt", "InstallDir")
+Func Example()
+	Local $idListview, $hImage
+	Local $sWow64 = ""
+	If @AutoItX64 Then $sWow64 = "\Wow6432Node"
+	Local $sAutoItDir = RegRead("HKEY_LOCAL_MACHINE\SOFTWARE" & $sWow64 & "\AutoIt v3\AutoIt", "InstallDir")
 
-	GUICreate("ImageList AddIcon", 410, 300)
-	$listview = GUICtrlCreateListView("", 2, 2, 404, 268, BitOR($LVS_SHOWSELALWAYS, $LVS_NOSORTHEADER, $LVS_REPORT))
-	GUISetState()
+	GUICreate("ImageList AddIcon", 490, 300)
+	$idListview = GUICtrlCreateListView("", 2, 2, 484, 268, BitOR($LVS_SHOWSELALWAYS, $LVS_NOSORTHEADER, $LVS_REPORT))
+	GUISetState(@SW_SHOW)
 
-	; 创建一个含有图像的图像列表
+	; Create an image list with images
 	$hImage = _GUIImageList_Create(11, 11)
-	AddIcon($hImage, $AutoItDir & "\Icons\filetype1.ico")
-	AddIcon($hImage, $AutoItDir & "\Icons\filetype2.ico")
-	AddIcon($hImage, $AutoItDir & "\Icons\filetype3.ico")
-	_GUICtrlListView_SetImageList($listview, $hImage, 1)
+	AddIcon($hImage, $sAutoItDir & "\Icons\au3.ico")
+	AddIcon($hImage, $sAutoItDir & "\Icons\au3script_v9.ico")
+	AddIcon($hImage, $sAutoItDir & "\Icons\au3script_v10.ico")
+	AddIcon($hImage, $sAutoItDir & "\Icons\au3script_v11.ico")
+	_GUICtrlListView_SetImageList($idListview, $hImage, 1)
 
-	; 添加列
-	_GUICtrlListView_AddColumn($listview, "Column 1", 100, 0, 0)
-	_GUICtrlListView_AddColumn($listview, "Column 2", 100, 1, 1)
-	_GUICtrlListView_AddColumn($listview, "Column 3", 100, 2, 2)
-	_GUICtrlListView_AddColumn($listview, "Column 4", 100)
+	; Add columns
+	_GUICtrlListView_AddColumn($idListview, "Column 1", 100, 0, 0)
+	_GUICtrlListView_AddColumn($idListview, "Column 2", 100, 1, 1)
+	_GUICtrlListView_AddColumn($idListview, "Column 3", 100, 2, 2)
+	_GUICtrlListView_AddColumn($idListview, "Column 4", 100, 1, 3)
+	_GUICtrlListView_AddColumn($idListview, "Column 5", 100)
 
-	; 循环直到用户退出
+	; Loop until the user exits.
 	Do
 	Until GUIGetMsg() = $GUI_EVENT_CLOSE
 	GUIDelete()
-EndFunc   ;==>_Main
+EndFunc   ;==>Example
 
 ; This is the long way to add an icon. Use _GUIImageList_AddIcon instead
 Func AddIcon($hWnd, $sFile, $iIndex = 0)
-	Local $pIcon, $tIcon, $hIcon
+	Local $tIcon, $hIcon
 
 	$tIcon = DllStructCreate("int Icon")
-	$pIcon = DllStructGetPtr($tIcon)
-	_WinAPI_ExtractIconEx($sFile, $iIndex, 0, $pIcon, 1)
+	_WinAPI_ExtractIconEx($sFile, $iIndex, 0, $tIcon, 1)
 	$hIcon = DllStructGetData($tIcon, "Icon")
 	_GUIImageList_ReplaceIcon($hWnd, -1, $hIcon)
 	_WinAPI_DestroyIcon($hIcon)

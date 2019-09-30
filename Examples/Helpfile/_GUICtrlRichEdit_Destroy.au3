@@ -1,19 +1,17 @@
-#include <GuiRichEdit.au3>
 #include <GUIConstantsEx.au3>
+#include <GuiRichEdit.au3>
 #include <WindowsConstants.au3>
 
-Global $hRichEdit
+Example()
 
-Main()
-
-Func Main()
-	Local $hGui, $iMsg, $btnDoIt
-	$hGui = GUICreate("Example (" & StringTrimRight(@ScriptName, 4) & ")", 320, 350, -1, -1)
+Func Example()
+	Local $hGui, $iMsg, $idBtnDoIt, $hRichEdit
+	$hGui = GUICreate("Example (" & StringTrimRight(@ScriptName, StringLen(".exe")) & ")", 320, 350, -1, -1)
 	$hRichEdit = _GUICtrlRichEdit_Create($hGui, "This is a test.", 10, 10, 300, 220, _
 			BitOR($ES_MULTILINE, $WS_VSCROLL, $ES_AUTOVSCROLL))
-	$btnDoIt = GUICtrlCreateButton("Do it", 10, 260, 90, 25)
+	$idBtnDoIt = GUICtrlCreateButton("Do it", 10, 260, 90, 25)
 
-	GUISetState()
+	GUISetState(@SW_SHOW)
 
 	While True
 		$iMsg = GUIGetMsg()
@@ -21,8 +19,8 @@ Func Main()
 			Case $iMsg = $GUI_EVENT_CLOSE
 				GUIDelete() ; needed unless script crashes if DoIt as not been pushed
 				Exit
-			Case $iMsg = $btnDoIt
+			Case $iMsg = $idBtnDoIt
 				_GUICtrlRichEdit_Destroy($hRichEdit)
 		EndSelect
 	WEnd
-EndFunc   ;==>Main
+EndFunc   ;==>Example

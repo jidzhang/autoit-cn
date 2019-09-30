@@ -1,27 +1,26 @@
-#include <GuiEdit.au3>
 #include <GUIConstantsEx.au3>
+#include <GuiEdit.au3>
+#include <MsgBoxConstants.au3>
 
-$Debug_Ed = False ; Check ClassName being passed to Edit functions, set to True and use a handle to another control to see it work
+Example()
 
-_Main()
+Func Example()
+	Local $idEdit
 
-Func _Main()
-	Local $hEdit
-
-	; 创建 GUI
+	; Create GUI
 	GUICreate("Edit Set Limit Text", 400, 300)
-	$hEdit = GUICtrlCreateEdit("This is a test" & @CRLF & "Another Line", 2, 2, 394, 268)
-	GUISetState()
+	$idEdit = GUICtrlCreateEdit("This is a test" & @CRLF & "Another Line", 2, 2, 394, 268)
+	GUISetState(@SW_SHOW)
 
-	MsgBox(4160, "信息", "Text Limit: " & _GUICtrlEdit_GetLimitText($hEdit))
+	MsgBox($MB_SYSTEMMODAL, "Information", "Text Limit: " & _GUICtrlEdit_GetLimitText($idEdit))
 
-	MsgBox(4160, "信息", "Setting Text Limit")
-	_GUICtrlEdit_SetLimitText($hEdit, 64000)
+	MsgBox($MB_SYSTEMMODAL, "Information", "Setting Text Limit")
+	_GUICtrlEdit_SetLimitText($idEdit, 64000)
 
-	MsgBox(4160, "信息", "Text Limit: " & _GUICtrlEdit_GetLimitText($hEdit))
+	MsgBox($MB_SYSTEMMODAL, "Information", "Text Limit: " & _GUICtrlEdit_GetLimitText($idEdit))
 
-	; 循环直到用户退出
+	; Loop until the user exits.
 	Do
 	Until GUIGetMsg() = $GUI_EVENT_CLOSE
 	GUIDelete()
-EndFunc   ;==>_Main
+EndFunc   ;==>Example

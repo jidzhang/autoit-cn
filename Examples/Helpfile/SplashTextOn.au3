@@ -1,21 +1,23 @@
-SplashTextOn("Title", "Message goes here.", -1, -1, -1, -1, 4, "", 24)
+#include <AutoItConstants.au3>
+
+SplashTextOn("Title", "Message goes here.", -1, -1, -1, -1, $DLG_TEXTLEFT, "", 24)
 Sleep(3000)
 SplashOff()
 
-;闪屏效果
-Local $message = ""
-SplashTextOn("TitleFoo", $message, -1, -1, -1, -1, 4, "")
-For $x = 1 To 20
-	$message = $message & $x & @LF
-	SplashTextOn("TitleFoo", $message, -1, -1, -1, -1, 4, "")
+; ; FLICKER
+Local $sMessage = ""
+SplashTextOn("TitleFoo", $sMessage, -1, -1, -1, -1, $DLG_TEXTLEFT, "")
+For $i = 1 To 20
+	$sMessage = $sMessage & $i & @CRLF
+	SplashTextOn("TitleFoo", $sMessage, -1, -1, -1, -1, $DLG_TEXTLEFT, "")
 	Sleep(100)
 Next
 
-;平滑效果
-$message = ""
-SplashTextOn("TitleFoo", $message, -1, -1, -1, -1, 4, "")
-For $x = 1 To 20
-	$message = $message & $x & @LF
-	ControlSetText("TitleFoo", "", "Static1", $message)
+; ; SMOOTH
+$sMessage = ""
+SplashTextOn("TitleFoo", $sMessage, -1, -1, -1, -1, $DLG_TEXTLEFT, "")
+For $i = 1 To 20
+	$sMessage = $sMessage & $i & @CRLF
+	ControlSetText("TitleFoo", "", "Static1", $sMessage)
 	Sleep(100)
 Next

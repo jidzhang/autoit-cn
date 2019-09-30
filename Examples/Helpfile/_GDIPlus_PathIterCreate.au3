@@ -1,11 +1,11 @@
-#include <GUIConstantsEx.au3>
 #include <GDIPlus.au3>
+#include <GUIConstantsEx.au3>
 
 Example()
 
 Func Example()
 	Local $hGUI = GUICreate("GDI+", 600, 300)
-	GUISetState()
+	GUISetState(@SW_SHOW)
 
 	_GDIPlus_Startup()
 	Local $hGraphics = _GDIPlus_GraphicsCreateFromHWND($hGUI)
@@ -30,10 +30,10 @@ Func Example()
 	Local $hSubPath = _GDIPlus_PathCreate();Path to get the subpath figure
 	Local $hMatrix = _GDIPlus_MatrixCreate()
 
-	Local $iTimer = TimerInit(), $aBounds = 0
-	; Loop until user exits
+	Local $hTimer = TimerInit(), $aBounds = 0
+	; Loop until the user exits.
 	Do
-		If TimerDiff($iTimer) > 40 Then
+		If TimerDiff($hTimer) > 40 Then
 			_GDIPlus_GraphicsClear($hGfx_Buffer, 0xFF000000)
 			For $i = 1 To $iIterCnt
 				_GDIPlus_PathReset($hSubPath);reset path transformation
@@ -51,7 +51,7 @@ Func Example()
 			_GDIPlus_PathIterRewind($hIter)
 
 			_GDIPlus_GraphicsDrawImage($hGraphics, $hBmp_Buffer, 0, 0)
-			$iTimer = TimerInit()
+			$hTimer = TimerInit()
 		EndIf
 	Until GUIGetMsg() = $GUI_EVENT_CLOSE
 

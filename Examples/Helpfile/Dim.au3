@@ -1,15 +1,13 @@
-﻿Local $weeklyWorkSchedule
-; 例子 1- 声明变量
-Local $x, $y = 23, $z
-Global $_PI = 3.14159, $RADIUS
-Local $_daysWorking = 5
+; Example 1 - Declaring variables
+Local $i, $j = 23, $k
+Global $g_fPI = 3.14159, $g_iRADIUS
+Local $iDaysWorking = 5
 
-; 例子 2- 声明数组
-Dim $weeklyWorkSchedule[$_daysWorking]
-Global $chessBoard[8][8]
-Local $mouseCoordinates[2], $windowStats[4]
+; Example 2 - Declaring arrays
+Global $g_aChessBoard[8][8]
+Local $aStates[2], $aWindowsStats[4]
 
-; 例子 3 - 声明常(变)量
-Const $x1 = 11, $y1 = 23, $z1 = 55
+; Example 3 - Declaring constant variables
+Const $iX1 = 11, $iY1 = 23, $iZ1 = 55
 Global Const $PI = 3.14159, $E = 2.71828
-Local Const $daysWorking = 5
+Local Const $DAYS_WORKING = 5

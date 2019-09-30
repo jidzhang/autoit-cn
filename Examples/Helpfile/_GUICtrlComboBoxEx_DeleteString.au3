@@ -1,18 +1,17 @@
 #include <GuiComboBoxEx.au3>
-#include <GuiImageList.au3>
 #include <GUIConstantsEx.au3>
+#include <GuiImageList.au3>
+#include <MsgBoxConstants.au3>
 
-$Debug_CB = False ; 检查传递给 ComboBox/ComboBoxEx 函数的类名, 设置为真并使用另一控件的句柄可以看出它是否有效
+Example()
 
-_Main()
-
-Func _Main()
+Func Example()
 	Local $hGUI, $hImage, $hCombo
 
-	; 创建 GUI
+	; Create GUI
 	$hGUI = GUICreate("ComboBoxEx Delete String", 400, 300)
 	$hCombo = _GUICtrlComboBoxEx_Create($hGUI, "", 2, 2, 394, 100, $CBS_SIMPLE)
-	GUISetState()
+	GUISetState(@SW_SHOW)
 
 	$hImage = _GUIImageList_Create(16, 16, 5, 3)
 	_GUIImageList_Add($hImage, _GUICtrlComboBoxEx_CreateSolidBitMap($hCombo, 0xFF0000, 16, 16))
@@ -24,10 +23,10 @@ Func _Main()
 		_GUICtrlComboBoxEx_AddString($hCombo, StringFormat("%03d : Random string", Random(1, 100, 1)), $x, $x)
 	Next
 
-	; 删除字符串
-	MsgBox(4160, "信息", "Delete String")
+	; Delete String
+	MsgBox($MB_SYSTEMMODAL, "Information", "Delete String")
 	_GUICtrlComboBoxEx_DeleteString($hCombo, 1)
 
 	Do
 	Until GUIGetMsg() = $GUI_EVENT_CLOSE
-EndFunc   ;==>_Main
+EndFunc   ;==>Example

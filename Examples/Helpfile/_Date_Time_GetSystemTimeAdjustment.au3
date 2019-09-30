@@ -1,42 +1,42 @@
 #include <Date.au3>
-#include <WinAPI.au3>
+#include <MsgBoxConstants.au3>
+#include <WinAPIError.au3>
 
-; 由于系统安全性在 Vista 中 Windows API "SetSystemTimeAdjustment" 可能被拒绝
+; Under Vista the Windows API "SetSystemTimeAdjustment" may be rejected due to system security
 
-_Main()
+Example()
 
-Func _Main()
+Func Example()
 	Local $aInfo
 
-	; 打开时钟这样我们可以观察到有趣的现象
+	; Open the clock so we can watch the fun
 	Run("RunDll32.exe shell32.dll,Control_RunDLL timedate.cpl")
 	WinWaitActive("[CLASS:#32770]")
 
-	; 获取本地协调时
+	; Get current time adjustments
 	$aInfo = _Date_Time_GetSystemTimeAdjustment()
 
-	; 减慢时钟
+	; Slow down clock
 	If Not _Date_Time_SetSystemTimeAdjustment($aInfo[1] / 10, False) Then
-		MsgBox(4096, "错误", "System clock cannot be DOWN" & @CRLF & @CRLF & _WinAPI_GetLastErrorMessage())
+		MsgBox($MB_SYSTEMMODAL, "Error", "System clock cannot be DOWN" & @CRLF & @CRLF & _WinAPI_GetLastErrorMessage())
 		Exit
 	EndIf
-	MsgBox(4096, "信息", "Slowing down system clock", 2)
+	MsgBox($MB_SYSTEMMODAL, "Information", "Slowing down system clock", 2)
 
 	Sleep(5000)
 
-	; 加快时钟
+	; Speed up clock
 	If Not _Date_Time_SetSystemTimeAdjustment($aInfo[1] * 10, False) Then
-		MsgBox(4096, "错误", "System clock cannot be UP" & @CRLF & @CRLF & _WinAPI_GetLastErrorMessage())
+		MsgBox($MB_SYSTEMMODAL, "Error", "System clock cannot be UP" & @CRLF & @CRLF & _WinAPI_GetLastErrorMessage())
 	EndIf
-	MsgBox(4096, "信息", "Speeding up system clock", 2)
+	MsgBox($MB_SYSTEMMODAL, "Information", "Speeding up system clock", 2)
 
 	Sleep(5000)
 
-	; 重设时间调整设置
+	; Reset time adjustment
 	If Not _Date_Time_SetSystemTimeAdjustment($aInfo[1], True) Then
-		MsgBox(4096, "错误", "System clock cannot be RESET" & @CRLF & @CRLF & _WinAPI_GetLastErrorMessage())
+		MsgBox($MB_SYSTEMMODAL, "Error", "System clock cannot be RESET" & @CRLF & @CRLF & _WinAPI_GetLastErrorMessage())
 	Else
-		MsgBox(4096, "信息", "System clock restored")
+		MsgBox($MB_SYSTEMMODAL, "Information", "System clock restored")
 	EndIf
-
-EndFunc   ;==>_Main
+EndFunc   ;==>Example

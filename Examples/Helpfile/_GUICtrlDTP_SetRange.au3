@@ -1,52 +1,50 @@
 #include <GUIConstantsEx.au3>
 #include <GuiDateTimePicker.au3>
 
-$Debug_DTP = False 检查传递给 DTP 函数的类名, 设置为True并输出到一个控件的句柄,用于检查它是否工作
+Global $g_idMemo, $g_aRange[14] = [True, @YEAR, 1, 1, 21, 45, 32, True, @YEAR, 12, 31, 23, 59, 59]
 
-Global $iMemo, $aRange[14] = [True, @YEAR, 1, 1, 21, 45, 32, True, @YEAR, 12, 31, 23, 59, 59]
+Example()
 
-_Main()
-
-Func _Main()
+Func Example()
 	Local $hDTP
 
-	; 创建 GUI
+	; Create GUI
 	GUICreate("DateTimePick Set Range", 400, 300)
 	$hDTP = GUICtrlGetHandle(GUICtrlCreateDate("", 2, 6, 190))
-	$iMemo = GUICtrlCreateEdit("", 2, 32, 396, 266, 0)
-	GUICtrlSetFont($iMemo, 9, 400, 0, "Courier New")
-	GUISetState()
+	$g_idMemo = GUICtrlCreateEdit("", 2, 32, 396, 266, 0)
+	GUICtrlSetFont($g_idMemo, 9, 400, 0, "Courier New")
+	GUISetState(@SW_SHOW)
 
-	; 设置显示的格式
+	; Set the display format
 	_GUICtrlDTP_SetFormat($hDTP, "ddd MMM dd, yyyy hh:mm ttt")
 
-	; 设置日期范围
-	_GUICtrlDTP_SetRange($hDTP, $aRange)
+	; Set date range
+	_GUICtrlDTP_SetRange($hDTP, $g_aRange)
 
-	; 显示日期范围
-	$aRange = _GUICtrlDTP_GetRange($hDTP)
+	; Display date range
+	$g_aRange = _GUICtrlDTP_GetRange($hDTP)
 	MemoWrite("Minimum date: " & GetDateStr(0))
 	MemoWrite("Maximum date: " & GetDateStr(7))
 	MemoWrite("Minimum time: " & GetTimeStr(4))
 	MemoWrite("Maximum time: " & GetTimeStr(11))
 
-	; 循环直到用户退出
+	; Loop until the user exits.
 	Do
 	Until GUIGetMsg() = $GUI_EVENT_CLOSE
 	GUIDelete()
-EndFunc   ;==>_Main
+EndFunc   ;==>Example
 
-; 返回日期部分
+; Returns the date portion
 Func GetDateStr($iOff = 0)
-	Return StringFormat("%02d/%02d/%04d", $aRange[$iOff + 2], $aRange[$iOff + 3], $aRange[$iOff + 1])
+	Return StringFormat("%02d/%02d/%04d", $g_aRange[$iOff + 2], $g_aRange[$iOff + 3], $g_aRange[$iOff + 1])
 EndFunc   ;==>GetDateStr
 
-; 返回时间部分
+; Returns the time portion
 Func GetTimeStr($iOff = 0)
-	Return StringFormat("%02d:%02d:%02d", $aRange[$iOff], $aRange[$iOff + 1], $aRange[$iOff + 2])
+	Return StringFormat("%02d:%02d:%02d", $g_aRange[$iOff], $g_aRange[$iOff + 1], $g_aRange[$iOff + 2])
 EndFunc   ;==>GetTimeStr
 
-; 写入一行到 memo 控件
+; Write a line to the memo control
 Func MemoWrite($sMessage)
-	GUICtrlSetData($iMemo, $sMessage & @CRLF, 1)
+	GUICtrlSetData($g_idMemo, $sMessage & @CRLF, 1)
 EndFunc   ;==>MemoWrite

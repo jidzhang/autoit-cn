@@ -1,9 +1,9 @@
 #include <GUIConstantsEx.au3>
-#include <GuiListView.au3>
 #include <GuiImageList.au3>
+#include <GuiListView.au3>
 #include <WindowsConstants.au3>
 
-Global $hListView, $hListView2
+Global $g_idListView, $g_idListView2
 
 Example()
 
@@ -12,10 +12,10 @@ Func Example()
 	Local $iExWindowStyle = BitOR($WS_EX_DLGMODALFRAME, $WS_EX_CLIENTEDGE)
 	Local $iExListViewStyle = BitOR($LVS_EX_FULLROWSELECT, $LVS_EX_SUBITEMIMAGES, $LVS_EX_GRIDLINES, $LVS_EX_CHECKBOXES, $LVS_EX_DOUBLEBUFFER)
 
-	GUICreate("ListView Sort Treat Numbers as Strings", 300, 200, 100)
+	GUICreate("ListView Sort Treat Numbers as Strings", 400, 200, 100)
 
-	$hListView = GUICtrlCreateListView("Column1|Col2|Col3", 10, 10, 280, 180, -1, $iExWindowStyle)
-	_GUICtrlListView_SetExtendedListViewStyle($hListView, $iExListViewStyle)
+	$g_idListView = GUICtrlCreateListView("Column1|Col2|Col3", 10, 10, 380, 180, -1, $iExWindowStyle)
+	_GUICtrlListView_SetExtendedListViewStyle($g_idListView, $iExListViewStyle)
 
 	; Load images
 	$hImage = _GUIImageList_Create(18, 18, 5, 3)
@@ -28,28 +28,28 @@ Func Example()
 	_GUIImageList_AddIcon($hImage, @SystemDir & "\shell32.dll", -9)
 	_GUIImageList_AddIcon($hImage, @SystemDir & "\shell32.dll", -10)
 	_GUIImageList_AddIcon($hImage, @SystemDir & "\shell32.dll", -11)
-	_GUICtrlListView_SetImageList($hListView, $hImage, 1)
+	_GUICtrlListView_SetImageList($g_idListView, $hImage, 1)
 
-	_AddRow($hListView, "ABC|000666|10.05.2004", $aIcons)
-	_AddRow($hListView, "DEF|444|11.05.2005", $aIcons, 1)
-	_AddRow($hListView, "CDE|555|12.05.2004", $aIcons, 2)
+	_AddRow($g_idListView, "ABC|000666|10.05.2004", $aIcons)
+	_AddRow($g_idListView, "DEF|444|11.05.2005", $aIcons, 1)
+	_AddRow($g_idListView, "CDE|555|12.05.2004", $aIcons, 2)
 
-	GUISetState()
+	GUISetState(@SW_SHOW)
 
-	GUICreate("ListView Sort Treat Numbers as Numbers", 300, 200, 400)
+	GUICreate("ListView Sort Treat Numbers as Numbers", 400, 200, 500)
 
-	$hListView2 = GUICtrlCreateListView("Column1|Col2|Col3", 10, 10, 280, 180, -1, $iExWindowStyle)
-	_GUICtrlListView_SetExtendedListViewStyle($hListView2, $iExListViewStyle)
-	_GUICtrlListView_SetImageList($hListView2, $hImage, 1)
+	$g_idListView2 = GUICtrlCreateListView("Column1|Col2|Col3", 10, 10, 380, 180, -1, $iExWindowStyle)
+	_GUICtrlListView_SetExtendedListViewStyle($g_idListView2, $iExListViewStyle)
+	_GUICtrlListView_SetImageList($g_idListView2, $hImage, 1)
 
-	_AddRow($hListView2, "ABC|000666|10.05.2004", $aIcons)
-	_AddRow($hListView2, "DEF|444|11.05.2005", $aIcons, 1)
-	_AddRow($hListView2, "CDE|555|12.05.2004", $aIcons, 2)
+	_AddRow($g_idListView2, "ABC|000666|10.05.2004", $aIcons)
+	_AddRow($g_idListView2, "DEF|444|11.05.2005", $aIcons, 1)
+	_AddRow($g_idListView2, "CDE|555|12.05.2004", $aIcons, 2)
 
-	GUISetState()
+	GUISetState(@SW_SHOW)
 
-	_GUICtrlListView_RegisterSortCallBack($hListView, False)
-	_GUICtrlListView_RegisterSortCallBack($hListView2)
+	_GUICtrlListView_RegisterSortCallBack($g_idListView, 0)
+	_GUICtrlListView_RegisterSortCallBack($g_idListView2)
 	GUIRegisterMsg($WM_NOTIFY, "_WM_NOTIFY")
 
 	While 1
@@ -59,8 +59,8 @@ Func Example()
 		EndSwitch
 	WEnd
 
-	_GUICtrlListView_UnRegisterSortCallBack($hListView)
-	_GUICtrlListView_UnRegisterSortCallBack($hListView2)
+	_GUICtrlListView_UnRegisterSortCallBack($g_idListView)
+	_GUICtrlListView_UnRegisterSortCallBack($g_idListView2)
 	GUIRegisterMsg($WM_NOTIFY, "")
 EndFunc   ;==>Example
 
@@ -75,16 +75,16 @@ Func _AddRow($hWnd, $sItem, $aIcons, $iPlus = 0)
 	Next
 EndFunc   ;==>_AddRow
 
-Func _WM_NOTIFY($hWnd, $iMsg, $iwParam, $ilParam)
-	#forceref $hWnd, $iMsg, $iwParam
+Func _WM_NOTIFY($hWnd, $iMsg, $wParam, $lParam)
+	#forceref $hWnd, $iMsg, $wParam
 	Local $hWndFrom, $iCode, $tNMHDR, $hWndListView, $hWndListView2
 
-	$hWndListView = $hListView
-	$hWndListView2 = $hListView2
-	If Not IsHWnd($hListView) Then $hWndListView = GUICtrlGetHandle($hListView)
-	If Not IsHWnd($hListView2) Then $hWndListView2 = GUICtrlGetHandle($hListView2)
+	$hWndListView = $g_idListView
+	$hWndListView2 = $g_idListView2
+	If Not IsHWnd($g_idListView) Then $hWndListView = GUICtrlGetHandle($g_idListView)
+	If Not IsHWnd($g_idListView2) Then $hWndListView2 = GUICtrlGetHandle($g_idListView2)
 
-	$tNMHDR = DllStructCreate($tagNMHDR, $ilParam)
+	$tNMHDR = DllStructCreate($tagNMHDR, $lParam)
 	$hWndFrom = HWnd(DllStructGetData($tNMHDR, "hWndFrom"))
 	$iCode = DllStructGetData($tNMHDR, "Code")
 
@@ -92,7 +92,7 @@ Func _WM_NOTIFY($hWnd, $iMsg, $iwParam, $ilParam)
 		Case $hWndListView, $hWndListView2
 			Switch $iCode
 				Case $LVN_COLUMNCLICK ; A column was clicked
-					Local $tInfo = DllStructCreate($tagNMLISTVIEW, $ilParam)
+					Local $tInfo = DllStructCreate($tagNMLISTVIEW, $lParam)
 
 					; Kick off the sort callback
 					_GUICtrlListView_SortItems($hWndFrom, DllStructGetData($tInfo, "SubItem"))

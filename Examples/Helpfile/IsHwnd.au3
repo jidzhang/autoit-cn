@@ -1,3 +1,5 @@
+#include <MsgBoxConstants.au3>
+
 Example()
 
 Func Example()
@@ -9,8 +11,8 @@ Func Example()
 
 	; Test if the window was found and display the results.
 	If IsHWnd($hWnd) Then
-		MsgBox(4096, "", "It's a valid HWND")
+		MsgBox($MB_SYSTEMMODAL, "", "It's a valid HWND")
 	Else
-		MsgBox(4096, "", "It's not a valid HWND")
+		MsgBox($MB_SYSTEMMODAL, "", "It's not a valid HWND")
 	EndIf
 EndFunc   ;==>Example

@@ -1,6 +1,6 @@
-#include <WinAPISys.au3>
-#include <WindowsConstants.au3>
 #include <GUIConstantsEx.au3>
+#include <WinAPISysWin.au3>
+#include <WindowsConstants.au3>
 
 Local $hForm = GUICreate('', 240, 268, 10, 10, BitOR($WS_CAPTION, $WS_POPUP), $WS_EX_TOPMOST)
 GUICtrlCreateLabel('Thread state:', 20, 18, 90, 14)
@@ -14,30 +14,30 @@ GUICtrlCreateLabel('Left:', 20, 172, 90, 14)
 GUICtrlCreateLabel('Top:', 20, 194, 90, 14)
 GUICtrlCreateLabel('Width:', 20, 216, 90, 14)
 GUICtrlCreateLabel('Height:', 20, 238, 90, 14)
-Local $Input[11]
+Local $a_idInput[11]
 For $i = 0 To 10
-	$Input[$i] = GUICtrlCreateLabel('', 114, 18 + 22 * $i, 116, 14)
+	$a_idInput[$i] = GUICtrlCreateLabel('', 114, 18 + 22 * $i, 116, 14)
 Next
 GUISetState(@SW_SHOWNOACTIVATE)
 
-Local $hWnd, $Info, $PID
+Local $hWnd, $aInfo, $iPID
 Do
 	$hWnd = WinGetHandle('[ACTIVE]')
-	$Info = _WinAPI_GetGUIThreadInfo(_WinAPI_GetWindowThreadProcessId($hWnd, $PID))
+	$aInfo = _WinAPI_GetGUIThreadInfo(_WinAPI_GetWindowThreadProcessId($hWnd, $iPID))
 	If Not @error Then
 		WinSetTitle($hForm, '', WinGetTitle($hWnd))
-		$Info[0] = '0x' & Hex($Info[0], 8)
+		$aInfo[0] = '0x' & Hex($aInfo[0], 8)
 	Else
 		WinSetTitle($hForm, '', '')
-		Dim $Info[11]
+		Dim $aInfo[11]
 		For $i = 0 To 10
-			$Info[$i] = ''
+			$aInfo[$i] = ''
 		Next
 		$hWnd = 0
 	EndIf
 	For $i = 0 To 10
-		If StringCompare(GUICtrlRead($Input[$i]), $Info[$i]) Then
-			GUICtrlSetData($Input[$i], $Info[$i])
+		If StringCompare(GUICtrlRead($a_idInput[$i]), $aInfo[$i]) Then
+			GUICtrlSetData($a_idInput[$i], $aInfo[$i])
 		EndIf
 	Next
 Until GUIGetMsg() = $GUI_EVENT_CLOSE

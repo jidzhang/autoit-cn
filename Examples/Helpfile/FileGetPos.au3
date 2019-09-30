@@ -1,33 +1,40 @@
-#include <Constants.au3>
+#include <FileConstants.au3>
+#include <MsgBoxConstants.au3>
+#include <WinAPIFiles.au3>
 
-Local Const $sFile = "test.txt"
-Local $hFile = FileOpen($sFile, 2)
+Example()
 
-; 检查文件是否写入模式
-If $hFile = -1 Then
-	MsgBox(4096, "错误", "无法打开文件.")
-	Exit
-EndIf
+Func Example()
+	; Create a constant variable in Local scope of the filepath that will be read/written to.
+	Local Const $sFilePath = _WinAPI_GetTempFileName(@TempDir)
 
-;写入文本.
-FileWriteLine($hFile, "Line1")
-FileWriteLine($hFile, "Line2")
-FileWriteLine($hFile, "Line3")
+	; Open the file for writing (overwrite the file) and store the handle to a variable.
+	Local $hFileOpen = FileOpen($sFilePath, $FO_OVERWRITE)
+	If $hFileOpen = -1 Then
+		MsgBox($MB_SYSTEMMODAL, "", "An error occurred whilst writing the temporary file.")
+		Return False
+	EndIf
 
-; 保存该文本文件内存缓冲区数据到磁盘.
-FileFlush($hFile)
+	; Write data to the file using the handle returned by FileOpen.
+	FileWriteLine($hFileOpen, "Line 1")
+	FileWriteLine($hFileOpen, "Line 2")
+	FileWriteLine($hFileOpen, "Line 3")
 
-; 读取当前文件坐标内容
-MsgBox(4096, "", "位置: " & FileGetPos($hFile) & @CRLF & "数据: " & @CRLF & FileRead($hFile))
+	; Flush the file to disk.
+	FileFlush($hFileOpen)
 
-; 设置当前文件坐标.
-Local $n = FileSetPos($hFile, 0, $FILE_BEGIN)
+	; Check file position and try to read contents for current position.
+	MsgBox($MB_SYSTEMMODAL, "", "Position: " & FileGetPos($hFileOpen) & @CRLF & "Data: " & @CRLF & FileRead($hFileOpen))
 
-;读取当前文件坐标内容
-MsgBox(4096, "", "位置: " & FileGetPos($hFile) & @CRLF & "数据: " & @CRLF & FileRead($hFile))
+	; Now, adjust the position to the beginning.
+	FileSetPos($hFileOpen, 0, $FILE_BEGIN)
 
-;关闭此前已打开的文件.
-FileClose($hFile)
+	; Check file position and try to read contents for current position.
+	MsgBox($MB_SYSTEMMODAL, "", "Position: " & FileGetPos($hFileOpen) & @CRLF & "Data: " & @CRLF & FileRead($hFileOpen))
 
-;删除临时文件.
-FileDelete($sFile)
+	; Close the handle returned by FileOpen.
+	FileClose($hFileOpen)
+
+	; Delete the temporary file.
+	FileDelete($sFilePath)
+EndFunc   ;==>Example

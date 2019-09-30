@@ -1,2 +1,4 @@
-Local $result = StringLeft("I am a string", 3)
-MsgBox(4096, "最左边三个字符为:", $result)
+#include <MsgBoxConstants.au3>
+
+Local $sString = StringLeft("This is a sentence with whitespace.", 5) ; Retrieve 5 characters from the left of the string.
+MsgBox($MB_SYSTEMMODAL, "", "The 5 leftmost characters are: " & $sString)

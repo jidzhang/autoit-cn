@@ -11,32 +11,32 @@
 ;
 
 ; Prompt the user to run the script - use a Yes/No prompt with the flag parameter set at 4 (see the help file for more details)
-Local $iAnswer = MsgBox(BitOR($MB_YESNO, $MB_SYSTEMMODAL), "AutoIt 例子 (英文+您系统的语言)", "这个脚本打开一个输入框,并要求您输入一些文本.  运行?")
+Local $iAnswer = MsgBox(BitOR($MB_YESNO, $MB_SYSTEMMODAL), "AutoIt Example (English Only)", "This script will open an input box and get you to type in some text.  Do you want to run it?")
 
 ; Check the user's answer to the prompt (see the help file for MsgBox return values)
 ; If "No" was clicked (7) then exit the script
 If $iAnswer = 7 Then
-	MsgBox($MB_SYSTEMMODAL, "AutoIt", "好的,再见!")
+	MsgBox($MB_SYSTEMMODAL, "AutoIt", "OK.  Bye!")
 	Exit
 EndIf
 
-; Loop around until the user gives a valid "thesnow" answer. This is not case-sensitive, therefore AutoIt and AuToIT are acceptable values as well
+; Loop around until the user gives a valid "autoit" answer. This is not case-sensitive, therefore AutoIt and AuToIT are acceptable values as well
 Local $iLoop = 1, $sText = ""
 While $iLoop = 1
-	$sText = InputBox("AutoIt 例子", "请输入:""thesnow"" 并单击确定")
+	$sText = InputBox("AutoIt Example", "Please type in the word ""autoit"" and click OK")
 	If @error = 1 Then
-		MsgBox($MB_SYSTEMMODAL, "错误", "您按下了 '取消' - 请重试!")
+		MsgBox($MB_SYSTEMMODAL, "Error", "You pressed 'Cancel' - try again!")
 	Else
 		; They clicked OK, but did they type the right thing?
-	If $sText <> "thesnow" Then ; This is not case-sensitive, therefore AutoIt and AuToIT are acceptable values as well
-			MsgBox($MB_SYSTEMMODAL, "错误", "难道您不知道小名鼎鼎的 thesnow 吗? - 请重试!")
+		If $sText <> "autoit" Then ; This is not case-sensitive, therefore AutoIt and AuToIT are acceptable values as well
+			MsgBox($MB_SYSTEMMODAL, "Error", "You typed in the wrong thing - try again!")
 		Else
-			$iLoop = 0 ; Exit the loop - ExitLoop would have been an alternative too :)
+			$iLoop = 0 ; Exit the loop - ExitLoop would have been an alternative too
 		EndIf
 	EndIf
 WEnd
 
 ; Print the success message
-MsgBox($MB_SYSTEMMODAL,"AutoIt 例子", "您输入了正确的单词!  恭喜.")
+MsgBox($MB_SYSTEMMODAL, "AutoIt Example", "You typed in the correct word!  Congrats.")
 
 ; Finished!

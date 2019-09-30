@@ -1,6 +1,10 @@
-#include <WinAPIGdi.au3>
 #include <APIGdiConstants.au3>
-#include <WinAPISys.au3>
+#include <MsgBoxConstants.au3>
+#include <WinAPIFiles.au3>
+#include <WinAPIGdi.au3>
+#include <WinAPIHObj.au3>
+#include <WinAPIMem.au3>
+#include <WinAPIRes.au3>
 
 ; Load image
 Local $hSource = _WinAPI_LoadImage(0, @ScriptDir & '\Extras\AutoIt.bmp', $IMAGE_BITMAP, 0, 0, BitOR($LR_LOADFROMFILE, $LR_CREATEDIBSECTION))
@@ -10,7 +14,7 @@ Local $hBitmap = _WinAPI_AdjustBitmap($hSource, 256, 256, $HALFTONE)
 
 ; Create compressed PNG data
 Local $pData = 0
-Local $Length = _WinAPI_CompressBitmapBits($hBitmap, $pData)
+Local $iLength = _WinAPI_CompressBitmapBits($hBitmap, $pData, 2);$COMPRESSION_BITMAP_PNG)
 
 ; Create .ico file
 If Not @error Then
@@ -25,13 +29,16 @@ If Not @error Then
 	DllStructSetData($tHDR, 'Reserved', 0)
 	DllStructSetData($tHDR, 'Planes', 1)
 	DllStructSetData($tHDR, 'BitCount', 32)
-	DllStructSetData($tHDR, 'Size', $Length)
+	DllStructSetData($tHDR, 'Size', $iLength)
 	DllStructSetData($tHDR, 'Offset', DllStructGetSize($tICO))
 	Local $hFile = _WinAPI_CreateFile(@TempDir & '\MyIcon.ico', 1, 4)
-	Local $Bytes
-	_WinAPI_WriteFile($hFile, DllStructGetPtr($tICO), DllStructGetSize($tICO), $Bytes)
-	_WinAPI_WriteFile($hFile, $pData, $Length, $Bytes)
+	Local $iBytes
+	_WinAPI_WriteFile($hFile, $tICO, DllStructGetSize($tICO), $iBytes)
+	_WinAPI_WriteFile($hFile, $pData, $iLength, $iBytes)
 	_WinAPI_CloseHandle($hFile)
+	ShellExecute("MsPaint", '"' & @TempDir & '\MyIcon.ico' & '"')
+Else
+	MsgBox($MB_SYSTEMMODAL, "Error", "_WinAPI_CompressBitmapBits() failed (@error = " & @error & ")")
 EndIf
 
 ; Delete unnecessary bitmaps

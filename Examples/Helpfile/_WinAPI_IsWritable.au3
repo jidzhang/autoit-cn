@@ -1,17 +1,21 @@
+#include <WinAPIError.au3>
 #include <WinAPIFiles.au3>
 
-Local $Drive = DriveGetDrive('ALL')
+Local $aDrive = DriveGetDrive('ALL')
 
-If IsArray($Drive) Then
-	Local $Text
-	For $i = 1 To $Drive[0]
-		If _WinAPI_IsWritable($Drive[$i]) Then
-			$Text = 'Writable'
+If IsArray($aDrive) Then
+	Local $sText
+	For $i = 1 To $aDrive[0]
+		If _WinAPI_IsWritable($aDrive[$i]) Then
+			$sText = 'Writable'
 		Else
-			$Text = 'Not writable'
+			If @error Then
+				$sText = 'No media'
+				If @extended Then $sText &= ' ( @error=' & @error & ' LastError=' & _WinAPI_GetLastErrorMessage() & ')'
+			Else
+				$sText = 'Not writable'
+			EndIf
 		EndIf
-		If Not @error Then
-			ConsoleWrite(StringUpper($Drive[$i]) & ' => ' & $Text & @CRLF)
-		EndIf
+		ConsoleWrite(StringUpper($aDrive[$i]) & ' => ' & $sText & @CRLF)
 	Next
 EndIf

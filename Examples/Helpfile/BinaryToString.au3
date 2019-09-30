@@ -1,49 +1,63 @@
-﻿Example()
+#include <MsgBoxConstants.au3>
+#include <StringConstants.au3>
+
+Example()
 
 Func Example()
-	; 定义一个字符串
+	; Define the string that will be converted later.
+	; NOTE: This string may show up as ?? in the help file and even in some editors.
+	; This example is saved as UTF-8 with BOM.  It should display correctly in editors
+	; which support changing code pages based on BOMs.
 	Local Const $sString = "Hello - 你好"
 
-	; 建立临时变量，以便存储转换结果.
-	Local $sBinary, $sConverted
-;----------------------------------------------------------------------
-	; 将 UTF-8 格式的字符串转换为 ANSI 格式的二进制数据.	
-	$sBinary = StringToBinary($sString)
+	; Temporary variables used to store conversion results.  $dBinary will hold
+	; the original string in binary form and $sConverted will hold the result
+	; afte it's been transformed back to the original format.
+	Local $dBinary = Binary(""), $sConverted = ""
 
-	; 将 ANSI 格式的二进制数据转换为字符串.
-	$sConverted = BinaryToString($sBinary)
+	; Convert the original UTF-8 string to an ANSI compatible binary string.
+	$dBinary = StringToBinary($sString)
 
-	; 显示转换结果.
-	DisplayResults($sString, $sBinary, $sConverted, "ANSI")
-;----------------------------------------------------------------------
-	; 将 UTF-8 格式的字符串转换为 UTF16-LE 格式的二进制数据.	
-	$sBinary = StringToBinary($sString, 2)
+	; Convert the ANSI compatible binary string back into a string.
+	$sConverted = BinaryToString($dBinary)
 
-	; 将 UTF16-LE 格式的二进制数据转换为字符串.
-	$sConverted = BinaryToString($sBinary, 2)
+	; Display the resulsts.  Note that the last two characters will appear
+	; as ?? since they cannot be represented in ANSI.
+	DisplayResults($sString, $dBinary, $sConverted, "ANSI")
 
-	; 显示转换结果.
-	DisplayResults($sString, $sBinary, $sConverted, "UTF16-LE")
-;----------------------------------------------------------------------
-	; 将 UTF-8 格式的字符串转换为 UTF16-BE 格式的二进制数据.	
-	$sBinary = StringToBinary($sString, 3)
+	; Convert the original UTF-8 string to an UTF16-LE binary string.
+	$dBinary = StringToBinary($sString, $SB_UTF16LE)
 
-	; 将 UTF16-BE 格式的二进制数据转换为字符串.
-	$sConverted = BinaryToString($sBinary, 3)
+	; Convert the UTF16-LE binary string back into a string.
+	$sConverted = BinaryToString($dBinary, $SB_UTF16LE)
 
-	; 显示转换结果.
-	DisplayResults($sString, $sBinary, $sConverted, "UTF16-BE")
-;----------------------------------------------------------------------
-	; 将 UTF-8 格式的字符串转换为 UTF-8 格式的二进制数据.
-	$sBinary = StringToBinary($sString, 4)
+	; Display the resulsts.
+	DisplayResults($sString, $dBinary, $sConverted, "UTF16-LE")
 
-	; 将 UTF-8 格式的二进制数据转换为字符串.
-	$sConverted = BinaryToString($sBinary, 4)
+	; Convert the original UTF-8 string to an UTF16-BE binary string.
+	$dBinary = StringToBinary($sString, $SB_UTF16BE)
 
-	; 显示转换结果.
-	DisplayResults($sString, $sBinary, $sConverted, "UTF8")
+	; Convert the UTF16-BE binary string back into a string.
+	$sConverted = BinaryToString($dBinary, $SB_UTF16BE)
+
+	; Display the resulsts.
+	DisplayResults($sString, $dBinary, $sConverted, "UTF16-BE")
+
+	; Convert the original UTF-8 string to an UTF-8 binary string.
+	$dBinary = StringToBinary($sString, $SB_UTF8)
+
+	; Convert the UTF8 binary string back into a string.
+	$sConverted = BinaryToString($dBinary, $SB_UTF8)
+
+	; Display the resulsts.
+	DisplayResults($sString, $dBinary, $sConverted, "UTF8")
 EndFunc   ;==>Example
 
-Func DisplayResults($sOriginal, $sBinary, $sConverted, $sConversionType)
-	MsgBox(4096, "", "字符串：" & $sOriginal & @CRLF & @CRLF & "字符串转换为二进制:" & @CRLF & $sBinary & @CRLF & @CRLF & "二进制转换为" & $sConversionType & ":" & @CRLF & $sConverted)
+; Helper function which formats the message for display.  It takes the following parameters:
+; $sOriginal - The original string before conversions.
+; $dBinary - The original string after it has been converted to binary.
+; $sConverted- The string after it has been converted to binary and then back to a string.
+; $sConversionType - A human friendly name for the encoding type used for the conversion.
+Func DisplayResults($sOriginal, $dBinary, $sConverted, $sConversionType)
+	MsgBox($MB_SYSTEMMODAL, "", "Original:" & @CRLF & $sOriginal & @CRLF & @CRLF & "Binary:" & @CRLF & $dBinary & @CRLF & @CRLF & $sConversionType & ":" & @CRLF & $sConverted)
 EndFunc   ;==>DisplayResults

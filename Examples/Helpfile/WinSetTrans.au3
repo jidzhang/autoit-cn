@@ -1,18 +1,18 @@
-﻿Example()
+Example()
 
 Func Example()
-	; 运行记事本程序
+	; Run Notepad
 	Run("notepad.exe")
 
-	; 10秒内暂停脚本的执行,直至记事本窗口存在(出现)为止
+	; Wait 10 seconds for the Notepad window to appear.
 	Local $hWnd = WinWait("[CLASS:Notepad]", "", 10)
 
-	; 设置记事本窗口的透明度=170.
+	; Set the transparency of the Notepad window to 170.
 	WinSetTrans($hWnd, "", 170)
 
-	; 设置2秒等待时间
+	; Wait for 2 seconds to display the Notepad window.
 	Sleep(2000)
 
-	; 通过 WinWait 的返回句柄来关闭记事本窗口.
+	; Close the Notepad window using the handle returned by WinWait.
 	WinClose($hWnd)
 EndFunc   ;==>Example

@@ -1,5 +1,7 @@
+#include <GDIPlus.au3>
 #include <GUIConstantsEx.au3>
 #include <ScreenCapture.au3>
+#include <WinAPIHObj.au3>
 
 Example()
 
@@ -12,8 +14,8 @@ Func Example()
 	Local $hBitmap = _GDIPlus_BitmapCreateFromHBITMAP($hHBmp) ;convert GDI to GDI+ bitmap
 	_WinAPI_DeleteObject($hHBmp) ;release GDI bitmap resource because not needed anymore
 
-	Local $hGUI = GUICreate("GDI+ example", $iWidth, $iHeight) ;create a test GUI
-	GUISetState()
+	Local $hGUI = GUICreate("GDI+ Example (" & @ScriptName & ")", $iWidth, $iHeight) ;create a test GUI
+	GUISetState(@SW_SHOW)
 
 	Local $hGraphics = _GDIPlus_GraphicsCreateFromHWND($hGUI) ;create a graphics object from a window handle
 	Local $hIA = _GDIPlus_ImageAttributesCreate() ;create an ImageAttribute object

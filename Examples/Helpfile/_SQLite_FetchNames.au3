@@ -19,9 +19,8 @@ _SQLite_Exec(-1, "DROP TABLE aTest;")
 _SQLite_Close()
 _SQLite_Shutdown()
 
-;~ Output:
-;~
-;~  rowid       A           B           C
-;~  3           a           1           Hello
-;~  2           b           3
-;~  1           c           2           World
+; Output:
+; rowid       A           B           C
+; 3           a           1           Hello
+; 2           b           3
+; 1           c           2           World

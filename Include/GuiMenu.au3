@@ -2,11 +2,13 @@
 
 #include "MenuConstants.au3"
 #include "StructureConstants.au3"
-#include "WinAPI.au3"
+#include "WinAPIConv.au3"
+#include "WinAPIMisc.au3"
+#include "WinAPISysInternals.au3"
 
 ; #INDEX# =======================================================================================================================
 ; Title .........: Menu
-; AutoIt Version : 3.3.13.12
+; AutoIt Version : 3.3.14.5
 ; Language ......: English
 ; Description ...: Functions that assist with Menu control management.
 ;                  A menu is a list of items that specify options or groups of options (a submenu) for an application. Clicking a
@@ -198,11 +200,11 @@ EndFunc   ;==>_GUICtrlMenu_AddMenuItem
 ; Author ........: Paul Campbell (PaulIA)
 ; Modified.......:
 ; ===============================================================================================================================
-Func _GUICtrlMenu_AppendMenu($hMenu, $iFlags, $iNewItem, $pNewItem)
+Func _GUICtrlMenu_AppendMenu($hMenu, $iFlags, $iNewItem, $vNewItem)
 	Local $sType = "wstr"
 	If BitAND($iFlags, $MF_BITMAP) Then $sType = "handle"
 	If BitAND($iFlags, $MF_OWNERDRAW) Then $sType = "ulong_ptr"
-	Local $aResult = DllCall("user32.dll", "bool", "AppendMenuW", "handle", $hMenu, "uint", $iFlags, "uint_ptr", $iNewItem, $sType, $pNewItem)
+	Local $aResult = DllCall("user32.dll", "bool", "AppendMenuW", "handle", $hMenu, "uint", $iFlags, "uint_ptr", $iNewItem, $sType, $vNewItem)
 	If @error Then Return SetError(@error, @extended, False)
 	If $aResult[0] = 0 Then Return SetError(10, 0, False)
 
@@ -804,11 +806,11 @@ EndFunc   ;==>_GUICtrlMenu_SetItemBitmaps
 ; Author ........: Paul Campbell (PaulIA)
 ; Modified.......:
 ; ===============================================================================================================================
-Func _GUICtrlMenu_SetItemBmp($hMenu, $iItem, $hBmp, $bByPos = True)
+Func _GUICtrlMenu_SetItemBmp($hMenu, $iItem, $hBitmap, $bByPos = True)
 	Local $tInfo = DllStructCreate($tagMENUITEMINFO)
 	DllStructSetData($tInfo, "Size", DllStructGetSize($tInfo))
 	DllStructSetData($tInfo, "Mask", $MIIM_BITMAP)
-	DllStructSetData($tInfo, "BmpItem", $hBmp)
+	DllStructSetData($tInfo, "BmpItem", $hBitmap)
 	Return _GUICtrlMenu_SetItemInfo($hMenu, $iItem, $tInfo, $bByPos)
 EndFunc   ;==>_GUICtrlMenu_SetItemBmp
 
@@ -816,10 +818,10 @@ EndFunc   ;==>_GUICtrlMenu_SetItemBmp
 ; Author ........: Paul Campbell (PaulIA)
 ; Modified.......:
 ; ===============================================================================================================================
-Func _GUICtrlMenu_SetItemBmpChecked($hMenu, $iItem, $hBmp, $bByPos = True)
+Func _GUICtrlMenu_SetItemBmpChecked($hMenu, $iItem, $hBitmap, $bByPos = True)
 	Local $tInfo = _GUICtrlMenu_GetItemInfo($hMenu, $iItem, $bByPos)
 	DllStructSetData($tInfo, "Mask", $MIIM_CHECKMARKS)
-	DllStructSetData($tInfo, "BmpChecked", $hBmp)
+	DllStructSetData($tInfo, "BmpChecked", $hBitmap)
 	Return _GUICtrlMenu_SetItemInfo($hMenu, $iItem, $tInfo, $bByPos)
 EndFunc   ;==>_GUICtrlMenu_SetItemBmpChecked
 
@@ -827,10 +829,10 @@ EndFunc   ;==>_GUICtrlMenu_SetItemBmpChecked
 ; Author ........: Paul Campbell (PaulIA)
 ; Modified.......:
 ; ===============================================================================================================================
-Func _GUICtrlMenu_SetItemBmpUnchecked($hMenu, $iItem, $hBmp, $bByPos = True)
+Func _GUICtrlMenu_SetItemBmpUnchecked($hMenu, $iItem, $hBitmap, $bByPos = True)
 	Local $tInfo = _GUICtrlMenu_GetItemInfo($hMenu, $iItem, $bByPos)
 	DllStructSetData($tInfo, "Mask", $MIIM_CHECKMARKS)
-	DllStructSetData($tInfo, "BmpUnchecked", $hBmp)
+	DllStructSetData($tInfo, "BmpUnchecked", $hBitmap)
 	Return _GUICtrlMenu_SetItemInfo($hMenu, $iItem, $tInfo, $bByPos)
 EndFunc   ;==>_GUICtrlMenu_SetItemBmpUnchecked
 

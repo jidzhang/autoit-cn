@@ -5,11 +5,13 @@
 #include "SendMessage.au3"
 #include "StructureConstants.au3"
 #include "UDFGlobalID.au3"
-#include "WinAPI.au3"
+#include "WinAPIConv.au3"
+#include "WinAPIHObj.au3"
+#include "WinAPISysInternals.au3"
 
 ; #INDEX# =======================================================================================================================
 ; Title .........: Header
-; AutoIt Version : 3.3.13.12
+; AutoIt Version : 3.3.14.5
 ; Description ...: Functions that assist with Header control management.
 ;                  A header control is a window that is usually positioned above columns of text or numbers.  It contains a title
 ;                  for each column, and it can be divided into parts.
@@ -691,11 +693,11 @@ EndFunc   ;==>_GUICtrlHeader_SetItemAlign
 ; Author ........: Paul Campbell (PaulIA)
 ; Modified.......: Gary Frost (gafrost)
 ; ===============================================================================================================================
-Func _GUICtrlHeader_SetItemBitmap($hWnd, $iIndex, $hBmp)
+Func _GUICtrlHeader_SetItemBitmap($hWnd, $iIndex, $hBitmap)
 	Local $tItem = DllStructCreate($tagHDITEM)
 	DllStructSetData($tItem, "Mask", BitOR($HDI_FORMAT, $HDI_BITMAP))
 	DllStructSetData($tItem, "Fmt", $HDF_BITMAP)
-	DllStructSetData($tItem, "hBMP", $hBmp)
+	DllStructSetData($tItem, "hBMP", $hBitmap)
 	Return _GUICtrlHeader_SetItem($hWnd, $iIndex, $tItem)
 EndFunc   ;==>_GUICtrlHeader_SetItemBitmap
 

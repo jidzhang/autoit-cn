@@ -1,7 +1,7 @@
+#include <MsgBoxConstants.au3>
 
-; 使用当前用户映射 X: 驱动器到 \\myserver\stuff 
+; Map X drive to \\myserver\stuff using current user
 DriveMapAdd("X:", "\\myserver\stuff")
 
-; 获取映射详细信息
-MsgBox(4096, "驱动器 X: 映射到", DriveMapGet("X:"))
-
+; Get details of the mapping
+MsgBox($MB_SYSTEMMODAL, "", "Drive X: is mapped to: " & DriveMapGet("X:"))

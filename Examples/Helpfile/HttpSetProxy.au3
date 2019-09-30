@@ -1,8 +1,8 @@
-; 不使用代理
+; Use no proxy
 HttpSetProxy(1)
 
-; 使用 IE 默认代理
+; Use IE defaults for proxy
 HttpSetProxy(0)
 
-; 使用代理, 地址 "www-cache.myisp.net", 端口 8080
+; Use the proxy "www-cache.myisp.net" on port 8080
 HttpSetProxy(2, "www-cache.myisp.net:8080")

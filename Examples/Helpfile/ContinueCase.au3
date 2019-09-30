@@ -1,24 +1,31 @@
-﻿Local $msg = ""
-Local $szName = InputBox(Default, "请输入一个单词", "", " M", Default, Default, Default, Default, 10)
-Switch @error
-	Case 2
-		$msg = "超时"
-		ContinueCase
-	Case 1; 继续上一Case事件
-		$msg &= "取消"
-	Case 0
-		Switch $szName
-			Case "a", "e", "i", "o", "u"
-				$msg = "这是元音字母"
-			Case "QP"
-				$msg = "数学"
-			Case "Q" To "QZ"
-				$msg = "自然科学"
-			Case Else
-				$msg = "其它"
-		EndSwitch
-	Case Else
-	$msg = "出现了非常可怕的错误."
-EndSwitch
+#include <MsgBoxConstants.au3>
 
-MsgBox(4096, Default, $msg)
+Example()
+
+Func Example()
+	Local $sName = InputBox("", "Please enter a word.", "", " M", Default, Default, Default, Default, 10)
+	Local $sMsg = ""
+
+	Switch @error
+		Case 2
+			$sMsg = "Timeout "
+			ContinueCase
+		Case 1 ; Continuing previous case
+			$sMsg &= "Cancellation"
+		Case 0
+			Switch $sName
+				Case "a", "e", "i", "o", "u"
+					$sMsg = "Vowel"
+				Case "QP"
+					$sMsg = "Mathematics"
+				Case "Q" To "QZ"
+					$sMsg = "Science"
+				Case Else
+					$sMsg = "Others"
+			EndSwitch
+		Case Else
+			$sMsg = "Something went horribly wrong."
+	EndSwitch
+
+	MsgBox($MB_SYSTEMMODAL, "", $sMsg)
+EndFunc   ;==>Example

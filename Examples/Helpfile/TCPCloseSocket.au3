@@ -1,134 +1,125 @@
 #include <GUIConstantsEx.au3>
-#include <WindowsConstants.au3>
-#include <ButtonConstants.au3>
+#include <MsgBoxConstants.au3>
 
-;==============================================
-;==============================================
-;SERVER!! Start Me First !!!!!!!!!!!!!!!
-;==============================================
-;==============================================
-
-; 初始化一个变量描述连接
-;==============================================
-Global $ConnectedSocket = -1
-
-Global $MainSocket
+; Start First clicking on "1. Server"
+; Then start a second instance of the script selecting "2. Client"
 
 Example()
 
 Func Example()
-	OnAutoItExitRegister("Cleanup")
+	TCPStartup() ; Start the TCP service.
 
-	Local $g_IP, $RogueSocket, $GOOEY, $edit, $input, $butt, $msg
-	Local $ret, $recv
+	; Register OnAutoItExit to be called when the script is closed.
+	OnAutoItExitRegister("OnAutoItExit")
 
-	$g_IP = "127.0.0.1"
+	; Assign Local variables the loopback IP Address and the Port.
+	Local $sIPAddress = "127.0.0.1" ; This IP Address only works for testing on your own computer.
+	Local $iPort = 65432 ; Port used for the connection.
 
-	; 开始 TCP 服务
-	;==============================================
-	TCPStartup()
+	#Region GUI
+	Local $sTitle = "TCP Start"
+	Local $hGUI = GUICreate($sTitle, 250, 70)
 
-	; 创建一个套接字(SOCKET)监听
-	;==============================================
-	$MainSocket = TCPListen($g_IP, 65432, 100)
-	If $MainSocket = -1 Then Exit
-	$RogueSocket = -1
+	Local $idBtnServer = GUICtrlCreateButton("1. Server", 65, 10, 130, 22)
 
-	; 创建一个图形用户界面消息窗
-	;==============================================
-	$GOOEY = GUICreate("我的服务端", 300, 200)
-	$edit = GUICtrlCreateEdit("", 10, 40, 280, 150, $WS_DISABLED)
-	$input = GUICtrlCreateInput("", 10, 10, 200, 20)
-	$butt = GUICtrlCreateButton("发送", 210, 10, 80, 20, $BS_DEFPUSHBUTTON)
-	GUISetState()
+	Local $idBtnClient = GUICtrlCreateButton("2. Client", 65, 40, 130, 22)
 
+	GUISetState(@SW_SHOW, $hGUI)
 
-	; 循环图形用户界面消息
-	;==============================================
 	While 1
-		$msg = GUIGetMsg()
+		Switch GUIGetMsg()
+			Case $GUI_EVENT_CLOSE
+				ExitLoop
+			Case $idBtnServer
+				WinSetTitle($sTitle, "", "TCP Server started")
+				GUICtrlSetState($idBtnClient, $GUI_HIDE)
+				GUICtrlSetState($idBtnServer, $GUI_DISABLE)
+				If Not MyTCP_Server($sIPAddress, $iPort) Then ExitLoop
+			Case $idBtnClient
+				WinSetTitle($sTitle, "", "TCP Client started")
+				GUICtrlSetState($idBtnServer, $GUI_HIDE)
+				GUICtrlSetState($idBtnClient, $GUI_DISABLE)
+				If Not MyTCP_Client($sIPAddress, $iPort) Then ExitLoop
+		EndSwitch
 
-		; 关闭界面
-		;--------------------
-		If $msg = $GUI_EVENT_CLOSE Then ExitLoop
-
-		; 用户按下发送按钮
-		;--------------------
-		If $msg = $butt Then
-			If $ConnectedSocket > -1 Then
-				$ret = TCPSend($ConnectedSocket, GUICtrlRead($input))
-				If @error Or $ret < 0 Then
-					; ERROR OCCURRED, CLOSE SOCKET AND RESET ConnectedSocket to -1
-					;----------------------------------------------------------------
-					TCPCloseSocket($ConnectedSocket)
-					WinSetTitle($GOOEY, "", "我的服务端 - 客户端断开连接")
-					$ConnectedSocket = -1
-				ElseIf $ret > 0 Then
-					; UPDATE EDIT CONTROL WITH DATA WE SENT
-					;----------------------------------------------------------------
-					GUICtrlSetData($edit, GUICtrlRead($edit) & GUICtrlRead($input) & @CRLF)
-				EndIf
-			EndIf
-			GUICtrlSetData($input, "")
-		EndIf
-
-		If $RogueSocket > 0 Then
-			$recv = TCPRecv($RogueSocket, 512)
-			If Not @error Then
-				TCPCloseSocket($RogueSocket)
-				$RogueSocket = -1
-			EndIf
-		EndIf
-
-		; If no connection look for one
-		;--------------------
-		If $ConnectedSocket = -1 Then
-			$ConnectedSocket = TCPAccept($MainSocket)
-			If $ConnectedSocket < 0 Then
-				$ConnectedSocket = -1
-			Else
-				WinSetTitle($GOOEY, "", "my server - Client Connected")
-			EndIf
-
-			; If connected try to read some data
-			;--------------------
-		Else
-			; EXECUTE AN UNCONDITIONAL ACCEPT IN CASE ANOTHER CLIENT TRIES TO CONNECT
-			;----------------------------------------------------------------
-			$RogueSocket = TCPAccept($MainSocket)
-			If $RogueSocket > 0 Then
-				TCPSend($RogueSocket, "~~rejected")
-			EndIf
-
-			$recv = TCPRecv($ConnectedSocket, 512)
-
-			If $recv <> "" And $recv <> "~~bye" Then
-				; UPDATE EDIT CONTROL WITH DATA WE RECEIVED
-				;----------------------------------------------------------------
-				GUICtrlSetData($edit, GUICtrlRead($edit) & ">" & $recv & @CRLF)
-
-			ElseIf @error Or $recv = "~~bye" Then
-				; ERROR OCCURRED, CLOSE SOCKET AND RESET ConnectedSocket to -1
-				;----------------------------------------------------------------
-				WinSetTitle($GOOEY, "", "my server - Client Disconnected")
-				TCPCloseSocket($ConnectedSocket)
-				$ConnectedSocket = -1
-			EndIf
-		EndIf
+		Sleep(10)
 	WEnd
 
-	GUIDelete($GOOEY)
+	#EndRegion GUI
 EndFunc   ;==>Example
 
-Func Cleanup()
-	;ON SCRIPT EXIT close opened sockets and shutdown TCP service
-	;----------------------------------------------------------------------
-	If $ConnectedSocket > -1 Then
-		TCPSend($ConnectedSocket, "~~bye")
-		Sleep(2000)
-		TCPRecv($ConnectedSocket, 512)
-		TCPCloseSocket($ConnectedSocket)
+Func MyTCP_Client($sIPAddress, $iPort)
+	; Assign a Local variable the socket and connect to a listening socket with the IP Address and Port specified.
+	Local $iSocket = TCPConnect($sIPAddress, $iPort)
+	Local $iError = 0
+
+	; If an error occurred display the error code and return False.
+	If @error Then
+		; The server is probably offline/port is not opened on the server.
+		$iError = @error
+		MsgBox(BitOR($MB_SYSTEMMODAL, $MB_ICONHAND), "", "Client:" & @CRLF & "Could not connect, Error code: " & $iError)
+		Return False
 	EndIf
-	TCPCloseSocket($MainSocket)
-	TCPShutdown()
-EndFunc   ;==>Cleanup
+
+	; Send the string "tata" to the server.
+	TCPSend($iSocket, "tata")
+
+	; If an error occurred display the error code and return False.
+	If @error Then
+		$iError = @error
+		MsgBox(BitOR($MB_SYSTEMMODAL, $MB_ICONHAND), "", "Client:" & @CRLF & "Could not send the data, Error code: " & $iError)
+		Return False
+	EndIf
+
+	; Close the socket.
+	TCPCloseSocket($iSocket)
+EndFunc   ;==>MyTCP_Client
+
+Func MyTCP_Server($sIPAddress, $iPort)
+	; Assign a Local variable the socket and bind to the IP Address and Port specified with a maximum of 100 pending connexions.
+	Local $iListenSocket = TCPListen($sIPAddress, $iPort, 100)
+	Local $iError = 0
+
+	If @error Then
+		; Someone is probably already listening on this IP Address and Port (script already running?).
+		$iError = @error
+		MsgBox(BitOR($MB_SYSTEMMODAL, $MB_ICONHAND), "", "Server:" & @CRLF & "Could not listen, Error code: " & $iError)
+		Return False
+	EndIf
+
+	; Assign a Local variable to be used by the Client socket.
+	Local $iSocket = 0
+
+	Do ; Wait for someone to connect (Unlimited).
+		; Accept incomming connexions if present (Socket to close when finished; one socket per client).
+		$iSocket = TCPAccept($iListenSocket)
+
+		; If an error occurred display the error code and return False.
+		If @error Then
+			$iError = @error
+			MsgBox(BitOR($MB_SYSTEMMODAL, $MB_ICONHAND), "", "Server:" & @CRLF & "Could not accept the incoming connection, Error code: " & $iError)
+			Return False
+		EndIf
+
+		If GUIGetMsg() = $GUI_EVENT_CLOSE Then Return False
+	Until $iSocket <> -1 ;if different from -1 a client is connected.
+
+	; Close the Listening socket to allow afterward binds.
+	TCPCloseSocket($iListenSocket)
+
+	; Assign a Local variable the data received.
+	Local $sReceived = TCPRecv($iSocket, 4) ;we're waiting for the string "tata" OR "toto" (example script TCPRecv): 4 bytes length.
+
+	; Notes: If you don't know how much length will be the data,
+	; use e.g: 2048 for maxlen parameter and call the function until the it returns nothing/error.
+
+	; Display the string received.
+	MsgBox($MB_SYSTEMMODAL, "", "Server:" & @CRLF & "Received: " & $sReceived)
+
+	; Close the socket.
+	TCPCloseSocket($iSocket)
+EndFunc   ;==>MyTCP_Server
+
+Func OnAutoItExit()
+	TCPShutdown() ; Close the TCP service.
+EndFunc   ;==>OnAutoItExit

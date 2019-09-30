@@ -1,25 +1,23 @@
 #include <GUIConstantsEx.au3>
 #include <GuiMonthCal.au3>
+#include <WinAPIMisc.au3>
 #include <WindowsConstants.au3>
 
-$Debug_MC = False ; Check ClassName being passed to MonthCal functions, set to True and use a handle to another control to see it work
+Global $g_idMonthCal, $g_idMemo, $g_hGUI
 
-Global $hMonthCal, $iMemo, $hGUI
+Example()
 
-_Main()
+Func Example()
+	; Create GUI
+	$g_hGUI = GUICreate("Month Calendar Hit Test", 400, 300)
+	$g_idMonthCal = GUICtrlCreateMonthCal("", 4, 4, -1, -1, $WS_BORDER, 0x00000000)
 
-Func _Main()
+	; Create memo control
+	$g_idMemo = GUICtrlCreateEdit("", 4, 168, 392, 128, $WS_VSCROLL)
+	GUICtrlSetFont($g_idMemo, 9, 400, 0, "Courier New")
+	GUISetState(@SW_SHOW)
 
-	; 创建 GUI
-	$hGUI = GUICreate("Month Calendar Hit Test", 400, 300)
-	$hMonthCal = GUICtrlCreateMonthCal("", 4, 4, -1, -1, $WS_BORDER, 0x00000000)
-
-	; 创建 memo 控件
-	$iMemo = GUICtrlCreateEdit("", 4, 168, 392, 128, $WS_VSCROLL)
-	GUICtrlSetFont($iMemo, 9, 400, 0, "Courier New")
-	GUISetState()
-
-	; 循环直到用户退出
+	; Loop until the user exits.
 	While 1
 		Switch GUIGetMsg()
 			Case $GUI_EVENT_MOUSEMOVE
@@ -29,13 +27,13 @@ Func _Main()
 		EndSwitch
 	WEnd
 	GUIDelete()
-EndFunc   ;==>_Main
+EndFunc   ;==>Example
 
 ; Perform hit test
 Func DoHitTest()
 	Local $tHit
 
-	$tHit = _GUICtrlMonthCal_HitTest($hMonthCal, _WinAPI_GetMousePosX(True, $hGUI), _WinAPI_GetMousePosY(True, $hGUI))
+	$tHit = _GUICtrlMonthCal_HitTest($g_idMonthCal, _WinAPI_GetMousePosX(True, $g_hGUI), _WinAPI_GetMousePosY(True, $g_hGUI))
 	If BitAND(DllStructGetData($tHit, "Hit"), $MCHT_CALENDARDATE) <> 0 Then
 		MemoWrite("Date: " & StringFormat("%02d/%02d/%04d", DllStructGetData($tHit, "Month"), _
 				DllStructGetData($tHit, "Day"), _
@@ -43,7 +41,7 @@ Func DoHitTest()
 	EndIf
 EndFunc   ;==>DoHitTest
 
-; 写入消息到 memo
+; Write message to memo
 Func MemoWrite($sMessage)
-	GUICtrlSetData($iMemo, $sMessage & @CRLF, 1)
+	GUICtrlSetData($g_idMemo, $sMessage & @CRLF, 1)
 EndFunc   ;==>MemoWrite

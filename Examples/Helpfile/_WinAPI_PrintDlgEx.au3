@@ -1,7 +1,7 @@
-#include <WinAPIDlg.au3>
 #include <APIDlgConstants.au3>
-#include <WinAPIFiles.au3>
 #include <Memory.au3>
+#include <WinAPIDlg.au3>
+#include <WinAPIMisc.au3>
 
 Opt('WinTitleMatchMode', 3)
 
@@ -45,16 +45,16 @@ If DllStructGetData($tDEVNAMES, 'Default') Then
 Else
 	ConsoleWrite(@CRLF)
 EndIf
-Local $Page[2]
+Local $aPage[2]
 If BitAND(DllStructGetData($tPRINTDLGEX, 'Flags'), $PD_PAGENUMS) Then
-	$Page[0] = DllStructGetData($tPRINTPAGERANGE, 'FromPage')
-	$Page[1] = DllStructGetData($tPRINTPAGERANGE, 'ToPage')
+	$aPage[0] = DllStructGetData($tPRINTPAGERANGE, 'FromPage')
+	$aPage[1] = DllStructGetData($tPRINTPAGERANGE, 'ToPage')
 Else
-	$Page[0] = DllStructGetData($tPRINTDLGEX, 'MinPage')
-	$Page[1] = DllStructGetData($tPRINTDLGEX, 'MaxPage')
+	$aPage[0] = DllStructGetData($tPRINTDLGEX, 'MinPage')
+	$aPage[1] = DllStructGetData($tPRINTDLGEX, 'MaxPage')
 EndIf
-ConsoleWrite('First page: ' & $Page[0] & @CRLF)
-ConsoleWrite('Last page: ' & $Page[1] & @CRLF)
+ConsoleWrite('First page: ' & $aPage[0] & @CRLF)
+ConsoleWrite('Last page: ' & $aPage[1] & @CRLF)
 ConsoleWrite('Copies: ' & DllStructGetData($tPRINTDLGEX, 'Copies') & @CRLF)
 
 ; Free global memory objects that contains a DEVMODE and DEVNAMES structures

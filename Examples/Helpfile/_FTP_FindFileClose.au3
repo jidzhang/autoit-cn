@@ -1,16 +1,17 @@
 #include <FTPEx.au3>
 
-Local $server = 'ftp.csx.cam.ac.uk'
-Local $username = ''
-Local $pass = ''
+Local $sServer = 'ftp.csx.cam.ac.uk'
+Local $sUsername = ''
+Local $sPass = ''
 
-Local $Open = _FTP_Open('MyFTP Control')
-Local $Conn = _FTP_Connect($Open, $server, $username, $pass)
+Local $hOpen = _FTP_Open('MyFTP Control')
+Local $hConn = _FTP_Connect($hOpen, $sServer, $sUsername, $sPass)
 
 Local $h_Handle
-Local $aFile = _FTP_FindFileFirst($Conn, "/pub/software/programming/pcre/", $h_Handle)
+Local $aFile = _FTP_FindFileFirst($hConn, "/pub/software/programming/pcre/", $h_Handle)
 
-Local $FindClose = _FTP_FindFileClose($h_Handle)
-ConsoleWrite('$FindClose = ' & $FindClose & '  -> Error code: ' & @error & @CRLF)
+Local $iFindClose = _FTP_FindFileClose($h_Handle)
+ConsoleWrite('$iFindClose = ' & $iFindClose & '  -> Error code: ' & @error & @CRLF)
 
-Local $Ftpc = _FTP_Close($Open)
+Local $iFtpc = _FTP_Close($hConn)
+Local $iFtpo = _FTP_Close($hOpen)

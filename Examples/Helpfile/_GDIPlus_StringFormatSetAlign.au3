@@ -1,8 +1,8 @@
 #include <GDIPlus.au3>
 #include <GUIConstantsEx.au3>
 
-Local $hWnd = GUICreate("GDI+ Example", 400, 300)
-GUISetState()
+Local $hWnd = GUICreate("GDI+ Example (" & @ScriptName & ")", 400, 300)
+GUISetState(@SW_SHOW)
 
 _GDIPlus_Startup()
 Local $hGraphics = _GDIPlus_GraphicsCreateFromHWND($hWnd)
@@ -16,10 +16,10 @@ Local $hStringFormat = _GDIPlus_StringFormatCreate()
 _GDIPlus_StringFormatSetAlign($hStringFormat, 1)
 _GDIPlus_GraphicsDrawStringEx($hGraphics, "AutoIt Rocks", $hFont, $hLayout, $hStringFormat, $hBrush)
 
+Local $iMsg = 0
 Do
-	Local $msg = GUIGetMsg()
-Until $msg = $GUI_EVENT_CLOSE
-
+	$iMsg = GUIGetMsg()
+Until $iMsg = $GUI_EVENT_CLOSE
 
 _GDIPlus_BrushDispose($hBrush)
 _GDIPlus_FontFamilyDispose($hFamily)

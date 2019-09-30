@@ -1,28 +1,30 @@
 #include <GUIConstantsEx.au3>
+#include <MsgBoxConstants.au3>
 #include <WindowsConstants.au3>
 
 Example()
 
 Func Example()
-	Local $title, $input, $msg
+	GUICreate("My GUI UpDown", -1, -1, -1, -1, $WS_SIZEBOX)
 
-	$title = "My GUI UpDown"
-	GUICreate($title, -1, -1, -1, -1, $WS_SIZEBOX)
-
-	$input = GUICtrlCreateInput("2", 10, 10, 50, 20)
-	GUICtrlCreateUpdown($input)
+	Local $idInput = GUICtrlCreateInput("2", 10, 10, 50, 20)
+	GUICtrlCreateUpdown($idInput)
 
 	; Attempt to resize input control
-	GUICtrlSetPos($input, 10, 10, 100, 40)
+	GUICtrlSetPos($idInput, 10, 10, 100, 40)
 
-	GUISetState()
+	GUISetState(@SW_SHOW)
 
-	; Run the GUI until the dialog is closed
+	Local $idMsg
+	; Loop until the user exits.
 	While 1
-		$msg = GUIGetMsg()
+		$idMsg = GUIGetMsg()
 
-		If $msg = $GUI_EVENT_CLOSE Then ExitLoop
+		Switch $idMsg
+			Case $GUI_EVENT_CLOSE
+				ExitLoop
+		EndSwitch
 	WEnd
 
-	MsgBox(4096, "Updown", GUICtrlRead($input))
+	MsgBox($MB_SYSTEMMODAL, "Updown", GUICtrlRead($idInput))
 EndFunc   ;==>Example

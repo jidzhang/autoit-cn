@@ -1,29 +1,28 @@
-#include <GUIConstantsEx.au3>
 #include <GuiButton.au3>
+#include <GUIConstantsEx.au3>
 #include <WindowsConstants.au3>
-#include <GuiMenu.au3>
 
-Global $btn, $iMemo, $btn2
+Global $g_hBtn, $g_idMemo, $g_hBtn2
 
-; Note the controlId from these buttons can NOT be read with GuiCtrlRead
+; Note the controlID from these buttons can NOT be read with GUICtrlRead
 
-_Main()
+Example()
 
-Func _Main()
+Func Example()
 	Local $hGUI
 
 	$hGUI = GUICreate("Buttons", 400, 400)
-	$iMemo = GUICtrlCreateEdit("", 10, 100, 390, 284, $WS_VSCROLL)
-	GUICtrlSetFont($iMemo, 9, 400, 0, "Courier New")
+	$g_idMemo = GUICtrlCreateEdit("", 10, 100, 390, 284, $WS_VSCROLL)
+	GUICtrlSetFont($g_idMemo, 9, 400, 0, "Courier New")
 
-	$btn = _GUICtrlButton_Create($hGUI, "Button1", 10, 10, 160, 40)
-	_GUICtrlButton_SetDontClick($btn)
+	$g_hBtn = _GUICtrlButton_Create($hGUI, "Button1", 10, 10, 160, 40)
+	_GUICtrlButton_SetDontClick($g_hBtn)
 
-	$btn2 = _GUICtrlButton_Create($hGUI, "Button2", 10, 55, 160, 40)
+	$g_hBtn2 = _GUICtrlButton_Create($hGUI, "Button2", 10, 55, 160, 40)
 
 	GUIRegisterMsg($WM_COMMAND, "WM_COMMAND")
 
-	GUISetState()
+	GUISetState(@SW_SHOW)
 
 	While 1
 		Switch GUIGetMsg()
@@ -33,26 +32,24 @@ Func _Main()
 	WEnd
 
 	Exit
+EndFunc   ;==>Example
 
-EndFunc   ;==>_Main
-
-
-; 写入一行到 memo 控件
+; Write a line to the memo control
 Func MemoWrite($sMessage)
-	GUICtrlSetData($iMemo, $sMessage & @CRLF, 1)
+	GUICtrlSetData($g_idMemo, $sMessage & @CRLF, 1)
 EndFunc   ;==>MemoWrite
 
 ; React on a button click
-Func WM_COMMAND($hWnd, $Msg, $wParam, $lParam)
-	#forceref $hWnd, $Msg
-	Local $nNotifyCode = BitShift($wParam, 16)
-	Local $nID = BitAND($wParam, 0x0000FFFF)
+Func WM_COMMAND($hWnd, $iMsg, $wParam, $lParam)
+	#forceref $hWnd, $iMsg
+	Local $iNotifyCode = BitShift($wParam, 16)
+	Local $iID = BitAND($wParam, 0x0000FFFF)
 	Local $hCtrl = $lParam
 	Local $sText = ""
 
 	Switch $hCtrl
-		Case $btn, $btn2
-			Switch $nNotifyCode
+		Case $g_hBtn, $g_hBtn2
+			Switch $iNotifyCode
 				Case $BN_CLICKED
 					If BitAND(_GUICtrlButton_GetState($hCtrl), $BST_DONTCLICK) = $BST_DONTCLICK Then
 						$sText = "$BST_DONTCLICK" & @CRLF
@@ -63,8 +60,8 @@ Func WM_COMMAND($hWnd, $Msg, $wParam, $lParam)
 							"-----------------------------" & @CRLF & _
 							"WM_COMMAND - Infos:" & @CRLF & _
 							"-----------------------------" & @CRLF & _
-							"Code" & @TAB & ":" & $nNotifyCode & @CRLF & _
-							"CtrlID" & @TAB & ":" & $nID & @CRLF & _
+							"Code" & @TAB & ":" & $iNotifyCode & @CRLF & _
+							"CtrlID" & @TAB & ":" & $iID & @CRLF & _
 							"CtrlHWnd:" & $hCtrl & @CRLF & _
 							_GUICtrlButton_GetText($hCtrl) & @CRLF)
 				Case $BN_PAINT

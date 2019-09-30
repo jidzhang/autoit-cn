@@ -1,5 +1,9 @@
-TrayTip("我是一个标题", "我是一个消息", 5, 1)
-MsgBox(4096,"", "请单击确定查看其它提示.")
-TrayTip("清除任何托盘提示","",0)
-TrayTip("", "一个不同的托盘提示.", 5)
+#include <MsgBoxConstants.au3>
+#include <TrayConstants.au3>
+
+TrayTip("I'm a title", "I'm the message", 0, $TIP_ICONASTERISK)
+MsgBox($MB_SYSTEMMODAL, "", "Press OK to reset the tip.")
+TrayTip("clears any tray tip", "", 0)
+MsgBox($MB_SYSTEMMODAL, "", "Press OK to see another tip.")
+TrayTip("", "A different tray tip.", 5)
 Sleep(5000)

@@ -1,3 +1,5 @@
+#include <MsgBoxConstants.au3>
+
 Example()
 
 Func Example()
@@ -9,8 +11,11 @@ Func Example()
 
 	; Test if the window exists and display the results.
 	If WinExists("[CLASS:Notepad]") Then
-		MsgBox(4096, "", "记事本窗口存在")
+		MsgBox($MB_SYSTEMMODAL, "", "Window exists")
 	Else
-		MsgBox(4096, "", "记事本窗口不存在")
+		MsgBox($MB_SYSTEMMODAL + $MB_ICONERROR, "Error", "Window does not exist")
 	EndIf
+
+	; Close the Notepad window.
+	WinClose("[CLASS:Notepad]", "")
 EndFunc   ;==>Example

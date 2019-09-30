@@ -1,31 +1,29 @@
 ; using UDF
 
-#include <GUIConstantsEx.au3>
 #include <GuiAVI.au3>
-
-Global $hAVI
+#include <GUIConstantsEx.au3>
 
 _Example_External()
 
 Func _Example_External()
-	Local $hGUI, $btn_start, $btn_stop
+	Local $hGUI, $hAVI, $id_Start, $id_Stop
 
 	; Create GUI
-	$hGUI = GUICreate("(External) AVI Play", 300, 200)
+	$hGUI = GUICreate("(External) AVI Play/Stop", 300, 200)
 	$hAVI = _GUICtrlAVI_Create($hGUI, @SystemDir & "\Shell32.dll", 160, 10, 10)
-	$btn_start = GUICtrlCreateButton("start", 50, 150, 70, 22)
-	$btn_stop = GUICtrlCreateButton("stop", 150, 150, 70, 22)
-	GUISetState()
+	$id_Start = GUICtrlCreateButton("start", 50, 150, 70, 22)
+	$id_Stop = GUICtrlCreateButton("stop", 150, 150, 70, 22)
+	GUISetState(@SW_SHOW)
 
-	; Loop until user exits
+	; Loop until the user exits.
 	While 1
 		Switch GUIGetMsg()
 			Case $GUI_EVENT_CLOSE
 				ExitLoop
-			Case $btn_start
+			Case $id_Start
 				; Play part of the AVI clip
 				_GUICtrlAVI_Play($hAVI)
-			Case $btn_stop
+			Case $id_Stop
 				; Stop AVI clip
 				_GUICtrlAVI_Stop($hAVI)
 		EndSwitch

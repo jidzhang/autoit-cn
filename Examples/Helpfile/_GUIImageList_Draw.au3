@@ -1,22 +1,23 @@
 #include <GUIConstantsEx.au3>
-#include <WinAPI.au3>
 #include <GuiImageList.au3>
+#include <WinAPIGdi.au3>
+#include <WinAPIGdiDC.au3>
 
-_Main()
+Example()
 
-Func _Main()
+Func Example()
 	Local $hImage, $hGUI, $hDC
 
 	$hGUI = GUICreate("ImageList Draw", 400, 300)
-	GUISetState()
+	GUISetState(@SW_SHOW)
 
-	; 加载图像
+	; Load images
 	$hImage = _GUIImageList_Create(32, 24)
 	_GUIImageList_Add($hImage, _WinAPI_CreateSolidBitmap($hGUI, 0xFF0000, 32, 24))
 	_GUIImageList_Add($hImage, _WinAPI_CreateSolidBitmap($hGUI, 0x00FF00, 32, 24))
 	_GUIImageList_Add($hImage, _WinAPI_CreateSolidBitmap($hGUI, 0x0000FF, 32, 24))
 
-	; 描绘图像
+	; Draw images
 	$hDC = _WinAPI_GetDC($hGUI)
 	_GUIImageList_Draw($hImage, 0, $hDC, 4, 4)
 	_GUIImageList_Draw($hImage, 1, $hDC, 40, 4)
@@ -24,8 +25,8 @@ Func _Main()
 
 	_WinAPI_ReleaseDC($hGUI, $hDC)
 
-	; 循环直到用户退出
+	; Loop until the user exits.
 	Do
 	Until GUIGetMsg() = $GUI_EVENT_CLOSE
 	GUIDelete()
-EndFunc   ;==>_Main
+EndFunc   ;==>Example

@@ -1,38 +1,38 @@
-#include <WinAPIFiles.au3>
 #include <APIFilesConstants.au3>
+#include <WinAPIFiles.au3>
 
-Local $Bus, $Text, $Drive = DriveGetDrive('ALL')
-For $i = 1 To $Drive[0]
-	$Bus = _WinAPI_GetDriveBusType($Drive[$i])
-	Switch $Bus
+Local $iBus, $sText, $aDrive = DriveGetDrive('ALL')
+For $i = 1 To $aDrive[0]
+	$iBus = _WinAPI_GetDriveBusType($aDrive[$i])
+	Switch $iBus
 		Case $DRIVE_BUS_TYPE_UNKNOWN
-			$Text = 'UNKNOWN'
+			$sText = 'UNKNOWN'
 		Case $DRIVE_BUS_TYPE_SCSI
-			$Text = 'SCSI'
+			$sText = 'SCSI'
 		Case $DRIVE_BUS_TYPE_ATAPI
-			$Text = 'ATAPI'
+			$sText = 'ATAPI'
 		Case $DRIVE_BUS_TYPE_ATA
-			$Text = 'ATA'
+			$sText = 'ATA'
 		Case $DRIVE_BUS_TYPE_1394
-			$Text = '1394'
+			$sText = '1394'
 		Case $DRIVE_BUS_TYPE_SSA
-			$Text = 'SSA'
+			$sText = 'SSA'
 		Case $DRIVE_BUS_TYPE_FIBRE
-			$Text = 'FIBRE'
+			$sText = 'FIBRE'
 		Case $DRIVE_BUS_TYPE_USB
-			$Text = 'USB'
+			$sText = 'USB'
 		Case $DRIVE_BUS_TYPE_RAID
-			$Text = 'RAID'
+			$sText = 'RAID'
 		Case $DRIVE_BUS_TYPE_ISCSI
-			$Text = 'ISCSI'
+			$sText = 'ISCSI'
 		Case $DRIVE_BUS_TYPE_SAS
-			$Text = 'SAS'
+			$sText = 'SAS'
 		Case $DRIVE_BUS_TYPE_SATA
-			$Text = 'SATA'
+			$sText = 'SATA'
 		Case $DRIVE_BUS_TYPE_SD
-			$Text = 'SD'
+			$sText = 'SD'
 		Case $DRIVE_BUS_TYPE_MMC
-			$Text = 'MMC'
+			$sText = 'MMC'
 	EndSwitch
-	ConsoleWrite(StringUpper($Drive[$i]) & ' => ' & $Text & @CRLF)
+	ConsoleWrite(StringUpper($aDrive[$i]) & ' => ' & $sText & @CRLF)
 Next

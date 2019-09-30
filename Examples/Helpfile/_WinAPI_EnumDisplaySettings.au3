@@ -1,18 +1,18 @@
-#include <WinAPIGdi.au3>
 #include <APIGdiConstants.au3>
+#include <WinAPIGdi.au3>
 
-Global $i = 0, $Data
+Local $i = 0, $aData
 
 While 1
-	$Data = _WinAPI_EnumDisplaySettings('', $i)
-	If IsArray($Data) Then
-		ConsoleWrite($Data[0] & ' x ' & $Data[1] & ' x ' & $Data[2] & ' bit' & @CRLF)
+	$aData = _WinAPI_EnumDisplaySettings('', $i)
+	If IsArray($aData) Then
+		ConsoleWrite($aData[0] & ' x ' & $aData[1] & ' x ' & $aData[2] & ' bit' & @CRLF)
 	Else
 		ExitLoop
 	EndIf
 	$i += 1
 WEnd
 
-$Data = _WinAPI_EnumDisplaySettings('', $ENUM_CURRENT_SETTINGS)
+$aData = _WinAPI_EnumDisplaySettings('', $ENUM_CURRENT_SETTINGS)
 ConsoleWrite('-------------------------------' & @CRLF)
-ConsoleWrite('Current settings: ' & $Data[0] & ' x ' & $Data[1] & ' x ' & $Data[2] & ' bit' & @CRLF)
+ConsoleWrite('Current settings: ' & $aData[0] & ' x ' & $aData[1] & ' x ' & $aData[2] & ' bit' & @CRLF)

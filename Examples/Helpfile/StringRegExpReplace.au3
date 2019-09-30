@@ -1,3 +1,5 @@
+#include <MsgBoxConstants.au3>
+
 Test1()
 Test2()
 Test3()
@@ -29,5 +31,5 @@ EndFunc   ;==>Test3
 Func Display($sInput, $sOutput)
 	; Format the output.
 	Local $sMsg = StringFormat("Input:\t%s\n\nOutput:\t%s", $sInput, $sOutput)
-	MsgBox(4096, "Results", $sMsg)
+	MsgBox($MB_SYSTEMMODAL, "Results", $sMsg)
 EndFunc   ;==>Display

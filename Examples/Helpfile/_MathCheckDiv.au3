@@ -1,13 +1,23 @@
 #include <Math.au3>
+#include <MsgBoxConstants.au3>
 
-Local $I_Var = InputBox('Odd or Even', 'Enter a number:')
-Local $I_Result = _MathCheckDiv($I_Var, 2)
-If $I_Result = -1 Or @error = 1 Then
-	MsgBox(4096, '', 'You did not enter a valid number')
-ElseIf $I_Result = 1 Then
-	MsgBox(4096, '', 'Number is odd')
-ElseIf $I_Result = 2 Then
-	MsgBox(4096, '', 'Number is even')
-Else
-	MsgBox(4096, '', 'Could not parse $I_Result')
-EndIf
+Example()
+
+Func Example()
+	Local $iVar = Int(InputBox("Odd or Even", "Enter a number:")) ; Parse as an integer.
+	Local $iResult = _MathCheckDiv($iVar, 2) ; Divide the number by 2.
+	If @error Then
+		MsgBox($MB_SYSTEMMODAL, "", "You did not enter a valid number")
+	Else
+		Switch $iResult
+			Case -1
+				MsgBox($MB_SYSTEMMODAL, "", "You did not enter a valid number")
+			Case $MATH_ISNOTDIVISIBLE
+				MsgBox($MB_SYSTEMMODAL, "", "Number is odd")
+			Case $MATH_ISDIVISIBLE
+				MsgBox($MB_SYSTEMMODAL, "", "Number is even")
+			Case Else
+				MsgBox($MB_SYSTEMMODAL, "", "Could not parse")
+		EndSwitch
+	EndIf
+EndFunc   ;==>Example

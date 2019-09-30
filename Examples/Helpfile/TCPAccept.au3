@@ -1,21 +1,55 @@
-;服务器!! 请先运行我 !!!!!!!!!!!!!!!
-Local $g_IP = "127.0.0.1"
+#include <MsgBoxConstants.au3>
 
-; 开始 TCP 服务
-;==============================================
-TCPStartup()
+; I am the server, start me first! (Start in second the TCPConnect example script).
 
-; 创建监听套接字(SOCKET)
-;==============================================
-Local $MainSocket = TCPListen($g_IP, 65432, 100)
-If $MainSocket = -1 Then Exit
+Example()
 
-;  等待客户端连接
-;--------------------
-While 1
-	Local $ConnectedSocket = TCPAccept($MainSocket)
-	If $ConnectedSocket >= 0 Then
-	MsgBox(4096,"","我的服务器 - 客户端已连接")
-		Exit
+Func Example()
+	TCPStartup() ; Start the TCP service.
+
+	; Register OnAutoItExit to be called when the script is closed.
+	OnAutoItExitRegister("OnAutoItExit")
+
+	; Assign Local variables the loopback IP Address and the Port.
+	Local $sIPAddress = "127.0.0.1" ; This IP Address only works for testing on your own computer.
+	Local $iPort = 65432 ; Port used for the connection.
+
+	; Bind to the IP Address and Port specified with a maximum of 100 pending connexions
+	;(Take a look at the example of this function for further details).
+	Local $iListenSocket = TCPListen($sIPAddress, $iPort, 100)
+	Local $iError = 0
+
+	; If an error occurred display the error code and return False.
+	If @error Then
+		; Someone is probably already listening on this IP Address and Port (script already running?).
+		$iError = @error
+		MsgBox(BitOR($MB_SYSTEMMODAL, $MB_ICONHAND), "", "Could not listen, Error code: " & $iError)
+		Return False
 	EndIf
-WEnd
+
+	; Assign Local variable to be used by Listening and Client sockets.
+	Local $iSocket = 0
+	Do ; Wait for someone to connect (Unlimited).
+		; Accept incomming connexions if present (Socket to close when finished; one socket per client).
+		$iSocket = TCPAccept($iListenSocket)
+
+		; If an error occurred display the error code and return False.
+		If @error Then
+			$iError = @error
+			MsgBox(BitOR($MB_SYSTEMMODAL, $MB_ICONHAND), "", "Could not accept the incoming connection, Error code: " & $iError)
+			Return False
+		EndIf
+	Until $iSocket <> -1 ;if different from -1 a client is connected.
+
+	; Close the Listening socket to allow afterward binds.
+	TCPCloseSocket($iListenSocket)
+
+	MsgBox($MB_SYSTEMMODAL, "", "Client Connected.")
+
+	; Close the socket.
+	TCPCloseSocket($iSocket)
+EndFunc   ;==>Example
+
+Func OnAutoItExit()
+	TCPShutdown() ; Close the TCP service.
+EndFunc   ;==>OnAutoItExit

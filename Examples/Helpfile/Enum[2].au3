@@ -21,7 +21,7 @@ Func Example()
 			'$aAnimalNames[$eMouse] = ' & $aAnimalNames[$eMouse] & @CRLF & _
 			'$aAnimalNames[$eHamster] = ' & $aAnimalNames[$eHamster] & @CRLF)
 
-	; Sometimes using this approach for accessing an element is more practical than using a numerical value, due to the fact changing the index value of
+	; Sometimes using this approach for accessing an element is more practical than using a numerical value, due to the fact that changing the index value of
 	; the enum constant has no affect on it's position in the array. Therefore changing the location of $eCat in the array is as simple as changing the order
 	; it appears in the initial declaration e.g.
 

@@ -1,28 +1,31 @@
+#include <FontConstants.au3>
 #include <GUIConstantsEx.au3>
 
 Example()
 
 Func Example()
-	Local $font, $msg
-
 	GUICreate("My GUI default font") ; will create a dialog box that when displayed is centered
 
-	$font = "Comic Sans MS"
-	GUISetFont(9, 400, 4, $font) ; will display underlined characters
+	Local $sFont = "Comic Sans MS"
+	GUISetFont(9,  $FW_NORMAL, $GUI_FONTUNDER, $sFont) ; will display underlined characters
 	GUICtrlCreateLabel("underlined label", 10, 20)
 
-	GUISetFont(9, 400, 2, $font) ; will display underlined characters
+	GUISetFont(9,  $FW_NORMAL, $GUI_FONTITALIC, $sFont) ; will display underlined characters
 	GUICtrlCreateLabel("italic label", 10, 40)
 
-	GUISetFont(9, 400, 8, $font) ; will display underlined characters
+	GUISetFont(9,  $FW_NORMAL, $GUI_FONTSTRIKE, $sFont) ; will display underlined characters
 	GUICtrlCreateLabel("strike label", 10, 60)
 
-	GUISetState()
+	GUISetState(@SW_SHOW)
 
-	; Run the GUI until the dialog is closed
+	; Loop until the user exits.
 	While 1
-		$msg = GUIGetMsg()
+		Switch GUIGetMsg()
+			Case $GUI_EVENT_CLOSE
+				ExitLoop
 
-		If $msg = $GUI_EVENT_CLOSE Then ExitLoop
+		EndSwitch
 	WEnd
+
+	GUIDelete()
 EndFunc   ;==>Example

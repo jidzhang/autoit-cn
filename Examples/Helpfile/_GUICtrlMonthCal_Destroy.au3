@@ -1,27 +1,26 @@
 #include <GUIConstantsEx.au3>
 #include <GuiMonthCal.au3>
+#include <MsgBoxConstants.au3>
 #include <WindowsConstants.au3>
 
-$Debug_MC = False ; Check ClassName being passed to MonthCal functions, set to True and use a handle to another control to see it work
+Example()
 
-_Main()
+Func Example()
+	Local $hGUI, $hHandleBefore, $hMonthCal
 
-Func _Main()
-	Local $hGUI, $HandleBefore, $hMonthCal
-
-	; 创建 GUI
+	; Create GUI
 	$hGUI = GUICreate("Month Calendar Destroy", 400, 300)
 	$hMonthCal = _GUICtrlMonthCal_Create($hGUI, 4, 4, $WS_BORDER)
-	GUISetState()
+	GUISetState(@SW_SHOW)
 
-	$HandleBefore = $hMonthCal
-	MsgBox(4160, "信息", "Destroying the Control for Handle: " & $hMonthCal)
-	MsgBox(4160, "信息", "Control Destroyed: " & _GUICtrlMonthCal_Destroy($hMonthCal) & @LF & _
-			"Handel Before Destroy: " & $HandleBefore & @LF & _
+	$hHandleBefore = $hMonthCal
+	MsgBox($MB_SYSTEMMODAL, "Information", "Destroying the Control for Handle: " & $hMonthCal)
+	MsgBox($MB_SYSTEMMODAL, "Information", "Control Destroyed: " & _GUICtrlMonthCal_Destroy($hMonthCal) & @CRLF & _
+			"Handel Before Destroy: " & $hHandleBefore & @CRLF & _
 			"Handle After Destroy: " & $hMonthCal)
 
-	; 循环直到用户退出
+	; Loop until the user exits.
 	Do
 	Until GUIGetMsg() = $GUI_EVENT_CLOSE
 	GUIDelete()
-EndFunc   ;==>_Main
+EndFunc   ;==>Example

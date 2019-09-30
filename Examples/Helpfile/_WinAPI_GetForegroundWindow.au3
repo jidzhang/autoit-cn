@@ -1,3 +1,4 @@
-#include <WinAPI.au3>
+#include <MsgBoxConstants.au3>
+#include <WinAPISysWin.au3>
 
-MsgBox(4096, "Handle", "Get Foreground Window: " & _WinAPI_GetForegroundWindow())
+MsgBox($MB_SYSTEMMODAL, "Handle", "Get Foreground Window: " & _WinAPI_GetForegroundWindow())

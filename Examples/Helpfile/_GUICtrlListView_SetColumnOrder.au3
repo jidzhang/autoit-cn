@@ -1,28 +1,27 @@
 #include <GUIConstantsEx.au3>
 #include <GuiListView.au3>
+#include <MsgBoxConstants.au3>
 
-$Debug_LV = False ; 检查传递给 ListView 函数的类名, 设置为True并输出到一个控件的句柄,用于检查它是否工作
+Example()
 
-_Main()
-
-Func _Main()
-	Local $a_order, $hListView
+Func Example()
+	Local $a_Order, $idListview
 
 	GUICreate("ListView Set Column Order", 400, 300)
-	$hListView = GUICtrlCreateListView("Column 1|Column 2|Column 3|Column 4", 2, 2, 394, 268)
-	GUISetState()
+	$idListview = GUICtrlCreateListView("Column 1|Column 2|Column 3|Column 4", 2, 2, 394, 268)
+	GUISetState(@SW_SHOW)
 
 	; Set column order
-	MsgBox(4160, "信息", "Changing column order")
-	_GUICtrlListView_SetColumnOrder($hListView, "3|2|0|1")
+	MsgBox($MB_SYSTEMMODAL, "Information", "Changing column order")
+	_GUICtrlListView_SetColumnOrder($idListview, "3|2|0|1")
 
 	; Show column order
-	$a_order = _GUICtrlListView_GetColumnOrderArray($hListView)
-	MsgBox(4160, "信息", StringFormat("Column order: [%d, %d, %d, %d]", $a_order[1], $a_order[2], $a_order[3], $a_order[4]))
+	$a_Order = _GUICtrlListView_GetColumnOrderArray($idListview)
+	MsgBox($MB_SYSTEMMODAL, "Information", StringFormat("Column order: [%d, %d, %d, %d]", $a_Order[1], $a_Order[2], $a_Order[3], $a_Order[4]))
 
-	; 循环直到用户退出
+	; Loop until the user exits.
 	Do
 	Until GUIGetMsg() = $GUI_EVENT_CLOSE
 
 	GUIDelete()
-EndFunc   ;==>_Main
+EndFunc   ;==>Example

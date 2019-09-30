@@ -20,7 +20,7 @@ MsgBox($MB_SYSTEMMODAL, "Result", "Data:" & @TAB & $aArray[6] & @CRLF & "Datatyp
 ; Add items by delimited string
 $aArray = $aArray_Base
 ; Now force datatype to Number
-_ArrayAdd($aArray, $sFill, Default, Default, Default, $ARRAYADD_FORCE_NUMBER)
+_ArrayAdd($aArray, $sFill, Default, Default, Default, $ARRAYFILL_FORCE_NUMBER)
 _ArrayDisplay($aArray, "Forced to number")
 ; And datatype is forced to required type
 MsgBox($MB_SYSTEMMODAL, "Result", "Data:" & @TAB & $aArray[6] & @CRLF & "Datatype:" & @TAB & VarGetType($aArray[6]))

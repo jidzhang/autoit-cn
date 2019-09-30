@@ -1,42 +1,47 @@
-#include <WinAPI.au3>
-#include <WindowsConstants.au3>
 #include <FontConstants.au3>
+#include <MsgBoxConstants.au3>
+#include <StructureConstants.au3>
+#include <WinAPIGdi.au3>
+#include <WinAPIGdiDC.au3>
+#include <WinAPIHObj.au3>
+#include <WinAPISysWin.au3>
+#include <WindowsConstants.au3>
 
-Global $tRECT, $hFont, $hOldFont, $hDC
+Global $g_tRECT, $g_hFont, $g_hOldFont, $g_hDC
 
 HotKeySet("{ESC}", "_Exit")
 
-$tRECT = DllStructCreate($tagRect)
-DllStructSetData($tRECT, "Left", 5)
-DllStructSetData($tRECT, "Top", 5)
-DllStructSetData($tRECT, "Right", 250)
-DllStructSetData($tRECT, "Bottom", 50)
+$g_tRECT = DllStructCreate($tagRECT)
+DllStructSetData($g_tRECT, "Left", 5)
+DllStructSetData($g_tRECT, "Top", 5)
+DllStructSetData($g_tRECT, "Right", 250)
+DllStructSetData($g_tRECT, "Bottom", 50)
 
-$hDC = _WinAPI_GetDC(0)
-$hFont = _WinAPI_CreateFont(50, 0, 0, 0, 400, False, False, False, $DEFAULT_CHARSET, _
+$g_hDC = _WinAPI_GetDC(0)
+$g_hFont = _WinAPI_CreateFont(50, 0, 0, 0, 400, False, False, False, $DEFAULT_CHARSET, _
 		$OUT_DEFAULT_PRECIS, $CLIP_DEFAULT_PRECIS, $DEFAULT_QUALITY, 0, 'Arial')
-$hOldFont = _WinAPI_SelectObject($hDC, $hFont)
+$g_hOldFont = _WinAPI_SelectObject($g_hDC, $g_hFont)
 
-_WinAPI_SetTextColor($hDC, 0x0000FF)
-_WinAPI_SetBkColor($hDC, 0x000000)
+_WinAPI_SetTextColor($g_hDC, 0x0000FF)
+_WinAPI_SetBkColor($g_hDC, 0x000000)
 
-MsgBox(4096, "信息", "GetBkMode: " & _WinAPI_GetBkMode($hDC))
+MsgBox($MB_SYSTEMMODAL, "Information", "GetBkMode: " & _WinAPI_GetBkMode($g_hDC))
 
-; 注释下一行可以获得黑色背景而不是透明背景
-_WinAPI_SetBkMode($hDC, $TRANSPARENT)
+; comment next line to get black background instead of transparent one
+_WinAPI_SetBkMode($g_hDC, $TRANSPARENT)
 
-MsgBox(4096, "信息", "GetBkMode: " & _WinAPI_GetBkMode($hDC))
+MsgBox($MB_SYSTEMMODAL, "Information", "GetBkMode: " & _WinAPI_GetBkMode($g_hDC))
 
 While 1
-	_WinAPI_DrawText($hDC, "Hello world!", $tRECT, $DT_CENTER)
+	_WinAPI_DrawText($g_hDC, "Hello world!", $g_tRECT, $DT_CENTER)
 	Sleep(100)
 WEnd
 
 Func _Exit()
-	_WinAPI_SelectObject($hDC, $hOldFont)
-	_WinAPI_DeleteObject($hFont)
-	_WinAPI_ReleaseDC(0, $hDC)
+	_WinAPI_SelectObject($g_hDC, $g_hOldFont)
+	_WinAPI_DeleteObject($g_hFont)
+	_WinAPI_ReleaseDC(0, $g_hDC)
 	_WinAPI_InvalidateRect(0, 0)
-	$tRECT = 0
+	$g_tRECT = 0
 	Exit
 EndFunc   ;==>_Exit

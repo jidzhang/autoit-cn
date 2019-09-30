@@ -1,40 +1,39 @@
 #include <GUIConstantsEx.au3>
-#include <GuiListView.au3>
 #include <GuiImageList.au3>
+#include <GuiListView.au3>
+#include <MsgBoxConstants.au3>
 
-$Debug_LV = False ; 检查传递给 ListView 函数的类名, 设置为True并输出到一个控件的句柄,用于检查它是否工作
+Example()
 
-_Main()
-
-Func _Main()
-	Local $aOrigin, $hImage, $hListView
+Func Example()
+	Local $aOrigin, $hImage, $idListview
 
 	GUICreate("ListView Get Origin", 400, 300)
-	$hListView = GUICtrlCreateListView("", 2, 2, 394, 268)
-	GUICtrlSetStyle($hListView, $LVS_ICON)
-	GUISetState()
+	$idListview = GUICtrlCreateListView("", 2, 2, 394, 268)
+	GUICtrlSetStyle($idListview, $LVS_ICON)
+	GUISetState(@SW_SHOW)
 
-	; 加载图像
+	; Load images
 	$hImage = _GUIImageList_Create()
-	_GUIImageList_Add($hImage, _GUICtrlListView_CreateSolidBitMap($hListView, 0xFF0000, 16, 16))
-	_GUIImageList_Add($hImage, _GUICtrlListView_CreateSolidBitMap($hListView, 0x00FF00, 16, 16))
-	_GUIImageList_Add($hImage, _GUICtrlListView_CreateSolidBitMap($hListView, 0x0000FF, 16, 16))
-	_GUICtrlListView_SetImageList($hListView, $hImage, 0)
+	_GUIImageList_Add($hImage, _GUICtrlListView_CreateSolidBitMap($idListview, 0xFF0000, 16, 16))
+	_GUIImageList_Add($hImage, _GUICtrlListView_CreateSolidBitMap($idListview, 0x00FF00, 16, 16))
+	_GUIImageList_Add($hImage, _GUICtrlListView_CreateSolidBitMap($idListview, 0x0000FF, 16, 16))
+	_GUICtrlListView_SetImageList($idListview, $hImage, 0)
 
-	; 添加列
-	_GUICtrlListView_AddColumn($hListView, "Items", 100)
+	; Add columns
+	_GUICtrlListView_AddColumn($idListview, "Items", 100)
 
-	; 添加项目
-	_GUICtrlListView_AddItem($hListView, "Item 1", 0)
-	_GUICtrlListView_AddItem($hListView, "Item 2", 1)
-	_GUICtrlListView_AddItem($hListView, "Item 3", 2)
+	; Add items
+	_GUICtrlListView_AddItem($idListview, "Item 1", 0)
+	_GUICtrlListView_AddItem($idListview, "Item 2", 1)
+	_GUICtrlListView_AddItem($idListview, "Item 3", 2)
 
 	; Get current origin
-	$aOrigin = _GUICtrlListView_GetOrigin($hListView)
-	MsgBox(4160, "信息", StringFormat("Success: %s Origin: X=%d, Y=%d", @extended = 1, $aOrigin[0], $aOrigin[1]))
+	$aOrigin = _GUICtrlListView_GetOrigin($idListview)
+	MsgBox($MB_SYSTEMMODAL, "Information", StringFormat("Success: %s Origin: X=%d, Y=%d", @extended = 1, $aOrigin[0], $aOrigin[1]))
 
-	; 循环直到用户退出
+	; Loop until the user exits.
 	Do
 	Until GUIGetMsg() = $GUI_EVENT_CLOSE
 	GUIDelete()
-EndFunc   ;==>_Main
+EndFunc   ;==>Example

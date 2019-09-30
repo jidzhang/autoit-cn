@@ -1,10 +1,10 @@
 #include <Date.au3>
+#include <MsgBoxConstants.au3>
 
-Global $Sec, $Min, $Hour, $Time
-; 以时间计算
-Local $StartTicks = _TimeToTicks(@HOUR, @MIN, @SEC)
-; 计算45分后
-Local $EndTicks = $StartTicks + 45 * 60 * 1000
-_TicksToTime($EndTicks, $Hour, $Min, $Sec)
-MsgBox(262144, '', 'New Time:' & $Hour & ":" & $Min & ":" & $Sec)
-
+Local $iSec, $iMin, $iHour
+; calculate with time
+Local $iStartTicks = _TimeToTicks(@HOUR, @MIN, @SEC)
+; calculate 45 minutes later
+Local $iEndTicks = $iStartTicks + 45 * 60 * 1000
+_TicksToTime($iEndTicks, $iHour, $iMin, $iSec)
+MsgBox($MB_SYSTEMMODAL, '', 'New Time:' & $iHour & ":" & $iMin & ":" & $iSec)

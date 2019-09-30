@@ -1,33 +1,37 @@
 #include <GDIPlus.au3>
 #include <ScreenCapture.au3>
 
-_Main()
+Example()
 
-Func _Main()
+Func Example()
 	Local $hImage, $sCLSID, $tData, $tParams
 
-	; 屏幕捕获
+	; Screen Capture
 	_ScreenCapture_Capture(@MyDocumentsDir & "\GDIPlus_Image.jpg")
 
-	; 初始化 GDI+ 库
+	; Initialize GDI+ library
 	_GDIPlus_Startup()
 
-	; 加载图像
+	; Load image
 	$hImage = _GDIPlus_ImageLoadFromFile(@MyDocumentsDir & "\GDIPlus_Image.jpg")
 
-	; 获取 JPEG 编码器的 CLSID
+	; Get JPEG encoder CLSID
 	$sCLSID = _GDIPlus_EncodersGetCLSID("JPG")
 
-	; 建立表示旋转 90 度的参数
+	; Set up parameters for 90 degree rotation
 	$tData = DllStructCreate("int Data")
 	DllStructSetData($tData, "Data", $GDIP_EVTTRANSFORMROTATE90)
 	$tParams = _GDIPlus_ParamInit(1)
 	_GDIPlus_ParamAdd($tParams, $GDIP_EPGTRANSFORMATION, 1, $GDIP_EPTLONG, DllStructGetPtr($tData, "Data"))
 
-	; 保存旋转后的图像
-	_GDIPlus_ImageSaveToFileEx($hImage, @MyDocumentsDir & "\GDIPlus_Image2.jpg", $sCLSID, DllStructGetPtr($tParams))
+	; Save image with rotation
+	_GDIPlus_ImageSaveToFileEx($hImage, @MyDocumentsDir & "\GDIPlus_Image2.jpg", $sCLSID, $tParams)
 
-	; 关闭 GDI+ 库
+	; Clean up resources
+	_GDIPlus_ImageDispose($hImage)
+
+	; Shut down GDI+ library
 	_GDIPlus_Shutdown()
 
-EndFunc   ;==>_Main
+	ShellExecute(@MyDocumentsDir & "\GDIPlus_Image2.jpg")
+EndFunc   ;==>Example

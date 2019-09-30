@@ -1,36 +1,37 @@
-﻿Example()
+#RequireAdmin
+
+#include <AutoItConstants.au3>
+
+Example()
 
 Func Example()
-	; 运行记事本程序
+	; Run Notepad
 	Run("notepad.exe")
 
-	; 10秒内暂停脚本的执行,直至记事本窗口存在(出现)为止
+	; Wait 10 seconds for the Notepad window to appear.
 	Local $hWnd = WinWait("[CLASS:Notepad]", "", 10)
 
-	; 屏蔽用户鼠标与键盘输入
-	BlockInput(1)
+	; Disable user input from the mouse and keyboard.
+	BlockInput($BI_DISABLE)
 
-	; 设置2秒等待时间
+	; Wait for 2 seconds.
 	Sleep(2000)
 
-    ; 通过 ControlSend 直接发送 F5 按键到记事本窗口，从而实现时间日期的输入操作.
+	; Send the 'F5' key to the edit control of Notepad to display the date and time. The handle returned by WinWait is used for the "title" parameter of ControlSend.
 	ControlSend($hWnd, "", "Edit1", "{F5}")
 
-	; 启用用户鼠标与键盘输入
-	BlockInput(0)
+	; Enable user input from the mouse and keyboard.
+	BlockInput($BI_ENABLE)
 
-	; 设置2秒等待时间
+	; Wait for 2 seconds.
 	Sleep(2000)
 
-	; 通过 WinWait 的返回句柄来关闭记事本窗口.
+	; Close the Notepad window using the handle returned by WinWait.
 	WinClose($hWnd)
 
-    ; 暂停脚本的执行直至指定的询问保存更改窗口被激活为止
+	; Now a screen will pop up and ask to save the changes, the classname of the window is called
+	; "#32770" and simulating the "TAB" key to move to the second button in which the "ENTER" is simulated to not "save the file"
 	WinWaitActive("[CLASS:#32770]")
-
-	; 设置0.5秒等待时间
 	Sleep(500)
-	
-	; 模拟键盘 TAB键 + ENTER键 输入操作
 	Send("{TAB}{ENTER}")
 EndFunc   ;==>Example

@@ -1,39 +1,37 @@
-#include <GUIConstantsEx.au3>
 #include <GuiAVI.au3>
-
-Global $hAVI
+#include <GUIConstantsEx.au3>
 
 _Example_External()
 
 Func _Example_External()
-	Local $hGUI, $btn_start, $btn_stop, $btn_show
+	Local $hGUI, $hAVI, $id_Start, $id_Stop, $id_Show
 
 	; Create GUI
 	$hGUI = GUICreate("(External) AVI Play", 350, 200)
 	$hAVI = _GUICtrlAVI_Create($hGUI, @SystemDir & "\Shell32.dll", 160, 10, 10)
-	$btn_start = GUICtrlCreateButton("start", 25, 150, 70, 22)
-	$btn_stop = GUICtrlCreateButton("stop", 125, 150, 70, 22)
-	$btn_show = GUICtrlCreateButton("hide", 225, 150, 70, 22)
-	GUISetState()
+	$id_Start = GUICtrlCreateButton("start", 25, 150, 70, 22)
+	$id_Stop = GUICtrlCreateButton("stop", 125, 150, 70, 22)
+	$id_Show = GUICtrlCreateButton("hide", 225, 150, 70, 22)
+	GUISetState(@SW_SHOW)
 
-	; Loop until user exits
+	; Loop until the user exits.
 	While 1
 		Switch GUIGetMsg()
 			Case $GUI_EVENT_CLOSE
 				ExitLoop
-			Case $btn_start
+			Case $id_Start
 				; Play part of the AVI clip
 				_GUICtrlAVI_Play($hAVI)
-			Case $btn_stop
+			Case $id_Stop
 				; Stop AVI clip
 				_GUICtrlAVI_Stop($hAVI)
-			Case $btn_show
-				If GUICtrlRead($btn_show) = "hide" Then
+			Case $id_Show
+				If GUICtrlRead($id_Show) = "hide" Then
 					_GUICtrlAVI_Show($hAVI, @SW_HIDE)
-					GUICtrlSetData($btn_show, "show")
+					GUICtrlSetData($id_Show, "show")
 				Else
 					_GUICtrlAVI_Show($hAVI, @SW_SHOW)
-					GUICtrlSetData($btn_show, "hide")
+					GUICtrlSetData($id_Show, "hide")
 				EndIf
 		EndSwitch
 	WEnd

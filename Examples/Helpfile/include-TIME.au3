@@ -1,2 +1,3 @@
-;;; TIME.AU3 ;;;
-MsgBox(4096, "", "The time is " & @HOUR & ":" & @MIN & ":" & @SEC)
+#include <MsgBoxConstants.au3>
+
+MsgBox($MB_SYSTEMMODAL, "", "The time is " & @HOUR & ":" & @MIN & ":" & @SEC)

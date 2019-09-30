@@ -1,38 +1,37 @@
 #include <GUIConstantsEx.au3>
-#include <WinAPI.au3>
-#include <GuiListView.au3>
 #include <GuiImageList.au3>
+#include <GuiListView.au3>
 #include <WindowsConstants.au3>
 
-_Main()
+Example()
 
-Func _Main()
-	Local $listview, $hImage
-	Local $Wow64 = ""
-	If @AutoItX64 Then $Wow64 = "\Wow6432Node"
-	Local $AutoItDir = RegRead("HKEY_LOCAL_MACHINE\SOFTWARE" & $Wow64 & "\AutoIt v3\AutoIt", "InstallDir")
+Func Example()
+	Local $idListview, $hImage
+	Local $sWow64 = ""
+	If @AutoItX64 Then $sWow64 = "\Wow6432Node"
+	Local $sAutoItDir = RegRead("HKEY_LOCAL_MACHINE\SOFTWARE" & $sWow64 & "\AutoIt v3\AutoIt", "InstallDir")
 
 	GUICreate("ImageList Copy", 410, 300)
-	$listview = GUICtrlCreateListView("", 2, 2, 404, 268, BitOR($LVS_SHOWSELALWAYS, $LVS_NOSORTHEADER, $LVS_REPORT))
-	GUISetState()
+	$idListview = GUICtrlCreateListView("", 2, 2, 404, 268, BitOR($LVS_SHOWSELALWAYS, $LVS_NOSORTHEADER, $LVS_REPORT))
+	GUISetState(@SW_SHOW)
 
-	; 创建一个含有图像的图像列表
+	; Create an image list with images
 	$hImage = _GUIImageList_Create(11, 11)
-	ConsoleWrite(_GUIImageList_AddIcon($hImage, $AutoItDir & "\Icons\filetype1.ico") & @LF)
-	ConsoleWrite(_GUIImageList_AddIcon($hImage, $AutoItDir & "\Icons\filetype2.ico") & @LF)
-	ConsoleWrite(_GUIImageList_AddIcon($hImage, $AutoItDir & "\Icons\filetype3.ico") & @LF)
-	ConsoleWrite(_GUIImageList_AddIcon($hImage, $AutoItDir & "\Icons\filetype3.ico") & @LF)
+	ConsoleWrite(_GUIImageList_AddIcon($hImage, $sAutoItDir & "\Icons\filetype1.ico") & @CRLF)
+	ConsoleWrite(_GUIImageList_AddIcon($hImage, $sAutoItDir & "\Icons\filetype2.ico") & @CRLF)
+	ConsoleWrite(_GUIImageList_AddIcon($hImage, $sAutoItDir & "\Icons\filetype3.ico") & @CRLF)
+	ConsoleWrite(_GUIImageList_AddIcon($hImage, $sAutoItDir & "\Icons\filetype3.ico") & @CRLF)
 	_GUIImageList_Copy($hImage, 0, 3)
-	_GUICtrlListView_SetImageList($listview, $hImage, 1)
+	_GUICtrlListView_SetImageList($idListview, $hImage, 1)
 
-	; 添加列
-	_GUICtrlListView_AddColumn($listview, "Column 1", 100, 1, 0, True)
-	_GUICtrlListView_AddColumn($listview, "Column 2", 100, 0, 1, True)
-	_GUICtrlListView_AddColumn($listview, "Column 3", 100, 2, 2, True)
-	_GUICtrlListView_AddColumn($listview, "Column 4", 100, 0, 3)
+	; Add columns
+	_GUICtrlListView_AddColumn($idListview, "Column 1", 100, 1, 0, True)
+	_GUICtrlListView_AddColumn($idListview, "Column 2", 100, 0, 1, True)
+	_GUICtrlListView_AddColumn($idListview, "Column 3", 100, 2, 2, True)
+	_GUICtrlListView_AddColumn($idListview, "Column 4", 100, 0, 3)
 
-	; 循环直到用户退出
+	; Loop until the user exits.
 	Do
 	Until GUIGetMsg() = $GUI_EVENT_CLOSE
 	GUIDelete()
-EndFunc   ;==>_Main
+EndFunc   ;==>Example

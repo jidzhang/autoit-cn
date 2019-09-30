@@ -1,4 +1,4 @@
-﻿Local $fBoolean = False
+#include <MsgBoxConstants.au3>
 
-; 如果 $fBoolean 不等于 True 将显示一个消息框.
-If Not $fBoolean = True Then MsgBox(4096, "布尔值比较", "OK") 
+Local $bBoolean = False
+If Not ($bBoolean = True) Then MsgBox($MB_SYSTEMMODAL, "Bool comparison", "OK") ; If $bBoolean is NOT equal to True then display the messagebox

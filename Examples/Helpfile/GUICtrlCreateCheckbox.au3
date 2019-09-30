@@ -1,19 +1,39 @@
 #include <GUIConstantsEx.au3>
+#include <MsgBoxConstants.au3>
 
 Example()
 
 Func Example()
-	Local $msg
-	GUICreate("My GUI Checkbox")  ; 创建一个对话框，并居中显示
+	; Create a GUI with various controls.
+	Local $hGUI = GUICreate("Example", 300, 200)
 
-	GUICtrlCreateCheckbox("CHECKBOX 1", 10, 10, 120, 20)
+	; Create a checkbox control.
+	Local $idCheckbox = GUICtrlCreateCheckbox("Standard Checkbox", 10, 10, 185, 25)
+	Local $idButton_Close = GUICtrlCreateButton("Close", 210, 170, 85, 25)
 
-	GUISetState()       ; 显示有复选框(Checkbox)控件的对话框
+	; Display the GUI.
+	GUISetState(@SW_SHOW, $hGUI)
 
-	; 运行界面,直到窗口被关闭
+	; Loop until the user exits.
 	While 1
-		$msg = GUIGetMsg()
+		Switch GUIGetMsg()
+			Case $GUI_EVENT_CLOSE, $idButton_Close
+				ExitLoop
 
-		If $msg = $GUI_EVENT_CLOSE Then ExitLoop
+			Case $idCheckbox
+				If _IsChecked($idCheckbox) Then
+					MsgBox($MB_SYSTEMMODAL, "", "The checkbox is checked.", 0, $hGUI)
+				Else
+					MsgBox($MB_SYSTEMMODAL, "", "The checkbox is not checked.", 0, $hGUI)
+				EndIf
+
+		EndSwitch
 	WEnd
+
+	; Delete the previous GUI and all controls.
+	GUIDelete($hGUI)
 EndFunc   ;==>Example
+
+Func _IsChecked($idControlID)
+	Return BitAND(GUICtrlRead($idControlID), $GUI_CHECKED) = $GUI_CHECKED
+EndFunc   ;==>_IsChecked

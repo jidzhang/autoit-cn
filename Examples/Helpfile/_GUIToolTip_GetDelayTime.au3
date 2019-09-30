@@ -5,10 +5,10 @@
 Example()
 
 Func Example()
-	Local $hGUI = GUICreate(StringTrimRight(@ScriptName, 4), 350, 200)
+	Local $hGUI = GUICreate(StringTrimRight(@ScriptName, StringLen(".exe")), 350, 200)
 
-	Local $iButton = GUICtrlCreateButton("This is a button", 30, 32, 130, 28)
-	Local $hButton = GUICtrlGetHandle($iButton)
+	Local $idButton = GUICtrlCreateButton("This is a button", 30, 32, 130, 28)
+	Local $hButton = GUICtrlGetHandle($idButton)
 	; Create a tooltip control
 	Local $hToolTip = _GUIToolTip_Create($hGUI)
 
@@ -17,7 +17,7 @@ Func Example()
 
 	; set the time for how long the tooltip displays, to 1500 ms ($TTDT_AUTOPOP)
 	_GUIToolTip_SetDelayTime($hToolTip, $TTDT_AUTOPOP, 1500)
-	GUISetState()
+	GUISetState(@SW_SHOW)
 
 	MsgBox($MB_SYSTEMMODAL, 'Message', 'Display time : ' & _GUIToolTip_GetDelayTime($hToolTip, $TTDT_AUTOPOP) & ' ms')
 
@@ -25,6 +25,6 @@ Func Example()
 		If GUIGetMsg() = $GUI_EVENT_CLOSE Then ExitLoop
 	WEnd
 	_GUIToolTip_Destroy($hToolTip)
-    GUIDelete($hGUI)
+	GUIDelete($hGUI)
 
 EndFunc   ;==>Example

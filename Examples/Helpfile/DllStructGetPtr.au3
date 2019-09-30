@@ -1,61 +1,52 @@
-;示例1
-;获取窗口句柄并使用 WinGetPos 获取窗口矩形
-Local $hwnd = WinGetHandle("")
-Local $coor = WinGetPos($hwnd)
+#include <MsgBoxConstants.au3>
+#include <StructureConstants.au3>
 
-;建立数据结构
-Local $rect = DllStructCreate("int;int;int;int")
+Example()
 
-;构成 DllCall
-DllCall("user32.dll", "int", "GetWindowRect", _
-		"hwnd", $hwnd, _
-		"ptr",DllStructGetPtr($rect)) ; 使用 DllStructGetPtr 后调用 DllCall
+Func Example()
+	; Assign a Local variable the handle of the current active window.
+	Local $hWnd = WinGetHandle("") ; Same as: "[active]".
 
-;获取返回的矩形
-Local $l = DllStructGetData($rect, 1)
-Local $t = DllStructGetData($rect, 2)
-Local $r = DllStructGetData($rect, 3)
-Local $b = DllStructGetData($rect, 4)
+	; Assign a Local variable the window's rectangle (array).
+	Local $aWndPos = WinGetPos($hWnd)
 
-;释放数据结构
-$rect = 0
+	; Assign a Local variable the structure created with the tagRECT definition.
+	Local $tRECT = DllStructCreate($tagRECT)
+	Local $iError = 0
 
-;显示 WinGetPos 的结果和返回的矩形
-MsgBox(4096,"Larry 测试 :)","WinGetPos(): (" & $coor[0] & "," & $coor[1] & _
-		") (" & $coor[2] + $coor[0] & "," & $coor[3] + $coor[1] & ")" & @CRLF & _
-		"GetWindowRect(): (" & $l & "," & $t & ") (" & $r & "," & $b & ")")
+	; If an error occurred display the error code and return False.
+	If @error Then
+		$iError = @error
+		MsgBox(BitOR($MB_SYSTEMMODAL, $MB_ICONHAND), Default, "Error in DllStructCreate, Code: " & $iError)
+		Return False
+	EndIf
 
-;示例2
-; DllStructGetPtr 参考项目
-Local $a = DllStructCreate("int")
-If @error Then
-	MsgBox(4096,"","DllStructCreate 错误" & @error);
-	Exit
-EndIf
+	; Make the DllCall of the GetWindowRect function.
+	DllCall("user32.dll", "int", "GetWindowRect", _
+			"hwnd", $hWnd, _
+			"ptr", DllStructGetPtr($tRECT))
 
-$b = DllStructCreate("uint", DllStructGetPtr($a, 1))
-If @error Then
-	MsgBox(4096,"","DllStructCreate 错误 " & @error);
-	Exit
-EndIf
+	; If an error occurred display the error code and return False.
+	If @error Then
+		$iError = @error
+		MsgBox(BitOR($MB_SYSTEMMODAL, $MB_ICONHAND), Default, "Error in DllCall, Code: " & $iError)
+		Return False
+	EndIf
 
-Local $c = DllStructCreate("float", DllStructGetPtr($a, 1))
-If @error Then
-	MsgBox(4096,"","DllStructCreate 错误 " & @error);
-	Exit
-EndIf
+	; Note: The 2nd parameter of the GetWindowRect function requires a pointer,
+	; the result returned by the DllStructCreate is NOT a pointer, but using 'struct*' allows to pass a structure as a ptr.
 
-;设置数据
-DllStructSetData($a, 1, -1)
+	; Assign Local variables the returned rectangle.
+	Local $iLeft = DllStructGetData($tRECT, "Left") ; Or 1 instead of "Left".
+	Local $iTop = DllStructGetData($tRECT, 2) ; Or "Top" instead of 2.
+	Local $iRight = DllStructGetData($tRECT, 3) ; Or "Right" instead of 3.
+	Local $iBottom = DllStructGetData($tRECT, "Bottom") ; Or 4 instead of "Bottom".
 
-;=========================================================
-;	显示相同数据的不同类型
-;=========================================================
-MsgBox(4096, "DllStruct", _
-		"int: " & DllStructGetData($a, 1) & @CRLF & _
-		"uint: " & DllStructGetData($b, 1) & @CRLF & _
-		"float: " & DllStructGetData($c, 1) & @CRLF & _
-		"")
+	; Release the resources used by the structure.
+	$tRECT = 0
 
-; 释放分配的内存
-$a = 0
+	; Display the results of WinGetPos and the returned rectangle.
+	MsgBox($MB_SYSTEMMODAL, "", "WinGetPos(): (" & $aWndPos[0] & ", " & $aWndPos[1] & ") " & _
+			"(" & $aWndPos[2] + $aWndPos[0] & ", " & $aWndPos[3] + $aWndPos[1] & ")" & @CRLF & _
+			"GetWindowRect(): (" & $iLeft & ", " & $iTop & ") (" & $iRight & ", " & $iBottom & ")")
+EndFunc   ;==>Example

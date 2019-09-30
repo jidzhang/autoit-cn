@@ -7,7 +7,7 @@ Func _Main()
 	Local $idButton1, $idButton2, $idButton3, $idButton4
 	Local $idButton5, $idButtonclose
 
-	GUICreate("Í¼ÐÎ°´Å¥",240,180)
+	GUICreate("test", 240, 180)
 	$idButton1 = GUICtrlCreateButton("1", 0, 0, 40, 40, $BS_ICON)
 	GUICtrlSetImage(-1, "shell32.dll", 5)
 	$idButton2 = GUICtrlCreateButton("2", 40, 00, 40, 40, $BS_ICON)
@@ -18,7 +18,7 @@ Func _Main()
 	GUICtrlSetImage(-1, "shell32.dll", 23)
 	$idButton5 = GUICtrlCreateButton("5", 160, 0, 40, 40, $BS_ICON)
 	GUICtrlSetImage(-1, "shell32.dll", 32)
-	$idButtonclose = GUICtrlCreateButton("¹Ø±Õ", 200, 0, 40, 40, $BS_ICON)
+	$idButtonclose = GUICtrlCreateButton("close", 200, 0, 40, 40, $BS_ICON)
 	GUICtrlSetImage(-1, "shell32.dll", 28)
 	GUISetState()
 

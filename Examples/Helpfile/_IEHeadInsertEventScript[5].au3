@@ -3,8 +3,6 @@
 ; navigation when any link is clicked and log the URL of the
 ; clicked link to the console
 
-Opt("TrayIconDebug", 1)
-
 #include <IE.au3>
 
 Local $oIE = _IECreate("http://www.autoitscript.com")
@@ -24,6 +22,6 @@ While WinExists(_IEPropertyGet($oIE, "hwnd"))
 WEnd
 
 Func _Evt_onClick()
-	Local $o_link = @COM_EventObj
-	ConsoleWrite($o_link.href & @CRLF)
+	Local $o_Link = @COM_EventObj
+	ConsoleWrite($o_Link.href & @CRLF)
 EndFunc   ;==>_Evt_onClick

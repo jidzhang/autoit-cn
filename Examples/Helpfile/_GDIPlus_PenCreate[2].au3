@@ -12,7 +12,7 @@ Func Example()
 	Local $iW = 600, $iH = 600
 	Local Const $iBgColor = 0x303030 ;$iBGColor format RRGGBB
 
-	$g_hGUI = GUICreate("GDI+ example", $iW, $iH) ;create a test GUI
+	$g_hGUI = GUICreate("GDI+ Example (" & @ScriptName & ")", $iW, $iH) ;create a test GUI
 	GUISetBkColor($iBgColor, $g_hGUI) ;set GUI background color
 	GUISetState(@SW_SHOW)
 

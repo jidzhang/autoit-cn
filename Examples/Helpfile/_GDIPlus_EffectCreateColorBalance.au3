@@ -5,22 +5,22 @@
 _Example()
 
 Func _Example()
-	Local $sFile = FileOpenDialog("Select an image", "", "Images (*.bmp;*.png;*.jpg;*.gif;*.tif)")
-	If @error Or Not FileExists($sFile) Then Return
-
-	If Not _GDIPlus_Startup() Then
+    If Not _GDIPlus_Startup() Or @extended < 6 Then
 		MsgBox($MB_SYSTEMMODAL, "ERROR", "GDIPlus.dll v1.1 not available")
 		Return
 	EndIf
+
+	Local $sFile = FileOpenDialog("Select an image", "", "Images (*.bmp;*.png;*.jpg;*.gif;*.tif)")
+	If @error Or Not FileExists($sFile) Then Return
 
 	Local $hImage = _GDIPlus_ImageLoadFromFile($sFile)
 
 	Local $iWidth = 600
 	Local $iHeight = _GDIPlus_ImageGetHeight($hImage) * 600 / _GDIPlus_ImageGetWidth($hImage)
 
-	Local $hGui = GUICreate("GDI+ v1.1", $iWidth, $iHeight)
+	Local $hGui = GUICreate("GDI+ v1.1 (" & @ScriptName & ")", $iWidth, $iHeight)
 	Local $hGraphics = _GDIPlus_GraphicsCreateFromHWND($hGui)
-	GUISetState()
+	GUISetState(@SW_SHOW)
 
 	Local $hEffect = _GDIPlus_EffectCreateColorBalance(-30, 20, 10)
 	_GDIPlus_BitmapApplyEffect($hImage, $hEffect)

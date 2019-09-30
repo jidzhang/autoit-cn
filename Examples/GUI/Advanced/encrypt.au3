@@ -21,7 +21,7 @@ _Main()
 
 Func _Main()
 	; Creates window
-	GUICreate('加密工具', 400, 400)
+	GUICreate('Encryption tool', 400, 400)
 
 	; Creates main edit
 	Local $idEditText = GUICtrlCreateEdit('', 5, 5, 380, 350)
@@ -34,12 +34,12 @@ Func _Main()
 	GUICtrlSetData($idCombo, "3DES|AES (128bit)|AES (192bit)|AES (256bit)|DES|RC2|RC4", "RC4")
 
 	; Encryption/Decryption buttons
-	Local $idEncryptButton = GUICtrlCreateButton('加密', 210, 360, 85, 35)
-	Local $idDecryptButton = GUICtrlCreateButton('解密', 300, 360, 85, 35)
+	Local $idEncryptButton = GUICtrlCreateButton('Encrypt', 210, 360, 85, 35)
+	Local $idDecryptButton = GUICtrlCreateButton('Decrypt', 300, 360, 85, 35)
 
 	; Simple text labels so you know what is what
-	GUICtrlCreateLabel('密码', 5, 385)
-	GUICtrlCreateLabel('等级',110,385)
+	GUICtrlCreateLabel('Password', 5, 385)
+	GUICtrlCreateLabel('Crypting Algorithm', 110, 385)
 
 	; Shows window
 	GUISetState()

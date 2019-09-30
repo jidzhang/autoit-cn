@@ -1,3 +1,5 @@
+#include <MsgBoxConstants.au3>
+
 Example()
 
 Func Example()
@@ -11,7 +13,7 @@ Func Example()
 	Local $sClassList = WinGetClassList($hWnd)
 
 	; Display the classlist.
-	MsgBox(4096, "", $sClassList)
+	MsgBox($MB_SYSTEMMODAL, "", $sClassList)
 
 	; Close the Notepad window using the handle returned by WinWait.
 	WinClose($hWnd)

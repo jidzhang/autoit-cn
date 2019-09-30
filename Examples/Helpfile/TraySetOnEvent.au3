@@ -1,26 +1,28 @@
 #NoTrayIcon
-#include <Constants.au3> ; Required for the $TRAY_EVENT_PRIMARYDOUBLE and $TRAY_EVENT_SECONDARYUP constants.
+#include <MsgBoxConstants.au3>
+#include <StringConstants.au3>
+#include <TrayConstants.au3> ; Required for the $TRAY_EVENT_PRIMARYDOUBLE, $TRAY_EVENT_SECONDARYUP and $TRAY_ICONSTATE_SHOW constants.
 
-Opt("TrayMenuMode", 3) ; 默认菜单项目 (脚本暂停中/退出)(Script Paused/Exit) 将不会显示,并且所选项目不能被选中(checkbox不会打勾) . 请参考TrayMenuMode选项1和2(3=1+2).
-Opt("TrayOnEventMode", 1)
+Opt("TrayMenuMode", 3) ; The default tray menu items will not be shown and items are not checked when selected. These are options 1 and 2 for TrayMenuMode.
+Opt("TrayOnEventMode", 1) ; Enable TrayOnEventMode.
 
 Example()
 
 Func Example()
-	TrayCreateItem("关于")
+	TrayCreateItem("About")
 
 	TrayCreateItem("") ; Create a separator line.
 
-	TrayCreateItem("退出")
+	TrayCreateItem("Exit")
 	TrayItemSetOnEvent(-1, "ExitScript")
 
 	TraySetOnEvent($TRAY_EVENT_PRIMARYDOUBLE, "TrayEvent")
 	TraySetOnEvent($TRAY_EVENT_SECONDARYUP, "TrayEvent")
 
-	TraySetState(1) ; Show the tray menu.
+	TraySetState($TRAY_ICONSTATE_SHOW) ; Show the tray menu.
 
 	While 1
-		Sleep(100)	; 空闲循环
+		Sleep(100) ; An idle loop.
 	WEnd
 EndFunc   ;==>Example
 
@@ -28,12 +30,12 @@ Func TrayEvent()
 	Switch @TRAY_ID ; Check the last tray item identifier.
 		Case $TRAY_EVENT_PRIMARYDOUBLE
 			; Display a message box about the AutoIt version and installation path of the AutoIt executable.
-			MsgBox(4096, "", "AutoIt tray menu example." & @CRLF & @CRLF & _
+			MsgBox($MB_SYSTEMMODAL, "", "AutoIt tray menu example." & @CRLF & @CRLF & _
 					"Version: " & @AutoItVersion & @CRLF & _
-					"Install Path: " & StringLeft(@AutoItExe, StringInStr(@AutoItExe, "\", 0, -1) - 1)) ; Find the folder of a full path.
+					"Install Path: " & StringLeft(@AutoItExe, StringInStr(@AutoItExe, "\", $STR_NOCASESENSEBASIC, -1) - 1)) ; Find the folder of a full path.
 
 		Case $TRAY_EVENT_SECONDARYUP
-			MsgBox(4096, "", "The secondary mouse button was released on the tray icon.")
+			MsgBox($MB_SYSTEMMODAL, "", "The secondary mouse button was released on the tray icon.")
 
 	EndSwitch
 EndFunc   ;==>TrayEvent

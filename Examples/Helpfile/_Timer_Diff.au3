@@ -1,15 +1,15 @@
 #include <Timers.au3>
 
-_Main()
+Example()
 
-Func _Main()
+Func Example()
 	HotKeySet("{ESC}", "_Quit")
 
-	Local $starttime = _Timer_Init()
+	Local $hStarttime = _Timer_Init()
 	While 1
-		ToolTip(_Timer_Diff($starttime))
+		ToolTip(_Timer_Diff($hStarttime))
 	WEnd
-EndFunc   ;==>_Main
+EndFunc   ;==>Example
 
 Func _Quit()
 	Exit

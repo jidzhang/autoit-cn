@@ -9,155 +9,155 @@
 ;
 ; ===============================================================================
 ;
+#include <EditConstants.au3>
 #include <GUIConstantsEx.au3>
 #include <WindowsConstants.au3>
-#include <EditConstants.au3>
 
-Global $iFlag, $Button, $MsgBox, $asMsgText
-Global $optWarning, $optInfo, $optCritical, $optQuestion
-Global $optNoIcon, $optApplication, $optSysModal, $optTaskModal, $optOK
-Global $optOkCancel, $optYesNo, $optYesNoCancel, $optAbortRetryIgnore
-Global $optRetryCancel, $optCancelRetryContinue, $optNothing, $optTopMost
-Global $optRightJust, $optFirst, $optSecond, $optThird
+Global $g_idOptWarning, $g_idOptInfo, $g_idOptCritical, $g_idOptQuestion
+Global $g_idOptSysModal, $g_idOptTaskModal
+Global $g_idOptOkCancel, $g_idOptYesNo, $g_idOptYesNoCancel, $g_idOptAbortRetryIgnore
+Global $g_idOptRetryCancel, $g_idOptCancelRetryContinue, $g_idOptTopMost
+Global $g_idOptRightJust, $g_idOptSecond, $g_idOptThird
 
 _Main()
 
 Func _Main()
-	Local $TITLE, $TEXT, $Timeout
-	Local $BTNCOPY, $BTNEXIT, $BTNPREVIEW, $MSG, $sText
+	Local $iFlag, $idButton, $sMsgBox, $asMsgText
+	Local $idTITLE, $idTEXT, $idTimeout, $idOptOK
+	Local $idBTNCOPY, $idBTNEXIT, $idBTNPREVIEW, $iMSG, $sText
 
-GUICreate("MsgBox 向导 v.1.0", 440, 540, 100, 100)  ; will create a dialog box 
+	GUICreate("MsgBox Wizard v.1.0", 440, 540, 100, 100) ; will create a dialog box
 
-GUICtrlCreateLabel("标题", 10, 5, 30)
-	$TITLE = GUICtrlCreateInput("", 10, 20, 420, 20)
+	GUICtrlCreateLabel("Title", 10, 5, 30)
+	$idTITLE = GUICtrlCreateInput("", 10, 20, 420, 20)
 	GUICtrlSetState(-1, $GUI_FOCUS)
-GUICtrlSetTip(-1, "消息框显示的标题.")
-GUICtrlCreateLabel("文本", 10, 50, 30)
-	$TEXT = GUICtrlCreateEdit("", 10, 65, 420, 100, $ES_AUTOVSCROLL + $WS_VSCROLL + $ES_MULTILINE + $ES_WANTRETURN)
-GUICtrlSetTip(-1, "消息框显示的文本.")
+	GUICtrlSetTip(-1, "The title of the message box.")
+	GUICtrlCreateLabel("Text", 10, 50, 30)
+	$idTEXT = GUICtrlCreateEdit("", 10, 65, 420, 100, $ES_AUTOVSCROLL + $WS_VSCROLL + $ES_MULTILINE + $ES_WANTRETURN)
+	GUICtrlSetTip(-1, "The text of the message box.")
 
-GUICtrlCreateGroup("图标", 10, 170, 200, 130)
-$optWarning = GUICtrlCreateRadio("警告", 20, 190, 100, 20)
+	GUICtrlCreateGroup("Icons", 10, 170, 200, 130)
+	$g_idOptWarning = GUICtrlCreateRadio("Warning", 20, 190, 100, 20)
 	GUICtrlSetState(-1, $GUI_CHECKED)
-$optInfo = GUICtrlCreateRadio("信息", 20, 210, 100, 20)
-$optCritical = GUICtrlCreateRadio("严重错误", 20, 230, 100, 20)
-$optQuestion = GUICtrlCreateRadio("问号", 20, 250, 100, 20)
-$optNoIcon = GUICtrlCreateRadio("没有", 20, 270, 100, 20)
+	$g_idOptInfo = GUICtrlCreateRadio("Informational", 20, 210, 100, 20)
+	$g_idOptCritical = GUICtrlCreateRadio("Critical", 20, 230, 100, 20)
+	$g_idOptQuestion = GUICtrlCreateRadio("Question", 20, 250, 100, 20)
+	GUICtrlCreateRadio("None", 20, 270, 100, 20)
 	GUICtrlCreateGroup("", -99, -99, 1, 1) ;close group
 
-GUICtrlCreateGroup("方式", 10, 310, 200, 90)
-$optApplication = GUICtrlCreateRadio("应用程序", 20, 330, 100, 20)
+	GUICtrlCreateGroup("Modality", 10, 310, 200, 90)
+	GUICtrlCreateRadio("Application", 20, 330, 100, 20)
 	GUICtrlSetState(-1, $GUI_CHECKED)
-$optSysModal = GUICtrlCreateRadio("系统方式", 20, 350, 100, 20)
-$optTaskModal = GUICtrlCreateRadio("任务方式", 20, 370, 100, 20)
+	$g_idOptSysModal = GUICtrlCreateRadio("System Modal", 20, 350, 100, 20)
+	$g_idOptTaskModal = GUICtrlCreateRadio("Task Modal", 20, 370, 100, 20)
 	GUICtrlCreateGroup("", -99, -99, 1, 1) ;close group
 
-GUICtrlCreateGroup("按钮", 230, 170, 200, 170)
-$optOK = GUICtrlCreateRadio("确定", 240, 190, 100, 20)
+	GUICtrlCreateGroup("Buttons", 230, 170, 200, 170)
+	$idOptOK = GUICtrlCreateRadio("OK", 240, 190, 100, 20)
 	GUICtrlSetState(-1, $GUI_CHECKED)
-$optOkCancel = GUICtrlCreateRadio("确定, 取消", 240, 210, 100, 20)
-$optYesNo = GUICtrlCreateRadio("是, 否", 240, 230, 100, 20)
-$optYesNoCancel = GUICtrlCreateRadio("是, 否, 取消", 240, 250, 100, 20)
-$optAbortRetryIgnore = GUICtrlCreateRadio("终止, 重试, 忽略", 240, 270, 120, 20)
-$optRetryCancel = GUICtrlCreateRadio("重试, 取消", 240, 290, 100, 20)
-$optCancelRetryContinue = GUICtrlCreateRadio("取消, 重试, 继续", 240, 310, 130, 20)
+	$g_idOptOkCancel = GUICtrlCreateRadio("OK, Cancel", 240, 210, 100, 20)
+	$g_idOptYesNo = GUICtrlCreateRadio("Yes, No", 240, 230, 100, 20)
+	$g_idOptYesNoCancel = GUICtrlCreateRadio("Yes, No, Cancel", 240, 250, 100, 20)
+	$g_idOptAbortRetryIgnore = GUICtrlCreateRadio("Abort, Retry, Ignore", 240, 270, 120, 20)
+	$g_idOptRetryCancel = GUICtrlCreateRadio("Retry, Cancel", 240, 290, 100, 20)
+	$g_idOptCancelRetryContinue = GUICtrlCreateRadio("Cancel, Retry, Continue", 240, 310, 130, 20)
 	GUICtrlCreateGroup("", -99, -99, 1, 1) ;close group
 
-GUICtrlCreateGroup("其它选项", 10, 410, 200, 90)
-$optNothing = GUICtrlCreateRadio("无", 20, 430, 100, 20)
+	GUICtrlCreateGroup("Miscellaneous", 10, 410, 200, 90)
+	GUICtrlCreateRadio("Nothing", 20, 430, 100, 20)
 	GUICtrlSetState(-1, $GUI_CHECKED)
-$optTopMost = GUICtrlCreateRadio("总是置顶", 20, 450, 130, 20)
-$optRightJust = GUICtrlCreateRadio("从右到左的阅读顺序", 20, 470, 150, 20)
+	$g_idOptTopMost = GUICtrlCreateRadio("Top-most attribute set", 20, 450, 130, 20)
+	$g_idOptRightJust = GUICtrlCreateRadio("Right-justified title/text", 20, 470, 150, 20)
 	GUICtrlCreateGroup("", -99, -99, 1, 1) ;close group
 
-GUICtrlCreateGroup("默认按钮", 230, 350, 200, 90)
-$optFirst = GUICtrlCreateRadio("第一个按钮", 240, 370, 130, 20)
+	GUICtrlCreateGroup("Default Buttons", 230, 350, 200, 90)
+	Local $idOptFirst = GUICtrlCreateRadio("First Button", 240, 370, 130, 20)
 	GUICtrlSetState(-1, $GUI_CHECKED)
-$optSecond = GUICtrlCreateRadio("第二个按钮", 240, 390, 130, 20)
+	$g_idOptSecond = GUICtrlCreateRadio("Second Button", 240, 390, 130, 20)
 	GUICtrlSetState(-1, $GUI_DISABLE)
-$optThird = GUICtrlCreateRadio("第三个按钮", 240, 410, 130, 20)
+	$g_idOptThird = GUICtrlCreateRadio("Third Button", 240, 410, 130, 20)
 	GUICtrlSetState(-1, $GUI_DISABLE)
 	GUICtrlCreateGroup("", -99, -99, 1, 1) ;close group
 
-GUICtrlCreateGroup("超时(秒):", 230, 450, 200, 50)
-	$Timeout = GUICtrlCreateInput("", 240, 470, 100, 20, $ES_NUMBER)
-GUICtrlSetTip(-1, "如果超过定义的时间,消息框将会自动的关闭.")
+	GUICtrlCreateGroup("Timeout", 230, 450, 200, 50)
+	$idTimeout = GUICtrlCreateInput("", 240, 470, 100, 20, $ES_NUMBER)
+	GUICtrlSetTip(-1, "Optional Timeout in seconds. After the timeout has elapsed the message box will be automatically closed.")
 	GUICtrlCreateGroup("", -99, -99, 1, 1) ;close group
 
-$BTNPREVIEW = GUICtrlCreateButton("预览(&P)", 10, 510, 100)
-GUICtrlSetTip(-1, "显示消息框")
-$BTNCOPY = GUICtrlCreateButton("复制(&C)", 120, 510, 100)
-GUICtrlSetTip(-1, "复制生成的 AutoIt 代码到剪切板")
-$BTNEXIT = GUICtrlCreateButton("退出(&E)", 230, 510, 100)
-GUICtrlSetTip(-1, "退出程序")
+	$idBTNPREVIEW = GUICtrlCreateButton("&Preview", 10, 510, 100)
+	GUICtrlSetTip(-1, "Show the MessageBox")
+	$idBTNCOPY = GUICtrlCreateButton("&Copy", 120, 510, 100)
+	GUICtrlSetTip(-1, "Copy the generated AutoIt code to the Clipboard")
+	$idBTNEXIT = GUICtrlCreateButton("&Exit", 230, 510, 100)
+	GUICtrlSetTip(-1, "Quit the program")
 
-	$Button = $optOK
+	$idButton = $idOptOK
 
 	GUISetState() ; will display an empty dialog box
 
 	; Run the GUI until the dialog is closed
 	While 1
-		$MSG = GUIGetMsg()
+		$iMSG = GUIGetMsg()
 		Select
-			Case $MSG = $GUI_EVENT_CLOSE Or $MSG = $BTNEXIT
+			Case $iMSG = $GUI_EVENT_CLOSE Or $iMSG = $idBTNEXIT
 				Exit
 
-			Case $MSG = $optOK
-				$Button = $optOK
-				GUICtrlSetState($optFirst, $GUI_CHECKED)
-				GUICtrlSetState($optFirst, $GUI_ENABLE)
-				GUICtrlSetState($optSecond, $GUI_DISABLE)
-				GUICtrlSetState($optThird, $GUI_DISABLE)
+			Case $iMSG = $idOptOK
+				$idButton = $idOptOK
+				GUICtrlSetState($idOptFirst, $GUI_CHECKED)
+				GUICtrlSetState($idOptFirst, $GUI_ENABLE)
+				GUICtrlSetState($g_idOptSecond, $GUI_DISABLE)
+				GUICtrlSetState($g_idOptThird, $GUI_DISABLE)
 
-			Case $MSG = $optOkCancel
-				$Button = $optOkCancel
-				GUICtrlSetState($optFirst, $GUI_CHECKED)
-				GUICtrlSetState($optFirst, $GUI_ENABLE)
-				GUICtrlSetState($optSecond, $GUI_ENABLE)
-				GUICtrlSetState($optThird, $GUI_DISABLE)
+			Case $iMSG = $g_idOptOkCancel
+				$idButton = $g_idOptOkCancel
+				GUICtrlSetState($idOptFirst, $GUI_CHECKED)
+				GUICtrlSetState($idOptFirst, $GUI_ENABLE)
+				GUICtrlSetState($g_idOptSecond, $GUI_ENABLE)
+				GUICtrlSetState($g_idOptThird, $GUI_DISABLE)
 
-			Case $MSG = $optYesNo
-				$Button = $optYesNo
-				GUICtrlSetState($optFirst, $GUI_CHECKED)
-				GUICtrlSetState($optFirst, $GUI_ENABLE)
-				GUICtrlSetState($optSecond, $GUI_ENABLE)
-				GUICtrlSetState($optThird, $GUI_DISABLE)
+			Case $iMSG = $g_idOptYesNo
+				$idButton = $g_idOptYesNo
+				GUICtrlSetState($idOptFirst, $GUI_CHECKED)
+				GUICtrlSetState($idOptFirst, $GUI_ENABLE)
+				GUICtrlSetState($g_idOptSecond, $GUI_ENABLE)
+				GUICtrlSetState($g_idOptThird, $GUI_DISABLE)
 
-			Case $MSG = $optYesNoCancel
-				$Button = $optYesNoCancel
-				GUICtrlSetState($optFirst, $GUI_CHECKED)
-				GUICtrlSetState($optFirst, $GUI_ENABLE)
-				GUICtrlSetState($optSecond, $GUI_ENABLE)
-				GUICtrlSetState($optThird, $GUI_ENABLE)
+			Case $iMSG = $g_idOptYesNoCancel
+				$idButton = $g_idOptYesNoCancel
+				GUICtrlSetState($idOptFirst, $GUI_CHECKED)
+				GUICtrlSetState($idOptFirst, $GUI_ENABLE)
+				GUICtrlSetState($g_idOptSecond, $GUI_ENABLE)
+				GUICtrlSetState($g_idOptThird, $GUI_ENABLE)
 
-			Case $MSG = $optAbortRetryIgnore
-				$Button = $optAbortRetryIgnore
-				GUICtrlSetState($optFirst, $GUI_CHECKED)
-				GUICtrlSetState($optFirst, $GUI_ENABLE)
-				GUICtrlSetState($optSecond, $GUI_ENABLE)
-				GUICtrlSetState($optThird, $GUI_ENABLE)
+			Case $iMSG = $g_idOptAbortRetryIgnore
+				$idButton = $g_idOptAbortRetryIgnore
+				GUICtrlSetState($idOptFirst, $GUI_CHECKED)
+				GUICtrlSetState($idOptFirst, $GUI_ENABLE)
+				GUICtrlSetState($g_idOptSecond, $GUI_ENABLE)
+				GUICtrlSetState($g_idOptThird, $GUI_ENABLE)
 
-			Case $MSG = $optRetryCancel
-				$Button = $optRetryCancel
-				GUICtrlSetState($optFirst, $GUI_CHECKED)
-				GUICtrlSetState($optFirst, $GUI_ENABLE)
-				GUICtrlSetState($optSecond, $GUI_ENABLE)
-				GUICtrlSetState($optThird, $GUI_DISABLE)
+			Case $iMSG = $g_idOptRetryCancel
+				$idButton = $g_idOptRetryCancel
+				GUICtrlSetState($idOptFirst, $GUI_CHECKED)
+				GUICtrlSetState($idOptFirst, $GUI_ENABLE)
+				GUICtrlSetState($g_idOptSecond, $GUI_ENABLE)
+				GUICtrlSetState($g_idOptThird, $GUI_DISABLE)
 
-			Case $MSG = $optCancelRetryContinue
-				$Button = $optCancelRetryContinue
-				GUICtrlSetState($optFirst, $GUI_CHECKED)
-				GUICtrlSetState($optFirst, $GUI_ENABLE)
-				GUICtrlSetState($optSecond, $GUI_ENABLE)
-				GUICtrlSetState($optThird, $GUI_ENABLE)
+			Case $iMSG = $g_idOptCancelRetryContinue
+				$idButton = $g_idOptCancelRetryContinue
+				GUICtrlSetState($idOptFirst, $GUI_CHECKED)
+				GUICtrlSetState($idOptFirst, $GUI_ENABLE)
+				GUICtrlSetState($g_idOptSecond, $GUI_ENABLE)
+				GUICtrlSetState($g_idOptThird, $GUI_ENABLE)
 
-			Case $MSG = $BTNPREVIEW
-				MsgBox(_SetFlag($iFlag), GUICtrlRead($TITLE), GUICtrlRead($TEXT), GUICtrlRead($Timeout))
+			Case $iMSG = $idBTNPREVIEW
+				MsgBox(_SetFlag($iFlag), GUICtrlRead($idTITLE), GUICtrlRead($idTEXT), GUICtrlRead($idTimeout))
 
-			Case $MSG = $BTNCOPY
-				$asMsgText = StringSplit(GUICtrlRead($TEXT), @CRLF, 1)
+			Case $iMSG = $idBTNCOPY
+				$asMsgText = StringSplit(GUICtrlRead($idTEXT), @CRLF, 1)
 				If $asMsgText[0] = 1 Then
-					$sText = GUICtrlRead($TEXT)
+					$sText = GUICtrlRead($idTEXT)
 				Else
 					$sText = $asMsgText[1]
 
@@ -168,33 +168,33 @@ GUICtrlSetTip(-1, "退出程序")
 				EndIf
 
 				Select
-					Case $Button = $optOK
-						If GUICtrlRead($Timeout) = "" Then
-							$MsgBox = "MsgBox(" & _SetFlag($iFlag) & "," & Chr(34) & GUICtrlRead($TITLE) & Chr(34) & "," _
+					Case $idButton = $idOptOK
+						If GUICtrlRead($idTimeout) = "" Then
+							$sMsgBox = "MsgBox(" & _SetFlag($iFlag) & "," & Chr(34) & GUICtrlRead($idTITLE) & Chr(34) & "," _
 									 & Chr(34) & $sText & Chr(34) & ")"
 						Else
-							$MsgBox = "Dim $iMsgBoxAnswer" & @CRLF & _
-									"$iMsgBoxAnswer = MsgBox(" & _SetFlag($iFlag) & "," & Chr(34) & GUICtrlRead($TITLE) & Chr(34) & "," _
-									 & Chr(34) & $sText & Chr(34) & "," & GUICtrlRead($Timeout) & ")" & @CRLF & _
+							$sMsgBox = "Dim $iMsgBoxAnswer" & @CRLF & _
+									"$iMsgBoxAnswer = MsgBox(" & _SetFlag($iFlag) & "," & Chr(34) & GUICtrlRead($idTITLE) & Chr(34) & "," _
+									 & Chr(34) & $sText & Chr(34) & "," & GUICtrlRead($idTimeout) & ")" & @CRLF & _
 									"Select" & @CRLF & _
 									"   Case $iMsgBoxAnswer = -1 ;Timeout" & @CRLF & @CRLF & _
 									"   Case Else                ;OK" & @CRLF & @CRLF & _
 									"EndSelect"
 						EndIf
 
-					Case $Button = $optOkCancel
-						If GUICtrlRead($Timeout) = "" Then
-							$MsgBox = "Dim $iMsgBoxAnswer" & @CRLF & _
-									"$iMsgBoxAnswer = MsgBox(" & _SetFlag($iFlag) & "," & Chr(34) & GUICtrlRead($TITLE) & Chr(34) & "," _
+					Case $idButton = $g_idOptOkCancel
+						If GUICtrlRead($idTimeout) = "" Then
+							$sMsgBox = "Dim $iMsgBoxAnswer" & @CRLF & _
+									"$iMsgBoxAnswer = MsgBox(" & _SetFlag($iFlag) & "," & Chr(34) & GUICtrlRead($idTITLE) & Chr(34) & "," _
 									 & Chr(34) & $sText & Chr(34) & ")" & @CRLF & _
 									"Select" & @CRLF & _
 									"   Case $iMsgBoxAnswer = 1 ;OK" & @CRLF & @CRLF & _
 									"   Case $iMsgBoxAnswer = 2 ;Cancel" & @CRLF & @CRLF & _
 									"EndSelect"
 						Else
-							$MsgBox = "Dim $iMsgBoxAnswer" & @CRLF & _
-									"$iMsgBoxAnswer = MsgBox(" & _SetFlag($iFlag) & "," & Chr(34) & GUICtrlRead($TITLE) & Chr(34) & "," _
-									 & Chr(34) & $sText & Chr(34) & "," & GUICtrlRead($Timeout) & ")" & @CRLF & _
+							$sMsgBox = "Dim $iMsgBoxAnswer" & @CRLF & _
+									"$iMsgBoxAnswer = MsgBox(" & _SetFlag($iFlag) & "," & Chr(34) & GUICtrlRead($idTITLE) & Chr(34) & "," _
+									 & Chr(34) & $sText & Chr(34) & "," & GUICtrlRead($idTimeout) & ")" & @CRLF & _
 									"Select" & @CRLF & _
 									"   Case $iMsgBoxAnswer = 1  ;OK" & @CRLF & @CRLF & _
 									"   Case $iMsgBoxAnswer = 2  ;Cancel" & @CRLF & @CRLF & _
@@ -202,19 +202,19 @@ GUICtrlSetTip(-1, "退出程序")
 									"EndSelect"
 						EndIf
 
-					Case $Button = $optYesNo
-						If GUICtrlRead($Timeout) = "" Then
-							$MsgBox = "Dim $iMsgBoxAnswer" & @CRLF & _
-									"$iMsgBoxAnswer = MsgBox(" & _SetFlag($iFlag) & "," & Chr(34) & GUICtrlRead($TITLE) & Chr(34) & "," _
+					Case $idButton = $g_idOptYesNo
+						If GUICtrlRead($idTimeout) = "" Then
+							$sMsgBox = "Dim $iMsgBoxAnswer" & @CRLF & _
+									"$iMsgBoxAnswer = MsgBox(" & _SetFlag($iFlag) & "," & Chr(34) & GUICtrlRead($idTITLE) & Chr(34) & "," _
 									 & Chr(34) & $sText & Chr(34) & ")" & @CRLF & _
 									"Select" & @CRLF & _
 									"   Case $iMsgBoxAnswer = 6 ;Yes" & @CRLF & @CRLF & _
 									"   Case $iMsgBoxAnswer = 7 ;No" & @CRLF & @CRLF & _
 									"EndSelect"
 						Else
-							$MsgBox = "Dim $iMsgBoxAnswer" & @CRLF & _
-									"iMsgBoxAnswer = MsgBox(" & _SetFlag($iFlag) & "," & Chr(34) & GUICtrlRead($TITLE) & Chr(34) & "," _
-									 & Chr(34) & $sText & Chr(34) & "," & GUICtrlRead($Timeout) & ")" & @CRLF & _
+							$sMsgBox = "Dim $iMsgBoxAnswer" & @CRLF & _
+									"iMsgBoxAnswer = MsgBox(" & _SetFlag($iFlag) & "," & Chr(34) & GUICtrlRead($idTITLE) & Chr(34) & "," _
+									 & Chr(34) & $sText & Chr(34) & "," & GUICtrlRead($idTimeout) & ")" & @CRLF & _
 									"Select" & @CRLF & _
 									"   Case $iMsgBoxAnswer = 6  ;Yes" & @CRLF & @CRLF & _
 									"   Case $iMsgBoxAnswer = 7  ;No" & @CRLF & @CRLF & _
@@ -222,10 +222,10 @@ GUICtrlSetTip(-1, "退出程序")
 									"EndSelect"
 						EndIf
 
-					Case $Button = $optYesNoCancel
-						If GUICtrlRead($Timeout) = "" Then
-							$MsgBox = "Dim $iMsgBoxAnswer" & @CRLF & _
-									"$iMsgBoxAnswer = MsgBox(" & _SetFlag($iFlag) & "," & Chr(34) & GUICtrlRead($TITLE) & Chr(34) & "," _
+					Case $idButton = $g_idOptYesNoCancel
+						If GUICtrlRead($idTimeout) = "" Then
+							$sMsgBox = "Dim $iMsgBoxAnswer" & @CRLF & _
+									"$iMsgBoxAnswer = MsgBox(" & _SetFlag($iFlag) & "," & Chr(34) & GUICtrlRead($idTITLE) & Chr(34) & "," _
 									 & Chr(34) & $sText & Chr(34) & ")" & @CRLF & _
 									"Select" & @CRLF & _
 									"   Case $iMsgBoxAnswer = 6 ;Yes" & @CRLF & @CRLF & _
@@ -233,9 +233,9 @@ GUICtrlSetTip(-1, "退出程序")
 									"   Case $iMsgBoxAnswer = 2 ;Cancel" & @CRLF & @CRLF & _
 									"EndSelect"
 						Else
-							$MsgBox = "Dim $iMsgBoxAnswer" & @CRLF & _
-									"$iMsgBoxAnswer = MsgBox(" & _SetFlag($iFlag) & "," & Chr(34) & GUICtrlRead($TITLE) & Chr(34) & "," _
-									 & Chr(34) & $sText & Chr(34) & "," & GUICtrlRead($Timeout) & ")" & @CRLF & _
+							$sMsgBox = "Dim $iMsgBoxAnswer" & @CRLF & _
+									"$iMsgBoxAnswer = MsgBox(" & _SetFlag($iFlag) & "," & Chr(34) & GUICtrlRead($idTITLE) & Chr(34) & "," _
+									 & Chr(34) & $sText & Chr(34) & "," & GUICtrlRead($idTimeout) & ")" & @CRLF & _
 									"Select" & @CRLF & _
 									"   Case $iMsgBoxAnswer = 6  ;Yes" & @CRLF & @CRLF & _
 									"   Case $iMsgBoxAnswer = 7  ;No" & @CRLF & @CRLF & _
@@ -244,10 +244,10 @@ GUICtrlSetTip(-1, "退出程序")
 									"EndSelect"
 						EndIf
 
-					Case $Button = $optAbortRetryIgnore
-						If GUICtrlRead($Timeout) = "" Then
-							$MsgBox = "Dim $iMsgBoxAnswer" & @CRLF & _
-									"$iMsgBoxAnswer = MsgBox(" & _SetFlag($iFlag) & "," & Chr(34) & GUICtrlRead($TITLE) & Chr(34) & "," _
+					Case $idButton = $g_idOptAbortRetryIgnore
+						If GUICtrlRead($idTimeout) = "" Then
+							$sMsgBox = "Dim $iMsgBoxAnswer" & @CRLF & _
+									"$iMsgBoxAnswer = MsgBox(" & _SetFlag($iFlag) & "," & Chr(34) & GUICtrlRead($idTITLE) & Chr(34) & "," _
 									 & Chr(34) & $sText & Chr(34) & ")" & @CRLF & _
 									"Select" & @CRLF & _
 									"   Case $iMsgBoxAnswer = 3 ;Abort" & @CRLF & @CRLF & _
@@ -255,9 +255,9 @@ GUICtrlSetTip(-1, "退出程序")
 									"   Case $iMsgBoxAnswer = 5 ;Ignore" & @CRLF & @CRLF & _
 									"EndSelect"
 						Else
-							$MsgBox = "Dim $iMsgBoxAnswer" & @CRLF & _
-									"$iMsgBoxAnswer = MsgBox(" & _SetFlag($iFlag) & "," & Chr(34) & GUICtrlRead($TITLE) & Chr(34) & "," _
-									 & Chr(34) & $sText & Chr(34) & "," & GUICtrlRead($Timeout) & ")" & @CRLF & _
+							$sMsgBox = "Dim $iMsgBoxAnswer" & @CRLF & _
+									"$iMsgBoxAnswer = MsgBox(" & _SetFlag($iFlag) & "," & Chr(34) & GUICtrlRead($idTITLE) & Chr(34) & "," _
+									 & Chr(34) & $sText & Chr(34) & "," & GUICtrlRead($idTimeout) & ")" & @CRLF & _
 									"Select" & @CRLF & _
 									"   Case $iMsgBoxAnswer = 3  ;Abort" & @CRLF & @CRLF & _
 									"   Case $iMsgBoxAnswer = 4  ;Retry" & @CRLF & @CRLF & _
@@ -266,19 +266,19 @@ GUICtrlSetTip(-1, "退出程序")
 									"EndSelect"
 						EndIf
 
-					Case $Button = $optRetryCancel
-						If GUICtrlRead($Timeout) = "" Then
-							$MsgBox = "Dim $iMsgBoxAnswer" & @CRLF & _
-									"$iMsgBoxAnswer = MsgBox(" & _SetFlag($iFlag) & "," & Chr(34) & GUICtrlRead($TITLE) & Chr(34) & "," _
+					Case $idButton = $g_idOptRetryCancel
+						If GUICtrlRead($idTimeout) = "" Then
+							$sMsgBox = "Dim $iMsgBoxAnswer" & @CRLF & _
+									"$iMsgBoxAnswer = MsgBox(" & _SetFlag($iFlag) & "," & Chr(34) & GUICtrlRead($idTITLE) & Chr(34) & "," _
 									 & Chr(34) & $sText & Chr(34) & ")" & @CRLF & _
 									"Select" & @CRLF & _
 									"   Case $iMsgBoxAnswer = 4 ;Retry" & @CRLF & @CRLF & _
 									"   Case $iMsgBoxAnswer = 2 ;Cancel" & @CRLF & @CRLF & _
 									"EndSelect"
 						Else
-							$MsgBox = "Dim $iMsgBoxAnswer" & @CRLF & _
-									"$iMsgBoxAnswer = MsgBox(" & _SetFlag($iFlag) & "," & Chr(34) & GUICtrlRead($TITLE) & Chr(34) & "," _
-									 & Chr(34) & $sText & Chr(34) & "," & GUICtrlRead($Timeout) & ")" & @CRLF & _
+							$sMsgBox = "Dim $iMsgBoxAnswer" & @CRLF & _
+									"$iMsgBoxAnswer = MsgBox(" & _SetFlag($iFlag) & "," & Chr(34) & GUICtrlRead($idTITLE) & Chr(34) & "," _
+									 & Chr(34) & $sText & Chr(34) & "," & GUICtrlRead($idTimeout) & ")" & @CRLF & _
 									"Select" & @CRLF & _
 									"   Case $iMsgBoxAnswer = 4  ;Retry" & @CRLF & @CRLF & _
 									"   Case $iMsgBoxAnswer = 2  ;Cancel" & @CRLF & @CRLF & _
@@ -286,10 +286,10 @@ GUICtrlSetTip(-1, "退出程序")
 									"EndSelect"
 						EndIf
 
-					Case $Button = $optCancelRetryContinue
-						If GUICtrlRead($Timeout) = "" Then
-							$MsgBox = "Dim $iMsgBoxAnswer" & @CRLF & _
-									"$iMsgBoxAnswer = MsgBox(" & _SetFlag($iFlag) & "," & Chr(34) & GUICtrlRead($TITLE) & Chr(34) & "," _
+					Case $idButton = $g_idOptCancelRetryContinue
+						If GUICtrlRead($idTimeout) = "" Then
+							$sMsgBox = "Dim $iMsgBoxAnswer" & @CRLF & _
+									"$iMsgBoxAnswer = MsgBox(" & _SetFlag($iFlag) & "," & Chr(34) & GUICtrlRead($idTITLE) & Chr(34) & "," _
 									 & Chr(34) & $sText & Chr(34) & ")" & @CRLF & _
 									"Select" & @CRLF & _
 									"   Case $iMsgBoxAnswer = 2 ;Cancel" & @CRLF & @CRLF & _
@@ -297,9 +297,9 @@ GUICtrlSetTip(-1, "退出程序")
 									"   Case $iMsgBoxAnswer = 11 ;Continue" & @CRLF & @CRLF & _
 									"EndSelect"
 						Else
-							$MsgBox = "Dim $iMsgBoxAnswer" & @CRLF & _
-									"$iMsgBoxAnswer = MsgBox(" & _SetFlag($iFlag) & "," & Chr(34) & GUICtrlRead($TITLE) & Chr(34) & "," _
-									 & Chr(34) & $sText & Chr(34) & "," & GUICtrlRead($Timeout) & ")" & @CRLF & _
+							$sMsgBox = "Dim $iMsgBoxAnswer" & @CRLF & _
+									"$iMsgBoxAnswer = MsgBox(" & _SetFlag($iFlag) & "," & Chr(34) & GUICtrlRead($idTITLE) & Chr(34) & "," _
+									 & Chr(34) & $sText & Chr(34) & "," & GUICtrlRead($idTimeout) & ")" & @CRLF & _
 									"Select" & @CRLF & _
 									"   Case $iMsgBoxAnswer = 2  ;Cancel" & @CRLF & @CRLF & _
 									"   Case $iMsgBoxAnswer = 10 ;Try Again" & @CRLF & @CRLF & _
@@ -309,7 +309,7 @@ GUICtrlSetTip(-1, "退出程序")
 						EndIf
 				EndSelect
 
-				ClipPut($MsgBox)
+				ClipPut($sMsgBox)
 		EndSelect
 
 	WEnd
@@ -334,53 +334,53 @@ Func _SetFlag($iFlag)
 
 	;Icons
 	Select
-		Case GUICtrlRead($optWarning) = $GUI_CHECKED
+		Case GUICtrlRead($g_idOptWarning) = $GUI_CHECKED
 			$iFlag = $iFlag + 48
-		Case GUICtrlRead($optInfo) = $GUI_CHECKED
+		Case GUICtrlRead($g_idOptInfo) = $GUI_CHECKED
 			$iFlag = $iFlag + 64
-		Case GUICtrlRead($optCritical) = $GUI_CHECKED
+		Case GUICtrlRead($g_idOptCritical) = $GUI_CHECKED
 			$iFlag = $iFlag + 16
-		Case GUICtrlRead($optQuestion) = $GUI_CHECKED
+		Case GUICtrlRead($g_idOptQuestion) = $GUI_CHECKED
 			$iFlag = $iFlag + 32
 	EndSelect
 
 	;Modality
 	Select
-		Case GUICtrlRead($optSysModal) = $GUI_CHECKED
+		Case GUICtrlRead($g_idOptSysModal) = $GUI_CHECKED
 			$iFlag = $iFlag + 4096
-		Case GUICtrlRead($optTaskModal) = $GUI_CHECKED
+		Case GUICtrlRead($g_idOptTaskModal) = $GUI_CHECKED
 			$iFlag = $iFlag + 8192
 	EndSelect
 
 	;Buttons
 	Select
-		Case GUICtrlRead($optOkCancel) = $GUI_CHECKED
+		Case GUICtrlRead($g_idOptOkCancel) = $GUI_CHECKED
 			$iFlag = $iFlag + 1
-		Case GUICtrlRead($optYesNo) = $GUI_CHECKED
+		Case GUICtrlRead($g_idOptYesNo) = $GUI_CHECKED
 			$iFlag = $iFlag + 4
-		Case GUICtrlRead($optYesNoCancel) = $GUI_CHECKED
+		Case GUICtrlRead($g_idOptYesNoCancel) = $GUI_CHECKED
 			$iFlag = $iFlag + 3
-		Case GUICtrlRead($optAbortRetryIgnore) = $GUI_CHECKED
+		Case GUICtrlRead($g_idOptAbortRetryIgnore) = $GUI_CHECKED
 			$iFlag = $iFlag + 2
-		Case GUICtrlRead($optRetryCancel) = $GUI_CHECKED
+		Case GUICtrlRead($g_idOptRetryCancel) = $GUI_CHECKED
 			$iFlag = $iFlag + 5
-		Case GUICtrlRead($optCancelRetryContinue) = $GUI_CHECKED
+		Case GUICtrlRead($g_idOptCancelRetryContinue) = $GUI_CHECKED
 			$iFlag = $iFlag + 6
 	EndSelect
 
 	;Miscellaneous
 	Select
-		Case GUICtrlRead($optTopMost) = $GUI_CHECKED
+		Case GUICtrlRead($g_idOptTopMost) = $GUI_CHECKED
 			$iFlag = $iFlag + 262144
-		Case GUICtrlRead($optRightJust) = $GUI_CHECKED
+		Case GUICtrlRead($g_idOptRightJust) = $GUI_CHECKED
 			$iFlag = $iFlag + 5244288
 	EndSelect
 
 	;Default Buttons
 	Select
-		Case GUICtrlRead($optSecond) = $GUI_CHECKED
+		Case GUICtrlRead($g_idOptSecond) = $GUI_CHECKED
 			$iFlag = $iFlag + 256
-		Case GUICtrlRead($optThird) = $GUI_CHECKED
+		Case GUICtrlRead($g_idOptThird) = $GUI_CHECKED
 			$iFlag = $iFlag + 512
 	EndSelect
 

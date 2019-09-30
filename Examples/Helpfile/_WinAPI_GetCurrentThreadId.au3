@@ -1,3 +1,4 @@
-#include <WinAPI.au3>
+#include <MsgBoxConstants.au3>
+#include <WinAPIProc.au3>
 
-MsgBox(4096, "ID", "Get Current Thread: " & _WinAPI_GetCurrentThreadId())
+MsgBox($MB_SYSTEMMODAL, "ID", "Get Current Thread: " & _WinAPI_GetCurrentThreadId())

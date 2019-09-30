@@ -1,10 +1,14 @@
-﻿;示例 1 弹出光盘驱动器 E: 盘的光驱托盘
-CDTray("E:", "open")
+#include <AutoItConstants.au3>
+#include <MsgBoxConstants.au3>
 
-;示例 2 弹出全部光盘驱动器的光驱托盘
-$var = DriveGetDrive( "CDROM" )
-If NOT @error Then
-    For $i = 1 to $var[0]
-		CDTray($var[$i], "open")
-    Next
+; Get List of all CDRom's
+Local $aCDRom = DriveGetDrive($DT_CDROM)
+If @error Then
+	MsgBox($MB_SYSTEMMODAL, "", "No CDRom found.")
+	Exit
 EndIf
+
+; Open the CD tray of the first CDRom
+CDTray($aCDRom[1], $CDTRAY_OPEN)
+Sleep(2000)
+CDTray($aCDRom[1], $CDTRAY_CLOSED) ; does not work on laptop-style cd trays that can only be closed manually.

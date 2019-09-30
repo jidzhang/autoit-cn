@@ -1,15 +1,17 @@
-#include <WinAPI.au3>
-_Main()
+#include <MsgBoxConstants.au3>
+#include <WinAPIConv.au3>
 
-Func _Main()
-	Local $hwnd = GUICreate("Example", 200, 200)
-	Local $tpoint = DllStructCreate("int X;int Y")
-	DllStructSetData($tpoint, "X", 100)
-	DllStructSetData($tpoint, "Y", 160)
+Example()
+
+Func Example()
+	Local $hWnd = GUICreate("Example", 200, 200)
+	Local $tPoint = DllStructCreate("int X;int Y")
+	DllStructSetData($tPoint, "X", 100)
+	DllStructSetData($tPoint, "Y", 160)
 	GUISetState(@SW_SHOW)
 	Sleep(1000)
-	_WinAPI_ClientToScreen($hwnd, $tpoint)
-	MsgBox(4096, "_WINAPI_ClientToScreen Example", "Screen Cordinates of client's x,y position: 100,160 is: " & @LF & _
-			"X: " & DllStructGetData($tpoint, "X") & @LF & _
-			"Y: " & DllStructGetData($tpoint, "Y") & @LF)
-EndFunc   ;==>_Main
+	_WinAPI_ClientToScreen($hWnd, $tPoint)
+	MsgBox($MB_SYSTEMMODAL, "_WinAPI_ClientToScreen Example", "Screen Cordinates of client's x,y position: 100,160 is: " & @CRLF & _
+			"X: " & DllStructGetData($tPoint, "X") & @CRLF & _
+			"Y: " & DllStructGetData($tPoint, "Y") & @CRLF)
+EndFunc   ;==>Example

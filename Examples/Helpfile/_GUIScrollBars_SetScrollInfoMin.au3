@@ -1,23 +1,22 @@
 #include <GUIConstantsEx.au3>
-#include <WindowsConstants.au3>
-#include <StructureConstants.au3>
 #include <GuiScrollBars.au3>
-#include <ScrollBarConstants.au3>
+#include <StructureConstants.au3>
+#include <WindowsConstants.au3>
 
-Global $iMemo
+Global $g_idMemo
 
-_Main()
+Example()
 
-Func _Main()
-	Local $GUIMsg, $hGUI
+Func Example()
+	Local $hGUIMsg, $hGUI
 
 	$hGUI = GUICreate("ScrollBar Example", 400, 400, -1, -1, BitOR($WS_MINIMIZEBOX, $WS_CAPTION, $WS_POPUP, $WS_SYSMENU, $WS_SIZEBOX))
-	$iMemo = GUICtrlCreateEdit("", 2, 2, 380, 380, BitOR($WS_HSCROLL, $WS_VSCROLL))
-	GUICtrlSetResizing($iMemo, $GUI_DOCKALL)
-	GUICtrlSetFont($iMemo, 9, 400, 0, "Courier New")
+	$g_idMemo = GUICtrlCreateEdit("", 2, 2, 380, 380, BitOR($WS_HSCROLL, $WS_VSCROLL))
+	GUICtrlSetResizing($g_idMemo, $GUI_DOCKALL)
+	GUICtrlSetFont($g_idMemo, 9, 400, 0, "Courier New")
 	GUISetBkColor(0x88AABB)
 
-	GUISetState()
+	GUISetState(@SW_SHOW)
 
 	_GUIScrollBars_Init($hGUI)
 
@@ -39,18 +38,18 @@ Func _Main()
 	MemoWrite("nTrackPos: " & _GUIScrollBars_GetScrollInfoTrackPos($hGUI, $SB_VERT))
 
 	While 1
-		$GUIMsg = GUIGetMsg()
+		$hGUIMsg = GUIGetMsg()
 
-		Switch $GUIMsg
+		Switch $hGUIMsg
 			Case $GUI_EVENT_CLOSE
 				ExitLoop
 		EndSwitch
 	WEnd
 
 	Exit
-EndFunc   ;==>_Main
+EndFunc   ;==>Example
 
-; 写入一行到 memo 控件
+; Write a line to the memo control
 Func MemoWrite($sMessage)
-	GUICtrlSetData($iMemo, $sMessage & @CRLF, 1)
+	GUICtrlSetData($g_idMemo, $sMessage & @CRLF, 1)
 EndFunc   ;==>MemoWrite

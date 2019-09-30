@@ -1,2 +1,5 @@
-#include <WinAPI.au3>
-MsgBox(4096, "Find Executable", "file " & @ScriptName & @LF & "Executable: " & _WinAPI_FindExecutable(@ScriptName))
+#include <MsgBoxConstants.au3>
+#include <WinAPIShellEx.au3>
+
+; Find the executable that is associated with the AutoIt script.
+MsgBox($MB_SYSTEMMODAL, "Find Executable", "File: " & @ScriptFullPath & @CRLF & "Executable: " & _WinAPI_FindExecutable(@ScriptName))

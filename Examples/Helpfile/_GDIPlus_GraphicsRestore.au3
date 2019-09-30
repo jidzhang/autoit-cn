@@ -9,7 +9,7 @@ Func Example()
 	$iW = 800
 	$iH = 300
 	$hGUI = GUICreate("GDI+", $iW, $iH)
-	GUISetState()
+	GUISetState(@SW_SHOW)
 
 	_GDIPlus_Startup()
 	$hGraphic = _GDIPlus_GraphicsCreateFromHWND($hGUI)
@@ -36,14 +36,12 @@ Func Example()
 	$hBrush = _GDIPlus_BrushCreateSolid(0xFF7F00FF)
 	_GDIPlus_GraphicsFillPath($hGraphic, $hPath, $hBrush)
 
-
 	_GDIPlus_GraphicsRestore($hGraphic, $iGfx_Save);restore clipping region
 
 	$hPen = _GDIPlus_PenCreate(0xFFFF007F)
 	_GDIPlus_GraphicsDrawPath($hGraphic, $hPath, $hPen)
 
-
-	; Loop until user exits
+	; Loop until the user exits.
 	Do
 	Until GUIGetMsg() = $GUI_EVENT_CLOSE
 

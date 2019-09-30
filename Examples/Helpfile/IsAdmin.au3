@@ -1,3 +1,5 @@
+#include <MsgBoxConstants.au3>
+
 If IsAdmin() Then
-	MsgBox(4096, "IsAdmin", "本程序拥有管理员权限")
+	MsgBox($MB_SYSTEMMODAL, "", "IsAdmin" & @CRLF & "Admin rights are detected.")
 EndIf

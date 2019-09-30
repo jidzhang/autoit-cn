@@ -1,11 +1,30 @@
-﻿Local $sFldr1 = "C:\Test_1"
-Local $sFldr2 = "C:\Test_2"
+#include <AutoItConstants.au3>
+#include <MsgBoxConstants.au3>
 
-If DirGetSize($sFldr1) = -1 Then; 检查目录所占用的空间
-	DirCreate($sFldr1); 创建目录文件
-	Sleep(2000)
-	DirCopy($sFldr1, $sFldr2, 1); 复制目录文件
-	Sleep(2000)
-	DirRemove($sFldr1, 1); 删除目录文件及子目录
-	DirRemove($sFldr2, 1); 删除目录文件及子目录
-EndIf
+Example()
+
+Func Example()
+	; Create a constant variable in Local scope of the directory.
+	Local Const $sFilePath = @TempDir & "\DirCreateFolder"
+
+	; If the directory exists the don't continue.
+	If FileExists($sFilePath) Then
+		MsgBox($MB_SYSTEMMODAL, "", "An error occurred. The directory already exists.")
+		Return False
+	EndIf
+
+	; Open the temporary directory.
+	ShellExecute(@TempDir)
+
+	; Create the directory.
+	DirCreate($sFilePath)
+
+	; Display a message of the directory creation.
+	MsgBox($MB_SYSTEMMODAL, "", "The directory has been created.")
+
+	; Remove the directory and all sub-directories.
+	DirRemove($sFilePath, $DIR_REMOVE)
+
+	; Display a message of the directory removal.
+	MsgBox($MB_SYSTEMMODAL, "", "The sub folder: Folder2 has been deleted.")
+EndFunc   ;==>Example

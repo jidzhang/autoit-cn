@@ -1,4 +1,6 @@
-Local $sText = StringReplace("这 是 一 行 文 本", " ", "-")
+#include <MsgBoxConstants.au3>
+
+; Replace a blank space (' ') with a - (minus) character.
+Local $sString = StringReplace("This is a sentence with whitespace.", " ", "-")
 Local $iReplacements = @extended
-MsgBox(4096, "新字符串", "新字符串为:" & @CRLF & $sText)
-MsgBox(4096, "替换", "共替换的数量为:" & @CRLF & $iReplacements & " 次.")
+MsgBox($MB_SYSTEMMODAL, "", $iReplacements & " replacements were made and the new string is:" & @CRLF & @CRLF & $sString)

@@ -1,13 +1,14 @@
-#include <WinAPIRes.au3>
-#include <APIResConstants.au3>
-#include <WinAPIMisc.au3>
 #include <APIMiscConstants.au3>
+#include <APIResConstants.au3>
 #include <GUIConstantsEx.au3>
 #include <Memory.au3>
-#include <StaticConstants.au3>
 #include <MsgBoxConstants.au3>
+#include <StaticConstants.au3>
+#include <WinAPIGdi.au3>
+#include <WinAPIMisc.au3>
+#include <WinAPIRes.au3>
 
-Global Const $sJpg = @TempDir & '\~Tech.jpg'
+Local Const $sJpg = @TempDir & '\~Tech.jpg'
 
 ; Load Resources.dll to memory
 Local $hInstance = _WinAPI_LoadLibraryEx(@ScriptDir & '\Extras\Resources.dll', $LOAD_LIBRARY_AS_DATAFILE)
@@ -63,14 +64,14 @@ GUICtrlCreateLabel($sText, 10, 18, 330, 36, $SS_CENTER)
 GUICtrlSetFont(-1, 30, -1, -1, 'Technovia Caps')
 GUICtrlSetBkColor(-1, $GUI_BKCOLOR_TRANSPARENT)
 GUICtrlSetColor(-1, 0xF06000)
-Local $Button = GUICtrlCreateButton('Play Sound', 125, 316, 100, 23)
-GUISetState()
+Local $idButton = GUICtrlCreateButton('Play Sound', 125, 316, 100, 23)
+GUISetState(@SW_SHOW)
 
 While 1
 	Switch GUIGetMsg()
 		Case $GUI_EVENT_CLOSE
 			ExitLoop
-		Case $Button
+		Case $idButton
 			_WinAPI_PlaySound($pWave, BitOR($SND_ASYNC, $SND_MEMORY, $SND_NOWAIT))
 	EndSwitch
 WEnd

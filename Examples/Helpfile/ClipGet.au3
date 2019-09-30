@@ -1,19 +1,20 @@
-﻿Example()
+#include <MsgBoxConstants.au3>
+
+Example()
 
 Func Example()
-	; 获取剪切板存放的文本内容.
+	; Retrieve the data stored in the clipboard.
 	Local $sData = ClipGet()
 
-	; 显示剪切板存放的文本内容.
-	MsgBox(4096, "提示", "剪切板存放的文本内容: " & @CRLF & $sData)
+	; Display the data returned by ClipGet.
+	MsgBox($MB_SYSTEMMODAL, "", "The following data is stored in the clipboard: " & @CRLF & $sData)
 
-	;---------------------------------------------------------------------------
-	; 在剪切板中写入文本,剪切板内现有的内容将被覆盖.
-	ClipPut("这里是剪切板中存放的内容！")
+	; Add new data to the clipboard.
+	ClipPut("A new string added to the clipboard.")
 
-	; 获取剪切板存放的文本内容.
+	; Retrieve the data stored in the clipboard.
 	$sData = ClipGet()
 
-	; 显示剪切板存放的文本内容.
-	MsgBox(4096, "提示", "剪切板存放的文本内容: " & @CRLF & $sData)
+	; Display the data returned by ClipGet.
+	MsgBox($MB_SYSTEMMODAL, "", "The following data is now stored in the clipboard: " & @CRLF & $sData)
 EndFunc   ;==>Example

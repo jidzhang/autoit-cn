@@ -1,35 +1,35 @@
-#include <GUIConstantsEx.au3>
-#include <WindowsConstants.au3>
 #include <GuiButton.au3>
+#include <GUIConstantsEx.au3>
 #include <GuiImageList.au3>
+#include <WindowsConstants.au3>
 
-Global $iMemo
+Global $g_idMemo
 
-_Main()
+Example()
 
-Func _Main()
-	Local $hImage, $btn, $aIdealSize
+Func Example()
+	Local $hImage, $idBtn, $aIdealSize
 
 	GUICreate("Buttons", 400, 400)
-	$iMemo = GUICtrlCreateEdit("", 119, 10, 276, 374, $WS_VSCROLL)
-	GUICtrlSetFont($iMemo, 9, 400, 0, "Courier New")
+	$g_idMemo = GUICtrlCreateEdit("", 119, 10, 276, 374, $WS_VSCROLL)
+	GUICtrlSetFont($g_idMemo, 9, 400, 0, "Courier New")
 
 	$hImage = _GUIImageList_Create(32, 32, 5, 3, 6)
 	For $x = 6 To 11
 		_GUIImageList_AddIcon($hImage, "shell32.dll", $x, True)
 	Next
 
-	$btn = GUICtrlCreateButton("Button1", 10, 10, 90, 50)
-	_GUICtrlButton_SetImageList($btn, $hImage)
+	$idBtn = GUICtrlCreateButton("Button1", 10, 10, 90, 50)
+	_GUICtrlButton_SetImageList($idBtn, $hImage)
 
-	GUISetState()
+	GUISetState(@SW_SHOW)
 
-	$aIdealSize = _GUICtrlButton_GetIdealSize($btn)
+	$aIdealSize = _GUICtrlButton_GetIdealSize($idBtn)
 	MemoWrite("Button1 Ideal width: " & $aIdealSize[0] & " height: " & $aIdealSize[1])
 
 	Sleep(3000)
 
-	MemoWrite(StringFormat("Set Size: %s", _GUICtrlButton_SetSize($btn, $aIdealSize[0], $aIdealSize[1])))
+	MemoWrite(StringFormat("Set Size: %s", _GUICtrlButton_SetSize($idBtn, $aIdealSize[0], $aIdealSize[1])))
 
 	While 1
 		Switch GUIGetMsg()
@@ -39,9 +39,9 @@ Func _Main()
 	WEnd
 
 	Exit
-EndFunc   ;==>_Main
+EndFunc   ;==>Example
 
-; 写入一行到 memo 控件
+; Write a line to the memo control
 Func MemoWrite($sMessage)
-	GUICtrlSetData($iMemo, $sMessage & @CRLF, 1)
+	GUICtrlSetData($g_idMemo, $sMessage & @CRLF, 1)
 EndFunc   ;==>MemoWrite

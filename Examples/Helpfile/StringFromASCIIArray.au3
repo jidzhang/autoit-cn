@@ -1,14 +1,18 @@
-#include <Array.au3>	; For _ArrayDisplay()
+#include <MsgBoxConstants.au3>
+#include <Array.au3> ; Required for _ArrayDisplay() only.
 
-; 字符串转换为 ASCII 码数组.
-Local $a = StringToASCIIArray("abc")
+Example()
 
-; 显示包含每个字符的ASCII码的数组.
-_ArrayDisplay($a)
+Func Example()
+	; Convert the string to an ASCII array.
+	Local $aArray = StringToASCIIArray("This is a sentence with whitespace.")
 
-; ASCII 码数组转换为字符串.
-Local $s = StringFromASCIIArray($a)
+	; Display the array to see that it contains the ASCII values for each character in the string.
+	_ArrayDisplay($aArray)
 
-;转换结果将会返回 ASCII 码表示的字符串.
-MsgBox(4096, "转换结果", $s)
+	; Convert the array into a string.
+	Local $sString = StringFromASCIIArray($aArray)
 
+	; Display the string to see that it matches the original string initially converted to an array.
+	MsgBox($MB_SYSTEMMODAL, "", $sString)
+EndFunc   ;==>Example

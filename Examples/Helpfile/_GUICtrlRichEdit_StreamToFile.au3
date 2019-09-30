@@ -1,31 +1,32 @@
-#include <GuiRichEdit.au3>
 #include <GUIConstantsEx.au3>
+#include <GuiRichEdit.au3>
+#include <MsgBoxConstants.au3>
 #include <WindowsConstants.au3>
 
-Main()
+Example()
 
-Func Main()
+Func Example()
 	Local $hGui, $hRichEdit, $iMsg
-	$hGui = GUICreate("Example (" & StringTrimRight(@ScriptName, 4) & ")", 320, 350, -1, -1)
+	$hGui = GUICreate("Example (" & StringTrimRight(@ScriptName, StringLen(".exe")) & ")", 320, 350, -1, -1)
 	$hRichEdit = _GUICtrlRichEdit_Create($hGui, "This is a test.", 10, 10, 300, 220, _
 			BitOR($ES_MULTILINE, $WS_VSCROLL, $ES_AUTOVSCROLL))
-	GUISetState()
+	GUISetState(@SW_SHOW)
 
 	_GUICtrlRichEdit_AppendText($hRichEdit, "Para with default border settings")
-	MsgBox(4096, "", "The default paragraph border settings are " & _GUICtrlRichEdit_GetParaBorder($hRichEdit))
+	MsgBox($MB_SYSTEMMODAL, "", "The default paragraph border settings are " & _GUICtrlRichEdit_GetParaBorder($hRichEdit))
 
-	_GUICtrlRichEdit_AppendText($hRichEdit, @CR & "Second paragraph")
+	_GUICtrlRichEdit_AppendText($hRichEdit, @CRLF & "Second paragraph")
 	_GUICtrlRichEdit_SetParaBorder($hRichEdit, "o", 3, "mag", 0.25)
-	MsgBox(4096, "", "Border settings of second paragraph are " & _GUICtrlRichEdit_GetParaBorder($hRichEdit))
+	MsgBox($MB_SYSTEMMODAL, "", "Border settings of second paragraph are " & _GUICtrlRichEdit_GetParaBorder($hRichEdit))
 
 	_GUICtrlRichEdit_SetSel($hRichEdit, 10, -1)
 	Sleep(1000)
-	MsgBox(4096, "", "Border settings of first paragraph in the selection are " & _GUICtrlRichEdit_GetParaBorder($hRichEdit))
+	MsgBox($MB_SYSTEMMODAL, "", "Border settings of first paragraph in the selection are " & _GUICtrlRichEdit_GetParaBorder($hRichEdit))
 
 	; Change from outside border to left border
 	_GUICtrlRichEdit_SetParaBorder($hRichEdit, "l")
 
-	; 把所有的文本流保存到桌面,这样您可以在 Word 中查看边框设置.
+	; Stream all text to the Desktop so you can look at border settings in Word
 	_GUICtrlRichEdit_Deselect($hRichEdit)
 	_GUICtrlRichEdit_StreamToFile($hRichEdit, @DesktopDir & "\gcre.rtf")
 
@@ -33,9 +34,9 @@ Func Main()
 		$iMsg = GUIGetMsg()
 		Select
 			Case $iMsg = $GUI_EVENT_CLOSE
-				_GUICtrlRichEdit_Destroy($hRichEdit) ; 除非脚本崩溃才需要
-;~ 				GUIDelete() 	; 同样行
+				_GUICtrlRichEdit_Destroy($hRichEdit) ; needed unless script crashes
+				; GUIDelete() 	; is OK too
 				Exit
 		EndSelect
 	WEnd
-EndFunc   ;==>Main
+EndFunc   ;==>Example

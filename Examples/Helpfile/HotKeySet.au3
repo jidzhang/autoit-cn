@@ -1,29 +1,30 @@
-; 按Esc键终止脚本, 按Pause/Break键暂停
+#include <MsgBoxConstants.au3>
 
-Global $Paused
+; Press Esc to terminate script, Pause/Break to "pause"
+
+Global $g_bPaused = False
+
 HotKeySet("{PAUSE}", "TogglePause")
 HotKeySet("{ESC}", "Terminate")
-HotKeySet("+!d", "ShowMessage") ;Shift-Alt-d
+HotKeySet("+!d", "ShowMessage") ; Shift-Alt-d
 
-;;;; 下面是程序正文 ;;;;
 While 1
 	Sleep(100)
 WEnd
-;;;;;;;;
 
 Func TogglePause()
-	$Paused = Not $Paused
-	While $Paused
+	$g_bPaused = Not $g_bPaused
+	While $g_bPaused
 		Sleep(100)
-		ToolTip('脚本已经"暂停"了',0,0)
+		ToolTip('Script is "Paused"', 0, 0)
 	WEnd
 	ToolTip("")
 EndFunc   ;==>TogglePause
 
 Func Terminate()
-	Exit 0
+	Exit
 EndFunc   ;==>Terminate
 
 Func ShowMessage()
-	MsgBox(4096,"标题","这是一个消息.")
+	MsgBox($MB_SYSTEMMODAL, "", "This is a message.")
 EndFunc   ;==>ShowMessage

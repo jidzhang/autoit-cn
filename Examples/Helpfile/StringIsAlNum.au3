@@ -1,2 +1,8 @@
-Local $x = "This is a sentence with whitespace."
-MsgBox(4096,"检查结果", "返回值为:" & StringIsAlNum($x))
+#include <MsgBoxConstants.au3>
+
+Local $sString = "This is a sentence with whitespace." ; Check whether this string contains only alphanumeric characters.
+If StringIsAlNum($sString) Then
+	MsgBox($MB_SYSTEMMODAL, "", "The variable contains only alphanumeric characters.")
+Else
+	MsgBox($MB_SYSTEMMODAL, "", "The variable does not contain alphanumeric characters.")
+EndIf

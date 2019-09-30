@@ -1,9 +1,9 @@
-#include <WinAPIFiles.au3>
-#include <WinAPIDiag.au3>
-#include <Array.au3>
 #include <MsgBoxConstants.au3>
+#include <WinAPIError.au3>
+#include <WinAPIFiles.au3>
+#include <WinAPIShPath.au3>
 
-Global Const $sFile = @DesktopDir & '\@' & StringRegExpReplace(_WinAPI_PathFindFileName(@ScriptName), '\A_+', '')
+Local $sFile = @DesktopDir & '\@' & StringRegExpReplace(_WinAPI_PathFindFileName(@ScriptName), '\A_+', '')
 
 ; Create hard link to the current file with prefix "@" on your Desktop
 If Not _WinAPI_CreateHardLink($sFile, @ScriptFullPath) Then

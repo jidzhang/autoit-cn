@@ -1,15 +1,18 @@
-#include <WinAPIGdi.au3>
 #include <APIGdiConstants.au3>
-#include <WindowsConstants.au3>
 #include <GUIConstantsEx.au3>
-
-Global Const $STM_SETIMAGE = 0x0172
-Global Const $STM_GETIMAGE = 0x0173
+#include <SendMessage.au3>
+#include <StaticConstants.au3>
+#include <WinAPIGdi.au3>
+#include <WinAPIGdiDC.au3>
+#include <WinAPIHObj.au3>
+#include <WinAPIMisc.au3>
+#include <WinAPISysWin.au3>
+#include <WindowsConstants.au3>
 
 ; Create GUI
 Local $hForm = GUICreate('Test ' & StringReplace(@ScriptName, '.au3', '()'), 241, 241)
-Local $Pic = GUICtrlCreatePic('', 0, 0, 241, 241)
-Local $hPic = GUICtrlGetHandle($Pic)
+Local $idPic = GUICtrlCreatePic('', 0, 0, 241, 241)
+Local $hPic = GUICtrlGetHandle($idPic)
 
 ; Create bitmap
 Local $hDC = _WinAPI_GetDC($hPic)
@@ -51,7 +54,7 @@ If $hObj <> $hBitmap Then
 	_WinAPI_DeleteObject($hBitmap)
 EndIf
 
-GUISetState()
+GUISetState(@SW_SHOW)
 
 Do
 Until GUIGetMsg() = $GUI_EVENT_CLOSE

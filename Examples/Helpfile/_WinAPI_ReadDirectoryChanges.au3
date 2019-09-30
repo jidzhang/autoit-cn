@@ -1,21 +1,21 @@
-#include <WinAPIFiles.au3>
 #include <APIFilesConstants.au3>
-#include <WinAPIDiag.au3>
-#include <WinAPISys.au3>
 #include <Array.au3>
 #include <MsgBoxConstants.au3>
+#include <WinAPIError.au3>
+#include <WinAPIFiles.au3>
+#include <WinAPIMem.au3>
 
-Global Const $sPath = @TempDir & '\~TEST~'
+Global $g_sPath = @TempDir & '\~TEST~'
 
-DirCreate($sPath)
-If Not FileExists($sPath) Then
+DirCreate($g_sPath)
+If Not FileExists($g_sPath) Then
 	MsgBox(BitOR($MB_ICONERROR, $MB_SYSTEMMODAL), 'Error', 'Unable to create folder.')
 	Exit
 EndIf
 
 OnAutoItExitRegister('OnAutoItExit')
 
-Local $hDirectory = _WinAPI_CreateFileEx($sPath, $OPEN_EXISTING, $FILE_LIST_DIRECTORY, BitOR($FILE_SHARE_READ, $FILE_SHARE_WRITE), $FILE_FLAG_BACKUP_SEMANTICS)
+Local $hDirectory = _WinAPI_CreateFileEx($g_sPath, $OPEN_EXISTING, $FILE_LIST_DIRECTORY, BitOR($FILE_SHARE_READ, $FILE_SHARE_WRITE), $FILE_FLAG_BACKUP_SEMANTICS)
 If @error Then
 	_WinAPI_ShowLastError('', 1)
 EndIf
@@ -33,5 +33,5 @@ While 1
 WEnd
 
 Func OnAutoItExit()
-	DirRemove($sPath, 1)
+	DirRemove($g_sPath, 1)
 EndFunc   ;==>OnAutoItExit

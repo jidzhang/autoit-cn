@@ -1,8 +1,9 @@
-#include <WinAPI.au3>
+#include <MsgBoxConstants.au3>
+#include <WinAPIConv.au3>
 
-_Main()
+Example()
 
-Func _Main()
+Func Example()
 	Local $iWord = 11 * 65535
-	MsgBox(4096, $iWord, "HiWord: " & _WinAPI_HiWord($iWord) & @LF & "LoWord: " & _WinAPI_LoWord($iWord))
-EndFunc   ;==>_Main
+	MsgBox($MB_SYSTEMMODAL, $iWord, "HiWord: " & _WinAPI_HiWord($iWord) & @CRLF & "LoWord: " & _WinAPI_LoWord($iWord))
+EndFunc   ;==>Example

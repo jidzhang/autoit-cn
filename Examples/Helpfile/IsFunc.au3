@@ -12,5 +12,5 @@ Func Example()
 	; Display a MsgBox that shows $hMsgBox is a native function.
 	$hMsgBox($MB_SYSTEMMODAL, "", "Check if $hMsgBox is a function or not." & @CRLF & _
 			@CRLF & _
-			"This will return 1 as the function is native: " & IsFunc($hMsgBox))
+			"This will return 2 as the function is native: " & IsFunc($hMsgBox))
 EndFunc   ;==>Example

@@ -1,5 +1,7 @@
-﻿Local $sText = ""
-For $i = 32 To 255
-	$sText = $sText & ChrW($i) ; 通过使用 $sText &= ChrW($i) 来显示.
+#include <MsgBoxConstants.au3>
+
+Local $sText = ""
+For $i = 256 To 512
+	$sText = $sText & ChrW($i) ; Or $sText &= ChrW($i) can be used as well.
 Next
-MsgBox(4096, "Unicode 字符 32 到 255", $sText) ; 显示 32 至 255 范围内的的字符.
+MsgBox($MB_SYSTEMMODAL, "Unicode chars 256 to 512", $sText) ; Display the unicode characters between 256 to 512.

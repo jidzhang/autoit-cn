@@ -1,20 +1,19 @@
 #include <GuiComboBoxEx.au3>
-#include <GuiImageList.au3>
 #include <GUIConstantsEx.au3>
+#include <GuiImageList.au3>
+#include <MsgBoxConstants.au3>
 
-$Debug_CB = False ;检查传递给 ComboBox/ComboBoxEx 函数的类名, 设置为True并输出到一个控件的句柄,用于检查它是否工作
+Example()
 
-_Main()
+Func Example()
+	Local $hGUI, $hImage, $sDelimiter = ";", $hCombo
 
-Func _Main()
-	Local $hGUI, $hImage, $Delimiter = ";", $hCombo
+	Opt("GUIDataSeparatorChar", $sDelimiter)
 
-	Opt("GUIDataSeparatorChar", $Delimiter)
-
-	; 创建 GUI
+	; Create GUI
 	$hGUI = GUICreate("ComboBoxEx Find String Exact", 400, 300)
 	$hCombo = _GUICtrlComboBoxEx_Create($hGUI, "This is;mY tExT", 2, 2, 394, 100, $CBS_SIMPLE)
-	GUISetState()
+	GUISetState(@SW_SHOW)
 
 	$hImage = _GUIImageList_Create(16, 16, 5, 3)
 	_GUIImageList_AddIcon($hImage, @SystemDir & "\shell32.dll", 110)
@@ -35,8 +34,8 @@ Func _Main()
 	_GUICtrlComboBoxEx_EndUpdate($hCombo)
 
 	; Find exact string
-	MsgBox(4160, "信息", "Found at: " & _GUICtrlComboBoxEx_FindStringExact($hCombo, "mY tExT"))
+	MsgBox($MB_SYSTEMMODAL, "Information", "Found at: " & _GUICtrlComboBoxEx_FindStringExact($hCombo, "mY tExT"))
 
 	Do
 	Until GUIGetMsg() = $GUI_EVENT_CLOSE
-EndFunc   ;==>_Main
+EndFunc   ;==>Example

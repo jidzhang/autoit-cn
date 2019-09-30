@@ -1,7 +1,7 @@
-#include <WinAPIReg.au3>
 #include <APIRegConstants.au3>
 #include <ComboConstants.au3>
 #include <GUIConstantsEx.au3>
+#include <WinAPIReg.au3>
 
 Local $hMRU = _WinAPI_CreateMRUList($HKEY_CURRENT_USER, 'Software\MyProg\MRU', 5)
 
@@ -14,22 +14,22 @@ If @error Then
 EndIf
 
 GUICreate('Test ' & StringReplace(@ScriptName, '.au3', '()'), 320, 92)
-Local $Combo = GUICtrlCreateCombo(_WinAPI_EnumMRUList($hMRU, 0), 10, 20, 300, 21, $CBS_DROPDOWNLIST)
-Local $Count = _WinAPI_EnumMRUList($hMRU, -1)
-Local $Data = ''
-For $i = 1 To $Count - 1
-	$Data &= _WinAPI_EnumMRUList($hMRU, $i) & '|'
+Local $idCombo = GUICtrlCreateCombo(_WinAPI_EnumMRUList($hMRU, 0), 10, 20, 300, 21, $CBS_DROPDOWNLIST)
+Local $iCount = _WinAPI_EnumMRUList($hMRU, -1)
+Local $sData = ''
+For $i = 1 To $iCount - 1
+	$sData &= _WinAPI_EnumMRUList($hMRU, $i) & '|'
 Next
-GUICtrlSetData(-1, $Data)
-Local $Button = GUICtrlCreateButton('OK', 125, 58, 70, 23)
-GUISetState()
+GUICtrlSetData(-1, $sData)
+Local $idButton = GUICtrlCreateButton('OK', 125, 58, 70, 23)
+GUISetState(@SW_SHOW)
 
 While 1
 	Switch GUIGetMsg()
 		Case $GUI_EVENT_CLOSE
 			ExitLoop
-		Case $Button
-			_WinAPI_AddMRUString($hMRU, GUICtrlRead($Combo))
+		Case $idButton
+			_WinAPI_AddMRUString($hMRU, GUICtrlRead($idCombo))
 			ExitLoop
 	EndSwitch
 WEnd

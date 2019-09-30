@@ -1,33 +1,33 @@
-#include <WinAPICom.au3>
 #include <GDIPlus.au3>
-#include <Memory.au3>
 #include <GUIConstantsEx.au3>
-
-Global Const $STM_SETIMAGE = 0x0172
-Global Const $STM_GETIMAGE = 0x0173
+#include <Memory.au3>
+#include <SendMessage.au3>
+#include <StaticConstants.au3>
+#include <WinAPICom.au3>
+#include <WinAPIHObj.au3>
 
 ; Create bitmap (MSDNLogo.png)
-Local $bData = _Image_MSDNLogo()
-Local $Length = BinaryLen($bData)
-Local $hData = _MemGlobalAlloc($Length, $GMEM_MOVEABLE)
+Local $dData = _Image_MSDNLogo()
+Local $iLength = BinaryLen($dData)
+Local $hData = _MemGlobalAlloc($iLength, $GMEM_MOVEABLE)
 Local $pData = _MemGlobalLock($hData)
-Local $tData = DllStructCreate('byte[' & $Length & ']', $pData)
-DllStructSetData($tData, 1, $bData)
+Local $tData = DllStructCreate('byte[' & $iLength & ']', $pData)
+DllStructSetData($tData, 1, $dData)
 _MemGlobalUnlock($hData)
 Local $pStream = _WinAPI_CreateStreamOnHGlobal($hData)
 _GDIPlus_Startup()
 Local $hImage = _GDIPlus_BitmapCreateFromStream($pStream)
 Local $hBitmap = _GDIPlus_BitmapCreateHBITMAPFromBitmap($hImage)
-Local $Width = _GDIPlus_ImageGetWidth($hImage)
-Local $Height = _GDIPlus_ImageGetHeight($hImage)
+Local $iWidth = _GDIPlus_ImageGetWidth($hImage)
+Local $iHeight = _GDIPlus_ImageGetHeight($hImage)
 _WinAPI_ReleaseStream($pStream)
 _GDIPlus_ImageDispose($hImage)
 _GDIPlus_Shutdown()
 
 ; Create GUI
-Local $hForm = GUICreate('Test ' & StringReplace(@ScriptName, '.au3', '()'), $Width, $Height)
-Local $Pic = GUICtrlCreatePic('', 0, 0, $Width, $Height)
-Local $hPic = GUICtrlGetHandle($Pic)
+Local $hForm = GUICreate('Test ' & StringReplace(@ScriptName, '.au3', '()'), $iWidth, $iHeight)
+Local $idPic = GUICtrlCreatePic('', 0, 0, $iWidth, $iHeight)
+Local $hPic = GUICtrlGetHandle($idPic)
 
 ; Set bitmap to control
 _SendMessage($hPic, $STM_SETIMAGE, 0, $hBitmap)
@@ -36,13 +36,13 @@ If $hObj <> $hBitmap Then
 	_WinAPI_DeleteObject($hBitmap)
 EndIf
 
-GUISetState()
+GUISetState(@SW_SHOW)
 
 Do
 Until GUIGetMsg() = $GUI_EVENT_CLOSE
 
 Func _Image_MSDNLogo()
-	Local $bImage = _
+	Local $sImage = _
 			'0x89504E470D0A1A0A0000000D49484452000000BE000000460802000000FDD7B9' & _
 			'BE000000097048597300000B1300000B1301009A9C180000000467414D410000' & _
 			'B18E7CFB5193000000206348524D00007A25000080830000F9FF000080E90000' & _
@@ -211,5 +211,5 @@ Func _Image_MSDNLogo()
 			'83A60E0D9A3A3468EAD0A0A94383A60E0D1A3475683C36FCEF00A7516BFF8067' & _
 			'B69A0000000049454E44AE426082'
 
-	Return Binary($bImage)
+	Return Binary($sImage)
 EndFunc   ;==>_Image_MSDNLogo

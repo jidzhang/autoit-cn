@@ -1,11 +1,11 @@
 #include <GuiMenu.au3>
 
-_Main()
+Example()
 
-Func _Main()
+Func Example()
 	Local $hWnd, $hMain, $hItem1, $hItem2
 
-	; 打开记事本
+	; Open Notepad
 	Run("notepad.exe")
 	WinWaitActive("[CLASS:Notepad]")
 	$hWnd = WinGetHandle("[CLASS:Notepad]")
@@ -27,5 +27,4 @@ Func _Main()
 	; Insert new menu into Notepad
 	_GUICtrlMenu_InsertMenuItem($hMain, 6, "&AutoIt", 0, $hItem2)
 	_GUICtrlMenu_DrawMenuBar($hWnd)
-
-EndFunc   ;==>_Main
+EndFunc   ;==>Example

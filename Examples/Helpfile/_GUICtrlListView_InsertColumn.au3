@@ -1,24 +1,22 @@
 #include <GUIConstantsEx.au3>
 #include <GuiListView.au3>
 
-$Debug_LV = False ; 检查传递给 ListView 函数的类名, 设置为真并使用另一控件的句柄可以看出它是否有效
+Example()
 
-_Main()
-
-Func _Main()
-	Local $hListView
+Func Example()
+	Local $idListview
 
 	GUICreate("ListView Insert Column", 400, 300)
-	$hListView = GUICtrlCreateListView("", 2, 2, 394, 268)
-	GUISetState()
+	$idListview = GUICtrlCreateListView("", 2, 2, 394, 268)
+	GUISetState(@SW_SHOW)
 
-	; 插入列
-	_GUICtrlListView_InsertColumn($hListView, 0, "Column 1", 100)
-	_GUICtrlListView_InsertColumn($hListView, 1, "Column 2", 100)
-	_GUICtrlListView_InsertColumn($hListView, 2, "Column 3", 100)
+	; Insert columns
+	_GUICtrlListView_InsertColumn($idListview, 0, "Column 1", 100)
+	_GUICtrlListView_InsertColumn($idListview, 1, "Column 2", 100)
+	_GUICtrlListView_InsertColumn($idListview, 2, "Column 3", 100)
 
-	; 循环直到用户退出
+	; Loop until the user exits.
 	Do
 	Until GUIGetMsg() = $GUI_EVENT_CLOSE
 	GUIDelete()
-EndFunc   ;==>_Main
+EndFunc   ;==>Example

@@ -1,10 +1,10 @@
 #include <WinAPIShPath.au3>
 
-Local $Path[5] = ['c:\path\file', 'c:\', 'c:', 'nodrive', StringFormat('d: %270s', '2')]
+Local $aPath[5] = ['c:\path\file', 'c:\', 'c:', 'nodrive', StringFormat('d: %270s', '2')]
 
-For $i = 0 To UBound($Path) - 2
-	ConsoleWrite($Path[$i] & ' => ' & _WinAPI_PathGetDriveNumber($Path[$i]) & @CRLF)
+For $i = 0 To UBound($aPath) - 2
+	ConsoleWrite($aPath[$i] & ' => ' & _WinAPI_PathGetDriveNumber($aPath[$i]) & @CRLF)
 Next
 
-Local $Ret = _WinAPI_PathGetDriveNumber($Path[UBound($Path) - 1])
-ConsoleWrite('TOO LONG STRING : @error = ' & @error & ' => "' & $Ret & '"' & @CRLF)
+Local $iRet = _WinAPI_PathGetDriveNumber($aPath[UBound($aPath) - 1])
+ConsoleWrite('TOO LONG STRING : @error = ' & @error & ' => "' & $iRet & '"' & @CRLF)

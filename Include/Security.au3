@@ -5,7 +5,7 @@
 
 ; #INDEX# =======================================================================================================================
 ; Title .........: Security
-; AutoIt Version : 3.3.13.12
+; AutoIt Version : 3.3.14.5
 ; Description ...: Functions that assist with Security management.
 ; Author(s) .....: Paul Campbell (PaulIA), trancexx
 ; ===============================================================================================================================
@@ -36,8 +36,8 @@
 ; Author ........: Paul Campbell (PaulIA)
 ; Modified.......: trancexx
 ; ===============================================================================================================================
-Func _Security__AdjustTokenPrivileges($hToken, $bDisableAll, $pNewState, $iBufferLen, $pPrevState = 0, $pRequired = 0)
-	Local $aCall = DllCall("advapi32.dll", "bool", "AdjustTokenPrivileges", "handle", $hToken, "bool", $bDisableAll, "struct*", $pNewState, "dword", $iBufferLen, "struct*", $pPrevState, "struct*", $pRequired)
+Func _Security__AdjustTokenPrivileges($hToken, $bDisableAll, $tNewState, $iBufferLen, $tPrevState = 0, $pRequired = 0)
+	Local $aCall = DllCall("advapi32.dll", "bool", "AdjustTokenPrivileges", "handle", $hToken, "bool", $bDisableAll, "struct*", $tNewState, "dword", $iBufferLen, "struct*", $tPrevState, "struct*", $pRequired)
 	If @error Then Return SetError(@error, @extended, False)
 
 	Return Not ($aCall[0] = 0)
@@ -289,6 +289,7 @@ Func _Security__SidToStringSid($pSID)
 
 	Local $aLen = DllCall("kernel32.dll", "int", "lstrlenW", "struct*", $pStringSid)
 	Local $sSID = DllStructGetData(DllStructCreate("wchar Text[" & $aLen[0] + 1 & "]", $pStringSid), "Text")
+	; _WinAPI_LocalFree($pStringSid)
 	DllCall("kernel32.dll", "handle", "LocalFree", "handle", $pStringSid)
 
 	Return $sSID
@@ -337,6 +338,7 @@ Func _Security__StringSidToSid($sSID)
 	Local $tBuffer = DllStructCreate("byte Data[" & _Security__GetLengthSid($pSID) & "]", $pSID)
 	Local $tSID = DllStructCreate("byte Data[" & DllStructGetSize($tBuffer) & "]")
 	DllStructSetData($tSID, "Data", DllStructGetData($tBuffer, "Data"))
+	; _WinAPI_LocalFree($pSID)
 	DllCall("kernel32.dll", "handle", "LocalFree", "handle", $pSID)
 
 	Return $tSID

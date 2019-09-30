@@ -1,27 +1,26 @@
-#include <GUIConstantsEx.au3>
-#include <WindowsConstants.au3>
 #include <GDIPlus.au3>
+#include <GUIConstantsEx.au3>
 #include <ScreenCapture.au3>
-#include <WinAPI.au3>
+#include <WinAPIHObj.au3>
+#include <WindowsConstants.au3>
 
+Global $g_idMemo
 
-Global $iMemo
+Example()
 
-_Main()
-
-Func _Main()
+Func Example()
 	Local $hBitmap, $hImage, $iImageType, $sImageType
 
-	; 创建 GUI
+	; Create GUI
 	GUICreate("GDI+", 600, 400)
-	$iMemo = GUICtrlCreateEdit("", 2, 2, 596, 396, $WS_VSCROLL)
-	GUICtrlSetFont($iMemo, 9, 400, 0, "Courier New")
-	GUISetState()
+	$g_idMemo = GUICtrlCreateEdit("", 2, 2, 596, 396, $WS_VSCROLL)
+	GUICtrlSetFont($g_idMemo, 9, 400, 0, "Courier New")
+	GUISetState(@SW_SHOW)
 
-	; 初始化 GDI+ 库
+	; Initialize GDI+ library
 	_GDIPlus_Startup()
 
-	; 捕获到 32 位位图
+	; Capture 32 bit bitmap
 	$hBitmap = _ScreenCapture_Capture("")
 	$hImage = _GDIPlus_BitmapCreateFromHBITMAP($hBitmap)
 
@@ -35,23 +34,22 @@ Func _Main()
 			$sImageType = "Metafile"
 	EndSwitch
 
-	; 显示图像类型: 未定义 = 0, 位图 = 1, 图元文件 = 2)
+	; Show image type: Unidentified = 0, Bitmap = 1, Metafile = 2)
 	MemoWrite("Image type: " & $sImageType);
 
-	; 清理资源
+	; Clean up resources
 	_GDIPlus_ImageDispose($hImage)
 	_WinAPI_DeleteObject($hBitmap)
 
-	; 关闭 GDI+ 库
+	; Shut down GDI+ library
 	_GDIPlus_Shutdown()
 
-	; 循环直到用户退出
+	; Loop until the user exits.
 	Do
 	Until GUIGetMsg() = $GUI_EVENT_CLOSE
+EndFunc   ;==>Example
 
-EndFunc   ;==>_Main
-
-; 写入一行到 memo 控件
+; Write a line to the memo control
 Func MemoWrite($sMessage = '')
-	GUICtrlSetData($iMemo, $sMessage & @CRLF, 1)
+	GUICtrlSetData($g_idMemo, $sMessage & @CRLF, 1)
 EndFunc   ;==>MemoWrite

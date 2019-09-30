@@ -3,11 +3,16 @@
 #include "ColorConstants.au3"
 #include "ImageListConstants.au3"
 #include "StructureConstants.au3"
-#include "WinAPI.au3"
+#include "WinAPIConstants.au3"
+#include "WinAPIConv.au3"
+#include "WinAPIError.au3"
+;~ #include "WinAPIGdi.au3"
+#include "WinAPIIcons.au3"
+#include "WinAPIRes.au3"
 
 ; #INDEX# =======================================================================================================================
 ; Title .........: ImageList
-; AutoIt Version : 3.3.13.12
+; AutoIt Version : 3.3.14.5
 ; Description ...: Functions that assist with ImageList control management.
 ;                  An image list is a collection of images of the same size, each of which can be referred to by its index. Image
 ;                  lists are used to efficiently manage large sets of icons or bitmaps. All images in an image list are contained
@@ -107,12 +112,12 @@ EndFunc   ;==>_GUIImageList_AddBitmap
 ; Author ........: Paul Campbell (PaulIA)
 ; Modified.......:
 ; ===============================================================================================================================
-Func _GUIImageList_AddIcon($hWnd, $sFile, $iIndex = 0, $bLarge = False)
+Func _GUIImageList_AddIcon($hWnd, $sFilePath, $iIndex = 0, $bLarge = False)
 	Local $iRet, $tIcon = DllStructCreate("handle Handle")
 	If $bLarge Then
-		$iRet = _WinAPI_ExtractIconEx($sFile, $iIndex, $tIcon, 0, 1)
+		$iRet = _WinAPI_ExtractIconEx($sFilePath, $iIndex, $tIcon, 0, 1)
 	Else
-		$iRet = _WinAPI_ExtractIconEx($sFile, $iIndex, 0, $tIcon, 1)
+		$iRet = _WinAPI_ExtractIconEx($sFilePath, $iIndex, 0, $tIcon, 1)
 	EndIf
 	If $iRet <= 0 Then Return SetError(-1, $iRet, -1)
 

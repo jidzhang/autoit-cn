@@ -1,9 +1,10 @@
-#include <WinAPI.au3>
+#include <MsgBoxConstants.au3>
+#include <WinAPISysWin.au3>
 
-_Main()
+Example()
 
-Func _Main()
-	Local $hwnd
-	$hwnd = GUICreate("test")
-	MsgBox(4096, "Client", "Client Width: " & _WinAPI_GetClientWidth($hwnd))
-EndFunc   ;==>_Main
+Func Example()
+	Local $hWnd
+	$hWnd = GUICreate("test")
+	MsgBox($MB_SYSTEMMODAL, "Client", "Client Width: " & _WinAPI_GetClientWidth($hWnd))
+EndFunc   ;==>Example

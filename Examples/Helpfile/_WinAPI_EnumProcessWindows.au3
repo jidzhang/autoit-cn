@@ -1,6 +1,6 @@
-#include <WinAPIProc.au3>
 #include <Array.au3>
+#include <WinAPIProc.au3>
 
-Local $Data = _WinAPI_EnumProcessWindows(0, 0)
+Local $aData = _WinAPI_EnumProcessWindows(0, 0)
 
-_ArrayDisplay($Data, '_WinAPI_EnumProcessWindows')
+_ArrayDisplay($aData, '_WinAPI_EnumProcessWindows')

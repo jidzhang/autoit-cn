@@ -1,25 +1,26 @@
-#include <GUIConstantsEx.au3>
 #include <EventLog.au3>
+#include <FontConstants.au3>
+#include <GUIConstantsEx.au3>
 
-Global $iMemo
+Global $g_idMemo
 
-_Main()
+Example()
 
-Func _Main()
+Func Example()
 	Local $hEventLog, $aEvent
 
-	; 创建 GUI
-	GUICreate("EventLog", 400, 300)
-	$iMemo = GUICtrlCreateEdit("", 2, 2, 396, 300, 0)
-	GUICtrlSetFont($iMemo, 9, 400, 0, "Courier New")
-	GUISetState()
+	; Create GUI
+	GUICreate("EventLog", 600, 300)
+	$g_idMemo = GUICtrlCreateEdit("", 2, 2, 596, 294, 0)
+	GUICtrlSetFont($g_idMemo, 9, $FW_NORMAL, $GUI_FONTNORMAL, "Courier New")
+	GUISetState(@SW_SHOW)
 
-	; 读取最近的事件记录
+	; Read most current event record
 	$hEventLog = _EventLog__Open("", "Application")
-	$aEvent = _EventLog__Read($hEventLog, True, False) ; 读取最后一条事件
-;~ 	$hEventLog = _EventLog__Open("", "System")
-;~ 	$aEvent = _EventLog__Read($hEventLog)
-;~ 	$aEvent = _EventLog__Read($hEventLog, True, False)
+	$aEvent = _EventLog__Read($hEventLog, True, False) ; read last event
+	; $hEventLog = _EventLog__Open("", "System")
+	; $aEvent = _EventLog__Read($hEventLog)
+	; $aEvent = _EventLog__Read($hEventLog, True, False)
 	MemoWrite("Result ............: " & $aEvent[0])
 	MemoWrite("Record number .....: " & $aEvent[1])
 	MemoWrite("Submitted .........: " & $aEvent[2] & " " & $aEvent[3])
@@ -33,14 +34,12 @@ Func _Main()
 	MemoWrite("Description .......: " & $aEvent[13])
 	_EventLog__Close($hEventLog)
 
-
-	; 循环直到用户退出
+	; Loop until the user exits.
 	Do
 	Until GUIGetMsg() = $GUI_EVENT_CLOSE
+EndFunc   ;==>Example
 
-EndFunc   ;==>_Main
-
-; 写入一行到 memo 控件
+; Write a line to the memo control
 Func MemoWrite($sMessage)
-	GUICtrlSetData($iMemo, $sMessage & @CRLF, 1)
+	GUICtrlSetData($g_idMemo, $sMessage & @CRLF, 1)
 EndFunc   ;==>MemoWrite

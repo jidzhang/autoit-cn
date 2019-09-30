@@ -1,32 +1,31 @@
-#include <GuiListBox.au3>
 #include <GUIConstantsEx.au3>
+#include <GuiListBox.au3>
+#include <MsgBoxConstants.au3>
 #include <WindowsConstants.au3>
 
-$Debug_LB = False ;检查传递给 ListBox 函数的类名, 设置为True并输出到一个控件的句柄,用于检查它是否工作
+Example()
 
-_Main()
+Func Example()
+	Local $idListBox
 
-Func _Main()
-	Local $hListBox
-
-	; 创建 GUI
+	; Create GUI
 	GUICreate("List Box Set Horizontal Extent", 400, 296)
-	$hListBox = GUICtrlCreateList("", 2, 2, 396, 296, BitOR($WS_BORDER, $WS_VSCROLL, $LBS_NOTIFY, $LBS_DISABLENOSCROLL, $WS_HSCROLL))
-	GUISetState()
+	$idListBox = GUICtrlCreateList("", 2, 2, 396, 296, BitOR($WS_BORDER, $WS_VSCROLL, $LBS_NOTIFY, $LBS_DISABLENOSCROLL, $WS_HSCROLL))
+	GUISetState(@SW_SHOW)
 
 	; Add long string
-	_GUICtrlListBox_AddString($hListBox, "AutoIt v3 is a freeware BASIC-like scripting language designed for automating the Windows GUI.")
+	_GUICtrlListBox_AddString($idListBox, "AutoIt v3 is a freeware BASIC-like scripting language designed for automating the Windows GUI.")
 
 	; Show current horizontal extent
-	MsgBox(4160, "信息", "Horizontal Extent: " & _GUICtrlListBox_GetHorizontalExtent($hListBox))
+	MsgBox($MB_SYSTEMMODAL, "Information", "Horizontal Extent: " & _GUICtrlListBox_GetHorizontalExtent($idListBox))
 
-	_GUICtrlListBox_SetHorizontalExtent($hListBox, 500)
+	_GUICtrlListBox_SetHorizontalExtent($idListBox, 500)
 
 	; Show current horizontal extent
-	MsgBox(4160, "信息", "Horizontal Extent: " & _GUICtrlListBox_GetHorizontalExtent($hListBox))
+	MsgBox($MB_SYSTEMMODAL, "Information", "Horizontal Extent: " & _GUICtrlListBox_GetHorizontalExtent($idListBox))
 
-	; 循环直到用户退出
+	; Loop until the user exits.
 	Do
 	Until GUIGetMsg() = $GUI_EVENT_CLOSE
 	GUIDelete()
-EndFunc   ;==>_Main
+EndFunc   ;==>Example

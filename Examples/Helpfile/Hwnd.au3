@@ -18,5 +18,6 @@ Func Example()
 	WinSetState(HWnd($sHWnd), "", @SW_RESTORE)
 	Sleep(2000)
 
-	WinClose(HWnd($sHWnd)) ; Close the Notepad window.
+	; Close the Notepad window.
+	WinClose(HWnd($sHWnd))
 EndFunc   ;==>Example

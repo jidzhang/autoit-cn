@@ -1,45 +1,46 @@
-#include <GUIConstantsEx.au3>
 #include <EventLog.au3>
-#include <WinAPI.au3>
+#include <FontConstants.au3>
+#include <GUIConstantsEx.au3>
+#include <WinAPIHObj.au3>
+#include <WinAPIProc.au3>
 
-Global $iMemo
+Global $g_idMemo
 
-_Main()
+Example()
 
-Func _Main()
+Func Example()
 	Local $hEventLog, $hEvent, $iResult
 
-	; 创建 GUI
-	GUICreate("EventLog", 400, 300)
-	$iMemo = GUICtrlCreateEdit("", 2, 2, 396, 300, 0)
-	GUICtrlSetFont($iMemo, 9, 400, 0, "Courier New")
-	GUISetState()
+	; Create GUI
+	GUICreate("EventLog", 600, 300)
+	$g_idMemo = GUICtrlCreateEdit("", 2, 2, 596, 294, 0)
+	GUICtrlSetFont($g_idMemo, 9, $FW_NORMAL, $GUI_FONTNORMAL, "Courier New")
+	GUISetState(@SW_SHOW)
 
-	; 建立事件
+	; Set up event
 	$hEventLog = _EventLog__Open("", "Security")
 	$hEvent = _WinAPI_CreateEvent(0, False, False, "")
 	_EventLog__Notify($hEventLog, $hEvent)
 
-	; 等待新事件发生
+	; Wait for new event to occur
 	MemoWrite("Waiting for new event")
 	$iResult = _WinAPI_WaitForSingleObject($hEvent)
 	_WinAPI_CloseHandle($hEvent)
 	_EventLog__Close($hEventLog)
 
-	; 写入结果
+	; Write results
 	If $iResult = -1 Then
 		MemoWrite("Wait failed")
 	Else
 		MemoWrite("New event occurred")
 	EndIf
 
-	; 循环直到用户退出
+	; Loop until the user exits.
 	Do
 	Until GUIGetMsg() = $GUI_EVENT_CLOSE
+EndFunc   ;==>Example
 
-EndFunc   ;==>_Main
-
-; 写入一行到 memo 控件
+; Write a line to the memo control
 Func MemoWrite($sMessage)
-	GUICtrlSetData($iMemo, $sMessage & @CRLF, 1)
+	GUICtrlSetData($g_idMemo, $sMessage & @CRLF, 1)
 EndFunc   ;==>MemoWrite

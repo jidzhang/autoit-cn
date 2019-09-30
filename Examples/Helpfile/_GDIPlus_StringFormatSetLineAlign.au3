@@ -1,11 +1,11 @@
-#include <GUIConstantsEx.au3>
 #include <GDIPlus.au3>
+#include <GUIConstantsEx.au3>
 
 Example()
 
 Func Example()
-	Local $hWnd = GUICreate("GDI+ Example", 400, 300)
-	GUISetState()
+	Local $hWnd = GUICreate("GDI+ Example (" & @ScriptName & ")", 400, 300)
+	GUISetState(@SW_SHOW)
 
 	_GDIPlus_Startup()
 	Local $hGraphics = _GDIPlus_GraphicsCreateFromHWND($hWnd)
@@ -21,9 +21,8 @@ Func Example()
 	_GDIPlus_GraphicsDrawStringEx($hGraphics, "AutoIt Rocks", $hFont, $hLayout, $hStringFormat, $hBrush)
 
 	Do
-		Local $msg = GUIGetMsg()
-	Until $msg = $GUI_EVENT_CLOSE
-
+		Local $iMsg = GUIGetMsg()
+	Until $iMsg = $GUI_EVENT_CLOSE
 
 	_GDIPlus_BrushDispose($hBrush)
 	_GDIPlus_FontFamilyDispose($hFamily)

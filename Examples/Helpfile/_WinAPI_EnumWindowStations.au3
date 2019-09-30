@@ -1,6 +1,6 @@
-#include <WinAPISys.au3>
 #include <Array.au3>
+#include <WinAPISys.au3>
 
-Local $Data = _WinAPI_EnumWindowStations()
+Local $aData = _WinAPI_EnumWindowStations()
 
-_ArrayDisplay($Data, '_WinAPI_EnumWindowStations')
+_ArrayDisplay($aData, '_WinAPI_EnumWindowStations')

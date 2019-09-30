@@ -1,2 +1,1 @@
-﻿; 禁止用户从脚本程序的托盘菜单中退出
-Break(0) 
+Break(0) ;Disable break

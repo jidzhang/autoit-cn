@@ -11,12 +11,12 @@
 ;
 
 ; Prompt the user to run the script - use a Yes/No prompt with the flag parameter set at 4 (see the help file for more details)
-Local $iAnswer = MsgBox(BitOR($MB_YESNO, $MB_SYSTEMMODAL), "AutoIt 例子", "这个脚本运行计算器后输入 2 x 4 x 8 x 16 并退出.  运行")
+Local $iAnswer = MsgBox(BitOR($MB_YESNO, $MB_SYSTEMMODAL), "AutoIt Example", "This script will run the calculator and type in 2 x 4 x 8 x 16 and then quit.  Do you want to run it?")
 
 ; Check the user's answer to the prompt (see the help file for MsgBox return values)
 ; If "No" was clicked (7) then exit the script
 If $iAnswer = 7 Then
-    MsgBox($MB_SYSTEMMODAL, "AutoIt", "好的,再见!")
+	MsgBox($MB_SYSTEMMODAL, "AutoIt", "OK.  Bye!")
 	Exit
 EndIf
 

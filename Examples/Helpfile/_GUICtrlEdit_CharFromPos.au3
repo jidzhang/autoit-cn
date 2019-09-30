@@ -1,26 +1,25 @@
-#include <GuiEdit.au3>
 #include <GUIConstantsEx.au3>
+#include <GuiEdit.au3>
+#include <MsgBoxConstants.au3>
 
-$Debug_Ed = False ; Check ClassName being passed to Edit functions, set to True and use a handle to another control to see it work
+Example()
 
-_Main()
+Func Example()
+	Local $aCharPos[2], $idEdit
 
-Func _Main()
-	Local $aCharPos[2], $hEdit
-
-	; 创建 GUI
+	; Create GUI
 	GUICreate("Edit Char From Pos", 400, 300)
-	$hEdit = GUICtrlCreateEdit("This is a test" & @CRLF & "Another Line", 2, 2, 394, 268)
-	GUISetState()
+	$idEdit = GUICtrlCreateEdit("This is a test" & @CRLF & "Another Line", 2, 2, 394, 268)
+	GUISetState(@SW_SHOW)
 
-	_GUICtrlEdit_AppendText($hEdit, @CRLF & "Append to the end?")
+	_GUICtrlEdit_AppendText($idEdit, @CRLF & "Append to the end?")
 
-	$aCharPos = _GUICtrlEdit_CharFromPos($hEdit, 100, 20)
-	MsgBox(4160, "信息", StringFormat("Char Nearsest Point: [%2d]", $aCharPos[0]) & @LF & _
+	$aCharPos = _GUICtrlEdit_CharFromPos($idEdit, 100, 20)
+	MsgBox($MB_SYSTEMMODAL, "Information", StringFormat("Char Nearsest Point: [%2d]", $aCharPos[0]) & @CRLF & _
 			StringFormat("Line Nearest Point: [%2d]", $aCharPos[1]))
 
-	; 循环直到用户退出
+	; Loop until the user exits.
 	Do
 	Until GUIGetMsg() = $GUI_EVENT_CLOSE
 	GUIDelete()
-EndFunc   ;==>_Main
+EndFunc   ;==>Example

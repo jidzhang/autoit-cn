@@ -1,9 +1,13 @@
-If Not IsDeclared("Var") Then
-	MsgBox(4096, "", "$Var is NOT declared") ; If $Var has not been declared then display the message box.
-EndIf
+#include <MsgBoxConstants.au3>
 
-Local $Var = 1 ; Declare the variable $Var.
+; Check if the variable $vVar is declared. As the variable isn't will display the error message.
+If Not IsDeclared("vVar") Then
+	MsgBox($MB_SYSTEMMODAL, "", "The variable $vVar is not declared.")
 
-If IsDeclared("Var") Then
-	MsgBox(4096, "", "$Var IS declared") ; If $Var is declared then display the message box.
+	Local $vVar = 0 ; Initialize the variable $vVar with data.
+	If IsDeclared("vVar") Then ; Check if the variable $vVar is declared.
+		MsgBox($MB_SYSTEMMODAL, "", "The variable $vVar is declared.")
+	Else
+		MsgBox($MB_SYSTEMMODAL, "", "The variable $vVar is not declared.")
+	EndIf
 EndIf

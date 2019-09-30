@@ -1,6 +1,7 @@
+#include <GDIPlus.au3>
 #include <GUIConstantsEx.au3>
-#include <Constants.au3>
 #include <ScreenCapture.au3>
+#include <WinAPIHObj.au3>
 
 Example()
 
@@ -15,7 +16,7 @@ Func Example()
 	Local $hBitmap_Scaled = _GDIPlus_ImageResize($hBitmap, $iW / 4, $iH / 4) ;resize image
 
 	Local $hGUI = GUICreate("GDI+ test", $iW / 4, $iH / 4, -1, -1) ;create a test gui to display the resized image
-	GUISetState()
+	GUISetState(@SW_SHOW)
 
 	Local $hGraphics = _GDIPlus_GraphicsCreateFromHWND($hGUI) ;create a graphics object from a window handle
 	_GDIPlus_GraphicsDrawImage($hGraphics, $hBitmap_Scaled, 0, 0) ;display scaled image

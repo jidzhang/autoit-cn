@@ -1,6 +1,8 @@
 #include <GDIPlus.au3>
 #include <GUIConstantsEx.au3>
 
+Global $g_hGUI, $g_hGfxCtxt, $g_hBitmap, $g_hGraphics, $g_hBrush
+
 Example()
 
 Func Example()
@@ -9,16 +11,16 @@ Func Example()
 	_GDIPlus_Startup() ;initialize GDI+
 	Local Const $iWidth = 600, $iHeight = 600, $iBgColor = 0x303030 ;$iBGColor format RRGGBB
 
-	Global $hGUI = GUICreate("GDI+ example", $iWidth, $iHeight) ;create a test GUI
-	GUISetBkColor($iBgColor, $hGUI) ;set GUI background color
-	GUISetState()
+	$g_hGUI = GUICreate("GDI+ Example (" & @ScriptName & ")", $iWidth, $iHeight) ;create a test GUI
+	GUISetBkColor($iBgColor, $g_hGUI) ;set GUI background color
+	GUISetState(@SW_SHOW)
 
 	;create buffered graphics frame set for smoother gfx object movements
-	Global $hGraphics = _GDIPlus_GraphicsCreateFromHWND($hGUI) ;create a graphics object from a window handle
-	Global $hBitmap = _GDIPlus_BitmapCreateFromGraphics($iWidth, $iHeight, $hGraphics)
-	Global $hGfxCtxt = _GDIPlus_ImageGetGraphicsContext($hBitmap)
-	_GDIPlus_GraphicsSetSmoothingMode($hGfxCtxt, $GDIP_SMOOTHINGMODE_HIGHQUALITY) ;sets the graphics object rendering quality (antialiasing)
-	Global $hBrush = _GDIPlus_BrushCreateSolid(0xFF80FF60)
+	$g_hGraphics = _GDIPlus_GraphicsCreateFromHWND($g_hGUI) ;create a graphics object from a window handle
+	$g_hBitmap = _GDIPlus_BitmapCreateFromGraphics($iWidth, $iHeight, $g_hGraphics)
+	$g_hGfxCtxt = _GDIPlus_ImageGetGraphicsContext($g_hBitmap)
+	_GDIPlus_GraphicsSetSmoothingMode($g_hGfxCtxt, $GDIP_SMOOTHINGMODE_HIGHQUALITY) ;sets the graphics object rendering quality (antialiasing)
+	$g_hBrush = _GDIPlus_BrushCreateSolid(0xFF80FF60)
 
 	Local $aPoints[11][4], $x, $y
 	$aPoints[0][0] = 10
@@ -35,9 +37,9 @@ Func Example()
 	GUISetOnEvent($GUI_EVENT_CLOSE, "_Exit")
 
 	Do
-		_GDIPlus_GraphicsClear($hGfxCtxt, 0xFF000000 + $iBgColor) ;clear bitmap for repaint
-		_GDIPlus_GraphicsFillClosedCurve2($hGfxCtxt, $aPoints, 0.75, $hBrush) ;draw closed curve
-		_GDIPlus_GraphicsDrawImage($hGraphics, $hBitmap, 0, 0) ;copy bitmap to graphic handle (GUI)
+		_GDIPlus_GraphicsClear($g_hGfxCtxt, 0xFF000000 + $iBgColor) ;clear bitmap for repaint
+		_GDIPlus_GraphicsFillClosedCurve2($g_hGfxCtxt, $aPoints, 0.75, $g_hBrush) ;draw closed curve
+		_GDIPlus_GraphicsDrawImage($g_hGraphics, $g_hBitmap, 0, 0) ;copy bitmap to graphic handle (GUI)
 		For $y = 1 To $aPoints[0][0]
 			$aPoints[$y][0] += $aPoints[$y][2] ;calculate new x position
 			If $aPoints[$y][0] < 0 Or $aPoints[$y][0] > $iWidth Then $aPoints[$y][2] *= -1 ;if vertical border is reached invert x vector
@@ -49,11 +51,11 @@ EndFunc   ;==>Example
 
 Func _Exit()
 	;cleanup GDI+ resources
-	_GDIPlus_BrushDispose($hBrush)
-	_GDIPlus_GraphicsDispose($hGfxCtxt)
-	_GDIPlus_GraphicsDispose($hGraphics)
-	_GDIPlus_BitmapDispose($hBitmap)
+	_GDIPlus_BrushDispose($g_hBrush)
+	_GDIPlus_GraphicsDispose($g_hGfxCtxt)
+	_GDIPlus_GraphicsDispose($g_hGraphics)
+	_GDIPlus_BitmapDispose($g_hBitmap)
 	_GDIPlus_Shutdown()
-	GUIDelete($hGUI)
+	GUIDelete($g_hGUI)
 	Exit
 EndFunc   ;==>_Exit

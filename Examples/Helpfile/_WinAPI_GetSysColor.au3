@@ -1,10 +1,10 @@
 #include <GUIConstantsEx.au3>
-#include <WinAPI.au3>
+#include <WinAPISysWin.au3>
 #include <WindowsConstants.au3>
 
-_Main()
+Example()
 
-Func _Main()
+Func Example()
 	Local $aElements[2] = [$COLOR_ACTIVECAPTION, $COLOR_GRADIENTACTIVECAPTION]
 	; Red and Yellow
 	Local $aColors[2] = [255, 65535], $aSaveColors[2]
@@ -16,7 +16,7 @@ Func _Main()
 
 	_WinAPI_SetSysColors($aElements, $aColors)
 
-	GUISetState()
+	GUISetState(@SW_SHOW)
 
 	While 1
 		Switch GUIGetMsg()
@@ -31,5 +31,4 @@ Func _Main()
 	_WinAPI_SetSysColors($aElements, $aSaveColors)
 
 	Exit
-
-EndFunc   ;==>_Main
+EndFunc   ;==>Example

@@ -1,14 +1,15 @@
-#include <WinAPI.au3>
+#include <MsgBoxConstants.au3>
+#include <WinAPIMisc.au3>
 
-_Main()
+Example()
 
-Func _Main()
-	Local $hwnd = GUICreate("test")
+Func Example()
+	Local $hWnd = GUICreate("test")
 	Local $iX = _WinAPI_GetMousePosX()
-	Local $iX2 = _WinAPI_GetMousePosX(True, $hwnd)
+	Local $iX2 = _WinAPI_GetMousePosX(True, $hWnd)
 	Local $iY = _WinAPI_GetMousePosY()
-	Local $iY2 = _WinAPI_GetMousePosY(True, $hwnd)
+	Local $iY2 = _WinAPI_GetMousePosY(True, $hWnd)
 
-	MsgBox(4096, "Mouse Pos", "X = " & $iX & @LF & "Y = " & $iY & @LF & @LF & _
-			"Client" & @LF & "X = " & $iX2 & @LF & "Y = " & $iY2)
-EndFunc   ;==>_Main
+	MsgBox($MB_SYSTEMMODAL, "Mouse Pos", "X = " & $iX & @CRLF & "Y = " & $iY & @CRLF & @CRLF & _
+			"Client" & @CRLF & "X = " & $iX2 & @CRLF & "Y = " & $iY2)
+EndFunc   ;==>Example

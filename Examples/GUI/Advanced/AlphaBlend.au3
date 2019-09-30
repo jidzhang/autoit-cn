@@ -35,7 +35,7 @@ $g_hGUI2 = GUICreate("Test", 250, 250, -1, -1, -1, $WS_EX_LAYERED, $hGUI1)
 ; Load layered image
 _GDIPlus_Startup()
 $g_hImage = _GDIPlus_ImageLoadFromFile(@ScriptDir & "\Images\Button.png")
-; $hImage = _GDIPlus_ImageLoadFromFile(@ScriptDir & "\Images\Torus.png")
+;~ $g_hImage = _GDIPlus_ImageLoadFromFile(@ScriptDir & "\..\Torus.png")
 SetBitmap($g_hGUI2, $g_hImage, 255)
 GUISetState()
 
@@ -54,16 +54,16 @@ _GDIPlus_Shutdown()
 ; ===============================================================================================================================
 ; Handle the WM_HSCROLL notificaton so that we can change the opacity in real time
 ; ===============================================================================================================================
-Func WM_HSCROLL($hWnd, $iMsg, $iwParam, $ilParam)
-	#forceref $hWnd, $iMsg, $iwParam, $ilParam
+Func WM_HSCROLL($hWnd, $iMsg, $iParam, $lParam)
+	#forceref $hWnd, $iMsg, $iParam, $lParam
 	SetBitmap($g_hGUI2, $g_hImage, GUICtrlRead($g_idSlider))
 EndFunc   ;==>WM_HSCROLL
 
 ; ===============================================================================================================================
 ; Handle the WM_NCHITTEST for the layered window so it can be dragged by clicking anywhere on the image.
 ; ===============================================================================================================================
-Func WM_NCHITTEST($hWnd, $iMsg, $iwParam, $ilParam)
-	#forceref $hWnd, $iMsg, $iwParam, $ilParam
+Func WM_NCHITTEST($hWnd, $iMsg, $iParam, $lParam)
+	#forceref $hWnd, $iMsg, $iParam, $lParam
 	If ($hWnd = $g_hGUI2) And ($iMsg = $WM_NCHITTEST) Then Return $HTCAPTION
 EndFunc   ;==>WM_NCHITTEST
 

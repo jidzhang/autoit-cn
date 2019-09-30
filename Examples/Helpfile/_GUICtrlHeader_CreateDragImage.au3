@@ -1,23 +1,25 @@
 #include <GUIConstantsEx.au3>
 #include <GuiHeader.au3>
 #include <GuiImageList.au3>
-#include <WinAPI.au3>
+#include <WinAPIGdi.au3>
+#include <WinAPIGdiDC.au3>
+#include <WinAPIMisc.au3>
+#include <WinAPISysWin.au3>
 
-$Debug_HDR = False ; 检查传递给函数的类名, 设置为True并输出到一个控件的句柄,用于检查它是否工作
+Global $g_idMemo
+Example()
 
-Global $iMemo
-_Main()
+Func Example()
+	Local $hGUI, $hHeader, $hImage, $iMsg, $aSize, $tPos, $tRECT, $hDC
 
-Func _Main()
-	Local $hGUI, $hHeader, $hImage, $iMsg, $aSize, $tPos, $tRect, $hDC
-
-	; 创建 GUI
+	; Create GUI
 	$hGUI = GUICreate("Header", 400, 300)
 	$hHeader = _GUICtrlHeader_Create($hGUI)
-	$iMemo = GUICtrlCreateEdit("", 2, 32, 396, 266, 0)
-	GUISetState()
+	_GUICtrlHeader_SetUnicodeFormat($hHeader, True)
+	$g_idMemo = GUICtrlCreateEdit("", 2, 32, 396, 266, 0)
+	GUISetState(@SW_SHOW)
 
-	; 添加列
+	; Add columns
 	_GUICtrlHeader_AddItem($hHeader, "Column 1", 100)
 	_GUICtrlHeader_AddItem($hHeader, "Column 2", 100)
 	_GUICtrlHeader_AddItem($hHeader, "Column 3", 100)
@@ -36,23 +38,23 @@ Func _Main()
 		$iMsg = GUIGetMsg()
 		If $iMsg = $GUI_EVENT_MOUSEMOVE Then
 			If $tPos <> 0 Then
-				$tRect = DllStructCreate($tagRECT)
-				DllStructSetData($tRect, "Left", DllStructGetData($tPos, "X"))
-				DllStructSetData($tRect, "Top", DllStructGetData($tPos, "Y"))
-				DllStructSetData($tRect, "Right", DllStructGetData($tPos, "X") + $aSize[0])
-				DllStructSetData($tRect, "Bottom", DllStructGetData($tPos, "Y") + $aSize[1])
-				_WinAPI_InvalidateRect($hGUI, $tRect)
+				$tRECT = DllStructCreate($tagRECT)
+				DllStructSetData($tRECT, "Left", DllStructGetData($tPos, "X"))
+				DllStructSetData($tRECT, "Top", DllStructGetData($tPos, "Y"))
+				DllStructSetData($tRECT, "Right", DllStructGetData($tPos, "X") + $aSize[0])
+				DllStructSetData($tRECT, "Bottom", DllStructGetData($tPos, "Y") + $aSize[1])
+				_WinAPI_InvalidateRect($hGUI, $tRECT)
 			EndIf
-			$tRect = _WinAPI_GetClientRect($hGUI)
+			$tRECT = _WinAPI_GetClientRect($hGUI)
 			$tPos = _WinAPI_GetMousePos(True, $hGUI)
-			If _WinAPI_PtInRect($tRect, $tPos) Then
+			If _WinAPI_PtInRect($tRECT, $tPos) Then
 				_GUIImageList_Draw($hImage, 0, $hDC, DllStructGetData($tPos, "X"), DllStructGetData($tPos, "Y"))
 			EndIf
 		EndIf
 	Until $iMsg = $GUI_EVENT_CLOSE
-EndFunc   ;==>_Main
+EndFunc   ;==>Example
 
-; 写入一行到 memo 控件
+; Write a line to the memo control
 Func MemoWrite($sMessage)
-	GUICtrlSetData($iMemo, $sMessage & @CRLF, 1)
+	GUICtrlSetData($g_idMemo, $sMessage & @CRLF, 1)
 EndFunc   ;==>MemoWrite

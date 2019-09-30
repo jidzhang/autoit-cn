@@ -1,8 +1,10 @@
+; == Example 2, @HotKeyPressed usage
+
 #include <MsgBoxConstants.au3>
 
 ; Press Esc to terminate script, Pause/Break to "pause"
 
-Global $gbPaused = False
+Global $g_bPaused = False
 
 HotKeySet("{PAUSE}", "HotKeyPressed")
 HotKeySet("{ESC}", "HotKeyPressed")
@@ -15,8 +17,8 @@ WEnd
 Func HotKeyPressed()
 	Switch @HotKeyPressed ; The last hotkey pressed.
 		Case "{PAUSE}" ; String is the {PAUSE} hotkey.
-			$gbPaused = Not $gbPaused
-			While $gbPaused
+			$g_bPaused = Not $g_bPaused
+			While $g_bPaused
 				Sleep(100)
 				ToolTip('Script is "Paused"', 0, 0)
 			WEnd

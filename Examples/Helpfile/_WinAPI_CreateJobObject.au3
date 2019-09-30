@@ -1,9 +1,9 @@
-#include <WinAPIProc.au3>
 #include <APIProcConstants.au3>
-#include <WinAPI.au3>
-#include <WinAPIMisc.au3>
+#include <WinAPIConv.au3>
+#include <WinAPIHObj.au3>
+#include <WinAPIProc.au3>
 
-Global Const $sTemp = @TempDir & '\Test.au3'
+Local Const $sTemp = @TempDir & '\Test.au3'
 
 ; Create temporary .au3 file
 Local $hFile = FileOpen($sTemp, 2)
@@ -29,7 +29,7 @@ Func _RunWaitEx($sCmd)
 	If Not $hJob Then Return SetError(1, 0, 0)
 
 	DllStructSetData($tStartup, 'Size', DllStructGetSize($tStartup))
-	If Not _WinAPI_CreateProcess('', $sCmd, 0, 0, 0, BitOR($CREATE_BREAKAWAY_FROM_JOB, $CREATE_SUSPENDED), 0, 0, DllStructGetPtr($tStartup), DllStructGetPtr($tProcess)) Then
+	If Not _WinAPI_CreateProcess('', $sCmd, 0, 0, 0, BitOR($CREATE_BREAKAWAY_FROM_JOB, $CREATE_SUSPENDED), 0, 0, $tStartup, $tProcess) Then
 		Return SetError(1, _WinAPI_CloseHandle($hJob), 0)
 	EndIf
 	Local $hProcess = DllStructGetData($tProcess, 'hProcess')
@@ -49,8 +49,8 @@ Func _RunWaitEx($sCmd)
 EndFunc   ;==>_RunWaitEx
 
 Func _WinAPI_ResumeThread($hThread)
-	Local $Ret = DllCall('kernel32.dll', 'dword', 'ResumeThread', 'ptr', $hThread)
-	If @error Or (_WinAPI_DWordToInt($Ret[0]) = -1) Then Return SetError(1, 0, -1)
+	Local $aRet = DllCall('kernel32.dll', 'dword', 'ResumeThread', 'ptr', $hThread)
+	If @error Or (_WinAPI_DWordToInt($aRet[0]) = -1) Then Return SetError(1, 0, -1)
 
-	Return $Ret[0]
+	Return $aRet[0]
 EndFunc   ;==>_WinAPI_ResumeThread

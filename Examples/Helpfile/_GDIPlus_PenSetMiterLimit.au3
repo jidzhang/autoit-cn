@@ -8,7 +8,7 @@ Func Example()
 
 	; Create GUI
 	$hGUI = GUICreate("GDI+", 800, 600)
-	GUISetState()
+	GUISetState(@SW_SHOW)
 
 	_GDIPlus_Startup()
 	$hGraphic = _GDIPlus_GraphicsCreateFromHWND($hGUI) ;Create a graphics object from a window handle
@@ -18,7 +18,6 @@ Func Example()
 	$hPath = _GDIPlus_PathCreate() ;Create new path object
 	_GDIPlus_PathAddLine($hPath, 30, 550, 70, 200)
 	_GDIPlus_PathAddLine($hPath, 70, 200, 110, 550)
-
 
 	$fPenWidth = 32
 
@@ -36,8 +35,7 @@ Func Example()
 		_GDIPlus_GraphicsTranslateTransform($hGraphic, 130, 0)
 	Next
 
-
-	; Loop until user exits
+	; Loop until the user exits.
 	Do
 	Until GUIGetMsg() = $GUI_EVENT_CLOSE
 

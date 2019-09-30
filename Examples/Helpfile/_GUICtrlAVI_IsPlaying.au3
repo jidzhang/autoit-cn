@@ -1,40 +1,38 @@
-#include <GUIConstantsEx.au3>
 #include <GuiAVI.au3>
+#include <GUIConstantsEx.au3>
 #include <WindowsConstants.au3>
 
-$Debug_AVI = False ; 检查传递给 AVI 函数的类名, 设置为真并使用另一控件的句柄可以看出它是否有效
+Global $g_idMemo
 
-Global $hAVI, $iMemo
+Example()
 
-_Main()
+Func Example()
+	Local $sWow64 = ""
+	If @AutoItX64 Then $sWow64 = "\Wow6432Node"
+	Local $hGUI, $hAVI, $sFile = RegRead("HKEY_LOCAL_MACHINE\SOFTWARE" & $sWow64 & "\AutoIt v3\AutoIt", "InstallDir") & "\Examples\GUI\SampleAVI.avi"
+	Local $id_StartStop
 
-Func _Main()
-	Local $Wow64 = ""
-	If @AutoItX64 Then $Wow64 = "\Wow6432Node"
-	Local $hGUI, $sFile = RegRead("HKEY_LOCAL_MACHINE\SOFTWARE" & $Wow64 & "\AutoIt v3\AutoIt", "InstallDir") & "\Examples\GUI\SampleAVI.avi"
-	Local $btn_StartStop
-
-	; 创建 GUI
+	; Create GUI
 	$hGUI = GUICreate("(External) AVI Open", 300, 200)
 	$hAVI = _GUICtrlAVI_Create($hGUI, "", -1, 10, 10)
-	$btn_StartStop = GUICtrlCreateButton("Start", 50, 10, 75, 25)
-	$iMemo = GUICtrlCreateEdit("", 10, 50, 276, 144, $WS_VSCROLL)
-	GUICtrlSetFont($iMemo, 9, 400, 0, "Courier New")
-	GUISetState()
+	$id_StartStop = GUICtrlCreateButton("Start", 50, 10, 75, 25)
+	$g_idMemo = GUICtrlCreateEdit("", 10, 50, 276, 144, $WS_VSCROLL)
+	GUICtrlSetFont($g_idMemo, 9, 400, 0, "Courier New")
+	GUISetState(@SW_SHOW)
 
-	; 播放 AutoIt AVI 实例
+	; Play the sample AutoIt AVI
 	_GUICtrlAVI_Open($hAVI, $sFile)
 
-	; 循环直到用户退出
+	; Loop until the user exits.
 	While 1
 		Switch GUIGetMsg()
-			Case $btn_StartStop
-				If GUICtrlRead($btn_StartStop) = "Start" Then
+			Case $id_StartStop
+				If GUICtrlRead($id_StartStop) = "Start" Then
 					_GUICtrlAVI_Play($hAVI)
-					GUICtrlSetData($btn_StartStop, "Stop")
+					GUICtrlSetData($id_StartStop, "Stop")
 				Else
 					_GUICtrlAVI_Stop($hAVI)
-					GUICtrlSetData($btn_StartStop, "Start")
+					GUICtrlSetData($id_StartStop, "Start")
 				EndIf
 				MemoWrite("Is Playing: " & _GUICtrlAVI_IsPlaying($hAVI))
 
@@ -43,14 +41,13 @@ Func _Main()
 		EndSwitch
 	WEnd
 
-	; 关闭 AVI 剪辑
+	; Close AVI clip
 	_GUICtrlAVI_Close($hAVI)
 
-
 	GUIDelete()
-EndFunc   ;==>_Main
+EndFunc   ;==>Example
 
-; 写入一行到 memo 控件
+; Write a line to the memo control
 Func MemoWrite($sMessage)
-	GUICtrlSetData($iMemo, $sMessage & @CRLF, 1)
+	GUICtrlSetData($g_idMemo, $sMessage & @CRLF, 1)
 EndFunc   ;==>MemoWrite

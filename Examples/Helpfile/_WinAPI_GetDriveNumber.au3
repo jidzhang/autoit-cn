@@ -1,21 +1,21 @@
 #include <WinAPIFiles.au3>
 
-Local $Data, $Drive = DriveGetDrive('FIXED')
-Local $List[10]
+Local $aData, $aDrive = DriveGetDrive('FIXED')
+Local $aList[10]
 
-For $i = 0 To UBound($Drive) - 1
-	$List[$i] = ''
+For $i = 0 To UBound($aDrive) - 1
+	$aList[$i] = ''
 Next
-If IsArray($Drive) Then
-	For $i = 1 To $Drive[0]
-		$Data = _WinAPI_GetDriveNumber($Drive[$i])
-		If IsArray($Data) Then
-			$List[$Data[1]] &= StringUpper($Drive[$i]) & ' '
+If IsArray($aDrive) Then
+	For $i = 1 To $aDrive[0]
+		$aData = _WinAPI_GetDriveNumber($aDrive[$i])
+		If IsArray($aData) Then
+			$aList[$aData[1]] &= StringUpper($aDrive[$i]) & ' '
 		EndIf
 	Next
 EndIf
-For $i = 0 To UBound($Drive) - 1
-	If $List[$i] Then
-		ConsoleWrite('Drive' & $i & ' => ' & $List[$i] & @CRLF)
+For $i = 0 To UBound($aDrive) - 1
+	If $aList[$i] Then
+		ConsoleWrite('Drive' & $i & ' => ' & $aList[$i] & @CRLF)
 	EndIf
 Next

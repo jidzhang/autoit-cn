@@ -1,15 +1,15 @@
 #NoTrayIcon
 
-#include <WinAPIFiles.au3>
-#include <WinAPI.au3>
 #include <MsgBoxConstants.au3>
+#include <WinAPIFiles.au3>
+#include <WinAPIHObj.au3>
 
 Opt('WinWaitDelay', 0)
 
-Global Const $Title = '_WinAPI_MapViewOfFile' & ChrW(160)
+Global Const $g_sTitle = '_WinAPI_MapViewOfFile' & ChrW(160)
 
 If Not $CmdLine[0] Then
-	If WinExists($Title) Then
+	If WinExists($g_sTitle) Then
 		Exit
 	EndIf
 	For $i = 1 To 2
@@ -40,12 +40,12 @@ Func _Receiver()
 
 	Local $pAddress = _WinAPI_MapViewOfFile($hMapping)
 	Local $tData = DllStructCreate('wchar[1024]', $pAddress)
-	Local $Text
-	While WinWait($Title, '', 1)
+	Local $sText
+	While WinWait($g_sTitle, '', 1)
 		Sleep(200)
-		$Text = DllStructGetData($tData, 1)
+		$sText = DllStructGetData($tData, 1)
 		DllStructSetData($tData, 1, '')
-		If $Text Then MsgBox(BitOR($MB_ICONINFORMATION, $MB_SYSTEMMODAL), $Title & " (receiver)", "                                               " & @CRLF & $Text)
+		If $sText Then MsgBox(BitOR($MB_ICONINFORMATION, $MB_SYSTEMMODAL), $g_sTitle & " (receiver)", "                                               " & @CRLF & $sText)
 	WEnd
 	_WinAPI_UnmapViewOfFile($pAddress)
 	_WinAPI_CloseHandle($hMapping)
@@ -60,14 +60,14 @@ Func _Sender()
 
 	Local $pAddress = _WinAPI_MapViewOfFile($hMapping)
 	Local $tData = DllStructCreate('wchar[1024]', $pAddress)
-	Local $Text
-	While WinWaitClose($Title)
-		$Text = StringStripWS(InputBox($Title & " (sender)", 'Type some text message.', '', '', -1, 171), 3)
-		If Not $Text Then
+	Local $sText
+	While WinWaitClose($g_sTitle)
+		$sText = StringStripWS(InputBox($g_sTitle & " (sender)", 'Type some text message.', '', '', -1, 171), BitOR($STR_STRIPLEADING, $STR_STRIPTRAILING))
+		If Not $sText Then
 			ExitLoop
 		EndIf
-		DllStructSetData($tData, 1, $Text)
-		If Not WinWait($Title, '', 1) Then
+		DllStructSetData($tData, 1, $sText)
+		If Not WinWait($g_sTitle, '', 1) Then
 			ExitLoop
 		EndIf
 	WEnd

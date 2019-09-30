@@ -1,64 +1,64 @@
 #include <WinAPIFiles.au3>
 
-Local $Text, $Type, $Drive = DriveGetDrive('CDROM')
-If IsArray($Drive) Then
-	For $i = 1 To $Drive[0]
-		$Text = 'Unknown'
-		$Type = _WinAPI_GetCDType($Drive[$i])
+Local $sText, $iType, $aDrive = DriveGetDrive('CDROM')
+If IsArray($aDrive) Then
+	For $i = 1 To $aDrive[0]
+		$sText = 'Unknown'
+		$iType = _WinAPI_GetCDType($aDrive[$i])
 		If Not @error Then
-			Switch $Type
+			Switch $iType
 				Case 0x0000
-					$Text = 'No media'
+					$sText = 'No media'
 				Case 0x0008
-					$Text = 'CD-ROM'
+					$sText = 'CD-ROM'
 				Case 0x0009
-					$Text = 'CD-R'
+					$sText = 'CD-R'
 				Case 0x000A
-					$Text = 'CD-RW'
+					$sText = 'CD-RW'
 				Case 0x0010
-					$Text = 'DVD-ROM'
+					$sText = 'DVD-ROM'
 				Case 0x0011
-					$Text = 'DVD-R SR'
+					$sText = 'DVD-R SR'
 				Case 0x0012
-					$Text = 'DVD-RAM'
+					$sText = 'DVD-RAM'
 				Case 0x0013
-					$Text = 'DVD-RW RO'
+					$sText = 'DVD-RW RO'
 				Case 0x0014
-					$Text = 'DVD-RW SR'
+					$sText = 'DVD-RW SR'
 				Case 0x0015
-					$Text = 'DVD-R DL'
+					$sText = 'DVD-R DL'
 				Case 0x0016
-					$Text = 'DVD-R DL JR'
+					$sText = 'DVD-R DL JR'
 				Case 0x0017
-					$Text = 'DVD-RW DL'
+					$sText = 'DVD-RW DL'
 				Case 0x0018
-					$Text = 'DVD-DDR'
+					$sText = 'DVD-DDR'
 				Case 0x001A
-					$Text = 'DVD+RW'
+					$sText = 'DVD+RW'
 				Case 0x001B
-					$Text = 'DVD+R'
+					$sText = 'DVD+R'
 				Case 0x0040
-					$Text = 'BD-ROM'
+					$sText = 'BD-ROM'
 				Case 0x0041
-					$Text = 'BD-R SRM'
+					$sText = 'BD-R SRM'
 				Case 0x0042
-					$Text = 'BD-R RRM'
+					$sText = 'BD-R RRM'
 				Case 0x0043
-					$Text = 'BD-RE'
+					$sText = 'BD-RE'
 				Case 0x0050
-					$Text = 'HD DVD-ROM'
+					$sText = 'HD DVD-ROM'
 				Case 0x0051
-					$Text = 'HD DVD-R'
+					$sText = 'HD DVD-R'
 				Case 0x0052
-					$Text = 'HD DVD-RAM'
+					$sText = 'HD DVD-RAM'
 				Case 0x0053
-					$Text = 'HD DVD-RW'
+					$sText = 'HD DVD-RW'
 				Case 0x0058
-					$Text = 'HD DVD-R DL'
+					$sText = 'HD DVD-R DL'
 				Case 0x005A
-					$Text = 'HD DVD-RW DL'
+					$sText = 'HD DVD-RW DL'
 			EndSwitch
 		EndIf
-		ConsoleWrite(StringUpper($Drive[$i]) & ' => ' & $Text & @CRLF)
+		ConsoleWrite(StringUpper($aDrive[$i]) & ' => ' & $sText & @CRLF)
 	Next
 EndIf

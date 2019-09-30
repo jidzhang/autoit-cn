@@ -1,8 +1,9 @@
 #RequireAdmin ; for this example to have sense
 
-#include <SecurityConstants.au3>
+#include <MsgBoxConstants.au3>
 #include <Security.au3>
-#include <WinAPI.au3>
+#include <SecurityConstants.au3>
+#include <WinAPIHObj.au3>
 
 Example_SeTokInfo()
 
@@ -25,7 +26,7 @@ Func Example_SeTokInfo()
 		If _Security__SetTokenInformation($hToken, $TOKENINTEGRITYLEVEL, $tTOKEN_MANDATORY_LABEL, DllStructGetSize($tTOKEN_MANDATORY_LABEL)) Then
 
 			; Default IL is $SID_HIGH_MANDATORY_LEVEL, however...
-			MsgBox(262144, "SetTokenInformation", "$hToken = " & $hToken & @CRLF & "This token have non-default Medium Integrity Level")
+			MsgBox($MB_SYSTEMMODAL, "SetTokenInformation", "$hToken = " & $hToken & @CRLF & "This token have non-default Medium Integrity Level")
 
 			; ... Do something with token here ...
 
@@ -34,4 +35,3 @@ Func Example_SeTokInfo()
 		_WinAPI_CloseHandle($hToken)
 	EndIf
 EndFunc   ;==>Example_SeTokInfo
-

@@ -1,8 +1,8 @@
 #include <GuiMenu.au3>
 
-_Main()
+Example()
 
-Func _Main()
+Func Example()
 	Local $hWnd, $hMain
 
 	Run("notepad.exe")
@@ -12,5 +12,4 @@ Func _Main()
 
 	; Disable/Gray Help menu
 	_GUICtrlMenu_EnableMenuItem($hMain, 4, 3)
-
-EndFunc   ;==>_Main
+EndFunc   ;==>Example

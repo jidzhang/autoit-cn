@@ -1,28 +1,27 @@
 #include <GUIConstantsEx.au3>
 #include <GuiListView.au3>
+#include <MsgBoxConstants.au3>
 
-$Debug_LV = False ; 检查传递给 ListView 函数的类名, 设置为True并输出到一个控件的句柄,用于检查它是否工作
+Example()
 
-_Main()
-
-Func _Main()
-	Local $hListView
+Func Example()
+	Local $idListview
 
 	GUICreate("ListView Set Unicode Format", 400, 300)
-	$hListView = GUICtrlCreateListView("", 2, 2, 394, 268)
-	GUISetState()
+	$idListview = GUICtrlCreateListView("", 2, 2, 394, 268)
+	GUISetState(@SW_SHOW)
 
-	; 添加列
-	_GUICtrlListView_AddColumn($hListView, "Items", 100)
+	; Add columns
+	_GUICtrlListView_AddColumn($idListview, "Items", 100)
 
-	; 设置 Unicode 格式
-	_GUICtrlListView_SetUnicodeFormat($hListView, False)
-	MsgBox(4160, "信息", "Unicode: " & _GUICtrlListView_GetUnicodeFormat($hListView))
-	_GUICtrlListView_SetUnicodeFormat($hListView, True)
-	MsgBox(4160, "信息", "Unicode: " & _GUICtrlListView_GetUnicodeFormat($hListView))
+	; Set Unicode format
+	_GUICtrlListView_SetUnicodeFormat($idListview, False)
+	MsgBox($MB_SYSTEMMODAL, "Information", "Unicode: " & _GUICtrlListView_GetUnicodeFormat($idListview))
+	_GUICtrlListView_SetUnicodeFormat($idListview, True)
+	MsgBox($MB_SYSTEMMODAL, "Information", "Unicode: " & _GUICtrlListView_GetUnicodeFormat($idListview))
 
-	; 循环直到用户退出
+	; Loop until the user exits.
 	Do
 	Until GUIGetMsg() = $GUI_EVENT_CLOSE
 	GUIDelete()
-EndFunc   ;==>_Main
+EndFunc   ;==>Example

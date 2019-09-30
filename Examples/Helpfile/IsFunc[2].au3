@@ -15,7 +15,7 @@ Func Example()
 	; Display a MsgBox that shows $hMsgBox is a function.
 	$hMsgBox($MB_SYSTEMMODAL, "", "Check if $hMsgBox is a function or not." & @CRLF & _
 			@CRLF & _
-			"This will return 2 as the function is a user function: " & IsFunc($hMsgBox))
+			"This will return 1 as the function is a user function: " & IsFunc($hMsgBox))
 EndFunc   ;==>Example
 
 ; User-defined message box function.

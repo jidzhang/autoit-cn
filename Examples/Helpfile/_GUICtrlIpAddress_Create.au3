@@ -2,45 +2,43 @@
 #include <GuiIPAddress.au3>
 #include <WindowsConstants.au3>
 
-$Debug_IP = False ; Check ClassName being passed to IPAddress functions, set to True and use a handle to another control to see it work
+Global $g_hIPAddress
 
-Global $hIPAddress
+Example()
 
-_Main()
+Func Example()
+	Local $hGui
 
-Func _Main()
-	Local $hgui
-
-	$hgui = GUICreate("IP Address Control Create Example", 400, 300)
-	$hIPAddress = _GUICtrlIpAddress_Create($hgui, 10, 10)
+	$hGui = GUICreate("IP Address Control Create Example", 400, 300)
+	$g_hIPAddress = _GUICtrlIpAddress_Create($hGui, 10, 10)
 	GUISetState(@SW_SHOW)
 
 	GUIRegisterMsg($WM_NOTIFY, "WM_NOTIFY")
 
-	_GUICtrlIpAddress_Set($hIPAddress, "24.168.2.128")
+	_GUICtrlIpAddress_Set($g_hIPAddress, "24.168.2.128")
 
 	; Wait for user to close GUI
 	Do
 	Until GUIGetMsg() = $GUI_EVENT_CLOSE
-EndFunc   ;==>_Main
+EndFunc   ;==>Example
 
-Func WM_NOTIFY($hWnd, $iMsg, $iwParam, $ilParam)
-	#forceref $hWnd, $iMsg, $iwParam
+Func WM_NOTIFY($hWnd, $iMsg, $wParam, $lParam)
+	#forceref $hWnd, $iMsg, $wParam
 	Local $hWndFrom, $iCode, $tNMHDR
 	Local $tInfo
 
-	$tNMHDR = DllStructCreate($tagNMHDR, $ilParam)
+	$tNMHDR = DllStructCreate($tagNMHDR, $lParam)
 	$hWndFrom = HWnd(DllStructGetData($tNMHDR, "hWndFrom"))
 	$iCode = DllStructGetData($tNMHDR, "Code")
 	Switch $hWndFrom
-		Case $hIPAddress
+		Case $g_hIPAddress
 			Switch $iCode
 				Case $IPN_FIELDCHANGED ; Sent when the user changes a field in the control or moves from one field to another
-					$tInfo = DllStructCreate($tagNMIPADDRESS, $ilParam)
-					_DebugPrint("$IPN_FIELDCHANGED" & @LF & "--> hWndFrom:" & @TAB & DllStructGetData($tInfo, "hWndFrom") & @LF & _
-							"-->IDFrom:" & @TAB & DllStructGetData($tInfo, "IDFrom") & @LF & _
-							"-->Code:" & @TAB & DllStructGetData($tInfo, "Code") & @LF & _
-							"-->Field:" & @TAB & DllStructGetData($tInfo, "Field") & @LF & _
+					$tInfo = DllStructCreate($tagNMIPADDRESS, $lParam)
+					_DebugPrint("$IPN_FIELDCHANGED" & @CRLF & "--> hWndFrom:" & @TAB & DllStructGetData($tInfo, "hWndFrom") & @CRLF & _
+							"-->IDFrom:" & @TAB & DllStructGetData($tInfo, "IDFrom") & @CRLF & _
+							"-->Code:" & @TAB & DllStructGetData($tInfo, "Code") & @CRLF & _
+							"-->Field:" & @TAB & DllStructGetData($tInfo, "Field") & @CRLF & _
 							"-->Value:" & @TAB & DllStructGetData($tInfo, "Value"))
 					; The return value is ignored
 			EndSwitch
@@ -48,10 +46,10 @@ Func WM_NOTIFY($hWnd, $iMsg, $iwParam, $ilParam)
 	Return $GUI_RUNDEFMSG
 EndFunc   ;==>WM_NOTIFY
 
-Func _DebugPrint($s_text, $line = @ScriptLineNumber)
+Func _DebugPrint($s_Text, $sLine = @ScriptLineNumber)
 	ConsoleWrite( _
-			"!===========================================================" & @LF & _
-			"+======================================================" & @LF & _
-			"-->Line(" & StringFormat("%04d", $line) & "):" & @TAB & $s_text & @LF & _
-			"+======================================================" & @LF)
+			"!===========================================================" & @CRLF & _
+			"+======================================================" & @CRLF & _
+			"-->Line(" & StringFormat("%04d", $sLine) & "):" & @TAB & $s_Text & @CRLF & _
+			"+======================================================" & @CRLF)
 EndFunc   ;==>_DebugPrint

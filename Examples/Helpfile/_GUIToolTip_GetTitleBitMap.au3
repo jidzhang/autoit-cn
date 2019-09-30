@@ -1,13 +1,15 @@
 #include <GUIConstantsEx.au3>
 #include <GUIToolTip.au3>
 #include <MsgBoxConstants.au3>
+#include <WinAPIIcons.au3>
+
 Example()
 
 Func Example()
-	Local $hGUI = GUICreate(StringTrimRight(@ScriptName, 4), 350, 200)
+	Local $hGUI = GUICreate(StringTrimRight(@ScriptName, StringLen(".exe")), 350, 200)
 
-	Local $iButton = GUICtrlCreateButton("Button", 30, 32, 130, 28)
-	Local $hButton = GUICtrlGetHandle($iButton)
+	Local $idButton = GUICtrlCreateButton("Button", 30, 32, 130, 28)
+	Local $hButton = GUICtrlGetHandle($idButton)
 
 	; Create a tooltip control
 	Local $hToolTip = _GUIToolTip_Create($hGUI)
@@ -20,18 +22,17 @@ Func Example()
 	; Set the title of the tooltip
 	_GUIToolTip_SetTitle($hToolTip, 'This is the Title Text', $hIcon)
 
-	GUISetState()
+	GUISetState(@SW_SHOW)
 
 	While 1
-        $msg = GUIGetMsg()
-        Switch $msg
-            Case $GUI_EVENT_CLOSE
-                ExitLoop
-            Case $iButton
-                MsgBox($MB_SYSTEMMODAL, "Title Bitmap", _GUIToolTip_GetTitleBitMap($hToolTip))
-        EndSwitch
+		Switch GUIGetMsg()
+			Case $GUI_EVENT_CLOSE
+				ExitLoop
+			Case $idButton
+				MsgBox($MB_SYSTEMMODAL, "Title Bitmap", _GUIToolTip_GetTitleBitMap($hToolTip))
+		EndSwitch
 	WEnd
 	; Destroy the tooltip control
 	_GUIToolTip_Destroy($hToolTip)
-    GUIDelete($hGUI)
+	GUIDelete($hGUI)
 EndFunc   ;==>Example

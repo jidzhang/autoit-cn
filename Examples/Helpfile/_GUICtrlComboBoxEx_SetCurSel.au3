@@ -1,19 +1,18 @@
 #include <GuiComboBoxEx.au3>
-#include <GuiImageList.au3>
 #include <GUIConstantsEx.au3>
+#include <GuiImageList.au3>
+#include <MsgBoxConstants.au3>
 #include <WindowsConstants.au3>
 
-$Debug_CB = False ; 检查传递给 ComboBox/ComboBoxEx 函数的类名, 设置为真并使用另一控件的句柄可以看出它是否有效
+Example()
 
-_Main()
-
-Func _Main()
+Func Example()
 	Local $hGUI, $hImage, $hCombo
 
-	; 创建 GUI
+	; Create GUI
 	$hGUI = GUICreate("ComboBoxEx Set Cur Sel", 400, 300)
 	$hCombo = _GUICtrlComboBoxEx_Create($hGUI, "", 2, 2, 394, 100, BitOR($CBS_SIMPLE, $WS_VSCROLL, $WS_BORDER))
-	GUISetState()
+	GUISetState(@SW_SHOW)
 
 	$hImage = _GUIImageList_Create(16, 16, 5, 3)
 	_GUIImageList_AddIcon($hImage, @SystemDir & "\shell32.dll", 110)
@@ -35,12 +34,12 @@ Func _Main()
 	Next
 	_GUICtrlComboBoxEx_EndUpdate($hCombo)
 
-	; 设置当前选择项
+	; Set Cur Sel
 	_GUICtrlComboBoxEx_SetCurSel($hCombo, Random(0, 99, 1))
 
-	; 获取当前选择项的索引
-	MsgBox(4160, "信息", "Current Sel: " & _GUICtrlComboBoxEx_GetCurSel($hCombo))
+	; Get Cur Sel
+	MsgBox($MB_SYSTEMMODAL, "Information", "Current Sel: " & _GUICtrlComboBoxEx_GetCurSel($hCombo))
 
 	Do
 	Until GUIGetMsg() = $GUI_EVENT_CLOSE
-EndFunc   ;==>_Main
+EndFunc   ;==>Example

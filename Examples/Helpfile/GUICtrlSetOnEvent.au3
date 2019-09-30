@@ -1,4 +1,5 @@
 #include <GUIConstantsEx.au3>
+#include <MsgBoxConstants.au3>
 
 Example()
 
@@ -24,31 +25,27 @@ Func Example()
 	While 1
 		Sleep(10)
 	WEnd
-
 EndFunc   ;==>Example
 
-
 Func OKPressed()
-	MsgBox(4096, "OK Pressed", "ID=" & @GUI_CtrlId & " WinHandle=" & @GUI_WinHandle & " CtrlHandle=" & @GUI_CtrlHandle)
+	MsgBox($MB_SYSTEMMODAL, "OK Pressed", "ID=" & @GUI_CtrlId & " WinHandle=" & @GUI_WinHandle & " CtrlHandle=" & @GUI_CtrlHandle)
 EndFunc   ;==>OKPressed
 
-
 Func CancelPressed()
-	MsgBox(4096, "Cancel Pressed", "ID=" & @GUI_CtrlId & " WinHandle=" & @GUI_WinHandle & " CtrlHandle=" & @GUI_CtrlHandle)
+	MsgBox($MB_SYSTEMMODAL, "Cancel Pressed", "ID=" & @GUI_CtrlId & " WinHandle=" & @GUI_WinHandle & " CtrlHandle=" & @GUI_CtrlHandle)
 EndFunc   ;==>CancelPressed
-
 
 Func SpecialEvents()
 	Select
 		Case @GUI_CtrlId = $GUI_EVENT_CLOSE
-			MsgBox(4096, "Close Pressed", "ID=" & @GUI_CtrlId & " WinHandle=" & @GUI_WinHandle)
+			MsgBox($MB_SYSTEMMODAL, "Close Pressed", "ID=" & @GUI_CtrlId & " WinHandle=" & @GUI_WinHandle)
 			Exit
 
 		Case @GUI_CtrlId = $GUI_EVENT_MINIMIZE
-			MsgBox(4096, "Window Minimized", "ID=" & @GUI_CtrlId & " WinHandle=" & @GUI_WinHandle)
+			MsgBox($MB_SYSTEMMODAL, "Window Minimized", "ID=" & @GUI_CtrlId & " WinHandle=" & @GUI_WinHandle)
 
 		Case @GUI_CtrlId = $GUI_EVENT_RESTORE
-			MsgBox(4096, "Window Restored", "ID=" & @GUI_CtrlId & " WinHandle=" & @GUI_WinHandle)
+			MsgBox($MB_SYSTEMMODAL, "Window Restored", "ID=" & @GUI_CtrlId & " WinHandle=" & @GUI_WinHandle)
 
 	EndSelect
 EndFunc   ;==>SpecialEvents

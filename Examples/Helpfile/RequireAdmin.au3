@@ -1,4 +1,5 @@
+#include <MsgBoxConstants.au3>
+
 #RequireAdmin
 
-MsgBox(4096,"信息","现在运行在完整管理员权限下")
-;注意:不管本预处理命令放在何处都会在程序开始时请求权限
+If IsAdmin() Then MsgBox($MB_SYSTEMMODAL, "", "The script is running with admin rights.")

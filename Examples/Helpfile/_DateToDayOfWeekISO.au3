@@ -1,6 +1,7 @@
 #include <Date.au3>
+#include <MsgBoxConstants.au3>
 
-; 指定日期的 ISO 星期序号 0=星期一 - 6=星期天
+; ISO week day number for a given date 1 = Monday - 7 = Sunday
 Local $iWeekday = _DateToDayOfWeekISO(@YEAR, @MON, @MDAY)
-; 不同于 @Wday
-MsgBox(4096, "", "Todays ISO WeekdayNumber is: " & $iWeekday)
+; NOT equal to @WDAY
+MsgBox($MB_SYSTEMMODAL, "", "Today's ISO week day number is: " & $iWeekday)

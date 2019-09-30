@@ -4,8 +4,8 @@ Local $tSID = _Security__GetAccountSid(@ComputerName)
 If Not @error Then
 	; $tSID is structure filled with SID data for spesified account
 	; Check this SID for validity:
-	Local $fValid = _Security__IsValidSid($tSID)
-	If $fValid Then
+	Local $bValid = _Security__IsValidSid($tSID)
+	If $bValid Then
 		ConsoleWrite("The SID is valid." & @CRLF)
 		; ... The rest of the script here...
 	Else

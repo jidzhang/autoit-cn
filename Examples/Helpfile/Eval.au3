@@ -1,4 +1,14 @@
-Local $a_b = 12
-Local $s = Eval("a" & "_" & "b")  ; $s …Ë÷√Œ™  12
+#include <MsgBoxConstants.au3>
 
-$s =Eval("c")  ; $s = "" ”Î @error = 1
+Example()
+
+Func Example()
+	; Assign the variable string sString with data.
+	Assign("sString", "This is a string which is declared using the function Assign")
+
+	; Find the value of the variable string sString and assign to the variable $sEvalString.
+	Local $sEvalString = Eval("sString")
+
+	; Display the value of $sEvalString. This should be the same value as $sString.
+	MsgBox($MB_SYSTEMMODAL, "", $sEvalString)
+EndFunc   ;==>Example

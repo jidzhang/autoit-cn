@@ -1,50 +1,50 @@
-#include <GuiMenu.au3>
 #include <GUIConstantsEx.au3>
-#include <WinAPI.au3>
+#include <GuiMenu.au3>
+#include <WinAPIError.au3>
 #include <WindowsConstants.au3>
 
-Global Enum $idOpen = 1000, $idSave, $idInfo
+Global Enum $e_idOpen = 1000, $e_idSave, $e_idInfo
 
-_Main()
+Example()
 
-Func _Main()
-	; 创建 GUI
+Func Example()
+	; Create GUI
 	GUICreate("Menu", 400, 300)
-	GUISetState()
+	GUISetState(@SW_SHOW)
 
-	; 注册消息处理程序
+	; Register message handlers
 	GUIRegisterMsg($WM_COMMAND, "WM_COMMAND")
 	GUIRegisterMsg($WM_CONTEXTMENU, "WM_CONTEXTMENU")
 
-	; 循环直到用户退出
+	; Loop until the user exits.
 	Do
 	Until GUIGetMsg() = $GUI_EVENT_CLOSE
-EndFunc   ;==>_Main
+EndFunc   ;==>Example
 
-; 处理 WM_COMMAND 消息
-Func WM_COMMAND($hWnd, $iMsg, $iwParam, $ilParam)
-	#forceref $hWnd, $iMsg, $ilParam
-	Switch $iwParam
-		Case $idOpen
+; Handle WM_COMMAND messages
+Func WM_COMMAND($hWnd, $iMsg, $wParam, $lParam)
+	#forceref $hWnd, $iMsg, $lParam
+	Switch $wParam
+		Case $e_idOpen
 			_WinAPI_ShowMsg("Open")
-		Case $idSave
+		Case $e_idSave
 			_WinAPI_ShowMsg("Save")
-		Case $idInfo
+		Case $e_idInfo
 			_WinAPI_ShowMsg("Info")
 	EndSwitch
 EndFunc   ;==>WM_COMMAND
 
-; 处理 WM_CONTEXTMENU 消息
-Func WM_CONTEXTMENU($hWnd, $iMsg, $iwParam, $ilParam)
-	#forceref $hWnd, $iMsg, $ilParam
+; Handle WM_CONTEXTMENU messages
+Func WM_CONTEXTMENU($hWnd, $iMsg, $wParam, $lParam)
+	#forceref $hWnd, $iMsg, $lParam
 	Local $hMenu
 
 	$hMenu = _GUICtrlMenu_CreatePopup()
-	_GUICtrlMenu_InsertMenuItem($hMenu, 0, "Open", $idOpen)
-	_GUICtrlMenu_InsertMenuItem($hMenu, 1, "Save", $idSave)
+	_GUICtrlMenu_InsertMenuItem($hMenu, 0, "Open", $e_idOpen)
+	_GUICtrlMenu_InsertMenuItem($hMenu, 1, "Save", $e_idSave)
 	_GUICtrlMenu_InsertMenuItem($hMenu, 3, "", 0)
-	_GUICtrlMenu_InsertMenuItem($hMenu, 3, "Info", $idInfo)
-	_GUICtrlMenu_TrackPopupMenu($hMenu, $iwParam)
+	_GUICtrlMenu_InsertMenuItem($hMenu, 3, "Info", $e_idInfo)
+	_GUICtrlMenu_TrackPopupMenu($hMenu, $wParam)
 	_GUICtrlMenu_DestroyMenu($hMenu)
 	Return True
 EndFunc   ;==>WM_CONTEXTMENU

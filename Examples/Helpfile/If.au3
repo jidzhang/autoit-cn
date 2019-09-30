@@ -1,7 +1,11 @@
-;如果没有命令行参数,脚本将终止.
+#include <MsgBoxConstants.au3>
+
+; Terminates script if no command-line arguments
 If $CmdLine[0] = 0 Then Exit
 
-;Alternative:
+; Alternative:
 If $CmdLine[0] = 0 Then
 	Exit
 EndIf
+
+MsgBox($MB_SYSTEMMODAL, "", "Script has command-line arguments.")

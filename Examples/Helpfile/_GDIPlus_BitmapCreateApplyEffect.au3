@@ -5,7 +5,7 @@
 _Example()
 
 Func _Example()
-	If Not _GDIPlus_Startup() Then
+    If Not _GDIPlus_Startup() Or @extended < 6 Then
 		MsgBox($MB_SYSTEMMODAL, "ERROR", "GDIPlus.dll v1.1 not available")
 		Return
 	EndIf
@@ -17,18 +17,18 @@ Func _Example()
 
 	Local $hEffect = _GDIPlus_EffectCreateBlur()
 
-	Local $tRect = DllStructCreate($tagRECT)
-	Local $hBitmap = _GDIPlus_BitmapCreateApplyEffect($hImage, $hEffect, Null, $tRect)
+	Local $tRECT = DllStructCreate($tagRECT)
+	Local $hBitmap = _GDIPlus_BitmapCreateApplyEffect($hImage, $hEffect, Null, $tRECT)
 
-	Local $iBmpW = $tRect.Right - $tRect.Left
-	Local $iBmpH = $tRect.Bottom - $tRect.Top
+	Local $iBmpW = $tRECT.Right - $tRECT.Left
+	Local $iBmpH = $tRECT.Bottom - $tRECT.Top
 
 	Local $iWidth = 600
 	Local $iHeight = $iBmpH * 600 / $iBmpW
 
-	Local $hGui = GUICreate("GDI+ v1.1", $iWidth, $iHeight)
+	Local $hGui = GUICreate("GDI+ v1.1 (" & @ScriptName & ")", $iWidth, $iHeight)
 	Local $hGraphics = _GDIPlus_GraphicsCreateFromHWND($hGui)
-	GUISetState()
+	GUISetState(@SW_SHOW)
 
 	_GDIPlus_GraphicsDrawImageRect($hGraphics, $hBitmap, 0, 0, $iWidth, $iHeight)
 

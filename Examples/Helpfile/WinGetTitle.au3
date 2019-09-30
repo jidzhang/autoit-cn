@@ -1,3 +1,5 @@
+#include <MsgBoxConstants.au3>
+
 Example()
 
 Func Example()
@@ -5,5 +7,5 @@ Func Example()
 	Local $sText = WinGetTitle("[ACTIVE]")
 
 	; Display the window title.
-	MsgBox(4096, "", $sText)
+	MsgBox($MB_SYSTEMMODAL, "", $sText)
 EndFunc   ;==>Example

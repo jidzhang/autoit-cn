@@ -1,22 +1,23 @@
 #include <GUIConstantsEx.au3>
+#include <MsgBoxConstants.au3>
 
 Example()
 
 Func Example()
-	Local $n, $msg
-
 	GUICreate("My GUI (GetControlState)")
-	$n = GUICtrlCreateCheckbox("checkbox", 10, 10)
-	GUICtrlSetState(-1, 1) 	; 调整指定控件的状态
+	Local $idCheckbox = GUICtrlCreateCheckbox("checkbox", 10, 10)
+	GUICtrlSetState(-1, 1) ; checked
 
-	GUISetState()       ; 显示一个空白的窗口
+	GUISetState(@SW_SHOW) ; will display an empty dialog box
 
-	; 运行界面,直到窗口被关闭
+	; Loop until the user exits.
 	While 1
-		$msg = GUIGetMsg()
+		Switch GUIGetMsg()
+			Case $GUI_EVENT_CLOSE
+				ExitLoop
 
-		If $msg = $GUI_EVENT_CLOSE Then ExitLoop
+		EndSwitch
 	WEnd
 
-	MsgBox(4096, "状态", StringFormat("GUICtrlRead=%d\nGUICtrlGetState=%d", GUICtrlRead($n), GUICtrlGetState($n)))
+	MsgBox($MB_SYSTEMMODAL, "state", StringFormat("GUICtrlRead=%d\nGUICtrlGetState=%d", GUICtrlRead($idCheckbox), GUICtrlGetState($idCheckbox)))
 EndFunc   ;==>Example

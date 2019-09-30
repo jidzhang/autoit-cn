@@ -8,7 +8,7 @@ Func Example()
 
 	; Create GUI
 	Local $hGUI = GUICreate("GDI+", 810, 610)
-	GUISetState()
+	GUISetState(@SW_SHOW)
 
 	_GDIPlus_Startup()
 	Local $hGraphic = _GDIPlus_GraphicsCreateFromHWND($hGUI) ;Create a graphics object from a window handle
@@ -24,8 +24,7 @@ Func Example()
 		_GDIPlus_BrushDispose($hBrush)
 	Next
 
-
-	; Loop until user exits
+	; Loop until the user exits.
 	Do
 	Until GUIGetMsg() = $GUI_EVENT_CLOSE
 

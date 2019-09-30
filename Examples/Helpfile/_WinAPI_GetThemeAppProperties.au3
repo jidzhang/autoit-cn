@@ -1,8 +1,8 @@
-#include <WinAPITheme.au3>
 #include <APIThemeConstants.au3>
 #include <GUIConstantsEx.au3>
+#include <WinAPITheme.au3>
 
-Local $Theme = _WinAPI_GetThemeAppProperties()
+Local $iTheme = _WinAPI_GetThemeAppProperties()
 
 Local $hForm = GUICreate('Test ' & StringReplace(@ScriptName, '.au3', '()'), 310, 360)
 GUISetFont(8.5, 400, 0, 'MS Shell Dlg', $hForm)
@@ -20,9 +20,9 @@ GUICtrlCreateTab(10, 118, 292, 206)
 GUICtrlCreateTabItem('Tab1')
 GUICtrlCreateTabItem('Tab2')
 GUICtrlCreateTabItem('')
-_WinAPI_SetThemeAppProperties($Theme)
+_WinAPI_SetThemeAppProperties($iTheme)
 
-GUISetState()
+GUISetState(@SW_SHOW)
 
 Do
 Until GUIGetMsg() = $GUI_EVENT_CLOSE

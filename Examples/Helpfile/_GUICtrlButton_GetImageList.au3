@@ -1,38 +1,36 @@
-#include <GUIConstantsEx.au3>
-#include <WindowsConstants.au3>
 #include <GuiButton.au3>
+#include <GUIConstantsEx.au3>
 #include <GuiImageList.au3>
+#include <WindowsConstants.au3>
 
-Global $iMemo
+Global $g_idMemo
 
-_Main()
+Example()
 
-Func _Main()
-	Local $hImage, $y = 70, $iIcon = 125, $btn[6], $aImageListInfo
+Func Example()
+	Local $hImage, $y = 70, $iIcon = 125, $a_idBtn[6], $aImageListInfo
 
 	GUICreate("Buttons", 510, 400)
-	$iMemo = GUICtrlCreateEdit("", 119, 10, 376, 374, $WS_VSCROLL)
-	GUICtrlSetFont($iMemo, 9, 400, 0, "Courier New")
-	GUISetState()
+	$g_idMemo = GUICtrlCreateEdit("", 119, 10, 376, 374, $WS_VSCROLL)
+	GUICtrlSetFont($g_idMemo, 9, 400, 0, "Courier New")
+	GUISetState(@SW_SHOW)
 
 	$hImage = _GUIImageList_Create(32, 32, 5, 3, 6)
 	For $x = 6 To 11
 		_GUIImageList_AddIcon($hImage, "shell32.dll", $x, True)
 	Next
 
-	$btn[0] = GUICtrlCreateButton("Button1", 10, 10, 90, 50)
-	_GUICtrlButton_SetImageList($btn[0], $hImage)
-
+	$a_idBtn[0] = GUICtrlCreateButton("Button1", 10, 10, 90, 50)
+	_GUICtrlButton_SetImageList($a_idBtn[0], $hImage)
 
 	For $x = 1 To 5
-		$btn[$x] = GUICtrlCreateButton("Button" & $x + 1, 10, $y, 90, 50)
-		_GUICtrlButton_SetImageList($btn[$x], _GetImageListHandle("shell32.dll", $iIcon + $x, True), $x)
+		$a_idBtn[$x] = GUICtrlCreateButton("Button" & $x + 1, 10, $y, 90, 50)
+		_GUICtrlButton_SetImageList($a_idBtn[$x], _GetImageListHandle("shell32.dll", $iIcon + $x, True), $x)
 		$y += 60
 	Next
 
-
 	For $x = 0 To 5
-		$aImageListInfo = _GUICtrlButton_GetImageList($btn[$x])
+		$aImageListInfo = _GUICtrlButton_GetImageList($a_idBtn[$x])
 		MemoWrite("Button" & $x + 1 & " Imagelist Info" & @CRLF & "--------------------------------")
 		MemoWrite("Image list handle........: " & $aImageListInfo[0])
 		MemoWrite("Left margin of the icon..: " & $aImageListInfo[1])
@@ -51,23 +49,23 @@ Func _Main()
 	WEnd
 
 	Exit
-EndFunc   ;==>_Main
+EndFunc   ;==>Example
 
-; 写入一行到 memo 控件
+; Write a line to the memo control
 Func MemoWrite($sMessage)
-	GUICtrlSetData($iMemo, $sMessage & @CRLF, 1)
+	GUICtrlSetData($g_idMemo, $sMessage & @CRLF, 1)
 EndFunc   ;==>MemoWrite
 
-; 使用图像列表在按钮上设置一个图像并显示文本
-Func _GetImageListHandle($sFile, $nIconID = 0, $fLarge = False)
+; using image list to set 1 image and have text on button
+Func _GetImageListHandle($sFile, $nIconID = 0, $bLarge = False)
 	Local $iSize = 16
-	If $fLarge Then $iSize = 32
+	If $bLarge Then $iSize = 32
 
 	Local $hImage = _GUIImageList_Create($iSize, $iSize, 5, 3)
 	If StringUpper(StringMid($sFile, StringLen($sFile) - 2)) = "BMP" Then
 		_GUIImageList_AddBitmap($hImage, $sFile)
 	Else
-		_GUIImageList_AddIcon($hImage, $sFile, $nIconID, $fLarge)
+		_GUIImageList_AddIcon($hImage, $sFile, $nIconID, $bLarge)
 	EndIf
 	Return $hImage
 EndFunc   ;==>_GetImageListHandle

@@ -1,31 +1,32 @@
-#include <GUIConstantsEx.au3>
 #include <GuiButton.au3>
+#include <GUIConstantsEx.au3>
+#include <MsgBoxConstants.au3>
 
-Global $iMemo
+Global $g_idMemo
 
-_Main()
+Example()
 
-Func _Main()
-	Local $y = 70, $btn[6], $iRand
+Func Example()
+	Local $y = 70, $a_idBtn[6], $iRand
 
 	GUICreate("Buttons", 510, 400)
-	$iMemo = GUICtrlCreateEdit("", 119, 10, 276, 374, 0)
-	GUICtrlSetFont($iMemo, 9, 400, 0, "Courier New")
-	GUISetState()
+	$g_idMemo = GUICtrlCreateEdit("", 119, 10, 276, 374, 0)
+	GUICtrlSetFont($g_idMemo, 9, 400, 0, "Courier New")
+	GUISetState(@SW_SHOW)
 
-	$btn[0] = GUICtrlCreateButton("Button1", 10, 10, 90, 50)
+	$a_idBtn[0] = GUICtrlCreateButton("Button1", 10, 10, 90, 50)
 
 	For $x = 1 To 5
-		$btn[$x] = GUICtrlCreateButton("Button" & $x + 1, 10, $y, 90, 50)
+		$a_idBtn[$x] = GUICtrlCreateButton("Button" & $x + 1, 10, $y, 90, 50)
 		$y += 60
 	Next
 
 	$iRand = Random(0, 5, 1)
-	MsgBox(4096, "信息", "Setting Button" & $iRand + 1 & " Text")
-	_GUICtrlButton_SetText($btn[$iRand], "New Text" & $iRand + 1)
+	MsgBox($MB_SYSTEMMODAL, "Information", "Setting Button" & $iRand + 1 & " Text")
+	_GUICtrlButton_SetText($a_idBtn[$iRand], "New Text" & $iRand + 1)
 
 	For $x = 0 To 5
-		MemoWrite("$btn[" & $x & "] Text: " & _GUICtrlButton_GetText($btn[$x]))
+		MemoWrite("$a_idBtn[" & $x & "] Text: " & _GUICtrlButton_GetText($a_idBtn[$x]))
 	Next
 
 	While 1
@@ -36,9 +37,9 @@ Func _Main()
 	WEnd
 
 	Exit
-EndFunc   ;==>_Main
+EndFunc   ;==>Example
 
-; 写入一行到 memo 控件
+; Write a line to the memo control
 Func MemoWrite($sMessage)
-	GUICtrlSetData($iMemo, $sMessage & @CRLF, 1)
+	GUICtrlSetData($g_idMemo, $sMessage & @CRLF, 1)
 EndFunc   ;==>MemoWrite

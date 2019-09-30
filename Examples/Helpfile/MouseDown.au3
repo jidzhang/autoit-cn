@@ -1,8 +1,5 @@
-﻿; 设置鼠标左键为按下状态
-MouseDown("left") 
+#include <AutoItConstants.au3>
 
-; 设置延迟时间
-Sleep(1000)
-
-; 设置鼠标左键为释放状态
-MouseUp("left") 
+MouseDown($MOUSE_CLICK_LEFT) ; Set the left mouse button state as down.
+Sleep(100)
+MouseUp($MOUSE_CLICK_LEFT) ; Set the left mouse button state as up.

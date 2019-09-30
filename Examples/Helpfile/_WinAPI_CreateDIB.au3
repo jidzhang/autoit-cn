@@ -1,10 +1,11 @@
-#include <WinAPIGdi.au3>
-#include <WinAPIMisc.au3>
-#include <WinAPISys.au3>
 #include <GUIConstantsEx.au3>
-
-Global Const $STM_SETIMAGE = 0x0172
-Global Const $STM_GETIMAGE = 0x0173
+#include <SendMessage.au3>
+#include <StaticConstants.au3>
+#include <WinAPIGdi.au3>
+#include <WinAPIGdiDC.au3>
+#include <WinAPIHObj.au3>
+#include <WinAPIMem.au3>
+#include <WinAPIMisc.au3>
 
 ; Create array of colors of 256 entries required for 8 bits-per-pixel bitmap
 Local $aColorTable[256]
@@ -26,8 +27,8 @@ Next
 
 ; Create GUI
 Local $hForm = GUICreate('Test ' & StringReplace(@ScriptName, '.au3', '()'), 256, 256)
-Local $Pic = GUICtrlCreatePic('', 0, 0, 256, 256)
-Local $hPic = GUICtrlGetHandle($Pic)
+Local $idPic = GUICtrlCreatePic('', 0, 0, 256, 256)
+Local $hPic = GUICtrlGetHandle($idPic)
 
 ; Create DDB from DIB to correct display in control
 Local $hDC = _WinAPI_GetDC($hPic)
@@ -47,12 +48,12 @@ If $hObj <> $hDev Then
 EndIf
 
 ; Show GUI
-GUISetState()
+GUISetState(@SW_SHOW)
 
 ; Save 8 bits-per-pixel bitmap to .bmp file
-Local $Path = FileSaveDialog('Save Image', @TempDir, 'Bitmap Image Files (*.bmp)', 2 + 16, 'MyImage.bmp', $hForm)
-If $Path Then
-	_WinAPI_SaveHBITMAPToFile($Path, $hBitmap, 2834, 2834)
+Local $sPath = FileSaveDialog('Save Image', @TempDir, 'Bitmap Image Files (*.bmp)', 2 + 16, 'MyImage.bmp', $hForm)
+If $sPath Then
+	_WinAPI_SaveHBITMAPToFile($sPath, $hBitmap, 2834, 2834)
 EndIf
 
 Do

@@ -1,14 +1,26 @@
-Global Enum $E1VAR1, $E1VAR2, $E1VAR3
-MsgBox(4096, "", "期望值 0: " & $E1VAR1)
-MsgBox(4096, "", "期望值 1: " & $E1VAR2)
-MsgBox(4096, "", "期望值 2: " & $E1VAR3)
+#include <MsgBoxConstants.au3>
 
-Global Enum $E2VAR1 = 10, $E2VAR2, $E2VAR3 = 15
-MsgBox(4096, "", "期望值 10: " & $E2VAR1)
-MsgBox(4096, "", "期望值 11: " & $E2VAR2)
-MsgBox(4096, "", "期望值 15: " & $E2VAR3)
+Example()
 
-Global Enum Step *2 $E3VAR1, $E3VAR2, $E3VAR3
-MsgBox(4096, "", "期望值 1: " & $E3VAR1)
-MsgBox(4096, "", "期望值 2: " & $E3VAR2)
-MsgBox(4096, "", "期望值 4: " & $E3VAR3)
+Func Example()
+	; These variables will enumerate from 0 to 2.
+	Local Enum $eVar1, $eVar2, $eVar3
+	MsgBox($MB_SYSTEMMODAL, "", "$eVar1 is equal to (0): " & $eVar1 & @CRLF & _
+			"$eVar2 is equal to (1): " & $eVar2 & @CRLF & _
+			"$eVar3 is equal to (2): " & $eVar3 & @CRLF)
+
+	; These variables will enumerate from 1 to 2 and then $eVariant3 is set to 5 which will continue to
+	; increment by 1.
+	Local Enum $eVariant1 = 1, $eVariant2, $eVariant3 = 5, $eVariant4
+	MsgBox($MB_SYSTEMMODAL, "", "$eVariant1 is equal to (1): " & $eVariant1 & @CRLF & _
+			"$eVariant2 is equal to (2): " & $eVariant2 & @CRLF & _
+			"$eVariant3 is equal to (5): " & $eVariant3 & @CRLF & _
+			"$eVariant3 is equal to (6): " & $eVariant4 & @CRLF)
+
+	; Multiply each enumeration by 2.
+	Local Enum Step *2 $eFoo1, $eFoo2, $eFoo3, $eFoo4
+	MsgBox($MB_SYSTEMMODAL, "", "$eFoo1 is equal to (1): " & $eFoo1 & @CRLF & _
+			"$eFoo2 is equal to (2): " & $eFoo2 & @CRLF & _
+			"$eFoo3 is equal to (4): " & $eFoo3 & @CRLF & _
+			"$eFoo3 is equal to (8): " & $eFoo4 & @CRLF)
+EndFunc   ;==>Example

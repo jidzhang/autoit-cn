@@ -1,23 +1,20 @@
 #include <GUIConstantsEx.au3>
-#include <GuiTreeView.au3>
 #include <GuiImageList.au3>
+#include <GuiTreeView.au3>
 #include <WindowsConstants.au3>
 
-$Debug_TV = False ; 检查传递给函数的类名, 设置为真并使用另一控件的句柄可以看出它是否有效
+Global $g_hTreeView
 
-Global $hTreeView
+Example()
 
-_Main()
-
-Func _Main()
-
-	Local $hGui, $hItem[6], $hImage
+Func Example()
+	Local $hGui, $ahItem[6], $hImage
 	Local $iStyle = BitOR($TVS_EDITLABELS, $TVS_HASBUTTONS, $TVS_HASLINES, $TVS_LINESATROOT, $TVS_DISABLEDRAGDROP, $TVS_SHOWSELALWAYS, $TVS_CHECKBOXES)
 
 	$hGui = GUICreate("TreeView Get Edit Control", 400, 300)
 
-	$hTreeView = _GUICtrlTreeView_Create($hGui, 2, 2, 396, 268, $iStyle, $WS_EX_CLIENTEDGE)
-	GUISetState()
+	$g_hTreeView = _GUICtrlTreeView_Create($hGui, 2, 2, 396, 268, $iStyle, $WS_EX_CLIENTEDGE)
+	GUISetState(@SW_SHOW)
 
 	GUIRegisterMsg($WM_NOTIFY, "WM_NOTIFY")
 
@@ -28,107 +25,107 @@ Func _Main()
 	_GUIImageList_AddIcon($hImage, "shell32.dll", 168)
 	_GUIImageList_AddIcon($hImage, "shell32.dll", 137)
 	_GUIImageList_AddIcon($hImage, "shell32.dll", 146)
-	_GUICtrlTreeView_SetNormalImageList($hTreeView, $hImage)
+	_GUICtrlTreeView_SetNormalImageList($g_hTreeView, $hImage)
 
 	For $x = 0 To _GUIImageList_GetImageCount($hImage) - 1
-		$hItem[$x] = _GUICtrlTreeView_Add($hTreeView, 0, StringFormat("[%02d] New Item", $x + 1), $x, $x)
+		$ahItem[$x] = _GUICtrlTreeView_Add($g_hTreeView, 0, StringFormat("[%02d] New Item", $x + 1), $x, $x)
 	Next
 
-	; 编辑首个项目的标签
-	_GUICtrlTreeView_EditText($hTreeView, $hItem[0])
+	; Edit item 0 label
+	_GUICtrlTreeView_EditText($g_hTreeView, $ahItem[0])
 	Sleep(1000)
-	_GUICtrlTreeView_EndEdit($hTreeView)
+	_GUICtrlTreeView_EndEdit($g_hTreeView)
 
-	; 循环直到用户退出
+	; Loop until the user exits.
 	Do
 	Until GUIGetMsg() = $GUI_EVENT_CLOSE
 	GUIDelete()
-EndFunc   ;==>_Main
+EndFunc   ;==>Example
 
-Func WM_NOTIFY($hWnd, $iMsg, $iwParam, $ilParam)
-	#forceref $hWnd, $iMsg, $iwParam
+Func WM_NOTIFY($hWnd, $iMsg, $wParam, $lParam)
+	#forceref $hWnd, $iMsg, $wParam
 	Local $hWndFrom, $iIDFrom, $iCode, $tNMHDR, $hWndTreeview
-	$hWndTreeview = $hTreeView
-	If Not IsHWnd($hTreeView) Then $hWndTreeview = GUICtrlGetHandle($hTreeView)
+	$hWndTreeview = $g_hTreeView
+	If Not IsHWnd($g_hTreeView) Then $hWndTreeview = GUICtrlGetHandle($g_hTreeView)
 
-	$tNMHDR = DllStructCreate($tagNMHDR, $ilParam)
+	$tNMHDR = DllStructCreate($tagNMHDR, $lParam)
 	$hWndFrom = HWnd(DllStructGetData($tNMHDR, "hWndFrom"))
 	$iIDFrom = DllStructGetData($tNMHDR, "IDFrom")
 	$iCode = DllStructGetData($tNMHDR, "Code")
 	Switch $hWndFrom
 		Case $hWndTreeview
 			Switch $iCode
-				Case $NM_CLICK ; 用户在控件中点击了鼠标左键
-					_DebugPrint("$NM_CLICK" & @LF & "--> hWndFrom:" & @TAB & $hWndFrom & @LF & _
-							"-->IDFrom:" & @TAB & $iIDFrom & @LF & _
+				Case $NM_CLICK ; The user has clicked the left mouse button within the control
+					_DebugPrint("$NM_CLICK" & @CRLF & "--> hWndFrom:" & @TAB & $hWndFrom & @CRLF & _
+							"-->IDFrom:" & @TAB & $iIDFrom & @CRLF & _
 							"-->Code:" & @TAB & $iCode)
-;~ 					Return 1 ; 非零值以不允许进行默认处理
-					Return 0 ; 零则允许进行默认处理
-				Case $NM_DBLCLK ; 用户在控件中双击了鼠标左键
-					_DebugPrint("$NM_DBLCLK" & @LF & "--> hWndFrom:" & @TAB & $hWndFrom & @LF & _
-							"-->IDFrom:" & @TAB & $iIDFrom & @LF & _
+					; Return 1 ; nonzero to not allow the default processing
+					Return 0 ; zero to allow the default processing
+				Case $NM_DBLCLK ; The user has double-clicked the left mouse button within the control
+					_DebugPrint("$NM_DBLCLK" & @CRLF & "--> hWndFrom:" & @TAB & $hWndFrom & @CRLF & _
+							"-->IDFrom:" & @TAB & $iIDFrom & @CRLF & _
 							"-->Code:" & @TAB & $iCode)
-;~ 					Return 1 ; 非零值以不允许进行默认处理
-					Return 0 ; 零则允许进行默认处理
-				Case $NM_RCLICK ; 用户在控件中点击了鼠标右键
-					_DebugPrint("$NM_RCLICK" & @LF & "--> hWndFrom:" & @TAB & $hWndFrom & @LF & _
-							"-->IDFrom:" & @TAB & $iIDFrom & @LF & _
+					; Return 1 ; nonzero to not allow the default processing
+					Return 0 ; zero to allow the default processing
+				Case $NM_RCLICK ; The user has clicked the right mouse button within the control
+					_DebugPrint("$NM_RCLICK" & @CRLF & "--> hWndFrom:" & @TAB & $hWndFrom & @CRLF & _
+							"-->IDFrom:" & @TAB & $iIDFrom & @CRLF & _
 							"-->Code:" & @TAB & $iCode)
-;~ 					Return 1 ; 非零值以不允许进行默认处理
-					Return 0 ; 零则允许进行默认处理
-				Case $NM_RDBLCLK ; 用户在控件中点击了鼠标右键
-					_DebugPrint("$NM_RDBLCLK" & @LF & "--> hWndFrom:" & @TAB & $hWndFrom & @LF & _
-							"-->IDFrom:" & @TAB & $iIDFrom & @LF & _
+					; Return 1 ; nonzero to not allow the default processing
+					Return 0 ; zero to allow the default processing
+				Case $NM_RDBLCLK ; The user has double-clicked the right mouse button within the control
+					_DebugPrint("$NM_RDBLCLK" & @CRLF & "--> hWndFrom:" & @TAB & $hWndFrom & @CRLF & _
+							"-->IDFrom:" & @TAB & $iIDFrom & @CRLF & _
 							"-->Code:" & @TAB & $iCode)
-;~ 					Return 1 ; 非零值以不允许进行默认处理
-					Return 0 ; 零则允许进行默认处理
-				Case $NM_KILLFOCUS ; 控件失去了输入焦点
-					_DebugPrint("$NM_KILLFOCUS" & @LF & "--> hWndFrom:" & @TAB & $hWndFrom & @LF & _
-							"-->IDFrom:" & @TAB & $iIDFrom & @LF & _
+					; Return 1 ; nonzero to not allow the default processing
+					Return 0 ; zero to allow the default processing
+				Case $NM_KILLFOCUS ; control has lost the input focus
+					_DebugPrint("$NM_KILLFOCUS" & @CRLF & "--> hWndFrom:" & @TAB & $hWndFrom & @CRLF & _
+							"-->IDFrom:" & @TAB & $iIDFrom & @CRLF & _
 							"-->Code:" & @TAB & $iCode)
-					; 没有返回值
-				Case $NM_RETURN ; 控件有输入焦点且用户按下了此键
-					_DebugPrint("$NM_RETURN" & @LF & "--> hWndFrom:" & @TAB & $hWndFrom & @LF & _
-							"-->IDFrom:" & @TAB & $iIDFrom & @LF & _
+					; No return value
+				Case $NM_RETURN ; control has the input focus and that the user has pressed the key
+					_DebugPrint("$NM_RETURN" & @CRLF & "--> hWndFrom:" & @TAB & $hWndFrom & @CRLF & _
+							"-->IDFrom:" & @TAB & $iIDFrom & @CRLF & _
 							"-->Code:" & @TAB & $iCode)
-;~ 					Return 1 ; 非零值以不允许进行默认处理
-					Return 0 ; 零则允许进行默认处理
-;~ 				Case $NM_SETCURSOR ; 控件正设置光标以响应 WM_SETCURSOR 消息
-;~ 					Local $tinfo = DllStructCreate($tagNMMOUSE, $ilParam)
-;~ 					$hWndFrom = HWnd(DllStructGetData($tinfo, "hWndFrom"))
-;~ 					$iIDFrom = DllStructGetData($tinfo, "IDFrom")
-;~ 					$iCode = DllStructGetData($tinfo, "Code")
-;~ 					_DebugPrint("$NM_SETCURSOR" & @LF & "--> hWndFrom:" & @TAB & $hWndFrom & @LF & _
-;~ 							"-->IDFrom:" & @TAB & $iIDFrom & @LF & _
-;~ 							"-->Code:" & @TAB & $iCode & @LF & _
-;~ 							"-->ItemSpec:" & @TAB & DllStructGetData($tinfo, "ItemSpec") & @LF & _
-;~ 							"-->ItemData:" & @TAB & DllStructGetData($tinfo, "ItemData") & @LF & _
-;~ 							"-->X:" & @TAB & DllStructGetData($tinfo, "X") & @LF & _
-;~ 							"-->Y:" & @TAB & DllStructGetData($tinfo, "Y") & @LF & _
-;~ 							"-->HitInfo:" & @TAB & DllStructGetData($tinfo, "HitInfo"))
-;~ 					Return 0 ; 启用控件设置光标
-;~ 					Return 1 ; 非零值以阻止控件设置光标
-				Case $NM_SETFOCUS ; 控件接收到输入焦点
-					_DebugPrint("$NM_SETFOCUS" & @LF & "--> hWndFrom:" & @TAB & $hWndFrom & @LF & _
-							"-->IDFrom:" & @TAB & $iIDFrom & @LF & _
+					; Return 1 ; nonzero to not allow the default processing
+					Return 0 ; zero to allow the default processing
+					; Case $NM_SETCURSOR ; control is setting the cursor in response to a WM_SETCURSOR message
+					; Local $tInfo = DllStructCreate($tagNMMOUSE, $lParam)
+					; $hWndFrom = HWnd(DllStructGetData($tInfo, "hWndFrom"))
+					; $iIDFrom = DllStructGetData($tInfo, "IDFrom")
+					; $iCode = DllStructGetData($tInfo, "Code")
+					; _DebugPrint("$NM_SETCURSOR" & @CRLF & "--> hWndFrom:" & @TAB & $hWndFrom & @CRLF & _
+					; "-->IDFrom:" & @TAB & $iIDFrom & @CRLF & _
+					; "-->Code:" & @TAB & $iCode & @CRLF & _
+					; "-->ItemSpec:" & @TAB & DllStructGetData($tInfo, "ItemSpec") & @CRLF & _
+					; "-->ItemData:" & @TAB & DllStructGetData($tInfo, "ItemData") & @CRLF & _
+					; "-->X:" & @TAB & DllStructGetData($tInfo, "X") & @CRLF & _
+					; "-->Y:" & @TAB & DllStructGetData($tInfo, "Y") & @CRLF & _
+					; "-->HitInfo:" & @TAB & DllStructGetData($tInfo, "HitInfo"))
+					; Return 0 ; to enable the control to set the cursor
+					; Return 1 ; nonzero to prevent the control from setting the cursor
+				Case $NM_SETFOCUS ; control has received the input focus
+					_DebugPrint("$NM_SETFOCUS" & @CRLF & "--> hWndFrom:" & @TAB & $hWndFrom & @CRLF & _
+							"-->IDFrom:" & @TAB & $iIDFrom & @CRLF & _
 							"-->Code:" & @TAB & $iCode)
-					; 没有返回值
+					; No return value
 				Case $TVN_BEGINDRAGA, $TVN_BEGINDRAGW
 					_DebugPrint("$TVN_BEGINDRAG")
 				Case $TVN_BEGINLABELEDITA, $TVN_BEGINLABELEDITW
 					_DebugPrint("$TVN_BEGINLABELEDIT")
-					MsgBox(4160, "信息", "Edit Control Handle: 0x" & Hex(_GUICtrlTreeView_GetEditControl($hTreeView)) & @CRLF & _
-							"IsPtr = " & IsPtr(_GUICtrlTreeView_GetEditControl($hTreeView)) & " IsHWnd = " & IsHWnd(_GUICtrlTreeView_GetEditControl($hTreeView)))
+					ConsoleWrite("Edit Control Handle: 0x" & Hex(_GUICtrlTreeView_GetEditControl($g_hTreeView)) & @CRLF & _
+							"IsPtr = " & IsPtr(_GUICtrlTreeView_GetEditControl($g_hTreeView)) & " IsHWnd = " & IsHWnd(_GUICtrlTreeView_GetEditControl($g_hTreeView)))
 				Case $TVN_BEGINRDRAGA, $TVN_BEGINRDRAGW
 					_DebugPrint("$TVN_BEGINRDRAG")
 				Case $TVN_DELETEITEMA, $TVN_DELETEITEMW
 					_DebugPrint("$TVN_DELETEITEM")
 				Case $TVN_ENDLABELEDITA, $TVN_ENDLABELEDITW
 					_DebugPrint("$TVN_ENDLABELEDIT")
-					Local $tInfo = DllStructCreate($tagNMHDR & ";" & $tagTVITEMEX, $ilParam)
+					Local $tInfo = DllStructCreate($tagNMHDR & ";" & $tagTVITEMEX, $lParam)
 					If DllStructGetData($tInfo, "Text") <> 0 Then
 						Local $tBuffer = DllStructCreate("char Text[" & DllStructGetData($tInfo, "TextMax") & "]", DllStructGetData($tInfo, "Text"))
-						_GUICtrlTreeView_SetText($hTreeView, _GUICtrlTreeView_GetSelection($hTreeView), DllStructGetData($tBuffer, "Text"))
+						_GUICtrlTreeView_SetText($g_hTreeView, _GUICtrlTreeView_GetSelection($g_hTreeView), DllStructGetData($tBuffer, "Text"))
 					EndIf
 				Case $TVN_GETDISPINFOA, $TVN_GETDISPINFOW
 					_DebugPrint("$TVN_GETDISPINFO")
@@ -153,10 +150,10 @@ Func WM_NOTIFY($hWnd, $iMsg, $iwParam, $ilParam)
 	Return $GUI_RUNDEFMSG
 EndFunc   ;==>WM_NOTIFY
 
-Func _DebugPrint($s_text, $line = @ScriptLineNumber)
+Func _DebugPrint($s_Text, $sLine = @ScriptLineNumber)
 	ConsoleWrite( _
-			"!===========================================================" & @LF & _
-			"+======================================================" & @LF & _
-			"-->Line(" & StringFormat("%04d", $line) & "):" & @TAB & $s_text & @LF & _
-			"+======================================================" & @LF)
+			"!===========================================================" & @CRLF & _
+			"+======================================================" & @CRLF & _
+			"-->Line(" & StringFormat("%04d", $sLine) & "):" & @TAB & $s_Text & @CRLF & _
+			"+======================================================" & @CRLF)
 EndFunc   ;==>_DebugPrint

@@ -7,7 +7,7 @@ Func Example()
 	; Wait 10 seconds for the Notepad window to appear.
 	Local $hWnd = WinWait("[CLASS:Notepad]", "", 10)
 
-	; 设置记事本的优先级为：空闲/低
+	; Set the priority of the Notepad process to "Idle/Low".
 	ProcessSetPriority("notepad.exe", 0)
 
 	; Wait for 2 seconds.
@@ -16,4 +16,3 @@ Func Example()
 	; Close the Notepad window using the handle returned by WinWait.
 	WinClose($hWnd)
 EndFunc   ;==>Example
-

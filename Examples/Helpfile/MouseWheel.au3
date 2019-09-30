@@ -1,2 +1,5 @@
-﻿; 鼠标轮轴向上滚动 10 次
-MouseWheel("up", 10) 
+#include <AutoItConstants.au3>
+
+; Move the mouse wheel up ten times.
+
+MouseWheel($MOUSE_WHEEL_UP, 10)

@@ -1,42 +1,30 @@
-;=============================
-;例子1:显示当前目录中所有文件的文件名
-;=============================
-Local $hSearch = FileFindFirstFile("*.*")
+#include <MsgBoxConstants.au3>
 
-; 检查搜索是否成功
-If $hSearch = -1 Then
-	MsgBox(4096, "错误", "没有文件/目录 匹配搜索")
-	Exit
-EndIf
+Example()
 
-While 1
-	Local $sFile = FileFindNextFile($hSearch)
-	If @error Then ExitLoop
+Func Example()
+	; Assign a Local variable the search handle of all files in the current directory.
+	Local $hSearch = FileFindFirstFile("*.*")
 
-	MsgBox(4096, "找到的文件:", $sFile)
-WEnd
+	; Check if the search was successful, if not display a message and return False.
+	If $hSearch = -1 Then
+		MsgBox($MB_SYSTEMMODAL, "", "Error: No files/directories matched the search pattern.")
+		Return False
+	EndIf
 
-; 关闭搜索句柄
-FileClose($hSearch)
+	; Assign a Local variable the empty string which will contain the files names found.
+	Local $sFileName = "", $iResult = 0
 
-;=============================
-;例子2:递归查找当前目录及其子目录下的所有文件
-;=============================
-FindAllFile(@ScriptDir)
-Func FindAllFile($sDir)
-	Local $hSearch = FileFindFirstFile($sDir & "\*.*")
-	; 检查搜索是否成功
-	If $hSearch = -1 Then Return
 	While 1
-		Local $sFile = FileFindNextFile($hSearch)
+		$sFileName = FileFindNextFile($hSearch)
+		; If there is no more file matching the search.
 		If @error Then ExitLoop
-		
-		If @extended Then 
-			FindAllFile($sDir & "\" & $sFile)
-			ContinueLoop
-		EndIf
-		FileWriteLine("找到的文件.txt",$sDir & "\" & $sFile)
+
+		; Display the file name.
+		$iResult = MsgBox(BitOR($MB_SYSTEMMODAL, $MB_OKCANCEL), "", "File: " & $sFileName)
+		If $iResult <> $IDOK Then ExitLoop ; If the user clicks on the cancel/close button.
 	WEnd
-	; 关闭搜索句柄
+
+	; Close the search handle.
 	FileClose($hSearch)
-EndFunc
+EndFunc   ;==>Example

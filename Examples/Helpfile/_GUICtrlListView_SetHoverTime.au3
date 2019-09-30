@@ -1,46 +1,45 @@
 #include <GUIConstantsEx.au3>
 #include <GuiListView.au3>
 #include <GuiStatusBar.au3>
+#include <MsgBoxConstants.au3>
 #include <WindowsConstants.au3>
 
-$Debug_LV = False ; 检查传递给 ListView 函数的类名, 设置为True并输出到一个控件的句柄,用于检查它是否工作
+Global $g_idListView, $g_hStatus
 
-Global $hListView, $Status
+Example()
 
-_Main()
+Func Example()
+	Local $hGUI
+	Local $iStylesEX = BitOR($LVS_EX_FULLROWSELECT, $LVS_EX_GRIDLINES, $LVS_EX_TRACKSELECT)
 
-Func _Main()
-	Local $GUI
-	Local $exStyles = BitOR($LVS_EX_FULLROWSELECT, $LVS_EX_GRIDLINES, $LVS_EX_TRACKSELECT)
-
-	$GUI = GUICreate("ListView Set Hover Time", 400, 300)
-	$hListView = GUICtrlCreateListView("", 2, 2, 394, 268)
-	_GUICtrlListView_SetHoverTime($hListView, 1000)
-	_GUICtrlListView_SetExtendedListViewStyle($hListView, $exStyles)
-	$hListView = GUICtrlGetHandle($hListView)
-	$Status = _GUICtrlStatusBar_Create($GUI, -1, "")
-	GUISetState()
+	$hGUI = GUICreate("ListView Set Hover Time", 400, 300)
+	$g_idListView = GUICtrlCreateListView("", 2, 2, 394, 268)
+	_GUICtrlListView_SetHoverTime($g_idListView, 1000)
+	_GUICtrlListView_SetExtendedListViewStyle($g_idListView, $iStylesEX)
+	$g_idListView = GUICtrlGetHandle($g_idListView)
+	$g_hStatus = _GUICtrlStatusBar_Create($hGUI, -1, "")
+	GUISetState(@SW_SHOW)
 
 	GUIRegisterMsg($WM_NOTIFY, "WM_NOTIFY")
 
-	; 添加列
-	_GUICtrlListView_AddColumn($hListView, "Column 1", 100)
-	_GUICtrlListView_AddColumn($hListView, "Column 2", 100)
-	_GUICtrlListView_AddColumn($hListView, "Column 3", 100)
+	; Add columns
+	_GUICtrlListView_AddColumn($g_idListView, "Column 1", 100)
+	_GUICtrlListView_AddColumn($g_idListView, "Column 2", 100)
+	_GUICtrlListView_AddColumn($g_idListView, "Column 3", 100)
 
-	_GUICtrlListView_InsertItem($hListView, "Row 1: Col 1")
-	_GUICtrlListView_AddSubItem($hListView, 0, "Row 1: Col 2", 1)
-	_GUICtrlListView_AddSubItem($hListView, 0, "Row 1: Col 3", 2)
-	_GUICtrlListView_InsertItem($hListView, "Row 2: Col 1")
-	_GUICtrlListView_AddSubItem($hListView, 1, "Row 2: Col 2", 1)
-	_GUICtrlListView_InsertItem($hListView, "Row 3: Col 1")
+	_GUICtrlListView_InsertItem($g_idListView, "Row 1: Col 1")
+	_GUICtrlListView_AddSubItem($g_idListView, 0, "Row 1: Col 2", 1)
+	_GUICtrlListView_AddSubItem($g_idListView, 0, "Row 1: Col 3", 2)
+	_GUICtrlListView_InsertItem($g_idListView, "Row 2: Col 1")
+	_GUICtrlListView_AddSubItem($g_idListView, 1, "Row 2: Col 2", 1)
+	_GUICtrlListView_InsertItem($g_idListView, "Row 3: Col 1")
 
-	; 获取悬停时间
-	MsgBox(4160, "信息", "Previous Hover Time (milliseconds): " & _GUICtrlListView_GetHoverTime($hListView))
+	; Get hover time
+	MsgBox($MB_SYSTEMMODAL, "Information", "Previous Hover Time (milliseconds): " & _GUICtrlListView_GetHoverTime($g_idListView))
 
-	; 设置悬停时间
-	_GUICtrlListView_SetHoverTime($hListView, 500)
-	MsgBox(4160, "信息", "Hover Time (milliseconds): " & _GUICtrlListView_GetHoverTime($hListView))
+	; Set hover time
+	_GUICtrlListView_SetHoverTime($g_idListView, 500)
+	MsgBox($MB_SYSTEMMODAL, "Information", "Hover Time (milliseconds): " & _GUICtrlListView_GetHoverTime($g_idListView))
 
 	While 1
 		Switch GUIGetMsg()
@@ -49,20 +48,20 @@ Func _Main()
 		EndSwitch
 	WEnd
 	GUIDelete()
-EndFunc   ;==>_Main
+EndFunc   ;==>Example
 
 Func ListView_HOTTRACK($iSubItem)
-	Local $HotItem = _GUICtrlListView_GetHotItem($hListView)
-	If $HotItem <> -1 Then _GUICtrlStatusBar_SetText($Status, @TAB & "Hot Item: " & $HotItem & " SubItem: " & $iSubItem)
+	Local $iHotItem = _GUICtrlListView_GetHotItem($g_idListView)
+	If $iHotItem <> -1 Then _GUICtrlStatusBar_SetText($g_hStatus, @TAB & "Hot Item: " & $iHotItem & " SubItem: " & $iSubItem)
 EndFunc   ;==>ListView_HOTTRACK
 
-Func WM_NOTIFY($hWnd, $iMsg, $iwParam, $ilParam)
-	#forceref $hWnd, $iMsg, $iwParam
+Func WM_NOTIFY($hWnd, $iMsg, $wParam, $lParam)
+	#forceref $hWnd, $iMsg, $wParam
 	Local $hWndFrom, $iIDFrom, $iCode, $tNMHDR, $hWndListView, $tInfo
-	$hWndListView = $hListView
-	If Not IsHWnd($hListView) Then $hWndListView = GUICtrlGetHandle($hListView)
+	$hWndListView = $g_idListView
+	If Not IsHWnd($g_idListView) Then $hWndListView = GUICtrlGetHandle($g_idListView)
 
-	$tNMHDR = DllStructCreate($tagNMHDR, $ilParam)
+	$tNMHDR = DllStructCreate($tagNMHDR, $lParam)
 	$hWndFrom = HWnd(DllStructGetData($tNMHDR, "hWndFrom"))
 	$iIDFrom = DllStructGetData($tNMHDR, "IDFrom")
 	$iCode = DllStructGetData($tNMHDR, "Code")
@@ -70,128 +69,128 @@ Func WM_NOTIFY($hWnd, $iMsg, $iwParam, $ilParam)
 		Case $hWndListView
 			Switch $iCode
 				Case $LVN_COLUMNCLICK ; A column was clicked
-					$tInfo = DllStructCreate($tagNMLISTVIEW, $ilParam)
-					_DebugPrint("$LVN_COLUMNCLICK" & @LF & "--> hWndFrom:" & @TAB & $hWndFrom & @LF & _
-							"-->IDFrom:" & @TAB & $iIDFrom & @LF & _
-							"-->Code:" & @TAB & $iCode & @LF & _
-							"-->Item:" & @TAB & DllStructGetData($tInfo, "Item") & @LF & _
-							"-->SubItem:" & @TAB & DllStructGetData($tInfo, "SubItem") & @LF & _
-							"-->NewState:" & @TAB & DllStructGetData($tInfo, "NewState") & @LF & _
-							"-->OldState:" & @TAB & DllStructGetData($tInfo, "OldState") & @LF & _
-							"-->Changed:" & @TAB & DllStructGetData($tInfo, "Changed") & @LF & _
-							"-->ActionX:" & @TAB & DllStructGetData($tInfo, "ActionX") & @LF & _
-							"-->ActionY:" & @TAB & DllStructGetData($tInfo, "ActionY") & @LF & _
+					$tInfo = DllStructCreate($tagNMLISTVIEW, $lParam)
+					_DebugPrint("$LVN_COLUMNCLICK" & @CRLF & "--> hWndFrom:" & @TAB & $hWndFrom & @CRLF & _
+							"-->IDFrom:" & @TAB & $iIDFrom & @CRLF & _
+							"-->Code:" & @TAB & $iCode & @CRLF & _
+							"-->Item:" & @TAB & DllStructGetData($tInfo, "Item") & @CRLF & _
+							"-->SubItem:" & @TAB & DllStructGetData($tInfo, "SubItem") & @CRLF & _
+							"-->NewState:" & @TAB & DllStructGetData($tInfo, "NewState") & @CRLF & _
+							"-->OldState:" & @TAB & DllStructGetData($tInfo, "OldState") & @CRLF & _
+							"-->Changed:" & @TAB & DllStructGetData($tInfo, "Changed") & @CRLF & _
+							"-->ActionX:" & @TAB & DllStructGetData($tInfo, "ActionX") & @CRLF & _
+							"-->ActionY:" & @TAB & DllStructGetData($tInfo, "ActionY") & @CRLF & _
 							"-->Param:" & @TAB & DllStructGetData($tInfo, "Param"))
-					; 没有返回值
+					; No return value
 				Case $LVN_HOTTRACK ; Sent by a list-view control when the user moves the mouse over an item
-					$tInfo = DllStructCreate($tagNMLISTVIEW, $ilParam)
-					_DebugPrint("$LVN_HOTTRACK" & @LF & "--> hWndFrom:" & @TAB & $hWndFrom & @LF & _
-							"-->IDFrom:" & @TAB & $iIDFrom & @LF & _
-							"-->Code:" & @TAB & $iCode & @LF & _
-							"-->Item:" & @TAB & DllStructGetData($tInfo, "Item") & @LF & _
-							"-->SubItem:" & @TAB & DllStructGetData($tInfo, "SubItem") & @LF & _
-							"-->NewState:" & @TAB & DllStructGetData($tInfo, "NewState") & @LF & _
-							"-->OldState:" & @TAB & DllStructGetData($tInfo, "OldState") & @LF & _
-							"-->Changed:" & @TAB & DllStructGetData($tInfo, "Changed") & @LF & _
-							"-->ActionX:" & @TAB & DllStructGetData($tInfo, "ActionX") & @LF & _
-							"-->ActionY:" & @TAB & DllStructGetData($tInfo, "ActionY") & @LF & _
+					$tInfo = DllStructCreate($tagNMLISTVIEW, $lParam)
+					_DebugPrint("$LVN_HOTTRACK" & @CRLF & "--> hWndFrom:" & @TAB & $hWndFrom & @CRLF & _
+							"-->IDFrom:" & @TAB & $iIDFrom & @CRLF & _
+							"-->Code:" & @TAB & $iCode & @CRLF & _
+							"-->Item:" & @TAB & DllStructGetData($tInfo, "Item") & @CRLF & _
+							"-->SubItem:" & @TAB & DllStructGetData($tInfo, "SubItem") & @CRLF & _
+							"-->NewState:" & @TAB & DllStructGetData($tInfo, "NewState") & @CRLF & _
+							"-->OldState:" & @TAB & DllStructGetData($tInfo, "OldState") & @CRLF & _
+							"-->Changed:" & @TAB & DllStructGetData($tInfo, "Changed") & @CRLF & _
+							"-->ActionX:" & @TAB & DllStructGetData($tInfo, "ActionX") & @CRLF & _
+							"-->ActionY:" & @TAB & DllStructGetData($tInfo, "ActionY") & @CRLF & _
 							"-->Param:" & @TAB & DllStructGetData($tInfo, "Param"))
 					ListView_HOTTRACK(DllStructGetData($tInfo, "SubItem"))
 					Return 0 ; allow the list view to perform its normal track select processing.
 					;Return 1 ; the item will not be selected.
 				Case $LVN_KEYDOWN ; A key has been pressed
-					$tInfo = DllStructCreate($tagNMLVKEYDOWN, $ilParam)
-					_DebugPrint("$LVN_KEYDOWN" & @LF & "--> hWndFrom:" & @TAB & $hWndFrom & @LF & _
-							"-->IDFrom:" & @TAB & $iIDFrom & @LF & _
-							"-->Code:" & @TAB & $iCode & @LF & _
-							"-->VKey:" & @TAB & DllStructGetData($tInfo, "VKey") & @LF & _
+					$tInfo = DllStructCreate($tagNMLVKEYDOWN, $lParam)
+					_DebugPrint("$LVN_KEYDOWN" & @CRLF & "--> hWndFrom:" & @TAB & $hWndFrom & @CRLF & _
+							"-->IDFrom:" & @TAB & $iIDFrom & @CRLF & _
+							"-->Code:" & @TAB & $iCode & @CRLF & _
+							"-->VKey:" & @TAB & DllStructGetData($tInfo, "VKey") & @CRLF & _
 							"-->Flags:" & @TAB & DllStructGetData($tInfo, "Flags"))
-					; 没有返回值
+					; No return value
 				Case $NM_CLICK ; Sent by a list-view control when the user clicks an item with the left mouse button
-					$tInfo = DllStructCreate($tagNMITEMACTIVATE, $ilParam)
-					_DebugPrint("$NM_CLICK" & @LF & "--> hWndFrom:" & @TAB & $hWndFrom & @LF & _
-							"-->IDFrom:" & @TAB & $iIDFrom & @LF & _
-							"-->Code:" & @TAB & $iCode & @LF & _
-							"-->Index:" & @TAB & DllStructGetData($tInfo, "Index") & @LF & _
-							"-->SubItem:" & @TAB & DllStructGetData($tInfo, "SubItem") & @LF & _
-							"-->NewState:" & @TAB & DllStructGetData($tInfo, "NewState") & @LF & _
-							"-->OldState:" & @TAB & DllStructGetData($tInfo, "OldState") & @LF & _
-							"-->Changed:" & @TAB & DllStructGetData($tInfo, "Changed") & @LF & _
-							"-->ActionX:" & @TAB & DllStructGetData($tInfo, "ActionX") & @LF & _
-							"-->ActionY:" & @TAB & DllStructGetData($tInfo, "ActionY") & @LF & _
-							"-->lParam:" & @TAB & DllStructGetData($tInfo, "lParam") & @LF & _
+					$tInfo = DllStructCreate($tagNMITEMACTIVATE, $lParam)
+					_DebugPrint("$NM_CLICK" & @CRLF & "--> hWndFrom:" & @TAB & $hWndFrom & @CRLF & _
+							"-->IDFrom:" & @TAB & $iIDFrom & @CRLF & _
+							"-->Code:" & @TAB & $iCode & @CRLF & _
+							"-->Index:" & @TAB & DllStructGetData($tInfo, "Index") & @CRLF & _
+							"-->SubItem:" & @TAB & DllStructGetData($tInfo, "SubItem") & @CRLF & _
+							"-->NewState:" & @TAB & DllStructGetData($tInfo, "NewState") & @CRLF & _
+							"-->OldState:" & @TAB & DllStructGetData($tInfo, "OldState") & @CRLF & _
+							"-->Changed:" & @TAB & DllStructGetData($tInfo, "Changed") & @CRLF & _
+							"-->ActionX:" & @TAB & DllStructGetData($tInfo, "ActionX") & @CRLF & _
+							"-->ActionY:" & @TAB & DllStructGetData($tInfo, "ActionY") & @CRLF & _
+							"-->lParam:" & @TAB & DllStructGetData($tInfo, "lParam") & @CRLF & _
 							"-->KeyFlags:" & @TAB & DllStructGetData($tInfo, "KeyFlags"))
-					; 没有返回值
+					; No return value
 				Case $NM_DBLCLK ; Sent by a list-view control when the user double-clicks an item with the left mouse button
-					$tInfo = DllStructCreate($tagNMITEMACTIVATE, $ilParam)
-					_DebugPrint("$NM_DBLCLK" & @LF & "--> hWndFrom:" & @TAB & $hWndFrom & @LF & _
-							"-->IDFrom:" & @TAB & $iIDFrom & @LF & _
-							"-->Code:" & @TAB & $iCode & @LF & _
-							"-->Index:" & @TAB & DllStructGetData($tInfo, "Index") & @LF & _
-							"-->SubItem:" & @TAB & DllStructGetData($tInfo, "SubItem") & @LF & _
-							"-->NewState:" & @TAB & DllStructGetData($tInfo, "NewState") & @LF & _
-							"-->OldState:" & @TAB & DllStructGetData($tInfo, "OldState") & @LF & _
-							"-->Changed:" & @TAB & DllStructGetData($tInfo, "Changed") & @LF & _
-							"-->ActionX:" & @TAB & DllStructGetData($tInfo, "ActionX") & @LF & _
-							"-->ActionY:" & @TAB & DllStructGetData($tInfo, "ActionY") & @LF & _
-							"-->lParam:" & @TAB & DllStructGetData($tInfo, "lParam") & @LF & _
+					$tInfo = DllStructCreate($tagNMITEMACTIVATE, $lParam)
+					_DebugPrint("$NM_DBLCLK" & @CRLF & "--> hWndFrom:" & @TAB & $hWndFrom & @CRLF & _
+							"-->IDFrom:" & @TAB & $iIDFrom & @CRLF & _
+							"-->Code:" & @TAB & $iCode & @CRLF & _
+							"-->Index:" & @TAB & DllStructGetData($tInfo, "Index") & @CRLF & _
+							"-->SubItem:" & @TAB & DllStructGetData($tInfo, "SubItem") & @CRLF & _
+							"-->NewState:" & @TAB & DllStructGetData($tInfo, "NewState") & @CRLF & _
+							"-->OldState:" & @TAB & DllStructGetData($tInfo, "OldState") & @CRLF & _
+							"-->Changed:" & @TAB & DllStructGetData($tInfo, "Changed") & @CRLF & _
+							"-->ActionX:" & @TAB & DllStructGetData($tInfo, "ActionX") & @CRLF & _
+							"-->ActionY:" & @TAB & DllStructGetData($tInfo, "ActionY") & @CRLF & _
+							"-->lParam:" & @TAB & DllStructGetData($tInfo, "lParam") & @CRLF & _
 							"-->KeyFlags:" & @TAB & DllStructGetData($tInfo, "KeyFlags"))
-					; 没有返回值
+					; No return value
 				Case $NM_KILLFOCUS ; The control has lost the input focus
-					_DebugPrint("$NM_KILLFOCUS" & @LF & "--> hWndFrom:" & @TAB & $hWndFrom & @LF & _
-							"-->IDFrom:" & @TAB & $iIDFrom & @LF & _
+					_DebugPrint("$NM_KILLFOCUS" & @CRLF & "--> hWndFrom:" & @TAB & $hWndFrom & @CRLF & _
+							"-->IDFrom:" & @TAB & $iIDFrom & @CRLF & _
 							"-->Code:" & @TAB & $iCode)
-					; 没有返回值
+					; No return value
 				Case $NM_RCLICK ; Sent by a list-view control when the user clicks an item with the right mouse button
-					$tInfo = DllStructCreate($tagNMITEMACTIVATE, $ilParam)
-					_DebugPrint("$NM_RCLICK" & @LF & "--> hWndFrom:" & @TAB & $hWndFrom & @LF & _
-							"-->IDFrom:" & @TAB & $iIDFrom & @LF & _
-							"-->Code:" & @TAB & $iCode & @LF & _
-							"-->Index:" & @TAB & DllStructGetData($tInfo, "Index") & @LF & _
-							"-->SubItem:" & @TAB & DllStructGetData($tInfo, "SubItem") & @LF & _
-							"-->NewState:" & @TAB & DllStructGetData($tInfo, "NewState") & @LF & _
-							"-->OldState:" & @TAB & DllStructGetData($tInfo, "OldState") & @LF & _
-							"-->Changed:" & @TAB & DllStructGetData($tInfo, "Changed") & @LF & _
-							"-->ActionX:" & @TAB & DllStructGetData($tInfo, "ActionX") & @LF & _
-							"-->ActionY:" & @TAB & DllStructGetData($tInfo, "ActionY") & @LF & _
-							"-->lParam:" & @TAB & DllStructGetData($tInfo, "lParam") & @LF & _
+					$tInfo = DllStructCreate($tagNMITEMACTIVATE, $lParam)
+					_DebugPrint("$NM_RCLICK" & @CRLF & "--> hWndFrom:" & @TAB & $hWndFrom & @CRLF & _
+							"-->IDFrom:" & @TAB & $iIDFrom & @CRLF & _
+							"-->Code:" & @TAB & $iCode & @CRLF & _
+							"-->Index:" & @TAB & DllStructGetData($tInfo, "Index") & @CRLF & _
+							"-->SubItem:" & @TAB & DllStructGetData($tInfo, "SubItem") & @CRLF & _
+							"-->NewState:" & @TAB & DllStructGetData($tInfo, "NewState") & @CRLF & _
+							"-->OldState:" & @TAB & DllStructGetData($tInfo, "OldState") & @CRLF & _
+							"-->Changed:" & @TAB & DllStructGetData($tInfo, "Changed") & @CRLF & _
+							"-->ActionX:" & @TAB & DllStructGetData($tInfo, "ActionX") & @CRLF & _
+							"-->ActionY:" & @TAB & DllStructGetData($tInfo, "ActionY") & @CRLF & _
+							"-->lParam:" & @TAB & DllStructGetData($tInfo, "lParam") & @CRLF & _
 							"-->KeyFlags:" & @TAB & DllStructGetData($tInfo, "KeyFlags"))
 					;Return 1 ; not to allow the default processing
 					Return 0 ; allow the default processing
 				Case $NM_RDBLCLK ; Sent by a list-view control when the user double-clicks an item with the right mouse button
-					$tInfo = DllStructCreate($tagNMITEMACTIVATE, $ilParam)
-					_DebugPrint("$NM_RDBLCLK" & @LF & "--> hWndFrom:" & @TAB & $hWndFrom & @LF & _
-							"-->IDFrom:" & @TAB & $iIDFrom & @LF & _
-							"-->Code:" & @TAB & $iCode & @LF & _
-							"-->Index:" & @TAB & DllStructGetData($tInfo, "Index") & @LF & _
-							"-->SubItem:" & @TAB & DllStructGetData($tInfo, "SubItem") & @LF & _
-							"-->NewState:" & @TAB & DllStructGetData($tInfo, "NewState") & @LF & _
-							"-->OldState:" & @TAB & DllStructGetData($tInfo, "OldState") & @LF & _
-							"-->Changed:" & @TAB & DllStructGetData($tInfo, "Changed") & @LF & _
-							"-->ActionX:" & @TAB & DllStructGetData($tInfo, "ActionX") & @LF & _
-							"-->ActionY:" & @TAB & DllStructGetData($tInfo, "ActionY") & @LF & _
-							"-->lParam:" & @TAB & DllStructGetData($tInfo, "lParam") & @LF & _
+					$tInfo = DllStructCreate($tagNMITEMACTIVATE, $lParam)
+					_DebugPrint("$NM_RDBLCLK" & @CRLF & "--> hWndFrom:" & @TAB & $hWndFrom & @CRLF & _
+							"-->IDFrom:" & @TAB & $iIDFrom & @CRLF & _
+							"-->Code:" & @TAB & $iCode & @CRLF & _
+							"-->Index:" & @TAB & DllStructGetData($tInfo, "Index") & @CRLF & _
+							"-->SubItem:" & @TAB & DllStructGetData($tInfo, "SubItem") & @CRLF & _
+							"-->NewState:" & @TAB & DllStructGetData($tInfo, "NewState") & @CRLF & _
+							"-->OldState:" & @TAB & DllStructGetData($tInfo, "OldState") & @CRLF & _
+							"-->Changed:" & @TAB & DllStructGetData($tInfo, "Changed") & @CRLF & _
+							"-->ActionX:" & @TAB & DllStructGetData($tInfo, "ActionX") & @CRLF & _
+							"-->ActionY:" & @TAB & DllStructGetData($tInfo, "ActionY") & @CRLF & _
+							"-->lParam:" & @TAB & DllStructGetData($tInfo, "lParam") & @CRLF & _
 							"-->KeyFlags:" & @TAB & DllStructGetData($tInfo, "KeyFlags"))
-					; 没有返回值
+					; No return value
 				Case $NM_RETURN ; The control has the input focus and that the user has pressed the ENTER key
-					_DebugPrint("$NM_RETURN" & @LF & "--> hWndFrom:" & @TAB & $hWndFrom & @LF & _
-							"-->IDFrom:" & @TAB & $iIDFrom & @LF & _
+					_DebugPrint("$NM_RETURN" & @CRLF & "--> hWndFrom:" & @TAB & $hWndFrom & @CRLF & _
+							"-->IDFrom:" & @TAB & $iIDFrom & @CRLF & _
 							"-->Code:" & @TAB & $iCode)
-					; 没有返回值
+					; No return value
 				Case $NM_SETFOCUS ; The control has received the input focus
-					_DebugPrint("$NM_SETFOCUS" & @LF & "--> hWndFrom:" & @TAB & $hWndFrom & @LF & _
-							"-->IDFrom:" & @TAB & $iIDFrom & @LF & _
+					_DebugPrint("$NM_SETFOCUS" & @CRLF & "--> hWndFrom:" & @TAB & $hWndFrom & @CRLF & _
+							"-->IDFrom:" & @TAB & $iIDFrom & @CRLF & _
 							"-->Code:" & @TAB & $iCode)
-					; 没有返回值
+					; No return value
 			EndSwitch
 	EndSwitch
 	Return $GUI_RUNDEFMSG
 EndFunc   ;==>WM_NOTIFY
 
-Func _DebugPrint($s_text, $line = @ScriptLineNumber)
+Func _DebugPrint($s_Text, $sLine = @ScriptLineNumber)
 	ConsoleWrite( _
-			"!===========================================================" & @LF & _
-			"+======================================================" & @LF & _
-			"-->Line(" & StringFormat("%04d", $line) & "):" & @TAB & $s_text & @LF & _
-			"+======================================================" & @LF)
+			"!===========================================================" & @CRLF & _
+			"+======================================================" & @CRLF & _
+			"-->Line(" & StringFormat("%04d", $sLine) & "):" & @TAB & $s_Text & @CRLF & _
+			"+======================================================" & @CRLF)
 EndFunc   ;==>_DebugPrint

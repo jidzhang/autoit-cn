@@ -3,8 +3,6 @@
 Example()
 
 Func Example()
-	Local $msg
-
 	Opt("GUICoordMode", 2) ; relative to cell mode
 
 	GUICreate("My GUI Set Coord", 200, 100)
@@ -17,12 +15,16 @@ Func Example()
 	GUICtrlCreateButton("Cancel #4", 10, -1)
 	GUICtrlSetState(-1, $GUI_FOCUS)
 
-	GUISetState() ; will display an empty dialog box
+	GUISetState(@SW_SHOW) ; will display an empty dialog box
 
-	; Run the GUI until the dialog is closed
+	; Loop until the user exits.
 	While 1
-		$msg = GUIGetMsg()
+		Switch GUIGetMsg()
+			Case $GUI_EVENT_CLOSE
+				ExitLoop
 
-		If $msg = $GUI_EVENT_CLOSE Then ExitLoop
+		EndSwitch
 	WEnd
+
+	GUIDelete()
 EndFunc   ;==>Example

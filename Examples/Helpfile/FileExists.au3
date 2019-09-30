@@ -1,17 +1,21 @@
-If FileExists("C:\autoexec.bat") Then
-	MsgBox(4096, "C:\autoexec.bat 文件", "C:\autoexec.bat 文件存在")
-Else
-	MsgBox(4096,"C:\autoexec.bat 文件", "C:\autoexec.bat 文件不存在")
-EndIf
+#include <MsgBoxConstants.au3>
+#include <WinAPIFiles.au3>
 
-If FileExists("C:\") Then
-	MsgBox(4096, "C:\ 目录 ", "C:\ 目录存在")
-Else
-	MsgBox(4096,"C:\ 目录" , "C:\ 目录不存在")
-EndIf
+Example()
 
-If FileExists("D:") Then
-	MsgBox(4096, "驱动器 D:", "驱动器D:存在")
-Else
-	MsgBox(4096,"驱动器 D:", "驱动器D:不存在")
-EndIf
+Func Example()
+	; Create a constant variable in Local scope of the filepath that will be read/written to.
+	Local Const $sFilePath = _WinAPI_GetTempFileName(@TempDir)
+
+	Local $iFileExists = FileExists($sFilePath)
+
+	; Display a message of whether the file exists or not.
+	If $iFileExists Then
+		MsgBox($MB_SYSTEMMODAL, "", "The file exists." & @CRLF & "FileExist returned: " & $iFileExists)
+	Else
+		MsgBox($MB_SYSTEMMODAL, "", "The file doesn't exist." & @CRLF & "FileExist returned: " & $iFileExists)
+	EndIf
+
+	; Delete the temporary file.
+	FileDelete($sFilePath)
+EndFunc   ;==>Example

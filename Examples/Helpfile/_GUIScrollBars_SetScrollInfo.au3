@@ -1,41 +1,40 @@
 #include <GUIConstantsEx.au3>
-#include <WindowsConstants.au3>
-#include <StructureConstants.au3>
 #include <GuiScrollBars.au3>
-#include <ScrollBarConstants.au3>
+#include <StructureConstants.au3>
+#include <WindowsConstants.au3>
 
-_Main()
+Example()
 
-Func _Main()
-	Local $nFileMenu, $nExititem, $GUIMsg, $hGUI, $h_cGUI, $h_cGUI2
-	Local $listview, $button
+Func Example()
+	Local $idFileMenu, $idExititem, $hGUIMsg, $hGUI, $h_GUIC, $h_GUIC2
+	Local $idListview, $idButton
 
 	$hGUI = GUICreate("ScrollBar Example", 400, 400, -1, -1, BitOR($WS_MINIMIZEBOX, $WS_CAPTION, $WS_POPUP, $WS_SYSMENU, $WS_SIZEBOX))
 	GUISetBkColor(0x88AABB)
 
-	$nFileMenu = GUICtrlCreateMenu("File")
-	$nExititem = GUICtrlCreateMenuItem("Exit", $nFileMenu)
-	$listview = GUICtrlCreateListView("col1  |col2|col3  ", 10, 10, 200, 150);,$LVS_SORTDESCENDING)
-	$button = GUICtrlCreateButton("Value?", 75, 170, 70, 20)
-	GUICtrlSetResizing($button, $GUI_DOCKALL)
+	$idFileMenu = GUICtrlCreateMenu("File")
+	$idExititem = GUICtrlCreateMenuItem("Exit", $idFileMenu)
+	$idListview = GUICtrlCreateListView("col1  |col2|col3  ", 10, 10, 200, 150) ; ,$LVS_SORTDESCENDING)
+	$idButton = GUICtrlCreateButton("Value?", 75, 170, 70, 20)
+	GUICtrlSetResizing($idButton, $GUI_DOCKALL)
 	For $x = 1 To 30
-		GUICtrlCreateListViewItem("item" & $x & "|col2|col3", $listview)
+		GUICtrlCreateListViewItem("item" & $x & "|col2|col3", $idListview)
 	Next
-	GUICtrlSetResizing($listview, $GUI_DOCKALL)
+	GUICtrlSetResizing($idListview, $GUI_DOCKALL)
 
-	$h_cGUI = GUICreate("Child GUI", 200, 200, 10, 200, $WS_CHILD, $WS_EX_CLIENTEDGE, $hGUI)
+	$h_GUIC = GUICreate("Child GUI", 200, 200, 10, 200, $WS_CHILD, $WS_EX_CLIENTEDGE, $hGUI)
 	GUICtrlCreateButton("a button", 10, 10, 90, 20)
 	GUISetBkColor(0X006400)
-	GUISetState()
-	GUICtrlSetResizing($h_cGUI, $GUI_DOCKALL)
+	GUISetState(@SW_SHOW)
+	GUICtrlSetResizing($h_GUIC, $GUI_DOCKALL)
 
 	GUISwitch($hGUI)
 
-	$h_cGUI2 = GUICreate("Child GUI", 200, 200, 215, 10, $WS_CHILD, $WS_EX_CLIENTEDGE, $hGUI)
+	$h_GUIC2 = GUICreate("Child GUI", 200, 200, 215, 10, $WS_CHILD, $WS_EX_CLIENTEDGE, $hGUI)
 	GUICtrlCreateButton("a button", 10, 10, 90, 20)
 	GUISetBkColor(0X006400)
-	GUISetState()
-	GUICtrlSetResizing($h_cGUI2, $GUI_DOCKALL)
+	GUISetState(@SW_SHOW)
+	GUICtrlSetResizing($h_GUIC2, $GUI_DOCKALL)
 
 	GUISwitch($hGUI)
 
@@ -43,182 +42,180 @@ Func _Main()
 	GUIRegisterMsg($WM_VSCROLL, "WM_VSCROLL")
 	GUIRegisterMsg($WM_HSCROLL, "WM_HSCROLL")
 
-	GUISetState()
+	GUISetState(@SW_SHOW)
 
 	_GUIScrollBars_Init($hGUI)
-	_GUIScrollBars_Init($h_cGUI)
+	_GUIScrollBars_Init($h_GUIC)
 
 	While 1
-		$GUIMsg = GUIGetMsg()
+		$hGUIMsg = GUIGetMsg()
 
-		Switch $GUIMsg
-			Case $GUI_EVENT_CLOSE, $nExititem
+		Switch $hGUIMsg
+			Case $GUI_EVENT_CLOSE, $idExititem
 				ExitLoop
 		EndSwitch
 	WEnd
 
 	Exit
-EndFunc   ;==>_Main
+EndFunc   ;==>Example
 
-Func WM_SIZE($hWnd, $Msg, $wParam, $lParam)
-	#forceref $Msg, $wParam
-	Local $index = -1, $yChar, $xChar, $xClientMax, $xClient, $yClient, $ivMax
-	For $x = 0 To UBound($aSB_WindowInfo) - 1
-		If $aSB_WindowInfo[$x][0] = $hWnd Then
-			$index = $x
-			$xClientMax = $aSB_WindowInfo[$index][1]
-			$xChar = $aSB_WindowInfo[$index][2]
-			$yChar = $aSB_WindowInfo[$index][3]
-			$ivMax = $aSB_WindowInfo[$index][7]
+Func WM_SIZE($hWnd, $iMsg, $wParam, $lParam)
+	#forceref $iMsg, $wParam
+	Local $iIndex = -1, $iCharY, $iCharX, $iClientMaxX, $iClientX, $iClientY, $iMax
+	For $x = 0 To UBound($__g_aSB_WindowInfo) - 1
+		If $__g_aSB_WindowInfo[$x][0] = $hWnd Then
+			$iIndex = $x
+			$iClientMaxX = $__g_aSB_WindowInfo[$iIndex][1]
+			$iCharX = $__g_aSB_WindowInfo[$iIndex][2]
+			$iCharY = $__g_aSB_WindowInfo[$iIndex][3]
+			$iMax = $__g_aSB_WindowInfo[$iIndex][7]
 			ExitLoop
 		EndIf
 	Next
-	If $index = -1 Then Return 0
+	If $iIndex = -1 Then Return 0
 
 	Local $tSCROLLINFO = DllStructCreate($tagSCROLLINFO)
 
 	; Retrieve the dimensions of the client area.
-	$xClient = BitAND($lParam, 0x0000FFFF)
-	$yClient = BitShift($lParam, 16)
-	$aSB_WindowInfo[$index][4] = $xClient
-	$aSB_WindowInfo[$index][5] = $yClient
+	$iClientX = BitAND($lParam, 0x0000FFFF)
+	$iClientY = BitShift($lParam, 16)
+	$__g_aSB_WindowInfo[$iIndex][4] = $iClientX
+	$__g_aSB_WindowInfo[$iIndex][5] = $iClientY
 
 	; Set the vertical scrolling range and page size
 	DllStructSetData($tSCROLLINFO, "fMask", BitOR($SIF_RANGE, $SIF_PAGE))
 	DllStructSetData($tSCROLLINFO, "nMin", 0)
-	DllStructSetData($tSCROLLINFO, "nMax", $ivMax)
-	DllStructSetData($tSCROLLINFO, "nPage", $yClient / $yChar)
+	DllStructSetData($tSCROLLINFO, "nMax", $iMax)
+	DllStructSetData($tSCROLLINFO, "nPage", $iClientY / $iCharY)
 	_GUIScrollBars_SetScrollInfo($hWnd, $SB_VERT, $tSCROLLINFO)
 
 	; Set the horizontal scrolling range and page size
 	DllStructSetData($tSCROLLINFO, "fMask", BitOR($SIF_RANGE, $SIF_PAGE))
 	DllStructSetData($tSCROLLINFO, "nMin", 0)
-	DllStructSetData($tSCROLLINFO, "nMax", 2 + $xClientMax / $xChar)
-	DllStructSetData($tSCROLLINFO, "nPage", $xClient / $xChar)
+	DllStructSetData($tSCROLLINFO, "nMax", 2 + $iClientMaxX / $iCharX)
+	DllStructSetData($tSCROLLINFO, "nPage", $iClientX / $iCharX)
 	_GUIScrollBars_SetScrollInfo($hWnd, $SB_HORZ, $tSCROLLINFO)
 
 	Return $GUI_RUNDEFMSG
 EndFunc   ;==>WM_SIZE
 
-Func WM_HSCROLL($hWnd, $Msg, $wParam, $lParam)
-	#forceref $Msg, $lParam
-	Local $nScrollCode = BitAND($wParam, 0x0000FFFF)
+Func WM_HSCROLL($hWnd, $iMsg, $wParam, $lParam)
+	#forceref $iMsg, $lParam
+	Local $iScrollCode = BitAND($wParam, 0x0000FFFF)
 
-	Local $index = -1, $xChar, $xPos
-	Local $Min, $Max, $Page, $Pos, $TrackPos
+	Local $iIndex = -1, $iCharX, $iPosX
+	Local $iMin, $iMax, $iPage, $iPos, $iTrackPos
 
-	For $x = 0 To UBound($aSB_WindowInfo) - 1
-		If $aSB_WindowInfo[$x][0] = $hWnd Then
-			$index = $x
-			$xChar = $aSB_WindowInfo[$index][2]
+	For $x = 0 To UBound($__g_aSB_WindowInfo) - 1
+		If $__g_aSB_WindowInfo[$x][0] = $hWnd Then
+			$iIndex = $x
+			$iCharX = $__g_aSB_WindowInfo[$iIndex][2]
 			ExitLoop
 		EndIf
 	Next
-	If $index = -1 Then Return 0
+	If $iIndex = -1 Then Return 0
 
-;~ 	; Get all the horizontal scroll bar information
+	; ; Get all the horizontal scroll bar information
 	Local $tSCROLLINFO = _GUIScrollBars_GetScrollInfoEx($hWnd, $SB_HORZ)
-	$Min = DllStructGetData($tSCROLLINFO, "nMin")
-	$Max = DllStructGetData($tSCROLLINFO, "nMax")
-	$Page = DllStructGetData($tSCROLLINFO, "nPage")
+	$iMin = DllStructGetData($tSCROLLINFO, "nMin")
+	$iMax = DllStructGetData($tSCROLLINFO, "nMax")
+	$iPage = DllStructGetData($tSCROLLINFO, "nPage")
 	; Save the position for comparison later on
-	$xPos = DllStructGetData($tSCROLLINFO, "nPos")
-	$Pos = $xPos
-	$TrackPos = DllStructGetData($tSCROLLINFO, "nTrackPos")
-	#forceref $Min, $Max
-	Switch $nScrollCode
+	$iPosX = DllStructGetData($tSCROLLINFO, "nPos")
+	$iPos = $iPosX
+	$iTrackPos = DllStructGetData($tSCROLLINFO, "nTrackPos")
+	#forceref $iMin, $iMax
+	Switch $iScrollCode
 
 		Case $SB_LINELEFT ; user clicked left arrow
-			DllStructSetData($tSCROLLINFO, "nPos", $Pos - 1)
+			DllStructSetData($tSCROLLINFO, "nPos", $iPos - 1)
 
 		Case $SB_LINERIGHT ; user clicked right arrow
-			DllStructSetData($tSCROLLINFO, "nPos", $Pos + 1)
+			DllStructSetData($tSCROLLINFO, "nPos", $iPos + 1)
 
 		Case $SB_PAGELEFT ; user clicked the scroll bar shaft left of the scroll box
-			DllStructSetData($tSCROLLINFO, "nPos", $Pos - $Page)
+			DllStructSetData($tSCROLLINFO, "nPos", $iPos - $iPage)
 
 		Case $SB_PAGERIGHT ; user clicked the scroll bar shaft right of the scroll box
-			DllStructSetData($tSCROLLINFO, "nPos", $Pos + $Page)
+			DllStructSetData($tSCROLLINFO, "nPos", $iPos + $iPage)
 
 		Case $SB_THUMBTRACK ; user dragged the scroll box
-			DllStructSetData($tSCROLLINFO, "nPos", $TrackPos)
+			DllStructSetData($tSCROLLINFO, "nPos", $iTrackPos)
 	EndSwitch
 
-;~    // Set the position and then retrieve it.  Due to adjustments
-;~    //   by Windows it may not be the same as the value set.
+	; // Set the position and then retrieve it.  Due to adjustments
+	; //   by Windows it may not be the same as the value set.
 
 	DllStructSetData($tSCROLLINFO, "fMask", $SIF_POS)
 	_GUIScrollBars_SetScrollInfo($hWnd, $SB_HORZ, $tSCROLLINFO)
 	_GUIScrollBars_GetScrollInfo($hWnd, $SB_HORZ, $tSCROLLINFO)
 	;// If the position has changed, scroll the window and update it
-	$Pos = DllStructGetData($tSCROLLINFO, "nPos")
-	If ($Pos <> $xPos) Then _GUIScrollBars_ScrollWindow($hWnd, $xChar * ($xPos - $Pos), 0)
+	$iPos = DllStructGetData($tSCROLLINFO, "nPos")
+	If ($iPos <> $iPosX) Then _GUIScrollBars_ScrollWindow($hWnd, $iCharX * ($iPosX - $iPos), 0)
 	Return $GUI_RUNDEFMSG
 EndFunc   ;==>WM_HSCROLL
 
-Func WM_VSCROLL($hWnd, $Msg, $wParam, $lParam)
-	#forceref $Msg, $wParam, $lParam
-	Local $nScrollCode = BitAND($wParam, 0x0000FFFF)
-	Local $index = -1, $yChar, $yPos
-	Local $Min, $Max, $Page, $Pos, $TrackPos
+Func WM_VSCROLL($hWnd, $iMsg, $wParam, $lParam)
+	#forceref $iMsg, $wParam, $lParam
+	Local $iScrollCode = BitAND($wParam, 0x0000FFFF)
+	Local $iIndex = -1, $iCharY, $iPosY
+	Local $iMin, $iMax, $iPage, $iPos, $iTrackPos
 
-	For $x = 0 To UBound($aSB_WindowInfo) - 1
-		If $aSB_WindowInfo[$x][0] = $hWnd Then
-			$index = $x
-			$yChar = $aSB_WindowInfo[$index][3]
+	For $x = 0 To UBound($__g_aSB_WindowInfo) - 1
+		If $__g_aSB_WindowInfo[$x][0] = $hWnd Then
+			$iIndex = $x
+			$iCharY = $__g_aSB_WindowInfo[$iIndex][3]
 			ExitLoop
 		EndIf
 	Next
-	If $index = -1 Then Return 0
-
+	If $iIndex = -1 Then Return 0
 
 	; Get all the vertial scroll bar information
 	Local $tSCROLLINFO = _GUIScrollBars_GetScrollInfoEx($hWnd, $SB_VERT)
-	$Min = DllStructGetData($tSCROLLINFO, "nMin")
-	$Max = DllStructGetData($tSCROLLINFO, "nMax")
-	$Page = DllStructGetData($tSCROLLINFO, "nPage")
+	$iMin = DllStructGetData($tSCROLLINFO, "nMin")
+	$iMax = DllStructGetData($tSCROLLINFO, "nMax")
+	$iPage = DllStructGetData($tSCROLLINFO, "nPage")
 	; Save the position for comparison later on
-	$yPos = DllStructGetData($tSCROLLINFO, "nPos")
-	$Pos = $yPos
-	$TrackPos = DllStructGetData($tSCROLLINFO, "nTrackPos")
+	$iPosY = DllStructGetData($tSCROLLINFO, "nPos")
+	$iPos = $iPosY
+	$iTrackPos = DllStructGetData($tSCROLLINFO, "nTrackPos")
 
-	Switch $nScrollCode
+	Switch $iScrollCode
 		Case $SB_TOP ; user clicked the HOME keyboard key
-			DllStructSetData($tSCROLLINFO, "nPos", $Min)
+			DllStructSetData($tSCROLLINFO, "nPos", $iMin)
 
 		Case $SB_BOTTOM ; user clicked the END keyboard key
-			DllStructSetData($tSCROLLINFO, "nPos", $Max)
+			DllStructSetData($tSCROLLINFO, "nPos", $iMax)
 
 		Case $SB_LINEUP ; user clicked the top arrow
-			DllStructSetData($tSCROLLINFO, "nPos", $Pos - 1)
+			DllStructSetData($tSCROLLINFO, "nPos", $iPos - 1)
 
 		Case $SB_LINEDOWN ; user clicked the bottom arrow
-			DllStructSetData($tSCROLLINFO, "nPos", $Pos + 1)
+			DllStructSetData($tSCROLLINFO, "nPos", $iPos + 1)
 
 		Case $SB_PAGEUP ; user clicked the scroll bar shaft above the scroll box
-			DllStructSetData($tSCROLLINFO, "nPos", $Pos - $Page)
+			DllStructSetData($tSCROLLINFO, "nPos", $iPos - $iPage)
 
 		Case $SB_PAGEDOWN ; user clicked the scroll bar shaft below the scroll box
-			DllStructSetData($tSCROLLINFO, "nPos", $Pos + $Page)
+			DllStructSetData($tSCROLLINFO, "nPos", $iPos + $iPage)
 
 		Case $SB_THUMBTRACK ; user dragged the scroll box
-			DllStructSetData($tSCROLLINFO, "nPos", $TrackPos)
+			DllStructSetData($tSCROLLINFO, "nPos", $iTrackPos)
 	EndSwitch
 
-;~    // Set the position and then retrieve it.  Due to adjustments
-;~    //   by Windows it may not be the same as the value set.
+	; // Set the position and then retrieve it.  Due to adjustments
+	; //   by Windows it may not be the same as the value set.
 
 	DllStructSetData($tSCROLLINFO, "fMask", $SIF_POS)
 	_GUIScrollBars_SetScrollInfo($hWnd, $SB_VERT, $tSCROLLINFO)
 	_GUIScrollBars_GetScrollInfo($hWnd, $SB_VERT, $tSCROLLINFO)
 	;// If the position has changed, scroll the window and update it
-	$Pos = DllStructGetData($tSCROLLINFO, "nPos")
+	$iPos = DllStructGetData($tSCROLLINFO, "nPos")
 
-	If ($Pos <> $yPos) Then
-		_GUIScrollBars_ScrollWindow($hWnd, 0, $yChar * ($yPos - $Pos))
-		$yPos = $Pos
+	If ($iPos <> $iPosY) Then
+		_GUIScrollBars_ScrollWindow($hWnd, 0, $iCharY * ($iPosY - $iPos))
+		$iPosY = $iPos
 	EndIf
 
 	Return $GUI_RUNDEFMSG
-
 EndFunc   ;==>WM_VSCROLL

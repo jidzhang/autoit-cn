@@ -1,31 +1,29 @@
-#include <Constants.au3>
 #include <GUIConstantsEx.au3>
 #include <GuiReBar.au3>
 #include <GuiToolbar.au3>
+#include <WinAPIConstants.au3>
 #include <WindowsConstants.au3>
 
-$Debug_RB = False
+Global $g_idMemo
 
-Global $iMemo
+Example()
 
-_Main()
-
-Func _Main()
-	Local $hGUI, $hReBar, $hToolbar, $iExit, $iInput
-	Local Enum $idNew = 1000, $idOpen, $idSave, $idHelp
+Func Example()
+	Local $hGUI, $hReBar, $hToolbar, $idExit, $idInput
+	Local Enum $e_idNew = 1000, $e_idOpen, $e_idSave, $idHelp
 
 	$hGUI = GUICreate("Rebar", 400, 396, -1, -1, BitOR($WS_MINIMIZEBOX, $WS_CAPTION, $WS_POPUP, $WS_SYSMENU, $WS_MAXIMIZEBOX))
 
-	; 创建伸缩条控件
+	; Create the rebar control
 	$hReBar = _GUICtrlRebar_Create($hGUI, BitOR($CCS_TOP, $WS_BORDER, $RBS_VARHEIGHT, $RBS_AUTOSIZE, $RBS_BANDBORDERS))
 
-	$iMemo = GUICtrlCreateEdit("", 2, 100, 396, 250, $WS_VSCROLL)
-	GUICtrlSetFont($iMemo, 10, 400, 0, "Courier New")
+	$g_idMemo = GUICtrlCreateEdit("", 2, 100, 396, 250, $WS_VSCROLL)
+	GUICtrlSetFont($g_idMemo, 10, 400, 0, "Courier New")
 
-	; 在伸缩条中创建一个工具栏
+	; Create a toolbar to put in the rebar
 	$hToolbar = _GUICtrlToolbar_Create($hGUI, BitOR($TBSTYLE_FLAT, $CCS_NORESIZE, $CCS_NOPARENTALIGN))
 
-	; 添加标准系统位图
+	; Add standard system bitmaps
 	Switch _GUICtrlToolbar_GetBitmapFlags($hToolbar)
 		Case 0
 			_GUICtrlToolbar_AddBitmap($hToolbar, 1, -1, $IDB_STD_SMALL_COLOR)
@@ -33,24 +31,24 @@ Func _Main()
 			_GUICtrlToolbar_AddBitmap($hToolbar, 1, -1, $IDB_STD_LARGE_COLOR)
 	EndSwitch
 
-	; 添加按钮
-	_GUICtrlToolbar_AddButton($hToolbar, $idNew, $STD_FILENEW)
-	_GUICtrlToolbar_AddButton($hToolbar, $idOpen, $STD_FILEOPEN)
-	_GUICtrlToolbar_AddButton($hToolbar, $idSave, $STD_FILESAVE)
+	; Add buttons
+	_GUICtrlToolbar_AddButton($hToolbar, $e_idNew, $STD_FILENEW)
+	_GUICtrlToolbar_AddButton($hToolbar, $e_idOpen, $STD_FILEOPEN)
+	_GUICtrlToolbar_AddButton($hToolbar, $e_idSave, $STD_FILESAVE)
 	_GUICtrlToolbar_AddButtonSep($hToolbar)
 	_GUICtrlToolbar_AddButton($hToolbar, $idHelp, $STD_HELP)
 
-	; 在伸缩条中创建一个输入框
-	$iInput = GUICtrlCreateInput("Input control", 0, 0, 120, 20)
+	; Create a input box to put in the rebar
+	$idInput = GUICtrlCreateInput("Input control", 0, 0, 120, 20)
 
-	;添加包含控件的带区
-	_GUICtrlRebar_AddBand($hReBar, GUICtrlGetHandle($iInput), 120, 200, "Name:")
+	; Add band containing the control
+	_GUICtrlRebar_AddBand($hReBar, GUICtrlGetHandle($idInput), 120, 200, "Name:")
 
-	; 添加包含伸缩条开始处控件的带区
+	; Add band containing the control to the beginning of rebar
 	_GUICtrlRebar_AddToolBarBand($hReBar, $hToolbar, "", 0)
 
-	$iExit = GUICtrlCreateButton("Exit", 150, 360, 100, 25)
-	GUICtrlSetState($iExit, $GUI_DEFBUTTON + $GUI_FOCUS)
+	$idExit = GUICtrlCreateButton("Exit", 150, 360, 100, 25)
+	GUICtrlSetState($idExit, $GUI_DEFBUTTON + $GUI_FOCUS)
 
 	GUISetState(@SW_SHOW, $hGUI)
 
@@ -64,13 +62,13 @@ Func _Main()
 
 	While 1
 		Switch GUIGetMsg()
-			Case $GUI_EVENT_CLOSE, $iExit
+			Case $GUI_EVENT_CLOSE, $idExit
 				Exit
 		EndSwitch
 	WEnd
-EndFunc   ;==>_Main
+EndFunc   ;==>Example
 
-; 写入消息到 memo
+; Write message to memo
 Func MemoWrite($sMessage = "")
-	GUICtrlSetData($iMemo, $sMessage & @CRLF, 1)
+	GUICtrlSetData($g_idMemo, $sMessage & @CRLF, 1)
 EndFunc   ;==>MemoWrite

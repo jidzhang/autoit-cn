@@ -1,3 +1,5 @@
+#include <MsgBoxConstants.au3>
+
 Example()
 
 Func Example()
@@ -9,9 +11,9 @@ Func Example()
 
 	; Test if $hWnd is a valid pointer and display the results.
 	If IsPtr($hWnd) Then
-		MsgBox(4096, "", "It's a valid Ptr")
+		MsgBox($MB_SYSTEMMODAL, "", "It's a valid Ptr")
 	Else
-		MsgBox(4096, "", "It's not a valid Ptr")
+		MsgBox($MB_SYSTEMMODAL, "", "It's not a valid Ptr")
 	EndIf
 
 	; Close the Notepad window using the handle returned by WinWait.

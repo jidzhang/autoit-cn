@@ -1,8 +1,9 @@
-#include <WinAPISys.au3>
-#include <APISysConstants.au3>
-#include <WinAPIProc.au3>
 #include <APIProcConstants.au3>
+#include <APISysConstants.au3>
 #include <MsgBoxConstants.au3>
+#include <WinAPIMem.au3>
+#include <WinAPIProc.au3>
+#include <WinAPISys.au3>
 
 ; Retrieve a handle to the current desktop and create a new desktop named "MyDesktop"
 Local $hPrev = _WinAPI_GetThreadDesktop(_WinAPI_GetCurrentThreadId())
@@ -21,7 +22,7 @@ Local $tProcess = DllStructCreate($tagPROCESS_INFORMATION)
 Local $tStartup = DllStructCreate($tagSTARTUPINFO)
 DllStructSetData($tStartup, 'Size', DllStructGetSize($tStartup))
 DllStructSetData($tStartup, 'Desktop', $pText)
-If _WinAPI_CreateProcess('', @SystemDir & '\calc.exe', 0, 0, 0, $CREATE_NEW_PROCESS_GROUP, 0, 0, DllStructGetPtr($tStartup), DllStructGetPtr($tProcess)) Then
+If _WinAPI_CreateProcess('', @SystemDir & '\calc.exe', 0, 0, 0, $CREATE_NEW_PROCESS_GROUP, 0, 0, $tStartup, $tProcess) Then
 	ProcessWaitClose(DllStructGetData($tProcess, 'ProcessID'))
 EndIf
 

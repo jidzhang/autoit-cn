@@ -1,28 +1,27 @@
-#include <GuiEdit.au3>
 #include <GUIConstantsEx.au3>
+#include <GuiEdit.au3>
+#include <MsgBoxConstants.au3>
 
-$Debug_Ed = False ; Check ClassName being passed to Edit functions, set to True and use a handle to another control to see it work
+Example()
 
-_Main()
+Func Example()
+	Local $idEdit
 
-Func _Main()
-	Local $hEdit
-
-	; 创建 GUI
+	; Create GUI
 	GUICreate("Edit Empty Undo Buffer", 400, 300)
-	$hEdit = GUICtrlCreateEdit("This is a test" & @CRLF & "Another Line", 2, 2, 394, 268)
-	GUISetState()
+	$idEdit = GUICtrlCreateEdit("This is a test" & @CRLF & "Another Line", 2, 2, 394, 268)
+	GUISetState(@SW_SHOW)
 
-	_GUICtrlEdit_AppendText($hEdit, @CRLF & "Append to the end?")
+	_GUICtrlEdit_AppendText($idEdit, @CRLF & "Append to the end?")
 
-	MsgBox(4160, "信息", "Can Undo: " & _GUICtrlEdit_CanUndo($hEdit))
+	MsgBox($MB_SYSTEMMODAL, "Information", "Can Undo: " & _GUICtrlEdit_CanUndo($idEdit))
 
-	_GUICtrlEdit_EmptyUndoBuffer($hEdit)
+	_GUICtrlEdit_EmptyUndoBuffer($idEdit)
 
-	MsgBox(4160, "信息", "Can Undo: " & _GUICtrlEdit_CanUndo($hEdit))
+	MsgBox($MB_SYSTEMMODAL, "Information", "Can Undo: " & _GUICtrlEdit_CanUndo($idEdit))
 
-	; 循环直到用户退出
+	; Loop until the user exits.
 	Do
 	Until GUIGetMsg() = $GUI_EVENT_CLOSE
 	GUIDelete()
-EndFunc   ;==>_Main
+EndFunc   ;==>Example

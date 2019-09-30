@@ -1,9 +1,10 @@
 #include <Date.au3>
+#include <MsgBoxConstants.au3>
 
-; 计算从 EPOCH (1970/01/01 00:00:00) 开始起的秒数
+; Calculated the number of seconds since EPOCH (1970/01/01 00:00:00)
 Local $iDateCalc = _DateDiff('s', "1970/01/01 00:00:00", _NowCalc())
-MsgBox(4096, "", "Number of seconds since EPOCH: " & $iDateCalc)
+MsgBox($MB_SYSTEMMODAL, "", "Number of seconds since EPOCH: " & $iDateCalc)
 
-; 计算今年至今的小时数
+; Calculated the number of Hours this year
 $iDateCalc = _DateDiff('h', @YEAR & "/01/01 00:00:00", _NowCalc())
-MsgBox(4096, "", "Number of Hours this year: " & $iDateCalc)
+MsgBox($MB_SYSTEMMODAL, "", "Number of Hours this year: " & $iDateCalc)

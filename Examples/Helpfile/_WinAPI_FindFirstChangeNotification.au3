@@ -1,40 +1,41 @@
-#include <WinAPIFiles.au3>
 #include <APIFilesConstants.au3>
-#include <WinAPI.au3>
 #include <MsgBoxConstants.au3>
+#include <WinAPIFiles.au3>
+#include <WinAPIProc.au3>
 
 Opt('TrayAutoPause', 0)
 
-Global Const $sPath = @TempDir & '\~TEST~'
+Global Const $g_sPath = @TempDir & '\~TEST~'
 
-DirCreate($sPath)
-If Not FileExists($sPath) Then
+DirCreate($g_sPath)
+If Not FileExists($g_sPath) Then
 	MsgBox(BitOR($MB_ICONERROR, $MB_SYSTEMMODAL), 'Error', 'Unable to create folder.')
 	Exit
 EndIf
+ShellExecute($g_sPath) ; to ease a file creation in this folder
 
 OnAutoItExitRegister('OnAutoItExit')
 
-Global $hObj[2]
-$hObj[0] = _WinAPI_FindFirstChangeNotification($sPath, $FILE_NOTIFY_CHANGE_FILE_NAME)
-$hObj[1] = _WinAPI_FindFirstChangeNotification($sPath, $FILE_NOTIFY_CHANGE_DIR_NAME)
+Global $g_ahObj[2]
+$g_ahObj[0] = _WinAPI_FindFirstChangeNotification($g_sPath, $FILE_NOTIFY_CHANGE_FILE_NAME)
+$g_ahObj[1] = _WinAPI_FindFirstChangeNotification($g_sPath, $FILE_NOTIFY_CHANGE_DIR_NAME)
 
-If (Not $hObj[0]) Or (Not $hObj[1]) Then
+If (Not $g_ahObj[0]) Or (Not $g_ahObj[1]) Then
 	MsgBox(BitOR($MB_ICONERROR, $MB_SYSTEMMODAL), 'Error', 'Unable to create change notification.')
 	Exit
 EndIf
 
-Local $tObj = DllStructCreate('ptr;ptr')
-Local $pObj = DllStructGetPtr($tObj)
+Local $tObjs = DllStructCreate('ptr;ptr')
+Local $paObj = DllStructGetPtr($tObjs)
 For $i = 0 To 1
-	DllStructSetData($tObj, $i + 1, $hObj[$i])
+	DllStructSetData($tObjs, $i + 1, $g_ahObj[$i])
 Next
 
-Local $ID
+Local $iID
 While 1
 	Sleep(100)
-	$ID = _WinAPI_WaitForMultipleObjects(2, $pObj, 0, 0)
-	Switch $ID
+	$iID = _WinAPI_WaitForMultipleObjects(2, $paObj, 0, 0)
+	Switch $iID
 		Case 0 ; WAIT_OBJECT_0
 			ConsoleWrite('A file was created, renamed, or deleted in the directory.' & @CRLF)
 		Case 1 ; WAIT_OBJECT_0 + 1
@@ -42,7 +43,7 @@ While 1
 		Case Else
 			ContinueLoop
 	EndSwitch
-	If Not _WinAPI_FindNextChangeNotification($hObj[$ID]) Then
+	If Not _WinAPI_FindNextChangeNotification($g_ahObj[$iID]) Then
 		MsgBox(BitOR($MB_ICONERROR, $MB_SYSTEMMODAL), 'Error', 'Unexpected error.')
 		Exit
 	EndIf
@@ -50,9 +51,9 @@ WEnd
 
 Func OnAutoItExit()
 	For $i = 0 To 1
-		If $hObj[$i] Then
-			_WinAPI_FindCloseChangeNotification($hObj[$i])
+		If $g_ahObj[$i] Then
+			_WinAPI_FindCloseChangeNotification($g_ahObj[$i])
 		EndIf
 	Next
-	DirRemove($sPath, 1)
+	DirRemove($g_sPath, $DIR_REMOVE)
 EndFunc   ;==>OnAutoItExit

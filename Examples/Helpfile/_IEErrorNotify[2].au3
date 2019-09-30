@@ -21,7 +21,7 @@ ConsoleWrite(@CRLF)
 ConsoleWrite('! Now look what happens when _IEErrorNotify is OFF' & @CRLF)
 $oIE = _IECreate('www.google') ; URL is broken
 $oForm = _IEFormGetObjByName($oIE, "gbqf")
-;~ $oForm = _IEFormGetObjByName($oIE, "gbqf")
+; $oForm = _IEFormGetObjByName($oIE, "gbqf")
 $oQuery = _IEFormElementGetObjByName($oForm, "q")
 _IEFormElementSetValue($oQuery, "AutoIt IE.au3")
 _IEFormSubmit($oForm)

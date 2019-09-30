@@ -1,27 +1,26 @@
-#include <GUIConstantsEx.au3>
 #include <GDIPlus.au3>
+#include <GUIConstantsEx.au3>
 
-_Main()
+Example()
 
-Func _Main()
+Func Example()
 	Local $hGUI, $hGraphic
 
-	; 创建 GUI
+	; Create GUI
 	$hGUI = GUICreate("GDI+", 400, 300)
-	GUISetState()
+	GUISetState(@SW_SHOW)
 
-	; 描绘贝塞尔曲线
+	; Draw a Bezier curve
 	_GDIPlus_Startup()
 	$hGraphic = _GDIPlus_GraphicsCreateFromHWND($hGUI)
 
 	_GDIPlus_GraphicsDrawBezier($hGraphic, 50, 50, 100, 5, 125, 25, 250, 50)
 
-	; 循环直到用户退出
+	; Loop until the user exits.
 	Do
 	Until GUIGetMsg() = $GUI_EVENT_CLOSE
 
-	; 清理资源
+	; Clean up resources
 	_GDIPlus_GraphicsDispose($hGraphic)
 	_GDIPlus_Shutdown()
-
-EndFunc   ;==>_Main
+EndFunc   ;==>Example

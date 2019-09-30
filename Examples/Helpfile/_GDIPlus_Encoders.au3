@@ -1,90 +1,99 @@
-#include <GUIConstantsEx.au3>
 #include <GDIPlus.au3>
+#include <GUIConstantsEx.au3>
 #include <ScreenCapture.au3>
+#include <WinAPIConv.au3>
+#include <WinAPIHObj.au3>
 #include <WindowsConstants.au3>
 
-Global $iMemo, $aEncoder, $hImage
+Global $g_idMemo, $g_aCodex, $g_hImage
 
-_Main()
+Example()
 
-Func _Main()
+Func Example()
 	Local $hBitmap
 
-	; 创建 GUI
+	; Create GUI
 	GUICreate("GDI+", 600, 400)
-	$iMemo = GUICtrlCreateEdit("", 2, 2, 596, 396, $WS_VSCROLL)
-	GUICtrlSetFont($iMemo, 9, 400, 0, "Courier New")
-	GUISetState()
+	$g_idMemo = GUICtrlCreateEdit("", 2, 2, 596, 396, $WS_VSCROLL)
+	GUICtrlSetFont($g_idMemo, 9, 400, 0, "Courier New")
+	GUISetState(@SW_SHOW)
 
-	; 初始化 GDI+ 库
+	; Initialize GDI+ library
 	_GDIPlus_Startup()
 
-	; 创建用于特征列表的图像
+	; Create an image to use for paramater lists
 	$hBitmap = _ScreenCapture_Capture("", 0, 0, 1, 1)
-	$hImage = _GDIPlus_BitmapCreateFromHBITMAP($hBitmap)
+	$g_hImage = _GDIPlus_BitmapCreateFromHBITMAP($hBitmap)
 
-	; 显示编码器特征
-	$aEncoder = _GDIPlus_Encoders()
-	ShowEncoder("Encoder")
+	; Show encoder parameters
+	$g_aCodex = _GDIPlus_Encoders()
+	ShowCodex("Encoder")
 
-	; 显示解码器特征
-	$aEncoder = _GDIPlus_Decoders()
-	ShowEncoder("Decoder")
+	; Show decoder parameters
+	$g_aCodex = _GDIPlus_Decoders()
+	ShowCodex("Decoder")
 
-	; 清理资源
-	_GDIPlus_ImageDispose($hImage)
+	; Clean up resources
+	_GDIPlus_ImageDispose($g_hImage)
 	_WinAPI_DeleteObject($hBitmap)
 
-	; 关闭 GDI+ 库
+	; Shut down GDI+ library
 	_GDIPlus_Shutdown()
 
-	; 循环直到用户退出
+	; Loop until the user exits.
 	Do
 	Until GUIGetMsg() = $GUI_EVENT_CLOSE
-EndFunc   ;==>_Main
+EndFunc   ;==>Example
 
-; 写入一行到 memo 控件
+; Write a line to the memo control
 Func MemoWrite($sMessage = '')
-	GUICtrlSetData($iMemo, $sMessage & @CRLF, 1)
+	GUICtrlSetData($g_idMemo, $sMessage & @CRLF, 1)
 EndFunc   ;==>MemoWrite
 
-; 显示编码器信息
-Func ShowEncoder($sTitle)
-	Local $iI, $iJ, $iK, $sCLSID, $tData, $tParam, $tParams
+; Show codex information
+Func ShowCodex($sTitle)
+	Local $iI, $iJ, $iK, $sCLSID, $tData, $tParam, $tParams, $iParamSize = _GDIPlus_ParamSize()
 
-	For $iI = 1 To $aEncoder[0][0]
-		$sCLSID = _GDIPlus_EncodersGetCLSID($aEncoder[$iI][5])
+	For $iI = 1 To $g_aCodex[0][0]
+		$sCLSID = _GDIPlus_EncodersGetCLSID($g_aCodex[$iI][5])
 		MemoWrite("Image " & $sTitle & " " & $iI)
-		MemoWrite("  Codec GUID ............: " & $aEncoder[$iI][1])
-		MemoWrite("  File format GUID ......: " & $aEncoder[$iI][2])
-		MemoWrite("  Codec name ............: " & $aEncoder[$iI][3])
-		MemoWrite("  Codec Dll file name ...: " & $aEncoder[$iI][4])
-		MemoWrite("  Codec file format .....: " & $aEncoder[$iI][5])
-		MemoWrite("  File name extensions ..: " & $aEncoder[$iI][6])
-		MemoWrite("  Mime type .............: " & $aEncoder[$iI][7])
-		MemoWrite("  Flags .................: 0x" & Hex($aEncoder[$iI][8]))
-		MemoWrite("  Version ...............: " & $aEncoder[$iI][9])
-		MemoWrite("  Signature count .......: " & $aEncoder[$iI][10])
-		MemoWrite("  Signature size ........: " & $aEncoder[$iI][11])
-		MemoWrite("  Signature pattern ptr .: 0x" & Hex($aEncoder[$iI][12]))
-		MemoWrite("  Signature mask ptr ....: 0x" & Hex($aEncoder[$iI][13]))
-		MemoWrite("  Paramater list size ...: " & _GDIPlus_EncodersGetParamListSize($hImage, $sCLSID))
+		MemoWrite("  Codec GUID ............: " & $g_aCodex[$iI][1])
+		MemoWrite("  File format GUID ......: " & $g_aCodex[$iI][2])
+		MemoWrite("  Codec name ............: " & $g_aCodex[$iI][3])
+		MemoWrite("  Codec Dll file name ...: " & $g_aCodex[$iI][4])
+		MemoWrite("  Codec file format .....: " & $g_aCodex[$iI][5])
+		MemoWrite("  File name extensions ..: " & $g_aCodex[$iI][6])
+		MemoWrite("  Mime type .............: " & $g_aCodex[$iI][7])
+		MemoWrite("  Flags .................: 0x" & Hex($g_aCodex[$iI][8]))
+		MemoWrite("  Version ...............: " & $g_aCodex[$iI][9])
+		MemoWrite("  Signature count .......: " & $g_aCodex[$iI][10])
+		MemoWrite("  Signature size ........: " & $g_aCodex[$iI][11])
+		MemoWrite("  Signature pattern ptr .: 0x" & Hex($g_aCodex[$iI][12]))
+		MemoWrite("  Signature mask ptr ....: 0x" & Hex($g_aCodex[$iI][13]))
+
+;~ 		If $sTitle = "Decoder" Then ContinueLoop
+
+		MemoWrite("  Parameter list size ...: " & _GDIPlus_EncodersGetParamListSize($g_hImage, $sCLSID))
+
+		$tParams = _GDIPlus_EncodersGetParamList($g_hImage, $sCLSID)
+		If @error Then
+			MemoWrite()
+			ContinueLoop
+		EndIf
+
+		MemoWrite("  Parameters Count ......: " & DllStructGetData($tParams, "Count"))
 		MemoWrite()
-
-		$tParams = _GDIPlus_EncodersGetParamList($hImage, $sCLSID)
-		If @error Then ContinueLoop
-
 		For $iJ = 0 To DllStructGetData($tParams, "Count") - 1
-			MemoWrite("  Image " & $sTitle & " Parameter " & $iJ)
-			$tParam = DllStructCreate($tagGDIPENCODERPARAM, DllStructGetPtr($tParams, "Params") + ($iJ * 28))
+			MemoWrite("  Image " & $sTitle & " " & $iI & " Parameter " & $iJ)
+			$tParam = DllStructCreate($tagGDIPENCODERPARAM, DllStructGetPtr($tParams, "GUID") + ($iJ * $iParamSize))
 			MemoWrite("    Parameter GUID ......: " & _WinAPI_StringFromGUID(DllStructGetPtr($tParam, "GUID")))
-			MemoWrite("    Number of values ....: " & DllStructGetData($tParam, "Count"))
+			MemoWrite("    Number of values ....: " & DllStructGetData($tParam, "NumberOfValues"))
 			MemoWrite("    Parameter type.......: " & DllStructGetData($tParam, "Type"))
 			MemoWrite("    Parameter pointer ...: 0x" & Hex(DllStructGetData($tParam, "Values")))
 			Switch DllStructGetData($tParam, "Type")
 				Case 4
-					$tData = DllStructCreate("int Data[" & DllStructGetData($tParam, "Count") & "]", DllStructGetData($tParam, "Values"))
-					For $iK = 1 To DllStructGetData($tParam, "Count")
+					$tData = DllStructCreate("int Data[" & DllStructGetData($tParam, "NumberOfValues") & "]", DllStructGetData($tParam, "Values"))
+					For $iK = 1 To DllStructGetData($tParam, "NumberOfValues")
 						MemoWrite("      Value .............: " & DllStructGetData($tData, 1, $iK))
 					Next
 				Case 6
@@ -95,4 +104,4 @@ Func ShowEncoder($sTitle)
 			MemoWrite()
 		Next
 	Next
-EndFunc   ;==>ShowEncoder
+EndFunc   ;==>ShowCodex

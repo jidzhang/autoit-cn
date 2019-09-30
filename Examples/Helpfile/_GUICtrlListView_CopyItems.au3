@@ -1,88 +1,88 @@
 #include <GUIConstantsEx.au3>
-#include <GuiListView.au3>
 #include <GuiImageList.au3>
+#include <GuiListView.au3>
 #include <WindowsConstants.au3>
 
 Opt("GUIOnEventMode", 1)
-Global $hListView, $hListView2, $GUI1, $GUI2, $run = 1
-Global $Dock = 1, $Dock_Location = 1, $x1, $x2, $y1, $y2
-Global $OptionsItem2, $OptionsItem3, $OptionsItem4
-Global $Options2Item2, $Options2Item3, $Options2Item4
+Global $g_hListView, $g_hListView2, $g_hGUI1, $g_hGUI2, $g_iRun = 1
+Global $g_iDock = 1, $g_iDock_Location = 1, $g_iX1, $g_iX2, $g_iY1, $g_iY2
+Global $g_idOptionsItem2, $g_idOptionsItem3, $g_idOptionsItem4
+Global $g_idOptions2Item2, $g_idOptions2Item3, $g_idOptions2Item4
 
-_Main()
+Example()
 
-Func _Main()
-	$run = 1
-	Local $OptionsMenu, $OptionsItem1, $Options2Menu, $Options2Item1, $width = 450
-	Local $Btn_MoveLeft, $Btn_MoveRight, $Btn_Exit1, $Btn_Exit2
-	Local $Btn_CopyRight, $Btn_CopyLeft, $hImage
-	Local $exStyles = BitOR($LVS_EX_GRIDLINES, $LVS_EX_FULLROWSELECT, $LVS_EX_CHECKBOXES, $LVS_EX_SUBITEMIMAGES)
+Func Example()
+	$g_iRun = 1
+	Local $idOptionsMenu, $idOptionsItem1, $idOptions2Menu, $idOptions2Item1, $iWidth = 450
+	Local $id_MoveLeft, $id_MoveRight, $id_Exit1, $id_Exit2
+	Local $id_CopyRight, $id_CopyLeft, $hImage
+	Local $iStylesEx = BitOR($LVS_EX_GRIDLINES, $LVS_EX_FULLROWSELECT, $LVS_EX_CHECKBOXES, $LVS_EX_SUBITEMIMAGES)
 
-	$GUI1 = GUICreate("(External) ListView Copy Items", $width, 300, 10, 10)
-	$OptionsMenu = GUICtrlCreateMenu("Options")
-	$OptionsItem1 = GUICtrlCreateMenu("Docking", $OptionsMenu)
+	$g_hGUI1 = GUICreate("(External) ListView Copy Items", $iWidth, 300, 10, 10)
+	$idOptionsMenu = GUICtrlCreateMenu("Options")
+	$idOptionsItem1 = GUICtrlCreateMenu("Docking", $idOptionsMenu)
 
-	$OptionsItem2 = GUICtrlCreateMenuItem("Docked", $OptionsItem1)
-	GUICtrlCreateMenuItem("", $OptionsItem1)
-	$OptionsItem3 = GUICtrlCreateMenuItem("Side By Side", $OptionsItem1)
-	$OptionsItem4 = GUICtrlCreateMenuItem("Top And Bottom", $OptionsItem1)
-	GUICtrlSetState($OptionsItem2, $GUI_CHECKED)
-	GUICtrlSetState($OptionsItem3, $GUI_CHECKED)
-	GUICtrlSetOnEvent($OptionsItem2, "_SetDocking")
-	GUICtrlSetOnEvent($OptionsItem3, "_SetDockSideBySide")
-	GUICtrlSetOnEvent($OptionsItem4, "_SetDockTopAndBottom")
+	$g_idOptionsItem2 = GUICtrlCreateMenuItem("Docked", $idOptionsItem1)
+	GUICtrlCreateMenuItem("", $idOptionsItem1)
+	$g_idOptionsItem3 = GUICtrlCreateMenuItem("Side By Side", $idOptionsItem1)
+	$g_idOptionsItem4 = GUICtrlCreateMenuItem("Top And Bottom", $idOptionsItem1)
+	GUICtrlSetState($g_idOptionsItem2, $GUI_CHECKED)
+	GUICtrlSetState($g_idOptionsItem3, $GUI_CHECKED)
+	GUICtrlSetOnEvent($g_idOptionsItem2, "_SetDocking")
+	GUICtrlSetOnEvent($g_idOptionsItem3, "_SetDockSideBySide")
+	GUICtrlSetOnEvent($g_idOptionsItem4, "_SetDockTopAndBottom")
 
 	GUISetOnEvent($GUI_EVENT_CLOSE, "SpecialEvents")
 	GUISetOnEvent($GUI_EVENT_MINIMIZE, "SpecialEvents")
 	GUISetOnEvent($GUI_EVENT_RESTORE, "SpecialEvents")
 
 	; need the handle because UDF function(s) are used to create the items
-	$hListView = GUICtrlGetHandle(GUICtrlCreateListView("", 2, 2, $width - 100, 268, BitOR($LVS_REPORT, $LVS_SHOWSELALWAYS), $WS_EX_CLIENTEDGE))
-	_GUICtrlListView_SetExtendedListViewStyle($hListView, $exStyles)
+	$g_hListView = GUICtrlGetHandle(GUICtrlCreateListView("", 2, 2, $iWidth - 100, 268, BitOR($LVS_REPORT, $LVS_SHOWSELALWAYS), $WS_EX_CLIENTEDGE))
+	_GUICtrlListView_SetExtendedListViewStyle($g_hListView, $iStylesEx)
 
-	$Btn_MoveRight = GUICtrlCreateButton("Move", $width - 95, 35, 90, 20)
-	GUICtrlSetOnEvent($Btn_MoveRight, "_MoveRight")
+	$id_MoveRight = GUICtrlCreateButton("Move", $iWidth - 95, 35, 90, 20)
+	GUICtrlSetOnEvent($id_MoveRight, "_MoveRight")
 
-	$Btn_CopyRight = GUICtrlCreateButton("Copy", $width - 95, 60, 90, 20)
-	GUICtrlSetOnEvent($Btn_CopyRight, "_CopyRight")
+	$id_CopyRight = GUICtrlCreateButton("Copy", $iWidth - 95, 60, 90, 20)
+	GUICtrlSetOnEvent($id_CopyRight, "_CopyRight")
 
-	$Btn_Exit1 = GUICtrlCreateButton("Exit", $width - 95, 140, 90, 25)
-	GUICtrlSetOnEvent($Btn_Exit1, "_Exit")
+	$id_Exit1 = GUICtrlCreateButton("Exit", $iWidth - 95, 140, 90, 25)
+	GUICtrlSetOnEvent($id_Exit1, "_Exit")
 
-	$GUI2 = GUICreate("Right/Bottom Window", $width, 300, $width + 15, 10)
+	$g_hGUI2 = GUICreate("Right/Bottom Window", $iWidth, 300, $iWidth + 15, 10)
 
-	$Options2Menu = GUICtrlCreateMenu("Options")
-	$Options2Item1 = GUICtrlCreateMenu("Docking", $Options2Menu)
-	$Options2Item2 = GUICtrlCreateMenuItem("Docked", $Options2Item1)
-	GUICtrlCreateMenuItem("", $Options2Item1)
-	$Options2Item3 = GUICtrlCreateMenuItem("Side By Side", $Options2Item1)
-	$Options2Item4 = GUICtrlCreateMenuItem("Top And Bottom", $Options2Item1)
-	GUICtrlSetState($Options2Item2, $GUI_CHECKED)
-	GUICtrlSetState($Options2Item3, $GUI_CHECKED)
-	GUICtrlSetOnEvent($Options2Item2, "_SetDocking2")
-	GUICtrlSetOnEvent($Options2Item3, "_SetDockSideBySide2")
-	GUICtrlSetOnEvent($Options2Item4, "_SetDockTopAndBottom2")
+	$idOptions2Menu = GUICtrlCreateMenu("Options")
+	$idOptions2Item1 = GUICtrlCreateMenu("Docking", $idOptions2Menu)
+	$g_idOptions2Item2 = GUICtrlCreateMenuItem("Docked", $idOptions2Item1)
+	GUICtrlCreateMenuItem("", $idOptions2Item1)
+	$g_idOptions2Item3 = GUICtrlCreateMenuItem("Side By Side", $idOptions2Item1)
+	$g_idOptions2Item4 = GUICtrlCreateMenuItem("Top And Bottom", $idOptions2Item1)
+	GUICtrlSetState($g_idOptions2Item2, $GUI_CHECKED)
+	GUICtrlSetState($g_idOptions2Item3, $GUI_CHECKED)
+	GUICtrlSetOnEvent($g_idOptions2Item2, "_SetDocking2")
+	GUICtrlSetOnEvent($g_idOptions2Item3, "_SetDockSideBySide2")
+	GUICtrlSetOnEvent($g_idOptions2Item4, "_SetDockTopAndBottom2")
 
 	GUISetOnEvent($GUI_EVENT_CLOSE, "SpecialEvents")
 	GUISetOnEvent($GUI_EVENT_MINIMIZE, "SpecialEvents")
 	GUISetOnEvent($GUI_EVENT_RESTORE, "SpecialEvents")
 
-	$hListView2 = GUICtrlGetHandle(GUICtrlCreateListView("", 2, 2, $width - 100, 268, BitOR($LVS_REPORT, $LVS_SHOWSELALWAYS), $WS_EX_CLIENTEDGE))
-	_GUICtrlListView_SetExtendedListViewStyle($hListView2, $exStyles)
+	$g_hListView2 = GUICtrlGetHandle(GUICtrlCreateListView("", 2, 2, $iWidth - 100, 268, BitOR($LVS_REPORT, $LVS_SHOWSELALWAYS), $WS_EX_CLIENTEDGE))
+	_GUICtrlListView_SetExtendedListViewStyle($g_hListView2, $iStylesEx)
 
-	$Btn_MoveLeft = GUICtrlCreateButton("Move", $width - 95, 35, 90, 20)
-	GUICtrlSetOnEvent($Btn_MoveLeft, "_MoveLeft")
+	$id_MoveLeft = GUICtrlCreateButton("Move", $iWidth - 95, 35, 90, 20)
+	GUICtrlSetOnEvent($id_MoveLeft, "_MoveLeft")
 
-	$Btn_CopyLeft = GUICtrlCreateButton("Copy", $width - 95, 60, 90, 20)
-	GUICtrlSetOnEvent($Btn_CopyLeft, "_CopyLeft")
+	$id_CopyLeft = GUICtrlCreateButton("Copy", $iWidth - 95, 60, 90, 20)
+	GUICtrlSetOnEvent($id_CopyLeft, "_CopyLeft")
 
-	$Btn_Exit2 = GUICtrlCreateButton("Exit", $width - 95, 140, 90, 25)
-	GUICtrlSetOnEvent($Btn_Exit2, "_Exit")
+	$id_Exit2 = GUICtrlCreateButton("Exit", $iWidth - 95, 140, 90, 25)
+	GUICtrlSetOnEvent($id_Exit2, "_Exit")
 
-	GUISetState(@SW_SHOW, $GUI2)
-	GUISetState(@SW_SHOW, $GUI1)
+	GUISetState(@SW_SHOW, $g_hGUI2)
+	GUISetState(@SW_SHOW, $g_hGUI1)
 
-	; 加载图像
+	; Load images
 	$hImage = _GUIImageList_Create(16, 16, 5, 3)
 	_GUIImageList_AddIcon($hImage, @SystemDir & "\shell32.dll", 13)
 	_GUIImageList_AddIcon($hImage, @SystemDir & "\shell32.dll", 14)
@@ -90,193 +90,193 @@ Func _Main()
 	_GUIImageList_AddIcon($hImage, @SystemDir & "\shell32.dll", 16)
 	_GUIImageList_AddIcon($hImage, @SystemDir & "\shell32.dll", 17)
 	_GUIImageList_AddIcon($hImage, @SystemDir & "\shell32.dll", 18)
-	_GUICtrlListView_SetImageList($hListView, $hImage, 1)
-	_GUICtrlListView_SetImageList($hListView2, $hImage, 1)
+	_GUICtrlListView_SetImageList($g_hListView, $hImage, 1)
+	_GUICtrlListView_SetImageList($g_hListView2, $hImage, 1)
 
-	; 添加列
-	_GUICtrlListView_AddColumn($hListView, "Column 1", 120)
-	_GUICtrlListView_AddColumn($hListView, "Column 2", 100)
-	_GUICtrlListView_AddColumn($hListView, "Column 3", 100)
+	; Add columns
+	_GUICtrlListView_AddColumn($g_hListView, "Column 1", 120)
+	_GUICtrlListView_AddColumn($g_hListView, "Column 2", 100)
+	_GUICtrlListView_AddColumn($g_hListView, "Column 3", 100)
 
-	; 添加列
-	_GUICtrlListView_AddColumn($hListView2, "Column 1", 120)
-	_GUICtrlListView_AddColumn($hListView2, "Column 2", 100)
-	_GUICtrlListView_AddColumn($hListView2, "Column 3", 100)
+	; Add columns
+	_GUICtrlListView_AddColumn($g_hListView2, "Column 1", 120)
+	_GUICtrlListView_AddColumn($g_hListView2, "Column 2", 100)
+	_GUICtrlListView_AddColumn($g_hListView2, "Column 3", 100)
 
-	; 添加项目
-	_GUICtrlListView_AddItem($hListView, "Row 1: Col 1", 0)
-	_GUICtrlListView_AddSubItem($hListView, 0, "Row 1: Col 2", 1, 1)
-	_GUICtrlListView_AddSubItem($hListView, 0, "Row 1: Col 3", 2, 2)
-	_GUICtrlListView_AddItem($hListView, "Row 2: Col 1", 1)
-	_GUICtrlListView_AddSubItem($hListView, 1, "Row 2: Col 2", 1, 2)
-	_GUICtrlListView_AddItem($hListView, "Row 3: Col 1", 2)
-	_GUICtrlListView_AddItem($hListView, "Row 4: Col 1", 3)
-	_GUICtrlListView_AddItem($hListView, "Row 5: Col 1", 4)
-	_GUICtrlListView_AddSubItem($hListView, 4, "Row 5: Col 2", 1, 3)
-	_GUICtrlListView_AddItem($hListView, "Row 6: Col 1", 5)
-	_GUICtrlListView_AddSubItem($hListView, 5, "Row 6: Col 2", 1, 4)
-	_GUICtrlListView_AddSubItem($hListView, 5, "Row 6: Col 3", 2, 3)
+	; Add items
+	_GUICtrlListView_AddItem($g_hListView, "Row 1: Col 1", 0)
+	_GUICtrlListView_AddSubItem($g_hListView, 0, "Row 1: Col 2", 1, 1)
+	_GUICtrlListView_AddSubItem($g_hListView, 0, "Row 1: Col 3", 2, 2)
+	_GUICtrlListView_AddItem($g_hListView, "Row 2: Col 1", 1)
+	_GUICtrlListView_AddSubItem($g_hListView, 1, "Row 2: Col 2", 1, 2)
+	_GUICtrlListView_AddItem($g_hListView, "Row 3: Col 1", 2)
+	_GUICtrlListView_AddItem($g_hListView, "Row 4: Col 1", 3)
+	_GUICtrlListView_AddItem($g_hListView, "Row 5: Col 1", 4)
+	_GUICtrlListView_AddSubItem($g_hListView, 4, "Row 5: Col 2", 1, 3)
+	_GUICtrlListView_AddItem($g_hListView, "Row 6: Col 1", 5)
+	_GUICtrlListView_AddSubItem($g_hListView, 5, "Row 6: Col 2", 1, 4)
+	_GUICtrlListView_AddSubItem($g_hListView, 5, "Row 6: Col 3", 2, 3)
 
-	While $run
-		If $Dock Then _KeepWindowsDocked()
+	While $g_iRun
+		If $g_iDock Then _KeepWindowsDocked()
 		Sleep(10)
 	WEnd
-EndFunc   ;==>_Main
+EndFunc   ;==>Example
 
 Func _SetDocking()
-	If BitAND(GUICtrlRead($OptionsItem2), $GUI_CHECKED) = $GUI_CHECKED Then
-		GUICtrlSetState($OptionsItem2, $GUI_UNCHECKED)
-		GUICtrlSetState($Options2Item2, $GUI_UNCHECKED)
-		$Dock = 0
+	If BitAND(GUICtrlRead($g_idOptionsItem2), $GUI_CHECKED) = $GUI_CHECKED Then
+		GUICtrlSetState($g_idOptionsItem2, $GUI_UNCHECKED)
+		GUICtrlSetState($g_idOptions2Item2, $GUI_UNCHECKED)
+		$g_iDock = 0
 	Else
-		GUICtrlSetState($OptionsItem2, $GUI_CHECKED)
-		GUICtrlSetState($Options2Item2, $GUI_CHECKED)
-		$Dock = 2
+		GUICtrlSetState($g_idOptionsItem2, $GUI_CHECKED)
+		GUICtrlSetState($g_idOptions2Item2, $GUI_CHECKED)
+		$g_iDock = 2
 	EndIf
-	If $Dock Then _KeepWindowsDocked()
+	If $g_iDock Then _KeepWindowsDocked()
 EndFunc   ;==>_SetDocking
 
 Func _SetDocking2()
-	If BitAND(GUICtrlRead($Options2Item2), $GUI_CHECKED) = $GUI_CHECKED Then
-		GUICtrlSetState($OptionsItem2, $GUI_UNCHECKED)
-		GUICtrlSetState($Options2Item2, $GUI_UNCHECKED)
-		$Dock = 0
+	If BitAND(GUICtrlRead($g_idOptions2Item2), $GUI_CHECKED) = $GUI_CHECKED Then
+		GUICtrlSetState($g_idOptionsItem2, $GUI_UNCHECKED)
+		GUICtrlSetState($g_idOptions2Item2, $GUI_UNCHECKED)
+		$g_iDock = 0
 	Else
-		GUICtrlSetState($OptionsItem2, $GUI_CHECKED)
-		GUICtrlSetState($Options2Item2, $GUI_CHECKED)
-		$Dock = 2
+		GUICtrlSetState($g_idOptionsItem2, $GUI_CHECKED)
+		GUICtrlSetState($g_idOptions2Item2, $GUI_CHECKED)
+		$g_iDock = 2
 	EndIf
-	If $Dock Then _KeepWindowsDocked()
+	If $g_iDock Then _KeepWindowsDocked()
 EndFunc   ;==>_SetDocking2
 
 Func _SetDockSideBySide()
-	If BitAND(GUICtrlRead($OptionsItem3), $GUI_CHECKED) = $GUI_CHECKED Then
-		GUICtrlSetState($OptionsItem3, $GUI_UNCHECKED)
-		GUICtrlSetState($OptionsItem4, $GUI_CHECKED)
-		GUICtrlSetState($Options2Item3, $GUI_UNCHECKED)
-		GUICtrlSetState($Options2Item4, $GUI_CHECKED)
-		$Dock_Location = 2
+	If BitAND(GUICtrlRead($g_idOptionsItem3), $GUI_CHECKED) = $GUI_CHECKED Then
+		GUICtrlSetState($g_idOptionsItem3, $GUI_UNCHECKED)
+		GUICtrlSetState($g_idOptionsItem4, $GUI_CHECKED)
+		GUICtrlSetState($g_idOptions2Item3, $GUI_UNCHECKED)
+		GUICtrlSetState($g_idOptions2Item4, $GUI_CHECKED)
+		$g_iDock_Location = 2
 	Else
-		GUICtrlSetState($OptionsItem3, $GUI_CHECKED)
-		GUICtrlSetState($OptionsItem4, $GUI_UNCHECKED)
-		GUICtrlSetState($Options2Item3, $GUI_CHECKED)
-		GUICtrlSetState($Options2Item4, $GUI_UNCHECKED)
-		$Dock_Location = 1
-		If $Dock Then $Dock = 2
+		GUICtrlSetState($g_idOptionsItem3, $GUI_CHECKED)
+		GUICtrlSetState($g_idOptionsItem4, $GUI_UNCHECKED)
+		GUICtrlSetState($g_idOptions2Item3, $GUI_CHECKED)
+		GUICtrlSetState($g_idOptions2Item4, $GUI_UNCHECKED)
+		$g_iDock_Location = 1
+		If $g_iDock Then $g_iDock = 2
 	EndIf
-	If $Dock Then _KeepWindowsDocked()
+	If $g_iDock Then _KeepWindowsDocked()
 EndFunc   ;==>_SetDockSideBySide
 
 Func _SetDockSideBySide2()
-	If BitAND(GUICtrlRead($Options2Item3), $GUI_CHECKED) = $GUI_CHECKED Then
-		GUICtrlSetState($OptionsItem3, $GUI_UNCHECKED)
-		GUICtrlSetState($OptionsItem4, $GUI_CHECKED)
-		GUICtrlSetState($Options2Item3, $GUI_UNCHECKED)
-		GUICtrlSetState($Options2Item4, $GUI_CHECKED)
-		$Dock_Location = 2
+	If BitAND(GUICtrlRead($g_idOptions2Item3), $GUI_CHECKED) = $GUI_CHECKED Then
+		GUICtrlSetState($g_idOptionsItem3, $GUI_UNCHECKED)
+		GUICtrlSetState($g_idOptionsItem4, $GUI_CHECKED)
+		GUICtrlSetState($g_idOptions2Item3, $GUI_UNCHECKED)
+		GUICtrlSetState($g_idOptions2Item4, $GUI_CHECKED)
+		$g_iDock_Location = 2
 	Else
-		GUICtrlSetState($OptionsItem3, $GUI_CHECKED)
-		GUICtrlSetState($OptionsItem4, $GUI_UNCHECKED)
-		GUICtrlSetState($Options2Item3, $GUI_CHECKED)
-		GUICtrlSetState($Options2Item4, $GUI_UNCHECKED)
-		$Dock_Location = 1
-		If $Dock Then $Dock = 2
+		GUICtrlSetState($g_idOptionsItem3, $GUI_CHECKED)
+		GUICtrlSetState($g_idOptionsItem4, $GUI_UNCHECKED)
+		GUICtrlSetState($g_idOptions2Item3, $GUI_CHECKED)
+		GUICtrlSetState($g_idOptions2Item4, $GUI_UNCHECKED)
+		$g_iDock_Location = 1
+		If $g_iDock Then $g_iDock = 2
 	EndIf
-	If $Dock Then _KeepWindowsDocked()
+	If $g_iDock Then _KeepWindowsDocked()
 EndFunc   ;==>_SetDockSideBySide2
 
 Func _SetDockTopAndBottom()
-	If BitAND(GUICtrlRead($OptionsItem4), $GUI_CHECKED) = $GUI_CHECKED Then
-		GUICtrlSetState($OptionsItem4, $GUI_UNCHECKED)
-		GUICtrlSetState($OptionsItem3, $GUI_CHECKED)
-		GUICtrlSetState($Options2Item4, $GUI_UNCHECKED)
-		GUICtrlSetState($Options2Item3, $GUI_CHECKED)
-		$Dock_Location = 1
+	If BitAND(GUICtrlRead($g_idOptionsItem4), $GUI_CHECKED) = $GUI_CHECKED Then
+		GUICtrlSetState($g_idOptionsItem4, $GUI_UNCHECKED)
+		GUICtrlSetState($g_idOptionsItem3, $GUI_CHECKED)
+		GUICtrlSetState($g_idOptions2Item4, $GUI_UNCHECKED)
+		GUICtrlSetState($g_idOptions2Item3, $GUI_CHECKED)
+		$g_iDock_Location = 1
 	Else
-		GUICtrlSetState($OptionsItem4, $GUI_CHECKED)
-		GUICtrlSetState($OptionsItem3, $GUI_UNCHECKED)
-		GUICtrlSetState($Options2Item4, $GUI_CHECKED)
-		GUICtrlSetState($Options2Item3, $GUI_UNCHECKED)
-		$Dock_Location = 2
-		If $Dock Then $Dock = 2
+		GUICtrlSetState($g_idOptionsItem4, $GUI_CHECKED)
+		GUICtrlSetState($g_idOptionsItem3, $GUI_UNCHECKED)
+		GUICtrlSetState($g_idOptions2Item4, $GUI_CHECKED)
+		GUICtrlSetState($g_idOptions2Item3, $GUI_UNCHECKED)
+		$g_iDock_Location = 2
+		If $g_iDock Then $g_iDock = 2
 	EndIf
-	If $Dock Then _KeepWindowsDocked()
+	If $g_iDock Then _KeepWindowsDocked()
 EndFunc   ;==>_SetDockTopAndBottom
 
 Func _SetDockTopAndBottom2()
-	If BitAND(GUICtrlRead($Options2Item4), $GUI_CHECKED) = $GUI_CHECKED Then
-		GUICtrlSetState($OptionsItem4, $GUI_UNCHECKED)
-		GUICtrlSetState($OptionsItem3, $GUI_CHECKED)
-		GUICtrlSetState($Options2Item4, $GUI_UNCHECKED)
-		GUICtrlSetState($Options2Item3, $GUI_CHECKED)
-		$Dock_Location = 1
+	If BitAND(GUICtrlRead($g_idOptions2Item4), $GUI_CHECKED) = $GUI_CHECKED Then
+		GUICtrlSetState($g_idOptionsItem4, $GUI_UNCHECKED)
+		GUICtrlSetState($g_idOptionsItem3, $GUI_CHECKED)
+		GUICtrlSetState($g_idOptions2Item4, $GUI_UNCHECKED)
+		GUICtrlSetState($g_idOptions2Item3, $GUI_CHECKED)
+		$g_iDock_Location = 1
 	Else
-		GUICtrlSetState($OptionsItem4, $GUI_CHECKED)
-		GUICtrlSetState($OptionsItem3, $GUI_UNCHECKED)
-		GUICtrlSetState($Options2Item4, $GUI_CHECKED)
-		GUICtrlSetState($Options2Item3, $GUI_UNCHECKED)
-		$Dock_Location = 2
-		If $Dock Then $Dock = 2
+		GUICtrlSetState($g_idOptionsItem4, $GUI_CHECKED)
+		GUICtrlSetState($g_idOptionsItem3, $GUI_UNCHECKED)
+		GUICtrlSetState($g_idOptions2Item4, $GUI_CHECKED)
+		GUICtrlSetState($g_idOptions2Item3, $GUI_UNCHECKED)
+		$g_iDock_Location = 2
+		If $g_iDock Then $g_iDock = 2
 	EndIf
-	If $Dock Then _KeepWindowsDocked()
+	If $g_iDock Then _KeepWindowsDocked()
 EndFunc   ;==>_SetDockTopAndBottom2
 
 Func _KeepWindowsDocked()
-	Local $p_win1 = WinGetPos($GUI1)
-	Local $p_win2 = WinGetPos($GUI2)
-	If $Dock_Location == 1 Then
-		If (($p_win1[0] <> $x1 Or $p_win1[1] <> $y1) And BitAND(WinGetState($GUI1), 8) Or $Dock = 2) Then
-			$x1 = $p_win1[0]
-			$y1 = $p_win1[1]
-			$x2 = $p_win1[2] + $x1
-			$y2 = $y1
-			WinMove($GUI2, "", $x2, $y2)
-			$Dock = 1
-		ElseIf (($p_win2[0] <> $x2 Or $p_win2[1] <> $y2) And BitAND(WinGetState($GUI2), 8)) Then
-			$x2 = $p_win2[0]
-			$y2 = $p_win2[1]
-			$x1 = $p_win2[0] - $p_win1[2]
-			$y1 = $y2
-			WinMove($GUI1, "", $x1, $y1)
+	Local $a_PosWin1 = WinGetPos($g_hGUI1)
+	Local $a_PosWin2 = WinGetPos($g_hGUI2)
+	If $g_iDock_Location == 1 Then
+		If (($a_PosWin1[0] <> $g_iX1 Or $a_PosWin1[1] <> $g_iY1) And BitAND(WinGetState($g_hGUI1), 8) Or $g_iDock = 2) Then
+			$g_iX1 = $a_PosWin1[0]
+			$g_iY1 = $a_PosWin1[1]
+			$g_iX2 = $a_PosWin1[2] + $g_iX1
+			$g_iY2 = $g_iY1
+			WinMove($g_hGUI2, "", $g_iX2, $g_iY2)
+			$g_iDock = 1
+		ElseIf (($a_PosWin2[0] <> $g_iX2 Or $a_PosWin2[1] <> $g_iY2) And BitAND(WinGetState($g_hGUI2), 8)) Then
+			$g_iX2 = $a_PosWin2[0]
+			$g_iY2 = $a_PosWin2[1]
+			$g_iX1 = $a_PosWin2[0] - $a_PosWin1[2]
+			$g_iY1 = $g_iY2
+			WinMove($g_hGUI1, "", $g_iX1, $g_iY1)
 		EndIf
 	Else
-		If (($p_win1[0] <> $x1 Or $p_win1[1] <> $y1) And BitAND(WinGetState($GUI1), 8) Or $Dock = 2) Then
-			$x1 = $p_win1[0]
-			$y1 = $p_win1[1]
-			$x2 = $x1
-			$y2 = $p_win1[3] + $y1
-			WinMove($GUI2, "", $x2, $y2)
-			$Dock = 1
-		ElseIf (($p_win2[0] <> $x2 Or $p_win2[1] <> $y2) And BitAND(WinGetState($GUI2), 8)) Then
-			$x2 = $p_win2[0]
-			$y2 = $p_win2[1]
-			$x1 = $x2
-			$y1 = $p_win2[1] - $p_win1[3]
-			WinMove($GUI1, "", $x1, $y1)
+		If (($a_PosWin1[0] <> $g_iX1 Or $a_PosWin1[1] <> $g_iY1) And BitAND(WinGetState($g_hGUI1), 8) Or $g_iDock = 2) Then
+			$g_iX1 = $a_PosWin1[0]
+			$g_iY1 = $a_PosWin1[1]
+			$g_iX2 = $g_iX1
+			$g_iY2 = $a_PosWin1[3] + $g_iY1
+			WinMove($g_hGUI2, "", $g_iX2, $g_iY2)
+			$g_iDock = 1
+		ElseIf (($a_PosWin2[0] <> $g_iX2 Or $a_PosWin2[1] <> $g_iY2) And BitAND(WinGetState($g_hGUI2), 8)) Then
+			$g_iX2 = $a_PosWin2[0]
+			$g_iY2 = $a_PosWin2[1]
+			$g_iX1 = $g_iX2
+			$g_iY1 = $a_PosWin2[1] - $a_PosWin1[3]
+			WinMove($g_hGUI1, "", $g_iX1, $g_iY1)
 		EndIf
 	EndIf
 EndFunc   ;==>_KeepWindowsDocked
 
 Func _CopyRight()
-	_GUICtrlListView_CopyItems($hListView, $hListView2)
+	_GUICtrlListView_CopyItems($g_hListView, $g_hListView2)
 EndFunc   ;==>_CopyRight
 
 Func _MoveRight()
-	_GUICtrlListView_CopyItems($hListView, $hListView2, 1)
+	_GUICtrlListView_CopyItems($g_hListView, $g_hListView2, 1)
 EndFunc   ;==>_MoveRight
 
 Func _CopyLeft()
-	_GUICtrlListView_CopyItems($hListView2, $hListView)
+	_GUICtrlListView_CopyItems($g_hListView2, $g_hListView)
 EndFunc   ;==>_CopyLeft
 
 Func _MoveLeft()
-	_GUICtrlListView_CopyItems($hListView2, $hListView, 1)
+	_GUICtrlListView_CopyItems($g_hListView2, $g_hListView, 1)
 EndFunc   ;==>_MoveLeft
 
 Func _Exit()
-	$run = 0
-	GUIDelete($GUI2)
-	GUIDelete($GUI1)
+	$g_iRun = 0
+	GUIDelete($g_hGUI2)
+	GUIDelete($g_hGUI1)
 EndFunc   ;==>_Exit
 
 Func SpecialEvents()

@@ -1,43 +1,41 @@
 #include <GuiComboBox.au3>
 #include <GUIConstantsEx.au3>
-#include <Constants.au3>
+#include <MsgBoxConstants.au3>
 
-$Debug_CB = False ; 检查传递给 ComboBox/ComboBoxEx 函数的类名, 设置为真并使用另一控件的句柄可以看出它是否有效
+Global $g_idMemo
 
-Global $iMemo
+Example()
 
-_Main()
+Func Example()
+	Local $aRect, $idCombo
 
-Func _Main()
-	Local $aRect, $hCombo
-
-	; 创建 GUI
+	; Create GUI
 	GUICreate("ComboBox Get Dropped Control Rect", 400, 296)
-	$hCombo = GUICtrlCreateCombo("", 2, 2, 396, 296)
-	$iMemo = GUICtrlCreateEdit("", 2, 32, 396, 266, 0)
-	GUICtrlSetFont($iMemo, 9, 400, 0, "Courier New")
-	GUISetState()
+	$idCombo = GUICtrlCreateCombo("", 2, 2, 396, 296)
+	$g_idMemo = GUICtrlCreateEdit("", 2, 32, 396, 266, 0)
+	GUICtrlSetFont($g_idMemo, 9, 400, 0, "Courier New")
+	GUISetState(@SW_SHOW)
 
-	; 添加文件
-	_GUICtrlComboBox_BeginUpdate($hCombo)
-	_GUICtrlComboBox_AddDir($hCombo, @WindowsDir & "\*.exe")
-	_GUICtrlComboBox_EndUpdate($hCombo)
+	; Add files
+	_GUICtrlComboBox_BeginUpdate($idCombo)
+	_GUICtrlComboBox_AddDir($idCombo, @WindowsDir & "\*.exe")
+	_GUICtrlComboBox_EndUpdate($idCombo)
 
-	; 获取控件下拉时的矩形坐标
-	$aRect = _GUICtrlComboBox_GetDroppedControlRect($hCombo)
+	; Get Dropped Control Rect
+	$aRect = _GUICtrlComboBox_GetDroppedControlRect($idCombo)
 
 	MemoWrite("X coordinate of the upper left corner ......: " & $aRect[0])
 	MemoWrite("Y coordinate of the upper left corner ......: " & $aRect[1])
 	MemoWrite("X coordinate of the lower right corner .....: " & $aRect[2])
 	MemoWrite("Y coordinate of the lower right corner .....: " & $aRect[3])
 
-	; 循环直到用户退出
+	; Loop until the user exits.
 	Do
 	Until GUIGetMsg() = $GUI_EVENT_CLOSE
 	GUIDelete()
-EndFunc   ;==>_Main
+EndFunc   ;==>Example
 
-; 写入一行到 memo 控件
+; Write a line to the memo control
 Func MemoWrite($sMessage)
-	GUICtrlSetData($iMemo, $sMessage & @CRLF, 1)
+	GUICtrlSetData($g_idMemo, $sMessage & @CRLF, 1)
 EndFunc   ;==>MemoWrite

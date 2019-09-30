@@ -1,15 +1,20 @@
-#include <WinAPIGdi.au3>
 #include <APIGdiConstants.au3>
-#include <WindowsConstants.au3>
 #include <FontConstants.au3>
-
-Global Const $STM_SETIMAGE = 0x0172
-Global Const $STM_GETIMAGE = 0x0173
+#include <SendMessage.au3>
+#include <StaticConstants.au3>
+#include <WinAPIGdi.au3>
+#include <WinAPIGdiDC.au3>
+#include <WinAPIHObj.au3>
+#include <WinAPIMisc.au3>
+#include <WinAPIRes.au3>
+#include <WinAPISys.au3>
+#include <WinAPISysWin.au3>
+#include <WindowsConstants.au3>
 
 ; Create GUI
 Local $hForm = GUICreate('Test ' & StringReplace(@ScriptName, '.au3', '()'), 400, 400)
-Local $Pic = GUICtrlCreatePic('', 0, 0, 400, 400)
-Local $hPic = GUICtrlGetHandle($Pic)
+Local $idPic = GUICtrlCreatePic('', 0, 0, 400, 400)
+Local $hPic = GUICtrlGetHandle($idPic)
 
 ; Create bitmap
 Local $hDev = _WinAPI_GetDC($hPic)
@@ -45,13 +50,13 @@ $hObj = _WinAPI_SelectObject($hDC, $hFont)
 _WinAPI_TextOut($hDC, 30, 185, 'Simple Text')
 _WinAPI_SelectObject($hDC, $hObj)
 _WinAPI_DeleteObject($hFont)
-Global $aPoint2[6][2] = [[0, 129],[55, 75],[75, 0],[95, 75],[150, 129],[75, 108]]
+Local $aPoint2[6][2] = [[0, 129], [55, 75], [75, 0], [95, 75], [150, 129], [75, 108]]
 Local $hRgn = _WinAPI_CreatePolygonRgn($aPoint2)
 _WinAPI_SetDCBrushColor($hDC, 0x0060C4)
 _WinAPI_OffsetRgn($hRgn, 25, 240)
 _WinAPI_PaintRgn($hDC, $hRgn)
 _WinAPI_DeleteObject($hRgn)
-Global $aPoint1[19][2] = [[50, 20],[70, 0],[70, 0],[90, 20],[100, 30],[110, 40],[120, 50],[130, 60],[130, 70],[120, 70],[110, 70],[30, 70],[20, 70],[10, 70],[10, 60],[20, 50],[30, 40],[40, 30],[50, 20]]
+Local $aPoint1[19][2] = [[50, 20], [70, 0], [70, 0], [90, 20], [100, 30], [110, 40], [120, 50], [130, 60], [130, 70], [120, 70], [110, 70], [30, 70], [20, 70], [10, 70], [10, 60], [20, 50], [30, 40], [40, 30], [50, 20]]
 _WinAPI_SetDCPenColor($hDC, 0xFF8000)
 _WinAPI_OffsetPoints($aPoint1, 219, 25)
 _WinAPI_PolyBezier($hDC, $aPoint1)
@@ -93,7 +98,7 @@ If $hObj <> $hBitmap Then
 	_WinAPI_DeleteObject($hBitmap)
 EndIf
 
-GUISetState()
+GUISetState(@SW_SHOW)
 
 Do
 Until GUIGetMsg() = -3

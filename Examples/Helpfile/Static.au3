@@ -1,57 +1,15 @@
-; Static variables examples.
+#include <MsgBoxConstants.au3>
 
-Func Test1()
-	Static $STbFirstPass = 1
+; Call the Example function to initialize the Static variable in Local scope.
+Example()
 
-	If $STbFirstPass Then
-		$STbFirstPass = 0
-		; Perform tasks for the first time through
-	EndIf
-	; Other things the function should do
-EndFunc   ;==>Test1
+; Call the Example function a second time to show that the variable has retained the data we last assigned to it.
+Example()
 
-Func Accumulate($State)
-	Static $Values[9]
-	Local $I
-
-	If IsNumber($State) Then
-		Switch $State
-			Case -1
-				; Reset
-				For $I = 0 To 8
-					$Values[$I] = 0
-				Next
-				Return True
-			Case -2
-				Return $Values
-			Case 0 To UBound($Values) - 1
-				$Values[$State] += 1
-				Return $Values[$State]
-			Case Else
-				If $State < 0 Then
-					SetError(1, 0)
-					Return False
-				Else
-					ReDim $Values[$State + 1] ; Resize the array to accomodate the new value
-					$Values[$State] = 1
-					Return 1
-				EndIf
-		EndSwitch
-	Else
-		SetError(2, 0)
-	EndIf
-EndFunc   ;==>Accumulate
-
-Global $I
-
-Test1()
-
-For $I = 1 To 99
-	Accumulate(Random(0, 20, 1))
-Next
-For $I In Accumulate(-2)
-	ConsoleWrite($I & ", ")
-Next
-ConsoleWrite(@CRLF);
-
-Test1()
+Func Example()
+	Local Static $sString = "This is a line of text which is declared using a Static variable in Local scope." & @CRLF & @CRLF & _
+			"The variable $sString will now be visible to this function only and until the script closes."
+	MsgBox($MB_SYSTEMMODAL, "", $sString)
+	$sString = "If using just Local scope this string wouldn't be visible if this function was called multiple times, but since we're using the Static keyword" & @CRLF & _
+			"the variable $sString will retain the data last assigned to it."
+EndFunc   ;==>Example

@@ -1,11 +1,11 @@
 #include <GuiMenu.au3>
 
-_Main()
+Example()
 
-Func _Main()
+Func Example()
 	Local $hWnd, $hMain, $hFile
 
-	; 打开记事本
+	; Open Notepad
 	Run("notepad.exe")
 	WinWaitActive("[CLASS:Notepad]")
 	$hWnd = WinGetHandle("[CLASS:Notepad]")
@@ -16,10 +16,9 @@ Func _Main()
 	Writeln("File menu style: 0x" & Hex(_GUICtrlMenu_GetMenuStyle($hFile)))
 	_GUICtrlMenu_SetMenuStyle($hFile, $MNS_NOCHECK)
 	Writeln("File menu style: 0x" & Hex(_GUICtrlMenu_GetMenuStyle($hFile)))
+EndFunc   ;==>Example
 
-EndFunc   ;==>_Main
-
-; 写入一行文本到记事本
+; Write a line of text to Notepad
 Func Writeln($sText)
-	ControlSend("[CLASS:Notepad]", "", "Edit1", $sText & @CR)
+	ControlSend("[CLASS:Notepad]", "", "Edit1", $sText & @CRLF)
 EndFunc   ;==>Writeln

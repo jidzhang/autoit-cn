@@ -1,54 +1,53 @@
-#include <GUIConstantsEx.au3>
 #include <GDIPlus.au3>
+#include <GUIConstantsEx.au3>
 #include <WindowsConstants.au3>
 
-_Main()
+Example()
 
-Func _Main()
-	Local $hGUI, $Label1, $label2, $hGraphic, $hBrush1, $iClr1, $iClr2
+Func Example()
+	Local $hGUI, $idLabel1, $idLabel2, $hGraphic, $hBrush1, $iClr1, $iClr2
 
-	; 创建 GUI
+	; Create GUI
 	$hGUI = GUICreate("GDI+", 345, 150)
-	$Label1 = GUICtrlCreateLabel("", 2, 2, 150, 20)
-	$label2 = GUICtrlCreateLabel("", 202, 2, 150, 20)
-	GUISetState()
+	$idLabel1 = GUICtrlCreateLabel("", 2, 2, 150, 30)
+	$idLabel2 = GUICtrlCreateLabel("", 202, 2, 150, 30)
+	GUISetState(@SW_SHOW)
 	Sleep(100)
 
-	; 初始化 GDIPlus
+	; Start GDIPlus
 	_GDIPlus_Startup()
 	$hGraphic = _GDIPlus_GraphicsCreateFromHWND($hGUI)
 
-	; 创建实心画刷
+	; Create solid brush
 	$hBrush1 = _GDIPlus_BrushCreateSolid()
 
-	; 获取实心画刷原来的颜色
+	; Get solid brush original color
 	$iClr1 = _GDIPlus_BrushGetSolidColor($hBrush1)
 
-	; 使用原来的画刷颜色描绘图形
-	_GDIPlus_GraphicsFillEllipse($hGraphic, 25, 25, 100, 100, $hBrush1)
+	; Draw some graphics with the original brush color
+	_GDIPlus_GraphicsFillEllipse($hGraphic, 25, 35, 100, 100, $hBrush1)
 
-	; 设置新的画刷颜色 (0xFFFF0000 = 红色)
+	; Set new brush color (0xFFFF0000 = Red)
 	_GDIPlus_BrushSetSolidColor($hBrush1, 0xFFFF0000)
 
-	; 获取实心画刷的新颜色
+	; Get solid brush new color
 	$iClr2 = _GDIPlus_BrushGetSolidColor($hBrush1)
 
-	; 使用新的画刷颜色描绘图形
-	_GDIPlus_GraphicsFillRect($hGraphic, 220, 25, 100, 100, $hBrush1)
+	; Draw some graphics with the new brush color
+	_GDIPlus_GraphicsFillRect($hGraphic, 220, 35, 100, 100, $hBrush1)
 
-	; 把原来的画刷颜色写入 Label1
-	GUICtrlSetData($Label1, "Brush orignal color: " & Hex($iClr1))
+	; Write original brush color to Label1
+	GUICtrlSetData($idLabel1, "Brush orignal color: " & Hex($iClr1))
 
-	; 把新的画刷颜色写入 Label2
-	GUICtrlSetData($label2, "Brush new color: " & Hex($iClr2))
+	; Write the new brush color to Label2
+	GUICtrlSetData($idLabel2, "Brush new color: " & Hex($iClr2))
 
-	; 循环直到用户退出
+	; Loop until the user exits.
 	Do
 	Until GUIGetMsg() = $GUI_EVENT_CLOSE
 
-	; 清理资源
+	; Clean up resources
 	_GDIPlus_BrushDispose($hBrush1)
 	_GDIPlus_GraphicsDispose($hGraphic)
 	_GDIPlus_Shutdown()
-
-EndFunc   ;==>_Main
+EndFunc   ;==>Example

@@ -1,4 +1,5 @@
-#include <Constants.au3>
+#include <AutoItConstants.au3>
+#include <MsgBoxConstants.au3>
 
 Example()
 
@@ -20,5 +21,5 @@ Func Example()
 		EndIf
 	WEnd
 
-	MsgBox(4096, "", "The sorted string is: " & @CRLF & $sOutput)
+	MsgBox($MB_SYSTEMMODAL, "", "The sorted string is: " & @CRLF & $sOutput)
 EndFunc   ;==>Example

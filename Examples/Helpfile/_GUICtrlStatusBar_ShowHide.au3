@@ -1,33 +1,38 @@
 #include <GUIConstantsEx.au3>
 #include <GuiStatusBar.au3>
+#include <MsgBoxConstants.au3>
 
-$Debug_SB = False ; 检查传递给函数的类名, 设置为True并输出到一个控件的句柄,用于检查它是否工作
+Example()
 
-_Main()
-
-Func _Main()
-
+Func Example()
 	Local $hGUI, $hStatus
 	Local $aParts[3] = [75, 150, -1]
 
-	; 创建 GUI
+	; Create GUI
 	$hGUI = GUICreate("StatusBar Show/Hide", 400, 300)
 
-	;===============================================================================
 	; defaults to 1 part, no text
 	$hStatus = _GUICtrlStatusBar_Create($hGUI)
-	;===============================================================================
 	_GUICtrlStatusBar_SetParts($hStatus, $aParts)
 
-	GUISetState()
+	GUISetState(@SW_SHOW)
 
-	MsgBox(4160, "信息", "Hide StatusBar")
+	; Set parts
+	_GUICtrlStatusBar_SetParts($hStatus, $aParts)
+	_GUICtrlStatusBar_SetText($hStatus, "Part 1")
+	_GUICtrlStatusBar_SetText($hStatus, "Part 2", 1)
+	_GUICtrlStatusBar_SetText($hStatus, "Part 3", 2)
+
 	_GUICtrlStatusBar_ShowHide($hStatus, @SW_HIDE)
-	MsgBox(4160, "信息", "Show StatusBar")
-	_GUICtrlStatusBar_ShowHide($hStatus, @SW_SHOW)
+	MsgBox($MB_SYSTEMMODAL, "Information", "Hide StatusBar")
+	Sleep(1000)
 
-	; 循环直到用户退出
+	_GUICtrlStatusBar_ShowHide($hStatus, @SW_SHOW)
+	MsgBox($MB_SYSTEMMODAL, "Information", "Show StatusBar")
+	Sleep(1000)
+
+	; Loop until the user exits.
 	Do
 	Until GUIGetMsg() = $GUI_EVENT_CLOSE
 	GUIDelete()
-EndFunc   ;==>_Main
+EndFunc   ;==>Example

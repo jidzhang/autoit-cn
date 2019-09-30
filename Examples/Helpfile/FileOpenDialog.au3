@@ -1,24 +1,28 @@
-Local $message = "按下 Ctrl 或 Shift 键选择多个文件."
+#include <FileConstants.au3>
+#include <MsgBoxConstants.au3>
 
-Local $var = FileOpenDialog($message, @WindowsDir & "\", "图像文件 (*.jpg;*.bmp)", 1 + 4 )
+Example()
 
-If @error Then
-	MsgBox(4096,"","没有选择文件!")
-Else
-	$var = StringReplace($var, "|", @CRLF)
-	MsgBox(4096,"","你选择了:" & $var)
-EndIf
+Func Example()
+	; Create a constant variable in Local scope of the message to display in FileOpenDialog.
+	Local Const $sMessage = "Hold down Ctrl or Shift to choose multiple files."
 
+	; Display an open dialog to select a list of file(s).
+	Local $sFileOpenDialog = FileOpenDialog($sMessage, @WindowsDir & "\", "Images (*.jpg;*.bmp)|Videos (*.avi;*.mpg)", BitOR($FD_FILEMUSTEXIST, $FD_MULTISELECT))
+	If @error Then
+		; Display the error message.
+		MsgBox($MB_SYSTEMMODAL, "", "No file(s) were selected.")
 
-; 多组筛选
-$message = "按下 Ctrl 或 Shift 键选择多个文件."
+		; Change the working directory (@WorkingDir) back to the location of the script directory as FileOpenDialog sets it to the last accessed folder.
+		FileChangeDir(@ScriptDir)
+	Else
+		; Change the working directory (@WorkingDir) back to the location of the script directory as FileOpenDialog sets it to the last accessed folder.
+		FileChangeDir(@ScriptDir)
 
-$var = FileOpenDialog($message, @WindowsDir & "", "图像 (*.jpg;*.bmp)|视频 (*.avi;*.mpg)", 1 + 4 )
+		; Replace instances of "|" with @CRLF in the string returned by FileOpenDialog.
+		$sFileOpenDialog = StringReplace($sFileOpenDialog, "|", @CRLF)
 
-If @error Then
-	MsgBox(4096,"","没有选择文件!")
-Else
-	$var = StringReplace($var, "|", @CRLF)
-	MsgBox(4096,"","你选择了:" & $var)
-EndIf
-
+		; Display the list of selected files.
+		MsgBox($MB_SYSTEMMODAL, "", "You chose the following files:" & @CRLF & $sFileOpenDialog)
+	EndIf
+EndFunc   ;==>Example

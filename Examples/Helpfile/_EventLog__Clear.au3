@@ -1,12 +1,11 @@
 #include <EventLog.au3>
 
-_Main()
+Example()
 
-Func _Main()
+Func Example()
 	Local $hEventLog
 
 	$hEventLog = _EventLog__Open("", "Application")
 	_EventLog__Clear($hEventLog, "C:\EventLog.bak")
 	_EventLog__Close($hEventLog)
-
-EndFunc   ;==>_Main
+EndFunc   ;==>Example

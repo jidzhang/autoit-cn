@@ -1,3 +1,5 @@
+#include <MsgBoxConstants.au3>
+
 Example()
 
 Func Example()
@@ -5,7 +7,7 @@ Func Example()
 	Local $sEnvVar = EnvGet("PATH")
 
 	; Assign the system environment variable called %PATH% with its current value as well as the script directory.
-	; When you assign an envorinment variable you do so minus the percentage signs (%).
+	; When you assign an environment variable you do so minus the percentage signs (%).
 	EnvSet("PATH", $sEnvVar & ";" & @ScriptDir)
 
 	; Refresh the OS environment for changes to take affect.
@@ -15,5 +17,5 @@ Func Example()
 	$sEnvVar = EnvGet("PATH")
 
 	; Display the value of the environment variable $PATH%.
-	MsgBox(4096, "", "The environment variable %PATH% has the value of: " & $sEnvVar)
+	MsgBox($MB_SYSTEMMODAL, "", "The environment variable %PATH% has the value of: " & $sEnvVar)
 EndFunc   ;==>Example

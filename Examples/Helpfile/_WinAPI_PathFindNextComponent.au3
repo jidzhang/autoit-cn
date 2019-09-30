@@ -1,10 +1,10 @@
 #include <WinAPIShPath.au3>
 
-Local $Path = @ScriptFullPath
+Local $sPath = @ScriptFullPath
 
-While $Path
-	ConsoleWrite($Path & @CRLF)
-	$Path = _WinAPI_PathFindNextComponent($Path)
+While $sPath
+	ConsoleWrite($sPath & @CRLF)
+	$sPath = _WinAPI_PathFindNextComponent($sPath)
 WEnd
-$Path = _WinAPI_PathFindNextComponent("")
-ConsoleWrite('Path = "' & $Path & '" -> @error = ' & @error & @CRLF)
+$sPath = _WinAPI_PathFindNextComponent("")
+ConsoleWrite('Path = "' & $sPath & '" -> @error = ' & @error & @CRLF)

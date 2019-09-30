@@ -1,2 +1,4 @@
 #include <Date.au3>
-MsgBox(4096,'',"现在日期为:" & _NowDate())
+#include <MsgBoxConstants.au3>
+
+MsgBox($MB_SYSTEMMODAL, '', "The Date is:" & _NowDate())

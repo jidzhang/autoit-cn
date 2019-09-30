@@ -1,23 +1,25 @@
-#include <Constants.au3>
+#include <AutoItConstants.au3>
+#include <MsgBoxConstants.au3>
 
 Example()
 
 Func Example()
-	Local $iPID = Run(@ComSpec & " /c DIR Example.au3", @SystemDir, @SW_HIDE, $STDERR_CHILD + $STDOUT_CHILD)
-	Local $sOutput
+	Local $iPID = Run(@ComSpec & " /c DIR Example.au3", @SystemDir, @SW_HIDE, BitOR($STDERR_CHILD, $STDOUT_CHILD))
+	Local $sOutput = ""
 	While 1
-		$sOutput = StdoutRead($iPID)
+		$sOutput &= StdoutRead($iPID)
 		If @error Then ; Exit the loop if the process closes or StdoutRead returns an error.
 			ExitLoop
 		EndIf
-		MsgBox(4096, "Stdout Read:", $sOutput)
+		MsgBox($MB_SYSTEMMODAL, "Stdout Read:", $sOutput)
 	WEnd
 
+	$sOutput = ''
 	While 1
-		$sOutput = StderrRead($iPID)
+		$sOutput &= StderrRead($iPID)
 		If @error Then ; Exit the loop if the process closes or StderrRead returns an error.
 			ExitLoop
 		EndIf
-		MsgBox(4096, "Stderr Read:", $sOutput)
+		MsgBox($MB_SYSTEMMODAL, "Stderr Read:", $sOutput)
 	WEnd
 EndFunc   ;==>Example

@@ -1,3 +1,5 @@
+#include <MsgBoxConstants.au3>
+
 Example()
 
 Func Example()
@@ -5,7 +7,7 @@ Func Example()
 	Local $aPos = WinGetPos("[ACTIVE]")
 
 	; Display the array values returned by WinGetPos.
-	MsgBox(4096, "", "X-Pos: " & $aPos[0] & @CRLF & _
+	MsgBox($MB_SYSTEMMODAL, "", "X-Pos: " & $aPos[0] & @CRLF & _
 			"Y-Pos: " & $aPos[1] & @CRLF & _
 			"Width: " & $aPos[2] & @CRLF & _
 			"Height: " & $aPos[3])

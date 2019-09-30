@@ -1,5 +1,9 @@
-#include <GUIConstantsEx.au3>
 #include <GDIPlus.au3>
+#include <GUIConstantsEx.au3>
+
+Global $g_hGUI
+Global $g_hGraphics, $g_hBmp_Buffer, $g_hGfx_Bufffer, $g_hBrush_NA, $g_hBrush_A, $g_hPen_NA, $g_hPen_A
+Global $g_hPath, $g_hFormat, $g_hFamily
 
 Example()
 
@@ -7,32 +11,31 @@ Func Example()
 	AutoItSetOption("GUIOnEventMode", 1)
 
 	Local Const $iW = 640, $iH = 240
-	Global $hGUI, $hGraphics, $hBmp_Buffer, $hGfx_Bufffer, $hBrush_NA, $hBrush_A, $hPen_NA, $hPen_A
-	Global $hPath, $hFormat, $hFamily, $tLayout
+	Local $tLayout
 
-	$hGUI = GUICreate("GDI+", $iW, $iH)
+	$g_hGUI = GUICreate("GDI+", $iW, $iH)
 	GUISetOnEvent($GUI_EVENT_CLOSE, "_Exit")
 	GUISetOnEvent($GUI_EVENT_MOUSEMOVE, "_MouseMove")
-	GUISetState()
+	GUISetState(@SW_SHOW)
 
 	_GDIPlus_Startup()
-	$hGraphics = _GDIPlus_GraphicsCreateFromHWND($hGUI)
-	$hBmp_Buffer = _GDIPlus_BitmapCreateFromGraphics($iW, $iH, $hGraphics)
-	$hGfx_Bufffer = _GDIPlus_ImageGetGraphicsContext($hBmp_Buffer)
-	_GDIPlus_GraphicsSetSmoothingMode($hGfx_Bufffer, $GDIP_SMOOTHINGMODE_HIGHQUALITY)
+	$g_hGraphics = _GDIPlus_GraphicsCreateFromHWND($g_hGUI)
+	$g_hBmp_Buffer = _GDIPlus_BitmapCreateFromGraphics($iW, $iH, $g_hGraphics)
+	$g_hGfx_Bufffer = _GDIPlus_ImageGetGraphicsContext($g_hBmp_Buffer)
+	_GDIPlus_GraphicsSetSmoothingMode($g_hGfx_Bufffer, $GDIP_SMOOTHINGMODE_HIGHQUALITY)
 
-	$hBrush_NA = _GDIPlus_BrushCreateSolid(0xFF000066)
-	$hBrush_A = _GDIPlus_BrushCreateSolid(0xFF00FF00)
-	$hPen_NA = _GDIPlus_PenCreate(0xFF666600, 4)
-	$hPen_A = _GDIPlus_PenCreate(0xFF00FF00, 4)
+	$g_hBrush_NA = _GDIPlus_BrushCreateSolid(0xFF000066)
+	$g_hBrush_A = _GDIPlus_BrushCreateSolid(0xFF00FF00)
+	$g_hPen_NA = _GDIPlus_PenCreate(0xFF666600, 4)
+	$g_hPen_A = _GDIPlus_PenCreate(0xFF00FF00, 4)
 
-	$hPath = _GDIPlus_PathCreate()
+	$g_hPath = _GDIPlus_PathCreate()
 
-	$hFormat = _GDIPlus_StringFormatCreate()
-	_GDIPlus_StringFormatSetAlign($hFormat, 1)
-	$hFamily = _GDIPlus_FontFamilyCreate("Arial Black")
+	$g_hFormat = _GDIPlus_StringFormatCreate()
+	_GDIPlus_StringFormatSetAlign($g_hFormat, 1)
+	$g_hFamily = _GDIPlus_FontFamilyCreate("Arial Black")
 	$tLayout = _GDIPlus_RectFCreate(0, 0, $iW, $iH)
-	_GDIPlus_PathAddString($hPath, "move mouse" & @LF & "over text", $tLayout, $hFamily, 0, 72, $hFormat)
+	_GDIPlus_PathAddString($g_hPath, "move mouse" & @LF & "over text", $tLayout, $g_hFamily, 0, 72, $g_hFormat)
 
 	_MouseMove()
 
@@ -44,35 +47,35 @@ Func _MouseMove()
 	Local $sInfo = ""
 	Local $aMouse = GUIGetCursorInfo()
 
-	_GDIPlus_GraphicsClear($hGfx_Bufffer, 0xFF000000)
-	_GDIPlus_GraphicsFillPath($hGfx_Bufffer, $hPath, $hBrush_NA)
-	_GDIPlus_GraphicsDrawPath($hGfx_Bufffer, $hPath, $hPen_NA)
+	_GDIPlus_GraphicsClear($g_hGfx_Bufffer, 0xFF000000)
+	_GDIPlus_GraphicsFillPath($g_hGfx_Bufffer, $g_hPath, $g_hBrush_NA)
+	_GDIPlus_GraphicsDrawPath($g_hGfx_Bufffer, $g_hPath, $g_hPen_NA)
 	Select
-		Case _GDIPlus_PathIsOutlineVisiblePoint($hPath, $aMouse[0], $aMouse[1], $hPen_A, $hGfx_Bufffer)
-			_GDIPlus_GraphicsDrawPath($hGfx_Bufffer, $hPath, $hPen_A)
+		Case _GDIPlus_PathIsOutlineVisiblePoint($g_hPath, $aMouse[0], $aMouse[1], $g_hPen_A, $g_hGfx_Bufffer)
+			_GDIPlus_GraphicsDrawPath($g_hGfx_Bufffer, $g_hPath, $g_hPen_A)
 			$sInfo = "mouse cursor touches path outline"
-		Case _GDIPlus_PathIsVisiblePoint($hPath, $aMouse[0], $aMouse[1], $hGraphics)
-			_GDIPlus_GraphicsFillPath($hGfx_Bufffer, $hPath, $hBrush_A)
+		Case _GDIPlus_PathIsVisiblePoint($g_hPath, $aMouse[0], $aMouse[1], $g_hGraphics)
+			_GDIPlus_GraphicsFillPath($g_hGfx_Bufffer, $g_hPath, $g_hBrush_A)
 			$sInfo = "mouse cursor in path fill area"
 	EndSelect
 
 	ToolTip($sInfo)
-	_GDIPlus_GraphicsDrawImage($hGraphics, $hBmp_Buffer, 0, 0)
+	_GDIPlus_GraphicsDrawImage($g_hGraphics, $g_hBmp_Buffer, 0, 0)
 EndFunc   ;==>_MouseMove
 
 Func _Exit()
-	_GDIPlus_FontFamilyDispose($hFamily)
-	_GDIPlus_StringFormatDispose($hFormat)
-	_GDIPlus_PathDispose($hPath)
-	_GDIPlus_BrushDispose($hBrush_NA)
-	_GDIPlus_BrushDispose($hBrush_A)
-	_GDIPlus_PenDispose($hPen_NA)
-	_GDIPlus_PenDispose($hPen_A)
+	_GDIPlus_FontFamilyDispose($g_hFamily)
+	_GDIPlus_StringFormatDispose($g_hFormat)
+	_GDIPlus_PathDispose($g_hPath)
+	_GDIPlus_BrushDispose($g_hBrush_NA)
+	_GDIPlus_BrushDispose($g_hBrush_A)
+	_GDIPlus_PenDispose($g_hPen_NA)
+	_GDIPlus_PenDispose($g_hPen_A)
 
-	_GDIPlus_GraphicsDispose($hGfx_Bufffer)
-	_GDIPlus_BitmapDispose($hBmp_Buffer)
-	_GDIPlus_GraphicsDispose($hGraphics)
+	_GDIPlus_GraphicsDispose($g_hGfx_Bufffer)
+	_GDIPlus_BitmapDispose($g_hBmp_Buffer)
+	_GDIPlus_GraphicsDispose($g_hGraphics)
 	_GDIPlus_Shutdown()
-	GUIDelete($hGUI)
+	GUIDelete($g_hGUI)
 	Exit
 EndFunc   ;==>_Exit

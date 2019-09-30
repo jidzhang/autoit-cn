@@ -1,14 +1,15 @@
 #include <ScreenCapture.au3>
 
-_Main()
+Example()
 
-Func _Main()
+Func Example()
 	Local $hBmp
 
-	; 捕获整个屏幕
+	; Capture full screen
 	$hBmp = _ScreenCapture_Capture("")
 
-	; 保存位图到文件
+	; Save bitmap to file
 	_ScreenCapture_SaveImage(@MyDocumentsDir & "\GDIPlus_Image.jpg", $hBmp)
 
-EndFunc   ;==>_Main
+	ShellExecute(@MyDocumentsDir & "\GDIPlus_Image.jpg")
+EndFunc   ;==>Example

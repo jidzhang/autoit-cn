@@ -1,30 +1,28 @@
 #include <GUIConstantsEx.au3>
 #include <GuiListView.au3>
 
-$Debug_LV = False ; 检查传递给 ListView 函数的类名, 设置为真并使用另一控件的句柄可以看出它是否有效
+Example()
 
-_Main()
-
-Func _Main()
-	Local $hListView
+Func Example()
+	Local $idListview
 
 	GUICreate("ListView Set Item Count", 400, 300)
-	$hListView = GUICtrlCreateListView("", 2, 2, 394, 268)
-	GUISetState()
+	$idListview = GUICtrlCreateListView("", 2, 2, 394, 268)
+	GUISetState(@SW_SHOW)
 
-	; 添加列
-	_GUICtrlListView_AddColumn($hListView, "Items", 100)
+	; Add columns
+	_GUICtrlListView_AddColumn($idListview, "Items", 100)
 
-	; 添加项目
-	_GUICtrlListView_SetItemCount($hListView, 100)
-	_GUICtrlListView_BeginUpdate($hListView)
+	; Add items
+	_GUICtrlListView_SetItemCount($idListview, 100)
+	_GUICtrlListView_BeginUpdate($idListview)
 	For $x = 1 To 100
-		GUICtrlCreateListViewItem("Item " & $x, $hListView)
+		GUICtrlCreateListViewItem("Item " & $x, $idListview)
 	Next
-	_GUICtrlListView_EndUpdate($hListView)
+	_GUICtrlListView_EndUpdate($idListview)
 
-	; 循环直到用户退出
+	; Loop until the user exits.
 	Do
 	Until GUIGetMsg() = $GUI_EVENT_CLOSE
 	GUIDelete()
-EndFunc   ;==>_Main
+EndFunc   ;==>Example

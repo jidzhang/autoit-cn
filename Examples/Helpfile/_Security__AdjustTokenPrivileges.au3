@@ -1,8 +1,9 @@
 #RequireAdmin ; for this example to have sense
 
-#include <SecurityConstants.au3>
+#include <MsgBoxConstants.au3>
 #include <Security.au3>
-#include <WinAPI.au3>
+#include <SecurityConstants.au3>
+#include <WinAPIHobj.au3>
 
 Local $hToken = _Security__OpenProcessToken(_WinAPI_GetCurrentProcess(), $TOKEN_ALL_ACCESS)
 If $hToken Then
@@ -11,7 +12,7 @@ If $hToken Then
 	; Disable all privileges for this token
 	If _Security__AdjustTokenPrivileges($hToken, True, 0, 0) Then
 		;... Do whatever with this token now and here...
-		MsgBox(262144, "TokenPrivileges", "All TokenPrivileges disabled!")
+		MsgBox($MB_SYSTEMMODAL, "TokenPrivileges", "All TokenPrivileges disabled!")
 	EndIf
 
 	; Close handle when done

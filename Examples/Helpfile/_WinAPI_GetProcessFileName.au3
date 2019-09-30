@@ -1,7 +1,7 @@
 #include <WinAPIProc.au3>
 
-Local $ID = ProcessExists('SciTE.exe')
+Local $iID = ProcessExists('SciTE.exe')
 
-If $ID Then
-	ConsoleWrite(_WinAPI_GetProcessFileName($ID) & @CRLF)
+If $iID Then
+	ConsoleWrite(_WinAPI_GetProcessFileName($iID) & @CRLF)
 EndIf

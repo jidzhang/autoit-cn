@@ -2,35 +2,37 @@
 #include <GuiStatusBar.au3>
 #include <WindowsConstants.au3>
 
-$Debug_SB = False ; 检查传递给函数的类名, 设置为真并使用另一控件的句柄可以看出它是否有效
+Global $g_hStatus
 
-Global $hStatus
+Example()
 
-_Main()
-
-Func _Main()
-
+Func Example()
 	Local $hGUI
 	Local $aParts[3] = [75, 150, -1]
 
-	; 创建 GUI
-	$hGUI = GUICreate("StatusBar Resize", 400, 300, -1, -1, $WS_SIZEBOX)
+	; Create GUI
+	$hGUI = GUICreate("StatusBar Resize", 400, 300, -1, -1, $WS_OVERLAPPEDWINDOW)
 
-	$hStatus = _GUICtrlStatusBar_Create($hGUI)
-	_GUICtrlStatusBar_SetParts($hStatus, $aParts)
-	GUISetState()
+	; Set parts
+	$g_hStatus = _GUICtrlStatusBar_Create($hGUI)
+	_GUICtrlStatusBar_SetParts($g_hStatus, $aParts)
+	_GUICtrlStatusBar_SetText($g_hStatus, "Part 1")
+	_GUICtrlStatusBar_SetText($g_hStatus, "Part 2", 1)
+	_GUICtrlStatusBar_SetText($g_hStatus, "Part 3", 2)
+
+	GUISetState(@SW_SHOW)
 
 	GUIRegisterMsg($WM_SIZE, "WM_SIZE")
 
-	; 循环直到用户退出
+	; Loop until the user exits.
 	Do
 	Until GUIGetMsg() = $GUI_EVENT_CLOSE
 	GUIDelete()
-EndFunc   ;==>_Main
+EndFunc   ;==>Example
 
-; 当 GUI 大小改变时重设状态栏大小
-Func WM_SIZE($hWnd, $iMsg, $iwParam, $ilParam)
-	#forceref $hWnd, $iMsg, $iwParam, $ilParam
-	_GUICtrlStatusBar_Resize($hStatus)
+; Resize the status bar when GUI size changes
+Func WM_SIZE($hWnd, $iMsg, $wParam, $lParam)
+	#forceref $hWnd, $iMsg, $wParam, $lParam
+	_GUICtrlStatusBar_Resize($g_hStatus)
 	Return $GUI_RUNDEFMSG
 EndFunc   ;==>WM_SIZE

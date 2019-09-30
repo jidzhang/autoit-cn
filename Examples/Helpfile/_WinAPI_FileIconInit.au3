@@ -1,10 +1,12 @@
-#include <WinAPIRes.au3>
-#include <WinAPIShPath.au3>
-#include <GUIImageList.au3>
 #include <GUIConstantsEx.au3>
-
-Global Const $STM_SETIMAGE = 0x0172
-Global Const $STM_GETIMAGE = 0x0173
+#include <GuiImageList.au3>
+#include <SendMessage.au3>
+#include <StaticConstants.au3>
+#include <WinAPIGdi.au3>
+#include <WinAPIGdiDC.au3>
+#include <WinAPIHObj.au3>
+#include <WinAPIIcons.au3>
+#include <WinAPIShPath.au3>
 
 ; Initialize system image list
 _WinAPI_FileIconInit()
@@ -13,24 +15,24 @@ _WinAPI_FileIconInit()
 Local $hImageList = _WinAPI_ShellGetImageList()
 If @error Then Exit
 
-Local $Count = _GUIImageList_GetImageCount($hImageList)
-Local $Size = _GUIImageList_GetIconSize($hImageList)
-Local $CX = Sqrt($Count)
-Local $CY
-If $CX Then
-	$CX = Ceiling($CX)
-	$CY = Ceiling($Count / $CX)
+Local $iCount = _GUIImageList_GetImageCount($hImageList)
+Local $a_iSize = _GUIImageList_GetIconSize($hImageList)
+Local $iCX = Sqrt($iCount)
+Local $iCY
+If $iCX Then
+	$iCX = Ceiling($iCX)
+	$iCY = Ceiling($iCount / $iCX)
 Else
-	$CX = 1
-	$CY = 1
+	$iCX = 1
+	$iCY = 1
 EndIf
-Local $W = $CX * ($Size[0] + 14)
-Local $H = $CY * ($Size[1] + 14)
+Local $W = $iCX * ($a_iSize[0] + 14)
+Local $H = $iCY * ($a_iSize[1] + 14)
 
 ; Create GUI
 Local $hForm = GUICreate('Test ' & StringReplace(@ScriptName, '.au3', '()'), $W, $H)
-Local $Pic = GUICtrlCreatePic('', 0, 0, $W, $H)
-Local $hPic = GUICtrlGetHandle($Pic)
+Local $idPic = GUICtrlCreatePic('', 0, 0, $W, $H)
+Local $hPic = GUICtrlGetHandle($idPic)
 
 ; Create bitmap
 Local $hDC = _WinAPI_GetDC($hPic)
@@ -39,12 +41,12 @@ Local $hBitmap = _WinAPI_CreateCompatibleBitmap($hDC, $W, $H)
 Local $hMemSv = _WinAPI_SelectObject($hMemDC, $hBitmap)
 
 ; Draw all icons from the system image list into bitmap
-Local $Index = 0
-For $y = 1 To $CY
-	For $x = 1 To $CX
-		_GUIImageList_Draw($hImageList, $Index, $hMemDC, ($x - 1) * ($Size[0] + 14) + 7, ($y - 1) * ($Size[0] + 14) + 7)
-		$Index += 1
-		If $Index >= $Count Then
+Local $iIndex = 0
+For $y = 1 To $iCY
+	For $x = 1 To $iCX
+		_GUIImageList_Draw($hImageList, $iIndex, $hMemDC, ($x - 1) * ($a_iSize[0] + 14) + 7, ($y - 1) * ($a_iSize[0] + 14) + 7)
+		$iIndex += 1
+		If $iIndex >= $iCount Then
 			ExitLoop
 		EndIf
 	Next
@@ -63,7 +65,7 @@ If $hObj <> $hBitmap Then
 EndIf
 
 ; Show GUI
-GUISetState()
+GUISetState(@SW_SHOW)
 
 Do
 Until GUIGetMsg() = $GUI_EVENT_CLOSE

@@ -1,3 +1,5 @@
+#include <MsgBoxConstants.au3>
+
 Example()
 
 Func Example()
@@ -5,5 +7,5 @@ Func Example()
 	Local $iReturn = ShellExecuteWait("notepad.exe")
 
 	; Display the return code of the Notepad process.
-	MsgBox(4096, "", "The return code from Notepad was: " & $iReturn)
+	MsgBox($MB_SYSTEMMODAL, "", "The return code from Notepad was: " & $iReturn)
 EndFunc   ;==>Example

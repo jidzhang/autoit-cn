@@ -350,7 +350,7 @@ EndFunc   ;==>TimeToRadians
 ; ===============================================================================================================================
 ; Handle the WM_NCHITTEST message so our window can be dragged
 ; ===============================================================================================================================
-Func WM_NCHITTEST($hWnd, $iMsg, $iwParam, $ilParam)
-	#forceref  $iMsg, $iwParam, $ilParam
+Func WM_NCHITTEST($hWnd, $iMsg, $iParam, $lParam)
+	#forceref  $iMsg, $iParam, $lParam
 	If $hWnd = $g_hDial Then Return $HTCAPTION
 EndFunc   ;==>WM_NCHITTEST

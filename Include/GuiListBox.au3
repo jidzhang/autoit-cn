@@ -4,11 +4,13 @@
 #include "ListBoxConstants.au3"
 #include "SendMessage.au3"
 #include "UDFGlobalID.au3"
-#include "WinAPI.au3"
+#include "WinAPIConv.au3"
+#include "WinAPIRes.au3"
+#include "WinAPISysInternals.au3"
 
 ; #INDEX# =======================================================================================================================
 ; Title .........: ListBox
-; AutoIt Version : 3.3.13.12
+; AutoIt Version : 3.3.14.5
 ; Language ......: English
 ; Description ...: Functions that assist with ListBox control management.
 ; Author(s) .....: Paul Campbell (PaulIA)
@@ -89,13 +91,13 @@ Global Const $__LISTBOXCONSTANT_WM_GETFONT = 0x0031
 ; Author ........: Paul Campbell (PaulIA)
 ; Modified.......: Gary Frost (gafrost)
 ; ===============================================================================================================================
-Func _GUICtrlListBox_AddFile($hWnd, $sFile)
-	If Not IsString($sFile) Then $sFile = String($sFile)
+Func _GUICtrlListBox_AddFile($hWnd, $sFilePath)
+	If Not IsString($sFilePath) Then $sFilePath = String($sFilePath)
 
 	If IsHWnd($hWnd) Then
-		Return _SendMessage($hWnd, $LB_ADDFILE, 0, $sFile, 0, "wparam", "wstr")
+		Return _SendMessage($hWnd, $LB_ADDFILE, 0, $sFilePath, 0, "wparam", "wstr")
 	Else
-		Return GUICtrlSendMsg($hWnd, $LB_ADDFILE, 0, $sFile)
+		Return GUICtrlSendMsg($hWnd, $LB_ADDFILE, 0, $sFilePath)
 	EndIf
 EndFunc   ;==>_GUICtrlListBox_AddFile
 
@@ -223,14 +225,14 @@ EndFunc   ;==>_GUICtrlListBox_Destroy
 ; Author ........: Gary Frost (gafrost), CyberSlug
 ; Modified.......:
 ; ===============================================================================================================================
-Func _GUICtrlListBox_Dir($hWnd, $sFile, $iAttributes = 0, $bBrackets = True)
-	If Not IsString($sFile) Then $sFile = String($sFile)
+Func _GUICtrlListBox_Dir($hWnd, $sFilePath, $iAttributes = 0, $bBrackets = True)
+	If Not IsString($sFilePath) Then $sFilePath = String($sFilePath)
 
 	If BitAND($iAttributes, $DDL_DRIVES) = $DDL_DRIVES And Not $bBrackets Then
 		Local $sText
 		Local $hGui_no_brackets = GUICreate("no brackets")
 		Local $idList_no_brackets = GUICtrlCreateList("", 240, 40, 120, 120)
-		Local $iRet = GUICtrlSendMsg($idList_no_brackets, $LB_DIR, $iAttributes, $sFile)
+		Local $iRet = GUICtrlSendMsg($idList_no_brackets, $LB_DIR, $iAttributes, $sFilePath)
 		For $i = 0 To _GUICtrlListBox_GetCount($idList_no_brackets) - 1
 			$sText = _GUICtrlListBox_GetText($idList_no_brackets, $i)
 			$sText = StringReplace(StringReplace(StringReplace($sText, "[", ""), "]", ":"), "-", "")
@@ -240,9 +242,9 @@ Func _GUICtrlListBox_Dir($hWnd, $sFile, $iAttributes = 0, $bBrackets = True)
 		Return $iRet
 	Else
 		If IsHWnd($hWnd) Then
-			Return _SendMessage($hWnd, $LB_DIR, $iAttributes, $sFile, 0, "wparam", "wstr")
+			Return _SendMessage($hWnd, $LB_DIR, $iAttributes, $sFilePath, 0, "wparam", "wstr")
 		Else
-			Return GUICtrlSendMsg($hWnd, $LB_DIR, $iAttributes, $sFile)
+			Return GUICtrlSendMsg($hWnd, $LB_DIR, $iAttributes, $sFilePath)
 		EndIf
 	EndIf
 EndFunc   ;==>_GUICtrlListBox_Dir
@@ -489,9 +491,14 @@ EndFunc   ;==>_GUICtrlListBox_GetSel
 Func _GUICtrlListBox_GetSelCount($hWnd)
 	If IsHWnd($hWnd) Then
 		Return _SendMessage($hWnd, $LB_GETSELCOUNT)
-	Else
+	EndIf
+
+	If IsHWnd(GUICtrlGetHandle($hWnd)) Then
 		Return GUICtrlSendMsg($hWnd, $LB_GETSELCOUNT, 0, 0)
 	EndIf
+
+	; Invalid controlID
+	Return -1
 EndFunc   ;==>_GUICtrlListBox_GetSelCount
 
 ; #FUNCTION# ====================================================================================================================

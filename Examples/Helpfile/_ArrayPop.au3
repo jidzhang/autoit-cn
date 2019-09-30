@@ -1,4 +1,5 @@
 #include <Array.au3>
+#include <MsgBoxConstants.au3>
 
 Local $avArray[10]
 
@@ -13,9 +14,8 @@ $avArray[7] = "Nutster"
 $avArray[8] = "JdeB"
 $avArray[9] = "Tylo"
 
-MsgBox(4096,"提示", "将会在列表视图中显示运行_ArrayPop()之前的一维或二维数组")
-_ArrayDisplay($avArray, "运行前")
+_ArrayDisplay($avArray, "$avArray BEFORE _ArrayPop()")
 While UBound($avArray)
-	MsgBox(4096,"返回值提示", "将会返回数组的最后一个元素：" & _ArrayPop($avArray))
-	_ArrayDisplay($avArray, "运行后")
+	MsgBox($MB_SYSTEMMODAL, '_ArrayPop() return value', _ArrayPop($avArray))
+	_ArrayDisplay($avArray, "$avArray AFTER _ArrayPop()")
 WEnd

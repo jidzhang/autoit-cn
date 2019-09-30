@@ -1,11 +1,11 @@
 #include <GuiMenu.au3>
 
-_Main()
+Example()
 
-Func _Main()
+Func Example()
 	Local $hWnd, $hMain
 
-	; 打开记事本
+	; Open Notepad
 	Run("notepad.exe")
 	WinWaitActive("[CLASS:Notepad]")
 	$hWnd = WinGetHandle("[CLASS:Notepad]")
@@ -13,10 +13,9 @@ Func _Main()
 
 	; Show Main menu item count
 	Writeln("Main menu item count: " & _GUICtrlMenu_GetItemCount($hMain))
+EndFunc   ;==>Example
 
-EndFunc   ;==>_Main
-
-; 写入一行文本到记事本
+; Write a line of text to Notepad
 Func Writeln($sText)
-	ControlSend("[CLASS:Notepad]", "", "Edit1", $sText & @CR)
+	ControlSend("[CLASS:Notepad]", "", "Edit1", $sText & @CRLF)
 EndFunc   ;==>Writeln

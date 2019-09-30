@@ -1,14 +1,31 @@
-#include <FTPEx.au3>
 #include <Array.au3>
+#include <FTPEx.au3>
+#include <MsgBoxConstants.au3>
 
-Local $server = 'ftp.csx.cam.ac.uk'
-Local $username = ''
-Local $pass = ''
+Local $sServer = 'ftp.csx.cam.ac.uk1'
+Local $sUsername = ''
+Local $sPass = ''
 
-Local $Open = _FTP_Open('MyFTP Control')
-Local $Conn = _FTP_Connect($Open, $server, $username, $pass)
+Local $hOpen = _FTP_Open('MyFTP Control', 0)
+If Not @error Then
+	; passive allows most protected FTPs to answer
+	Local $hConn = _FTP_Connect($hOpen, $sServer, $sUsername, $sPass)
+	If Not @error Then
+		Local $aFile = _FTP_ListToArrayEx($hConn, 0)
+		If Not @error Then
+			_ArrayDisplay($aFile)
+		Else
+			MsgBox($MB_SYSTEMMODAL, "Error", '_FTP_ListToArrayEx($Conn, 0)' & @CRLF & _
+					'@error = ' & @error & ' @extended = ' & @extended)
+		EndIf
+		Local $iFtpc = _FTP_Close($hConn)
+	Else
+		MsgBox($MB_SYSTEMMODAL, "Error", '_FTP_Connect($Open, ' & $sServer & ', ' & $sUsername & ', ' & $sPass & ')' & @CRLF & _
+				'@error = ' & @error & ' @extended = ' & @extended)
+	EndIf
 
-Local $aFile = _FTP_ListToArrayEx($Conn, 0)
-_ArrayDisplay($aFile)
-
-Local $Ftpc = _FTP_Close($Open)
+	Local $iFtpo = _FTP_Close($hOpen)
+Else
+	MsgBox($MB_SYSTEMMODAL, "Error", "_FTP_Open('MyFTP Control')" & @CRLF & _
+			'@error = ' & @error & ' @extended = ' & @extended)
+EndIf

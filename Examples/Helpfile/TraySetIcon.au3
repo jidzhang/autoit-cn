@@ -1,20 +1,21 @@
 #NoTrayIcon
+#include <TrayConstants.au3> ; Required for the $TRAY_ICONSTATE_SHOW constant.
 
-Opt("TrayMenuMode", 3) ; 默认菜单项目 (脚本暂停中/退出)(Script Paused/Exit) 将不会显示,并且所选项目不能被选中(checkbox不会打勾) . 请参考TrayMenuMode选项1和2(3=1+2).
+Opt("TrayMenuMode", 3) ; The default tray menu items will not be shown and items are not checked when selected. These are options 1 and 2 for TrayMenuMode.
 
 Example()
 
 Func Example()
-	Local $iExit = TrayCreateItem("退出")
+	Local $idExit = TrayCreateItem("Exit")
 
-	TraySetState(1) ; Show the tray menu.
+	TraySetState($TRAY_ICONSTATE_SHOW) ; Show the tray menu.
 
 	Local $hTimer = TimerInit() ; Begin the timer and store the handle in a variable.
-	Local $iDiff = 0, $iIndex = 0
+	Local $fDiff = 0, $iIndex = 0
 
 	While 1
-		$iDiff = TimerDiff($hTimer) ; Find the difference in time from the previous call of TimerInit
-		If $iDiff > 1000 Then ; If the difference is greater than 1 second then change the tray menu icon.
+		$fDiff = TimerDiff($hTimer) ; Find the difference in time from the previous call of TimerInit
+		If $fDiff > 1000 Then ; If the difference is greater than 1 second then change the tray menu icon.
 
 			$iIndex = -Random(0, 100, 1) ; Use a negative number for ordinal numbering.
 			TraySetToolTip("Currently using the icon shell32.dll, " & $iIndex & ".") ; Set the tray menu tooltip with information about the icon index.
@@ -24,7 +25,7 @@ Func Example()
 		EndIf
 
 		Switch TrayGetMsg()
-			Case $iExit ; Exit the loop.
+			Case $idExit ; Exit the loop.
 				ExitLoop
 		EndSwitch
 	WEnd

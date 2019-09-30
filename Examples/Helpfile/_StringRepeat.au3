@@ -1,4 +1,5 @@
+#include <MsgBoxConstants.au3>
 #include <String.au3>
 
-MsgBox(4096, '', _StringRepeat("+-", 40))
-Exit
+; Repeat the string "+-" forty times.
+MsgBox($MB_SYSTEMMODAL, '', _StringRepeat("+-", 40))

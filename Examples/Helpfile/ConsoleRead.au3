@@ -1,14 +1,21 @@
-﻿#cs
-	1、编译此脚本为 "ConsoleRead.exe".
-	2、以命令提示符的方式打开程序 ConsoleRead.exe 所在目录在.
-	3、键入以下命令行: echo Hello! | ConsoleRead.exe
+#include <MsgBoxConstants.au3>
+
+#cs
+	Compile this script to "ConsoleRead.exe".
+	Open a command prompt to the directory where ConsoleRead.exe resides.
+	Type the following on the command line:
+	echo Hello! | ConsoleRead.exe
+
+	When invoked in a console window, the above command echos the text "Hello!"
+	but instead of displaying it, the | tells the console to pipe it to the STDIN stream
+	of the ConsoleRead.exe process.
 #ce
 
 Example()
 
 Func Example()
 	If Not @Compiled Then
-		MsgBox(4096, "提示", "此脚本必须编译后才能正确显示.")
+		MsgBox($MB_SYSTEMMODAL, "", "This script must be compiled in order to run the example.")
 		Exit
 	EndIf
 
@@ -18,5 +25,5 @@ Func Example()
 		If @error Then ExitLoop
 		Sleep(25)
 	WEnd
-	MsgBox(4096, "提示", "返回: " & @CRLF & @CRLF & $sOutput)
+	MsgBox($MB_SYSTEMMODAL, "", "Received: " & @CRLF & @CRLF & $sOutput)
 EndFunc   ;==>Example

@@ -1,39 +1,38 @@
-#include <GuiListBox.au3>
 #include <GUIConstantsEx.au3>
+#include <GuiListBox.au3>
+#include <MsgBoxConstants.au3>
 
-$Debug_LB = False ;检查传递给 ListBox 函数的类名, 设置为True并输出到一个控件的句柄,用于检查它是否工作
+Example()
 
-_Main()
+Func Example()
+	Local $sItems, $aItems, $idListBox
 
-Func _Main()
-	Local $sItems, $aItems, $hListBox
-
-	; 创建 GUI
+	; Create GUI
 	GUICreate("List Box Get Sel Items Text", 400, 296)
-	$hListBox = GUICtrlCreateList("", 2, 2, 396, 296, BitOR($LBS_STANDARD, $LBS_EXTENDEDSEL))
-	GUISetState()
+	$idListBox = GUICtrlCreateList("", 2, 2, 396, 296, BitOR($LBS_STANDARD, $LBS_EXTENDEDSEL))
+	GUISetState(@SW_SHOW)
 
-	; 添加字符串
-	_GUICtrlListBox_BeginUpdate($hListBox)
+	; Add strings
+	_GUICtrlListBox_BeginUpdate($idListBox)
 	For $iI = 1 To 9
-		_GUICtrlListBox_AddString($hListBox, StringFormat("%03d : Random string", Random(1, 100, 1)))
+		_GUICtrlListBox_AddString($idListBox, StringFormat("%03d : Random string", Random(1, 100, 1)))
 	Next
-	_GUICtrlListBox_EndUpdate($hListBox)
+	_GUICtrlListBox_EndUpdate($idListBox)
 
 	; Select a few items
-	_GUICtrlListBox_SetSel($hListBox, 3)
-	_GUICtrlListBox_SetSel($hListBox, 4)
-	_GUICtrlListBox_SetSel($hListBox, 5)
+	_GUICtrlListBox_SetSel($idListBox, 3)
+	_GUICtrlListBox_SetSel($idListBox, 4)
+	_GUICtrlListBox_SetSel($idListBox, 5)
 
-	; Get indexes of selected items
-	$aItems = _GUICtrlListBox_GetSelItemsText($hListBox)
+	; Get text of selected items
+	$aItems = _GUICtrlListBox_GetSelItemsText($idListBox)
 	For $iI = 1 To $aItems[0]
-		$sItems &= @LF & $aItems[$iI]
+		$sItems &= @CRLF & $aItems[$iI]
 	Next
-	MsgBox(4160, "信息", "Items Selected: " & $sItems)
+	MsgBox($MB_SYSTEMMODAL, "Information", "Items Selected: " & $sItems)
 
-	; 循环直到用户退出
+	; Loop until the user exits.
 	Do
 	Until GUIGetMsg() = $GUI_EVENT_CLOSE
 	GUIDelete()
-EndFunc   ;==>_Main
+EndFunc   ;==>Example

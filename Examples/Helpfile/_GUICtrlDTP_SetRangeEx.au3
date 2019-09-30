@@ -1,72 +1,70 @@
 #include <GUIConstantsEx.au3>
 #include <GuiDateTimePicker.au3>
 
-$Debug_DTP = False 检查传递给 DTP 函数的类名, 设置为True并输出到一个控件的句柄,用于检查它是否工作
+Global $g_idMemo, $g_tRange
 
-Global $iMemo, $tRange
+Example()
 
-_Main()
-
-Func _Main()
+Func Example()
 	Local $hDTP
 
-	; 创建 GUI
+	; Create GUI
 	GUICreate("DateTimePick Set RangeEx", 400, 300)
 	$hDTP = GUICtrlGetHandle(GUICtrlCreateDate("", 2, 6, 190))
-	$iMemo = GUICtrlCreateEdit("", 2, 32, 396, 266, 0)
-	GUICtrlSetFont($iMemo, 9, 400, 0, "Courier New")
-	GUISetState()
+	$g_idMemo = GUICtrlCreateEdit("", 2, 32, 396, 266, 0)
+	GUICtrlSetFont($g_idMemo, 9, 400, 0, "Courier New")
+	GUISetState(@SW_SHOW)
 
-	; 设置显示的格式
+	; Set the display format
 	_GUICtrlDTP_SetFormat($hDTP, "ddd MMM dd, yyyy hh:mm ttt")
 
-	; 设置日期范围
-	$tRange = DllStructCreate($tagDTPRANGE)
-	DllStructSetData($tRange, "MinValid", True)
-	DllStructSetData($tRange, "MinYear", @YEAR)
-	DllStructSetData($tRange, "MinMonth", 1)
-	DllStructSetData($tRange, "MinDay", 1)
-	DllStructSetData($tRange, "MaxValid", True)
-	DllStructSetData($tRange, "MaxYear", @YEAR)
-	DllStructSetData($tRange, "MaxMonth", 12)
-	DllStructSetData($tRange, "MaxDay", 31)
-	DllStructSetData($tRange, "MaxHour", 12)
-	DllStructSetData($tRange, "MaxMinute", 59)
-	DllStructSetData($tRange, "MaxSecond", 59)
-	_GUICtrlDTP_SetRangeEx($hDTP, $tRange)
+	; Set date range
+	$g_tRange = DllStructCreate($tagDTPRANGE)
+	DllStructSetData($g_tRange, "MinValid", True)
+	DllStructSetData($g_tRange, "MinYear", @YEAR)
+	DllStructSetData($g_tRange, "MinMonth", 1)
+	DllStructSetData($g_tRange, "MinDay", 1)
+	DllStructSetData($g_tRange, "MaxValid", True)
+	DllStructSetData($g_tRange, "MaxYear", @YEAR)
+	DllStructSetData($g_tRange, "MaxMonth", 12)
+	DllStructSetData($g_tRange, "MaxDay", 31)
+	DllStructSetData($g_tRange, "MaxHour", 12)
+	DllStructSetData($g_tRange, "MaxMinute", 59)
+	DllStructSetData($g_tRange, "MaxSecond", 59)
+	_GUICtrlDTP_SetRangeEx($hDTP, $g_tRange)
 
-	; 显示日期范围
-	$tRange = _GUICtrlDTP_GetRangeEx($hDTP)
+	; Display date range
+	$g_tRange = _GUICtrlDTP_GetRangeEx($hDTP)
 	MemoWrite("Minimum date: " & GetDateStr("Min"))
 	MemoWrite("Maximum date: " & GetDateStr("Max"))
 	MemoWrite("Minimum time: " & GetTimeStr("Min"))
 	MemoWrite("Maximum time: " & GetTimeStr("Max"))
 
-	; 循环直到用户退出
+	; Loop until the user exits.
 	Do
 	Until GUIGetMsg() = $GUI_EVENT_CLOSE
 	GUIDelete()
-EndFunc   ;==>_Main
+EndFunc   ;==>Example
 
-; 返回日期部分
+; Returns the date portion
 Func GetDateStr($sPrefix)
 	If $sPrefix = "Min" Then
-		Return StringFormat("%02d/%02d/%04d", DllStructGetData($tRange, "MinMonth"), DllStructGetData($tRange, "MinDay"), DllStructGetData($tRange, "MinYear"))
+		Return StringFormat("%02d/%02d/%04d", DllStructGetData($g_tRange, "MinMonth"), DllStructGetData($g_tRange, "MinDay"), DllStructGetData($g_tRange, "MinYear"))
 	Else
-		Return StringFormat("%02d/%02d/%04d", DllStructGetData($tRange, "MaxMonth"), DllStructGetData($tRange, "MaxDay"), DllStructGetData($tRange, "MaxYear"))
+		Return StringFormat("%02d/%02d/%04d", DllStructGetData($g_tRange, "MaxMonth"), DllStructGetData($g_tRange, "MaxDay"), DllStructGetData($g_tRange, "MaxYear"))
 	EndIf
 EndFunc   ;==>GetDateStr
 
-; 返回时间部分
+; Returns the time portion
 Func GetTimeStr($sPrefix)
 	If $sPrefix = "Min" Then
-		Return StringFormat("%02d:%02d:%02d", DllStructGetData($tRange, "MinHour"), DllStructGetData($tRange, "MinMinute"), DllStructGetData($tRange, "MinSecond"))
+		Return StringFormat("%02d:%02d:%02d", DllStructGetData($g_tRange, "MinHour"), DllStructGetData($g_tRange, "MinMinute"), DllStructGetData($g_tRange, "MinSecond"))
 	Else
-		Return StringFormat("%02d:%02d:%02d", DllStructGetData($tRange, "MaxHour"), DllStructGetData($tRange, "MaxMinute"), DllStructGetData($tRange, "MaxSecond"))
+		Return StringFormat("%02d:%02d:%02d", DllStructGetData($g_tRange, "MaxHour"), DllStructGetData($g_tRange, "MaxMinute"), DllStructGetData($g_tRange, "MaxSecond"))
 	EndIf
 EndFunc   ;==>GetTimeStr
 
-; 写入一行到 memo 控件
+; Write a line to the memo control
 Func MemoWrite($sMessage)
-	GUICtrlSetData($iMemo, $sMessage & @CRLF, 1)
+	GUICtrlSetData($g_idMemo, $sMessage & @CRLF, 1)
 EndFunc   ;==>MemoWrite

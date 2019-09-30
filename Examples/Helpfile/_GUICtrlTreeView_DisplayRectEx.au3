@@ -1,21 +1,19 @@
 #include <GUIConstantsEx.au3>
-#include <GuiTreeView.au3>
 #include <GuiImageList.au3>
+#include <GuiTreeView.au3>
+#include <MsgBoxConstants.au3>
 #include <WindowsConstants.au3>
 
-$Debug_TV = False ; 检查传递给函数的类名, 设置为真并使用另一控件的句柄可以看出它是否有效
+Example()
 
-_Main()
-
-Func _Main()
-
-	Local $hItem[6], $hImage, $tRect, $hTreeView
+Func Example()
+	Local $ahItem[6], $hImage, $tRECT, $idTreeView
 	Local $iStyle = BitOR($TVS_EDITLABELS, $TVS_HASBUTTONS, $TVS_HASLINES, $TVS_LINESATROOT, $TVS_DISABLEDRAGDROP, $TVS_SHOWSELALWAYS, $TVS_CHECKBOXES)
 
 	GUICreate("TreeView Display RectEx", 400, 300)
 
-	$hTreeView = GUICtrlCreateTreeView(2, 2, 396, 268, $iStyle, $WS_EX_CLIENTEDGE)
-	GUISetState()
+	$idTreeView = GUICtrlCreateTreeView(2, 2, 396, 268, $iStyle, $WS_EX_CLIENTEDGE)
+	GUISetState(@SW_SHOW)
 
 	$hImage = _GUIImageList_Create(16, 16, 5, 3)
 	_GUIImageList_AddIcon($hImage, "shell32.dll", 110)
@@ -24,17 +22,17 @@ Func _Main()
 	_GUIImageList_AddIcon($hImage, "shell32.dll", 168)
 	_GUIImageList_AddIcon($hImage, "shell32.dll", 137)
 	_GUIImageList_AddIcon($hImage, "shell32.dll", 146)
-	_GUICtrlTreeView_SetNormalImageList($hTreeView, $hImage)
+	_GUICtrlTreeView_SetNormalImageList($idTreeView, $hImage)
 
 	For $x = 0 To _GUIImageList_GetImageCount($hImage) - 1
-		$hItem[$x] = _GUICtrlTreeView_Add($hTreeView, 0, StringFormat("[%02d] New Item", $x + 1), $x, $x)
+		$ahItem[$x] = _GUICtrlTreeView_Add($idTreeView, 0, StringFormat("[%02d] New Item", $x + 1), $x, $x)
 	Next
-	$tRect = _GUICtrlTreeView_DisplayRectEx($hTreeView, $hItem[2])
-	MsgBox(4160, "信息", StringFormat("Item 2 Rectangle : [%d, %d, %d, %d]", DllStructGetData($tRect, "Left"), _
-			DllStructGetData($tRect, "Top"), DllStructGetData($tRect, "Right"), DllStructGetData($tRect, "Bottom")))
+	$tRECT = _GUICtrlTreeView_DisplayRectEx($idTreeView, $ahItem[2])
+	MsgBox($MB_SYSTEMMODAL, "Information", StringFormat("Item 2 Rectangle : [%d, %d, %d, %d]", DllStructGetData($tRECT, "Left"), _
+			DllStructGetData($tRECT, "Top"), DllStructGetData($tRECT, "Right"), DllStructGetData($tRECT, "Bottom")))
 
-	; 循环直到用户退出
+	; Loop until the user exits.
 	Do
 	Until GUIGetMsg() = $GUI_EVENT_CLOSE
 	GUIDelete()
-EndFunc   ;==>_Main
+EndFunc   ;==>Example

@@ -1,11 +1,14 @@
-#include <WinAPISys.au3>
 #include <APISysConstants.au3>
+#include <GuiMenu.au3>
+#include <SendMessage.au3>
+#include <WinAPIGdi.au3>
+#include <WinAPIMisc.au3>
 #include <WinAPIProc.au3>
+#include <WinAPISys.au3>
 #include <WindowsConstants.au3>
-#include <GUIMenu.au3>
 
 Local $hEventProc = DllCallbackRegister('_EventProc', 'none', 'ptr;dword;hwnd;long;long;dword;dword')
-Global $tRECT, $Index, $hMenu = 0
+Global $g_tRECT, $g_iIndex, $g_hMenu = 0
 
 OnAutoItExitRegister('OnAutoItExit')
 
@@ -22,28 +25,28 @@ Func OnAutoItExit()
 	DllCallbackFree($hEventProc)
 EndFunc   ;==>OnAutoItExit
 
-Func _EventProc($hEventHook, $iEvent, $hWnd, $iObjectID, $iChildID, $iThreadID, $iEventTime)
-	#forceref $hEventHook, $iObjectID, $iChildID, $iThreadID, $iEventTime
+Func _EventProc($hEventHook, $iEvent, $hWnd, $iObjectID, $iChildID, $iThreadId, $iEventTime)
+	#forceref $hEventHook, $iObjectID, $iChildID, $iThreadId, $iEventTime
 
 	Switch $iEvent
 		Case $EVENT_SYSTEM_MENUPOPUPSTART
 			; Add "View - Calculator"
-			$hMenu = _SendMessage($hWnd, $MN_GETHMENU)
-			If (_GUICtrlMenu_IsMenu($hMenu)) And (StringInStr(_GUICtrlMenu_GetItemText($hMenu, 0), 'Status Bar')) And (StringInStr(_WinAPI_GetWindowFileName($hWnd), 'notepad.exe')) Then
-				$Index = _GUICtrlMenu_GetItemCount($hMenu)
-				_GUICtrlMenu_InsertMenuItem($hMenu, $Index, 'Calculator' & @TAB & ':-)')
-				$tRECT = _GUICtrlMenu_GetItemRectEx($hWnd, $hMenu, $Index)
+			$g_hMenu = _SendMessage($hWnd, $MN_GETHMENU)
+			If (_GUICtrlMenu_IsMenu($g_hMenu)) And (StringInStr(_GUICtrlMenu_GetItemText($g_hMenu, 0), 'Status Bar')) And (StringInStr(_WinAPI_GetWindowFileName($hWnd), 'notepad.exe')) Then
+				$g_iIndex = _GUICtrlMenu_GetItemCount($g_hMenu)
+				_GUICtrlMenu_InsertMenuItem($g_hMenu, $g_iIndex, 'Calculator' & @TAB & ':-)')
+				$g_tRECT = _GUICtrlMenu_GetItemRectEx($hWnd, $g_hMenu, $g_iIndex)
 			Else
-				$hMenu = 0
+				$g_hMenu = 0
 			EndIf
 		Case $EVENT_SYSTEM_MENUPOPUPEND
-			If $hMenu Then
-				_GUICtrlMenu_DeleteMenu($hMenu, $Index)
+			If $g_hMenu Then
+				_GUICtrlMenu_DeleteMenu($g_hMenu, $g_iIndex)
 				Local $tPOINT = _WinAPI_GetMousePos()
-				If _WinAPI_PtInRect($tRECT, $tPOINT) Then
+				If _WinAPI_PtInRect($g_tRECT, $tPOINT) Then
 					Run(@SystemDir & '\calc.exe')
 				EndIf
-				$hMenu = 0
+				$g_hMenu = 0
 			EndIf
 	EndSwitch
 EndFunc   ;==>_EventProc

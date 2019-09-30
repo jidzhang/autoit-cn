@@ -1,16 +1,17 @@
 #include <FileConstants.au3>
 #include <MsgBoxConstants.au3>
+#include <WinAPIFiles.au3>
 
 Example()
 
 Func Example()
 	; Create a constant variable in Local scope of the filepath that will be read/written to.
-	Local Const $sFilePath = @TempDir & "\FileOpen.txt"
+	Local Const $sFilePath = _WinAPI_GetTempFileName(@TempDir)
 
 	; Open the file for read/write access.
 	Local $hFileOpen = FileOpen($sFilePath, $FO_READ + $FO_OVERWRITE)
 	If $hFileOpen = -1 Then
-		MsgBox($MB_SYSTEMMODAL, "", "An error occurred when reading the file.")
+		MsgBox($MB_SYSTEMMODAL, "", "An error occurred when reading/writing the file.")
 		Return False
 	EndIf
 

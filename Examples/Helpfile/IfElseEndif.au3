@@ -1,12 +1,14 @@
-Local $var = ""
-If $var > 0 Then
-	MsgBox(4096, "", "Value is positive.")
-ElseIf $var < 0 Then
-	MsgBox(4096, "", "Value is negative.")
+#include <MsgBoxConstants.au3>
+
+Local $sString = ""
+If $sString > 0 Then
+	MsgBox($MB_SYSTEMMODAL, "", "Value is positive.")
+ElseIf $sString < 0 Then
+	MsgBox($MB_SYSTEMMODAL, "", "Value is negative.")
 Else
-	If StringIsXDigit($var) Then
-		MsgBox(4096, "", "Value might be hexadecimal!")
+	If StringIsXDigit($sString) Then
+		MsgBox($MB_SYSTEMMODAL, "", "Value might be hexadecimal!")
 	Else
-		MsgBox(4096, "", "Value is a string.")
+		MsgBox($MB_SYSTEMMODAL, "", "Value is a string.")
 	EndIf
 EndIf

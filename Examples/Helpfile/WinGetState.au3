@@ -1,3 +1,6 @@
+#include <AutoItConstants.au3>
+#include <MsgBoxConstants.au3>
+
 Example()
 
 Func Example()
@@ -11,10 +14,10 @@ Func Example()
 	Local $iState = WinGetState($hWnd)
 
 	; Check if the Notepad window is minimized and display the appropriate message box.
-	If BitAND($iState, 16) Then
-		MsgBox(4096, "", "Notepad is minimized and the state returned by WinGetState was - " & $iState)
+	If BitAND($iState, $WIN_STATE_MINIMIZED) Then
+		MsgBox($MB_SYSTEMMODAL, "", "Notepad is minimized and the state returned by WinGetState was - " & $iState)
 	Else
-		MsgBox(4096, "", "Notepad isn't minimized and the state returned by WinGetState was - " & $iState)
+		MsgBox($MB_SYSTEMMODAL, "", "Notepad isn't minimized and the state returned by WinGetState was - " & $iState)
 	EndIf
 
 	; Close the Notepad window using the handle returned by WinWait.

@@ -1,6 +1,7 @@
-#include <SecurityConstants.au3>
 #include <Security.au3>
-#include <WinAPI.au3>
+#include <SecurityConstants.au3>
+#include <WinAPIError.au3>
+#include <WinAPIHObj.au3>
 
 Local $hToken = _Security__OpenThreadToken($TOKEN_ADJUST_PRIVILEGES)
 If $hToken Then
@@ -14,5 +15,3 @@ Else
 	ConsoleWrite(_WinAPI_GetLastErrorMessage())
 	; Read remarks for _Security__OpenThreadToken
 EndIf
-
-

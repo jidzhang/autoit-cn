@@ -1,19 +1,19 @@
 #RequireAdmin ; for this example to have sense
 
+#include <MsgBoxConstants.au3>
 #include <ProcessConstants.au3>
-#include <StructureConstants.au3>
-#include <SecurityConstants.au3>
 #include <Security.au3>
-#include <WinAPI.au3>
+#include <SecurityConstants.au3>
+#include <StructureConstants.au3>
+#include <WinAPIHObj.au3>
+#include <WinAPIProc.au3>
 
 Example_ProcessWithTok()
 
-
 Func Example_ProcessWithTok()
 	; Run AutoIt non-elevated regardless of having full administrator rights obtained using #RequireAdmin or by any other means
-	_RunNonElevated('"' & @AutoItExe & '" /AutoIt3ExecuteLine  "MsgBox(262144, ''RunNonElevated'', ''IsAdmin() = '' & "IsAdmin()" & '', PID = '' & "@AutoItPID")"')
+	_RunNonElevated('"' & @AutoItExe & '" /AutoIt3ExecuteLine  "MsgBox(4096, ''RunNonElevated'', ''IsAdmin() = '' & "IsAdmin()" & '', PID = '' & "@AutoItPID")"')
 EndFunc   ;==>Example_ProcessWithTok
-
 
 Func _RunNonElevated($sCommandLine = "")
 	If Not IsAdmin() Then Return Run($sCommandLine) ; if current process is run non-elevated then just Run new one.

@@ -3,28 +3,38 @@
 Example()
 
 Func Example()
-	Local $parent1, $parent2, $tabitem, $msg
-
-	$parent1 = GUICreate("Parent1")
+	Local $hGUIParent1 = GUICreate("Parent1")
 	GUICtrlCreateTab(10, 10)
-	$tabitem = GUICtrlCreateTabItem("tab1")
+	Local $idTabItem = GUICtrlCreateTabItem("tab1")
 	GUICtrlCreateTabItem("tab2")
 	GUICtrlCreateTabItem("")
 
-	$parent2 = GUICreate("Parent2", -1, -1, 100, 100)
+	Local $hGUIParent2 = GUICreate("Parent2", -1, -1, 100, 100)
 
-	GUISwitch($parent2)
-	GUISetState()
-	Do
-		$msg = GUIGetMsg()
-	Until $msg = $GUI_EVENT_CLOSE
+	GUISwitch($hGUIParent2)
+	GUISetState(@SW_SHOW)
 
-	GUISwitch($parent1, $tabitem)
+	; Loop until the user exits.
+	While 1
+		Switch GUIGetMsg()
+			Case $GUI_EVENT_CLOSE
+				ExitLoop
+
+		EndSwitch
+	WEnd
+
+	GUISwitch($hGUIParent1, $idTabItem)
 	GUICtrlCreateButton("OK", 50, 50, 50)
 	GUICtrlCreateTabItem("")
 
-	GUISetState(@SW_SHOW, $parent1)
-	Do
-		$msg = GUIGetMsg()
-	Until $msg = $GUI_EVENT_CLOSE
+	GUISetState(@SW_SHOW, $hGUIParent1)
+	While 1
+		Switch GUIGetMsg()
+			Case $GUI_EVENT_CLOSE
+				ExitLoop
+		EndSwitch
+	WEnd
+
+	GUIDelete($hGUIParent1)
+	GUIDelete($hGUIParent2)
 EndFunc   ;==>Example

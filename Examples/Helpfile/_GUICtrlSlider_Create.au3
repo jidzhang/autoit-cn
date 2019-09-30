@@ -2,35 +2,33 @@
 #include <GuiSlider.au3>
 #include <WindowsConstants.au3>
 
-$Debug_S = False ; 检查传递给函数的类名, 设置为True并输出到一个控件的句柄,用于检查它是否工作
+Global $g_hSlider
 
-Global $hSlider
+Example()
 
-_Main()
-
-Func _Main()
+Func Example()
 	Local $hGUI
 
-	; 创建 GUI
+	; Create GUI
 	$hGUI = GUICreate("(UDF Created) Slider Create", 400, 296)
-	$hSlider = _GUICtrlSlider_Create($hGUI, 2, 2, 396, 20, BitOR($TBS_TOOLTIPS, $TBS_AUTOTICKS))
-	GUISetState()
+	$g_hSlider = _GUICtrlSlider_Create($hGUI, 2, 2, 396, 20, BitOR($TBS_TOOLTIPS, $TBS_AUTOTICKS))
+	GUISetState(@SW_SHOW)
 
 	GUIRegisterMsg($WM_NOTIFY, "WM_NOTIFY")
 
-	; 循环直到用户退出
+	; Loop until the user exits.
 	Do
 	Until GUIGetMsg() = $GUI_EVENT_CLOSE
 	GUIDelete()
-EndFunc   ;==>_Main
+EndFunc   ;==>Example
 
-Func WM_NOTIFY($hWnd, $iMsg, $iwParam, $ilParam)
-	#forceref $hWnd, $iMsg, $iwParam
+Func WM_NOTIFY($hWnd, $iMsg, $wParam, $lParam)
+	#forceref $hWnd, $iMsg, $wParam
 	Local $hWndFrom, $iIDFrom, $iCode, $tNMHDR, $hWndSlider
-	$hWndSlider = $hSlider
-	If Not IsHWnd($hSlider) Then $hWndSlider = GUICtrlGetHandle($hSlider)
+	$hWndSlider = $g_hSlider
+	If Not IsHWnd($g_hSlider) Then $hWndSlider = GUICtrlGetHandle($g_hSlider)
 
-	$tNMHDR = DllStructCreate($tagNMHDR, $ilParam)
+	$tNMHDR = DllStructCreate($tagNMHDR, $lParam)
 	$hWndFrom = HWnd(DllStructGetData($tNMHDR, "hWndFrom"))
 	$iIDFrom = DllStructGetData($tNMHDR, "IDFrom")
 	$iCode = DllStructGetData($tNMHDR, "Code")
@@ -38,19 +36,19 @@ Func WM_NOTIFY($hWnd, $iMsg, $iwParam, $ilParam)
 		Case $hWndSlider
 			Switch $iCode
 				Case $NM_RELEASEDCAPTURE ; The control is releasing mouse capture
-					_DebugPrint("$NM_RELEASEDCAPTURE" & @LF & "--> hWndFrom:" & @TAB & $hWndFrom & @LF & _
-							"-->IDFrom:" & @TAB & $iIDFrom & @LF & _
+					_DebugPrint("$NM_RELEASEDCAPTURE" & @CRLF & "--> hWndFrom:" & @TAB & $hWndFrom & @CRLF & _
+							"-->IDFrom:" & @TAB & $iIDFrom & @CRLF & _
 							"-->Code:" & @TAB & $iCode)
-					; 没有返回值
+					; No return value
 			EndSwitch
 	EndSwitch
 	Return $GUI_RUNDEFMSG
 EndFunc   ;==>WM_NOTIFY
 
-Func _DebugPrint($s_text, $line = @ScriptLineNumber)
+Func _DebugPrint($s_Text, $sLine = @ScriptLineNumber)
 	ConsoleWrite( _
-			"!===========================================================" & @LF & _
-			"+======================================================" & @LF & _
-			"-->Line(" & StringFormat("%04d", $line) & "):" & @TAB & $s_text & @LF & _
-			"+======================================================" & @LF)
+			"!===========================================================" & @CRLF & _
+			"+======================================================" & @CRLF & _
+			"-->Line(" & StringFormat("%04d", $sLine) & "):" & @TAB & $s_Text & @CRLF & _
+			"+======================================================" & @CRLF)
 EndFunc   ;==>_DebugPrint

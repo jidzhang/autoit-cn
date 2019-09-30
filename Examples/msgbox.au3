@@ -11,8 +11,4 @@
 ;
 
 ; Use the @CRLF macro to create a newline in a MsgBox - it is similar to the \n in v2.64
-;~ @CR=回车
-;~ @LF=换行
-;~ @CRLF=回车+换行
-
-MsgBox($MB_SYSTEMMODAL, "AutoIt 例子", "这是第一行" & @CRLF & "这是第二行" & @CRLF & "这是第三行")
+MsgBox($MB_SYSTEMMODAL, "AutoIt Example", "This is line 1" & @CRLF & "This is line 2" & @CRLF & "This is line 3")

@@ -1,6 +1,8 @@
+#include <MsgBoxConstants.au3>
+
 Local $oShell = ObjCreate("shell.application")
 If IsObj($oShell) Then
-	MsgBox(4096,"","变量是一个对象")
+	MsgBox($MB_SYSTEMMODAL, "", "The variable is an object")
 Else
-	MsgBox(4096,"","变量不是一个对象.")
+	MsgBox($MB_SYSTEMMODAL, "", "The variable is not an object")
 EndIf

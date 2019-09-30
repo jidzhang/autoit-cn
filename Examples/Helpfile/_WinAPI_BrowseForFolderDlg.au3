@@ -1,35 +1,40 @@
-#include <WinAPIDlg.au3>
 #include <APIDlgConstants.au3>
-#include <WinAPISys.au3>
 #include <MsgBoxConstants.au3>
+#include <SendMessage.au3>
+#include <WinAPIDlg.au3>
+#include <WinAPIMem.au3>
+#include <WinAPIMisc.au3>
+#include <WinAPIShellEx.au3>
+#include <WinAPIShPath.au3>
+#include <WinAPISysWin.au3>
 
-Global Const $InitDir = @ProgramFilesDir
+Local Const $sInitDir = @ProgramFilesDir
 
 Local $hBrowseProc = DllCallbackRegister('_BrowseProc', 'int', 'hwnd;uint;lparam;ptr')
 Local $pBrowseProc = DllCallbackGetPtr($hBrowseProc)
 
-Local $pText = _WinAPI_CreateString($InitDir)
-Local $Path = _WinAPI_BrowseForFolderDlg(_WinAPI_PathStripToRoot($InitDir), 'Select a folder from the list below.', BitOR($BIF_RETURNONLYFSDIRS, $BIF_EDITBOX, $BIF_VALIDATE), $pBrowseProc, $pText)
+Local $pText = _WinAPI_CreateString($sInitDir)
+Local $sPath = _WinAPI_BrowseForFolderDlg(_WinAPI_PathStripToRoot($sInitDir), 'Select a folder from the list below.', BitOR($BIF_RETURNONLYFSDIRS, $BIF_EDITBOX, $BIF_VALIDATE), $pBrowseProc, $pText)
 _WinAPI_FreeMemory($pText)
 
-If $Path Then
+If $sPath Then
 	ConsoleWrite('--------------------------------------------------' & @CRLF)
-	ConsoleWrite($Path & @CRLF)
+	ConsoleWrite($sPath & @CRLF)
 EndIf
 
 DllCallbackFree($hBrowseProc)
 
 Func _BrowseProc($hWnd, $iMsg, $wParam, $lParam)
-	Local $Path
+	Local $sPath
 
 	Switch $iMsg
 		Case $BFFM_INITIALIZED
 			_WinAPI_SetWindowText($hWnd, 'MyTitle')
 			_SendMessage($hWnd, $BFFM_SETSELECTIONW, 1, $lParam)
 		Case $BFFM_SELCHANGED
-			$Path = _WinAPI_ShellGetPathFromIDList($wParam)
+			$sPath = _WinAPI_ShellGetPathFromIDList($wParam)
 			If Not @error Then
-				ConsoleWrite($Path & @CRLF)
+				ConsoleWrite($sPath & @CRLF)
 			EndIf
 		Case $BFFM_VALIDATEFAILED
 			MsgBox(BitOR($MB_ICONERROR, $MB_SYSTEMMODAL), 'Error', _WinAPI_GetString($wParam) & ' is invalid.', 0, $hWnd)

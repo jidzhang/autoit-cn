@@ -10,12 +10,12 @@
 ;   Counts to 5 using a "while" loop
 
 ; Prompt the user to run the script - use a Yes/No prompt with the flag parameter set at 4 (see the help file for more details)
-Local $iAnswer = MsgBox(BitOR($MB_YESNO, $MB_SYSTEMMODAL), "AutoIt 例子", "这个脚本将会运行5次 'While' 循环.  运行?")
+Local $iAnswer = MsgBox(BitOR($MB_YESNO, $MB_SYSTEMMODAL), "AutoIt Example", "This script will count to 5 using a 'While' loop.  Do you want to run it?")
 
 ; Check the user's answer to the prompt (see the help file for MsgBox return values)
 ; If "No" was clicked (7) then exit the script
 If $iAnswer = 7 Then
-	MsgBox($MB_SYSTEMMODAL, "AutoIt 例子", "好的,再见!")
+	MsgBox($MB_SYSTEMMODAL, "AutoIt Example", "OK.  Bye!")
 	Exit
 EndIf
 
@@ -28,8 +28,8 @@ While $iCount < 5
 	$iCount = $iCount + 1 ; Alternatively $iCount += 1 can be used to increase the value of $iCount by one
 
 	; Print the count
-	MsgBox($MB_SYSTEMMODAL, "AutoIt 例子", "计数器为: " & $iCount)
+	MsgBox($MB_SYSTEMMODAL, "AutoIt Example", "Count is: " & $iCount)
 WEnd
 
 ; Finished!
-MsgBox($MB_SYSTEMMODAL, "AutoIt 例子", "完成!")
+MsgBox($MB_SYSTEMMODAL, "AutoIt Example", "Finished!")

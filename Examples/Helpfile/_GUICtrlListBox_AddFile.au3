@@ -1,23 +1,21 @@
-#include <GuiListBox.au3>
 #include <GUIConstantsEx.au3>
+#include <GuiListBox.au3>
 
-$Debug_LB = False ; 检查传递给 ListBox 函数的类名, 设置为真并使用另一控件的句柄可以看出它是否有效
+Example()
 
-_Main()
+Func Example()
+	Local $idListBox
 
-Func _Main()
-	Local $hListBox
-
-	; 创建 GUI
+	; Create GUI
 	GUICreate("List Box Add File", 400, 296)
-	$hListBox = GUICtrlCreateList("", 2, 2, 396, 296)
-	GUISetState()
+	$idListBox = GUICtrlCreateList("", 2, 2, 396, 296)
+	GUISetState(@SW_SHOW)
 
-	; 添加文件
-	_GUICtrlListBox_AddFile($hListBox, @WindowsDir & "\notepad.exe")
+	; Add file
+	_GUICtrlListBox_AddFile($idListBox, @WindowsDir & "\notepad.exe")
 
-	; 循环直到用户退出
+	; Loop until the user exits.
 	Do
 	Until GUIGetMsg() = $GUI_EVENT_CLOSE
 	GUIDelete()
-EndFunc   ;==>_Main
+EndFunc   ;==>Example

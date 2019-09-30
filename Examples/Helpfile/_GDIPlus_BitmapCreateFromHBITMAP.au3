@@ -1,38 +1,37 @@
-#include <GUIConstantsEx.au3>
 #include <GDIPlus.au3>
+#include <GUIConstantsEx.au3>
 #include <ScreenCapture.au3>
+#include <WinAPIHObj.au3>
 
-_Main()
+Example()
 
-Func _Main()
+Func Example()
 	Local $hGUI, $hBMP, $hBitmap, $hGraphic
 
-	; 捕获屏幕的左上角
+	; Capture upper left corner of screen
 	$hBMP = _ScreenCapture_Capture("", 0, 0, 400, 300)
 
-	; 创建 GUI
+	; Create GUI
 	$hGUI = GUICreate("GDI+", 400, 300)
-	GUISetState()
+	GUISetState(@SW_SHOW)
 
-	; 初始化 GDI+ 库
+	; Initialize GDI+ library
 	_GDIPlus_Startup()
 
-	; 在 GUI 中描绘位图
+	; Draw bitmap to GUI
 	$hBitmap = _GDIPlus_BitmapCreateFromHBITMAP($hBMP)
 	$hGraphic = _GDIPlus_GraphicsCreateFromHWND($hGUI)
 	_GDIPlus_GraphicsDrawImage($hGraphic, $hBitmap, 0, 0)
 
-	; 清理资源
+	; Clean up resources
 	_GDIPlus_GraphicsDispose($hGraphic)
 	_GDIPlus_BitmapDispose($hBitmap)
 	_WinAPI_DeleteObject($hBMP)
 
-	; 关闭 GDI+ 库
+	; Shut down GDI+ library
 	_GDIPlus_Shutdown()
 
-	; 循环直到用户退出
+	; Loop until the user exits.
 	Do
 	Until GUIGetMsg() = $GUI_EVENT_CLOSE
-
-
-EndFunc   ;==>_Main
+EndFunc   ;==>Example

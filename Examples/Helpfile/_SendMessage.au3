@@ -1,23 +1,24 @@
+#include <MsgBoxConstants.au3>
 #include <SendMessage.au3>
 
-_Main()
+Example()
 
-Func _Main()
-	Local Const $Off = 2, $On = -1
+Func Example()
+	Local Const $iOff = 2, $iOn = -1
 
 	Opt("WinTitleMatchMode", 4)
-	Local $hwnd = WinGetHandle('classname=Progman')
-	_ToggleMonitor($hwnd, $Off)
+	Local $hWnd = WinGetHandle('classname=Progman')
+	_ToggleMonitor($hWnd, $iOff)
 	Sleep(3000)
-	_ToggleMonitor($hwnd, $On)
-EndFunc   ;==>_Main
+	_ToggleMonitor($hWnd, $iOn)
+EndFunc   ;==>Example
 
-Func _ToggleMonitor($hwnd, $OnOff)
+Func _ToggleMonitor($hWnd, $iOnOff)
 	Local Const $WM_SYSCOMMAND = 274
 	Local Const $SC_MONITORPOWER = 61808
-	_SendMessage($hwnd, $WM_SYSCOMMAND, $SC_MONITORPOWER, $OnOff)
+	_SendMessage($hWnd, $WM_SYSCOMMAND, $SC_MONITORPOWER, $iOnOff)
 	If @error Then
-		MsgBox(4096, "_ToggleMonitor", "_SendMessage Error: " & @error)
+		MsgBox($MB_SYSTEMMODAL, "_ToggleMonitor", "_SendMessage Error: " & @error)
 		Exit
 	EndIf
 EndFunc   ;==>_ToggleMonitor

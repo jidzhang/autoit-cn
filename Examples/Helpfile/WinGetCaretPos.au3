@@ -1,25 +1,25 @@
 Local $aCaretPos = WinGetCaretPos()
 If Not @error Then
-	ToolTip("第一个种方式", $aCaretPos[0], $aCaretPos[1])
+	ToolTip("First Method", $aCaretPos[0], $aCaretPos[1])
 EndIf
 Sleep(2000)
 
 $aCaretPos = _WinGetCaretPos()
 If Not @error Then
-	ToolTip("第二种方式", $aCaretPos[0], $aCaretPos[1])
+	ToolTip("Second Method", $aCaretPos[0], $aCaretPos[1])
 EndIf
 Sleep(2000)
 
-; 得到 MDI 文本编辑器的一些可靠方法.
+; A more reliable method to retrieve the caret coordinates in MDI text editors.
 Func _WinGetCaretPos()
 	Local $iXAdjust = 5
 	Local $iYAdjust = 40
 
-	Local $iOpt = Opt("CaretCoordMode", 0)         ;相对模式
-	Local $aGetCaretPos = WinGetCaretPos()         ;相对插入符坐标
-	Local $aGetPos = WinGetPos("[ACTIVE]")         ;窗口坐标
-	Local $sControl = ControlGetFocus("[ACTIVE]")  ;文本区域 "句柄"
-	Local $aControlPos = ControlGetPos("[ACTIVE]", "", $sControl)  ;文本区域坐标
+	Local $iOpt = Opt("CaretCoordMode", 0) ; Set "CaretCoordMode" to relative mode and store the previous option.
+	Local $aGetCaretPos = WinGetCaretPos() ; Retrieve the relative caret coordinates.
+	Local $aGetPos = WinGetPos("[ACTIVE]") ; Retrieve the position as well as height and width of the active window.
+	Local $sControl = ControlGetFocus("[ACTIVE]") ; Retrieve the control name that has keyboard focus.
+	Local $aControlPos = ControlGetPos("[ACTIVE]", "", $sControl) ; Retrieve the position as well as the size of the control.
 	$iOpt = Opt("CaretCoordMode", $iOpt) ; Reset "CaretCoordMode" to the previous option.
 
 	Local $aReturn[2] = [0, 0] ; Create an array to store the x, y position.

@@ -1,15 +1,18 @@
-#include <WinAPIGdi.au3>
 #include <APIGdiConstants.au3>
 #include <GUIConstantsEx.au3>
+#include <SendMessage.au3>
+#include <StaticConstants.au3>
+#include <WinAPIGdi.au3>
+#include <WinAPIGdiDC.au3>
+#include <WinAPIHObj.au3>
+#include <WinAPIRes.au3>
+#include <WinAPISysWin.au3>
 #include <WindowsConstants.au3>
-
-Global Const $STM_SETIMAGE = 0x0172
-Global Const $STM_GETIMAGE = 0x0173
 
 ; Create GUI
 Local $hForm = GUICreate('Test ' & StringReplace(@ScriptName, '.au3', '()'), 310, 300)
-Local $Pic = GUICtrlCreatePic('', 0, 0, 310, 300)
-Local $hPic = GUICtrlGetHandle($Pic)
+Local $idPic = GUICtrlCreatePic('', 0, 0, 310, 300)
+Local $hPic = GUICtrlGetHandle($idPic)
 
 ; Create bitmap
 Local $hDC = _WinAPI_GetDC($hPic)
@@ -48,7 +51,7 @@ _WinAPI_DrawLine($hMemDC, 20, 190, 289, 190)
 _WinAPI_SelectObject($hMemDC, $hSv)
 _WinAPI_DeleteObject($hPen)
 
-Global $aStyle[6] = [1, 7, 1, 7, 1, 25]
+Local $aStyle[6] = [1, 7, 1, 7, 1, 25]
 $hPen = _WinAPI_ExtCreatePen(BitOR($PS_GEOMETRIC, $PS_USERSTYLE, $PS_ENDCAP_ROUND), 5, $BS_SOLID, 0, 0, $aStyle)
 $hSv = _WinAPI_SelectObject($hMemDC, $hPen)
 _WinAPI_DrawLine($hMemDC, 20, 230, 289, 230)
@@ -75,7 +78,7 @@ If $hObj <> $hBitmap Then
 	_WinAPI_DeleteObject($hBitmap)
 EndIf
 
-GUISetState()
+GUISetState(@SW_SHOW)
 
 Do
 Until GUIGetMsg() = $GUI_EVENT_CLOSE

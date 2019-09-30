@@ -1,33 +1,32 @@
 #include <GuiComboBox.au3>
 #include <GUIConstantsEx.au3>
+#include <MsgBoxConstants.au3>
 
-$Debug_CB = False ;检查传递给 ComboBox/ComboBoxEx 函数的类名, 设置为True并输出到一个控件的句柄,用于检查它是否工作
+Example()
 
-_Main()
+Func Example()
+	Local $idCombo
 
-Func _Main()
-	Local $hCombo
-
-	; 创建 GUI
+	; Create GUI
 	GUICreate("ComboBox Get Locale Country Language id", 400, 296)
-	$hCombo = GUICtrlCreateCombo("", 2, 2, 396, 296)
-	GUISetState()
+	$idCombo = GUICtrlCreateCombo("", 2, 2, 396, 296)
+	GUISetState(@SW_SHOW)
 
-	; 添加文件
-	_GUICtrlComboBox_BeginUpdate($hCombo)
-	_GUICtrlComboBox_AddDir($hCombo, @WindowsDir & "\*.exe")
-	_GUICtrlComboBox_EndUpdate($hCombo)
+	; Add files
+	_GUICtrlComboBox_BeginUpdate($idCombo)
+	_GUICtrlComboBox_AddDir($idCombo, @WindowsDir & "\*.exe")
+	_GUICtrlComboBox_EndUpdate($idCombo)
 
-	; 显示区域, 国家代码, 语言标识符, 主要语言标识符和子语言标识符
-	MsgBox(4160, "信息", _
-			"Locale .................: " & _GUICtrlComboBox_GetLocale($hCombo) & @LF & _
-			"Country code ........: " & _GUICtrlComboBox_GetLocaleCountry($hCombo) & @LF & _
-			"Language identifier..: " & _GUICtrlComboBox_GetLocaleLang($hCombo) & @LF & _
-			"Primary Language id : " & _GUICtrlComboBox_GetLocalePrimLang($hCombo) & @LF & _
-			"Sub-Language id ....: " & _GUICtrlComboBox_GetLocaleSubLang($hCombo))
+	; Show locale, country code, language identifier, primary language id, sub-language id
+	MsgBox($MB_SYSTEMMODAL, "Information", _
+			"Locale .................: " & _GUICtrlComboBox_GetLocale($idCombo) & @CRLF & _
+			"Country code ........: " & _GUICtrlComboBox_GetLocaleCountry($idCombo) & @CRLF & _
+			"Language identifier..: " & _GUICtrlComboBox_GetLocaleLang($idCombo) & @CRLF & _
+			"Primary Language id : " & _GUICtrlComboBox_GetLocalePrimLang($idCombo) & @CRLF & _
+			"Sub-Language id ....: " & _GUICtrlComboBox_GetLocaleSubLang($idCombo))
 
-	; 循环直到用户退出
+	; Loop until the user exits.
 	Do
 	Until GUIGetMsg() = $GUI_EVENT_CLOSE
 	GUIDelete()
-EndFunc   ;==>_Main
+EndFunc   ;==>Example

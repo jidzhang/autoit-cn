@@ -1,8 +1,5 @@
-Run("notepad.exe")
-WinWaitActive("[CLASS:Notepad]")
-
-;等待记事本窗口为不活动状态,如果一直是活动状态,脚本暂停
+; Wait for the window "[CLASS:Notepad]" to not be active.
 WinWaitNotActive("[CLASS:Notepad]")
 
-;等待记事本窗口为不活动状态(延迟5秒,5秒后不管如何,脚本继续)
+; Wait a maximum of 5 seconds for "[CLASS:Notepad]" to not be active.
 WinWaitNotActive("[CLASS:Notepad]", "", 5)

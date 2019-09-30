@@ -1,25 +1,23 @@
-#include <GuiEdit.au3>
 #include <GUIConstantsEx.au3>
+#include <GuiEdit.au3>
 
-$Debug_Ed = False ; Check ClassName being passed to Edit functions, set to True and use a handle to another control to see it work
+Example()
 
-_Main()
+Func Example()
+	Local $idEdit, $sTitle = "ShowBalloonTip", $sText = "Displays a balloon tip associated with an edit control"
 
-Func _Main()
-	Local $hEdit, $sTitle = "ShowBalloonTip", $sText = "Displays a balloon tip associated with an edit control"
-
-	; 创建 GUI
+	; Create GUI
 	GUICreate("Edit ShowBalloonTip", 400, 300)
-	$hEdit = GUICtrlCreateEdit("", 2, 2, 394, 268)
-	GUISetState()
+	$idEdit = GUICtrlCreateEdit("", 2, 2, 394, 268)
+	GUISetState(@SW_SHOW)
 
 	; Set Text
-	_GUICtrlEdit_SetText($hEdit, "This is a test" & @CRLF & "Another Line" & @CRLF & "Append to the end?")
+	_GUICtrlEdit_SetText($idEdit, "This is a test" & @CRLF & "Another Line" & @CRLF & "Append to the end?")
 
-	_GUICtrlEdit_ShowBalloonTip($hEdit, $sTitle, $sText, $TTI_INFO)
+	_GUICtrlEdit_ShowBalloonTip($idEdit, $sTitle, $sText, $TTI_INFO)
 
-	; 循环直到用户退出
+	; Loop until the user exits.
 	Do
 	Until GUIGetMsg() = $GUI_EVENT_CLOSE
 	GUIDelete()
-EndFunc   ;==>_Main
+EndFunc   ;==>Example

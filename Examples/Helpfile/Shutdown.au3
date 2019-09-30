@@ -1,1 +1,3 @@
-Shutdown(6)  ;«ø÷∆÷ÿ∆Ù
+; Force a reboot
+
+Shutdown(6)

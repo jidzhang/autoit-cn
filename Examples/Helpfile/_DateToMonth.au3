@@ -1,9 +1,10 @@
 #include <Date.au3>
+#include <MsgBoxConstants.au3>
 
-; 获取长名称
+; Retrieve the long name
 Local $sLongMonthName = _DateToMonth(@MON)
 
-; 获取简称
-Local $sShortMonthName = _DateToMonth(@MON, 1)
+; Retrieve the abbreviated name
+Local $sShortMonthName = _DateToMonth(@MON, $DMW_SHORTNAME)
 
-MsgBox(4096, "Month of Year", "The month is: " & $sLongMonthName & " (" & $sShortMonthName & ")")
+MsgBox($MB_SYSTEMMODAL, "Month of Year", "The month is: " & $sLongMonthName & " (" & $sShortMonthName & ")")

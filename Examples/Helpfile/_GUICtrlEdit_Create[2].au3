@@ -1,9 +1,9 @@
-#include <GuiEdit.au3>
-#include <WinAPI.au3> ; used for Lo/Hi word
-#include <WindowsConstants.au3>
 #include <GUIConstantsEx.au3>
+#include <GuiEdit.au3>
+#include <WinAPIConv.au3>
+#include <WindowsConstants.au3>
 
-Global $hEdit
+Global $g_hEdit
 
 Example()
 
@@ -12,28 +12,28 @@ Func Example()
 
 	; Create GUI
 	$hGUI = GUICreate("Edit Create", 400, 300)
-	$hEdit = _GUICtrlEdit_Create($hGUI, "", 2, 2, 394, 268)
-	GUISetState()
+	$g_hEdit = _GUICtrlEdit_Create($hGUI, "", 2, 2, 394, 268)
+	GUISetState(@SW_SHOW)
 
 	GUIRegisterMsg($WM_COMMAND, "WM_COMMAND")
 
-	_GUICtrlEdit_SetText($hEdit, "This is a test" & @CRLF & "Another Line")
+	_GUICtrlEdit_SetText($g_hEdit, "This is a test" & @CRLF & "Another Line")
 
-	; Loop until user exits
+	; Loop until the user exits.
 	Do
 	Until GUIGetMsg() = $GUI_EVENT_CLOSE
 	GUIDelete()
 EndFunc   ;==>Example
 
-Func WM_COMMAND($hWnd, $iMsg, $iwParam, $ilParam)
+Func WM_COMMAND($hWnd, $iMsg, $wParam, $lParam)
 	#forceref $hWnd, $iMsg
 	Local $hWndFrom, $iIDFrom, $iCode, $hWndEdit
-	If Not IsHWnd($hEdit) Then $hWndEdit = GUICtrlGetHandle($hEdit)
-	$hWndFrom = $ilParam
-	$iIDFrom = _WinAPI_LoWord($iwParam)
-	$iCode = _WinAPI_HiWord($iwParam)
+	If Not IsHWnd($g_hEdit) Then $hWndEdit = GUICtrlGetHandle($g_hEdit)
+	$hWndFrom = $lParam
+	$iIDFrom = _WinAPI_LoWord($wParam)
+	$iCode = _WinAPI_HiWord($wParam)
 	Switch $hWndFrom
-		Case $hEdit, $hWndEdit
+		Case $g_hEdit, $hWndEdit
 			Switch $iCode
 				Case $EN_ALIGN_LTR_EC ; Sent when the user has changed the edit control direction to left-to-right
 					_DebugPrint("$EN_ALIGN_LTR_EC" & @CRLF & "--> hWndFrom:" & @TAB & $hWndFrom & @CRLF & _
@@ -95,10 +95,10 @@ Func WM_COMMAND($hWnd, $iMsg, $iwParam, $ilParam)
 	Return $GUI_RUNDEFMSG
 EndFunc   ;==>WM_COMMAND
 
-Func _DebugPrint($s_text, $line = @ScriptLineNumber)
+Func _DebugPrint($s_Text, $sLine = @ScriptLineNumber)
 	ConsoleWrite( _
 			"!===========================================================" & @CRLF & _
 			"+======================================================" & @CRLF & _
-			"-->Line(" & StringFormat("%04d", $line) & "):" & @TAB & $s_text & @CRLF & _
+			"-->Line(" & StringFormat("%04d", $sLine) & "):" & @TAB & $s_Text & @CRLF & _
 			"+======================================================" & @CRLF)
 EndFunc   ;==>_DebugPrint

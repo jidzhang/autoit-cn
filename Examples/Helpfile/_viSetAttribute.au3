@@ -1,26 +1,27 @@
-;- 这里假设您安装了仪器到 GPIB 地址 3.
-; 如果您的仪器安装到了不同的地址, 则改变 "GPIB::3::0" 为
-; 相应描述符. 进行对 _viOpen 的相同调用
-; 此例子演示了如何使用 _viSetAttribute. 在此例中我们使用 _viSetAttribute
-; 代替 _viSetTimeout 设置 _viExecCommand 操作的 GPIB 超时时间.
+; - This assumes that you have instrument set to GPIB address 3.
+; If you have an instrument in a different address change "GPIB::3::0" to the
+; corresponding descriptor. Do the same for the call to _viOpen
+; It shows how to use the _viSetAttribute. In this example we use _viSetAttribute
+; instead of _viSetTimeout to set the GPIB timeout of a _viExecCommand operation.
 
+#include <MsgBoxConstants.au3>
 #include <Visa.au3>
 
-Local $h_session = 0
+Local $h_Session = 0
 
-; 查询在 GPIB 地址 3 的仪器 ID
-MsgBox(4096, "Step 1", "Simple GPIB query with explicit TIMEOUT set")
-Local $s_answer = _viExecCommand("GPIB::3::0", "*IDN?", 10000) ; 超时为 10 秒
-MsgBox(4096, "GPIB QUERY result", $s_answer) ; 显示应答
+; Query the ID of the instrument in GPIB address 3
+MsgBox($MB_SYSTEMMODAL, "Step 1", "Simple GPIB query with explicit TIMEOUT set")
+Local $s_Answer = _viExecCommand("GPIB::3::0", "*IDN?", 10000) ; 10 secs timeout
+MsgBox($MB_SYSTEMMODAL, "GPIB QUERY result", $s_Answer) ; Show the answer
 
-; 这里相当于首先使用 _viSetAttribute 函数:
-MsgBox(4096, "Step 2", "_vOpen + timeout using _viSetAttribute + GPIB query")
-Local $h_instr = _viOpen(3)
-; 注意 - 这里相当于: _viSetTimeout($h_instr, 10000)
-_viSetAttribute($h_instr, $VI_ATTR_TMO_VALUE, 10000) ; 10000 毫秒 = 10 秒
+; This is the same as using the _viSetAttribute function first:
+MsgBox($MB_SYSTEMMODAL, "Step 2", "_vOpen + timeout using _viSetAttribute + GPIB query")
+Local $h_Instr = _viOpen(3)
+; NOTE - This is the same as: _viSetTimeout($h_Instr, 10000)
+_viSetAttribute($h_Instr, $VI_ATTR_TMO_VALUE, 10000) ; 10000 ms = 10 secs
 
-$s_answer = _viExecCommand($h_instr, "*IDN?") ; 现在不需要设置超时
-MsgBox(4096, "GPIB QUERY result", $s_answer) ; 显示应答
+$s_Answer = _viExecCommand($h_Instr, "*IDN?") ; No need to set the timeout now
+MsgBox($MB_SYSTEMMODAL, "GPIB QUERY result", $s_Answer) ; Show the answer
 
-MsgBox(4096, "Step 3", "Close the Instrument connection using _viClose")
-_viClose($h_instr) ; 关闭仪器连接
+MsgBox($MB_SYSTEMMODAL, "Step 3", "Close the Instrument connection using _viClose")
+_viClose($h_Instr) ; Close the instrument connection

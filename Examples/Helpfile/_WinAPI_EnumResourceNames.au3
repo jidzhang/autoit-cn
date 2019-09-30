@@ -1,7 +1,7 @@
-#include <WinAPIRes.au3>
 #include <APIResConstants.au3>
 #include <Array.au3>
+#include <WinAPIRes.au3>
 
-Local $Data = _WinAPI_EnumResourceNames(@SystemDir & '\shell32.dll', $RT_DIALOG)
+Local $aData = _WinAPI_EnumResourceNames(@SystemDir & '\shell32.dll', $RT_DIALOG)
 
-_ArrayDisplay($Data, '_WinAPI_EnumResourceNames')
+_ArrayDisplay($aData, '_WinAPI_EnumResourceNames')

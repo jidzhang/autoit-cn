@@ -1,10 +1,8 @@
-_Example()
+#include <MsgBoxConstants.au3>
 
+Example()
 
-
-
-Func _Example()
-
+Func Example()
 	; Error monitoring. This will trap all COM errors while alive.
 	; This particular object is declared as local, meaning after the function returns it will not exist.
 	Local $oErrorHandler = ObjEvent("AutoIt.Error", "_ErrFunc")
@@ -35,8 +33,9 @@ Func _Example()
 
 	; Deliberately cause error by calling non-existing method
 	$oIE.PlayMeARockAndRollSong()
+
 	; Check for errors
-	If @error Then MsgBox(48 + 262144, "COM Error", "@error is set to COM error number." & @CRLF & "@error = " & @error)
+	If @error Then MsgBox($MB_SYSTEMMODAL, "COM Error", "@error is set to COM error number." & @CRLF & "@error = 0x" & Hex(@error))
 
 	; Wait few seconds to see if more events will be fired
 	Sleep(3000)
@@ -45,33 +44,32 @@ Func _Example()
 	$oIE.Quit()
 
 	#forceref $oErrorHandler, $oIEEvents
-
-EndFunc   ;==>_Example
-
+EndFunc   ;==>Example
 
 ; BeforeNavigate2 method definition
-Func _IEEvent_BeforeNavigate2($IEpDisp, $IEURL, $IEFlags, $IETargetFrameName, $IEPostData, $IEHeaders, $IECancel)
+Func _IEEvent_BeforeNavigate2($oIEpDisp, $sIEURL, $iIEFlags, $sIETargetFrameName, $sIEPostData, $iIEHeaders, $bIECancel)
 	ConsoleWrite("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!--BeforeNavigate2 fired--!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! " & @CRLF & _
-			"$IEpDisp = " & $IEpDisp() & "  -  " & ObjName($IEpDisp) & @CRLF & _ ; e.g. default property and name for the object
-			"$IEURL = " & $IEURL & @CRLF & _
-			"$IEFlags = " & $IEFlags & @CRLF & _
-			"$IETargetFrameName = " & $IETargetFrameName & @CRLF & _
-			"$IEPostData = " & $IEPostData & @CRLF & _
-			"$IEHeaders = " & $IEHeaders & @CRLF & _
-			"$IECancel = " & $IECancel & @CRLF & _
+			"$oIEpDisp = " & $oIEpDisp() & "  -  " & ObjName($oIEpDisp) & @CRLF & _ ; e.g. default property and name for the object
+			"$sIEURL = " & $sIEURL & @CRLF & _
+			"$iIEFlags = " & $iIEFlags & @CRLF & _
+			"$sIETargetFrameName = " & $sIETargetFrameName & @CRLF & _
+			"$sIEPostData = " & $sIEPostData & @CRLF & _
+			"$iIEHeaders = " & $iIEHeaders & @CRLF & _
+			"$bIECancel = " & $bIECancel & @CRLF & _
 			"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! " & @CRLF & @CRLF)
 EndFunc   ;==>_IEEvent_BeforeNavigate2
 
 ; User's COM error function. Will be called if COM error occurs
 Func _ErrFunc($oError)
 	; Do anything here.
-	ConsoleWrite("err.number is: " & @TAB & $oError.number & @CRLF & _
-			"err.windescription:" & @TAB & $oError.windescription & @CRLF & _
-			"err.description is: " & @TAB & $oError.description & @CRLF & _
-			"err.source is: " & @TAB & $oError.source & @CRLF & _
-			"err.helpfile is: " & @TAB & $oError.helpfile & @CRLF & _
-			"err.helpcontext is: " & @TAB & $oError.helpcontext & @CRLF & _
-			"err.lastdllerror is: " & @TAB & $oError.lastdllerror & @CRLF & _
-			"err.scriptline is: " & @TAB & $oError.scriptline & @CRLF & _
-			"err.retcode is: " & @TAB & $oError.retcode & @CRLF & @CRLF)
+	ConsoleWrite(@ScriptName & " (" & $oError.scriptline & ") : ==> COM Error intercepted !" & @CRLF & _
+			@TAB & "err.number is: " & @TAB & @TAB & "0x" & Hex($oError.number) & @CRLF & _
+			@TAB & "err.windescription:" & @TAB & $oError.windescription & @CRLF & _
+			@TAB & "err.description is: " & @TAB & $oError.description & @CRLF & _
+			@TAB & "err.source is: " & @TAB & @TAB & $oError.source & @CRLF & _
+			@TAB & "err.helpfile is: " & @TAB & $oError.helpfile & @CRLF & _
+			@TAB & "err.helpcontext is: " & @TAB & $oError.helpcontext & @CRLF & _
+			@TAB & "err.lastdllerror is: " & @TAB & $oError.lastdllerror & @CRLF & _
+			@TAB & "err.scriptline is: " & @TAB & $oError.scriptline & @CRLF & _
+			@TAB & "err.retcode is: " & @TAB & "0x" & Hex($oError.retcode) & @CRLF & @CRLF)
 EndFunc   ;==>_ErrFunc

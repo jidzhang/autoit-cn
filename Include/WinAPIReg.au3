@@ -4,11 +4,12 @@
 #include "StringConstants.au3"
 #include "StructureConstants.au3"
 #include "WinAPICom.au3"
-#include "WinAPIInternals.au3"
+#include "WinAPIError.au3"
+#include "WinAPIMem.au3"
 
 ; #INDEX# =======================================================================================================================
 ; Title .........: WinAPI Extended UDF Library for AutoIt3
-; AutoIt Version : 3.3.13.12
+; AutoIt Version : 3.3.14.5
 ; Description ...: Additional variables, constants and functions for the WinAPIReg.au3
 ; Author(s) .....: Yashied, jpm
 ; ===============================================================================================================================
@@ -19,6 +20,7 @@
 ; ===============================================================================================================================
 
 ; #CONSTANTS# ===================================================================================================================
+Global Const $__WINAPICONSTANT_ERROR_MORE_DATA = 234 ; More data is available.
 ; ===============================================================================================================================
 #EndRegion Global Variables and Constants
 
@@ -131,7 +133,7 @@ Func _WinAPI_CreateMRUList($hKey, $sSubKey, $iMax = 26)
 	DllStructSetData($tMRUINFO, 6, 0)
 	DllStructSetData($tMRUINFO, 7, $sSubKey)
 
-	Local $aRet = DllCall('comctl32.dll', 'int', 'CreateMRUListW', 'struct*', $tMRUINFO)
+	Local $aRet = DllCall('comctl32.dll', 'HANDLE', 'CreateMRUListW', 'struct*', $tMRUINFO)
 	If @error Then Return SetError(@error, @extended, 0)
 	; If Not $aRet[0] Then Return SetError(1000, 0, 0)
 
@@ -142,8 +144,8 @@ EndFunc   ;==>_WinAPI_CreateMRUList
 ; Author.........: Yashied
 ; Modified.......: Jpm
 ; ===============================================================================================================================
-Func _WinAPI_DllInstall($sPath)
-	Local $iRet = RunWait(@SystemDir & '\regsvr32.exe /s ' & $sPath)
+Func _WinAPI_DllInstall($sFilePath)
+	Local $iRet = RunWait(@SystemDir & '\regsvr32.exe /s ' & $sFilePath)
 	If @error Or $iRet Then Return SetError(@error + ($iRet + 100), @extended, 0)
 
 	Return 1
@@ -153,8 +155,8 @@ EndFunc   ;==>_WinAPI_DllInstall
 ; Author.........: Yashied
 ; Modified.......: Jpm
 ; ===============================================================================================================================
-Func _WinAPI_DllUninstall($sPath)
-	Local $iRet = RunWait(@SystemDir & '\regsvr32.exe /s /u ' & $sPath)
+Func _WinAPI_DllUninstall($sFilePath)
+	Local $iRet = RunWait(@SystemDir & '\regsvr32.exe /s /u ' & $sFilePath)
 	If @error Or $iRet Then Return SetError(@error + ($iRet + 100), @extended, 0)
 
 	Return 1
@@ -265,7 +267,7 @@ EndFunc   ;==>_WinAPI_RegCopyTreeEx
 ; Author.........: Yashied
 ; Modified.......: jpm
 ; ===============================================================================================================================
-Func _WinAPI_RegCreateKey($hKey, $sSubKey = '', $iAccess = 0x000F003F, $iOptions = 0, $tSecurity = 0)
+Func _WinAPI_RegCreateKey($hKey, $sSubKey = '', $iAccess = $KEY_ALL_ACCESS, $iOptions = 0, $tSecurity = 0)
 	Local $aRet = DllCall('advapi32.dll', 'long', 'RegCreateKeyExW', 'handle', $hKey, 'wstr', $sSubKey, 'dword', 0, 'ptr', 0, _
 			'dword', $iOptions, 'dword', $iAccess, 'struct*', $tSecurity, 'ulong_ptr*', 0, 'dword*', 0)
 	If @error Then Return SetError(@error, @extended, 0)
@@ -574,7 +576,7 @@ Func _WinAPI_RegQueryValue($hKey, $sValueName, ByRef $tValueData)
 	Local $aRet = DllCall('advapi32.dll', 'long', 'RegQueryValueExW', 'handle', $hKey, 'wstr', $sValueName, 'dword', 0, _
 			'dword*', 0, 'struct*', $tValueData, 'dword*', DllStructGetSize($tValueData))
 	If @error Then Return SetError(@error, @extended, 0)
-	If $aRet[0] Then Return SetError(10, $aRet[0], 0)
+	If $aRet[0] <> $__WINAPICONSTANT_ERROR_MORE_DATA Then Return SetError(10, $aRet[0], 0)
 
 	Return SetExtended($aRet[4], $aRet[6])
 EndFunc   ;==>_WinAPI_RegQueryValue
@@ -583,8 +585,8 @@ EndFunc   ;==>_WinAPI_RegQueryValue
 ; Author.........: Yashied
 ; Modified.......: jpm
 ; ===============================================================================================================================
-Func _WinAPI_RegRestoreKey($hKey, $sFile)
-	Local $aRet = DllCall('advapi32.dll', 'long', 'RegRestoreKeyW', 'handle', $hKey, 'wstr', $sFile, 'dword', 8)
+Func _WinAPI_RegRestoreKey($hKey, $sFilePath)
+	Local $aRet = DllCall('advapi32.dll', 'long', 'RegRestoreKeyW', 'handle', $hKey, 'wstr', $sFilePath, 'dword', 8)
 	If @error Then Return SetError(@error, @extended, 0)
 	If $aRet[0] Then Return SetError(10, $aRet[0], 0)
 
@@ -595,18 +597,18 @@ EndFunc   ;==>_WinAPI_RegRestoreKey
 ; Author.........: Yashied
 ; Modified.......: jpm
 ; ===============================================================================================================================
-Func _WinAPI_RegSaveKey($hKey, $sFile, $bReplace = False, $tSecurity = 0)
+Func _WinAPI_RegSaveKey($hKey, $sFilePath, $bReplace = False, $tSecurity = 0)
 	Local $aRet
 	While 1
-		$aRet = DllCall('advapi32.dll', 'long', 'RegSaveKeyW', 'handle', $hKey, 'wstr', $sFile, 'struct*', $tSecurity)
+		$aRet = DllCall('advapi32.dll', 'long', 'RegSaveKeyW', 'handle', $hKey, 'wstr', $sFilePath, 'struct*', $tSecurity)
 		If @error Then Return SetError(@error, @extended, 0)
 		Switch $aRet[0]
 			Case 0
 				ExitLoop
 			Case 183 ; ERROR_ALREADY_EXISTS
 				If $bReplace Then
-					; If Not _WinAPI_DeleteFile($sFile) Then
-					If Not FileDelete($sFile) Then
+					; If Not _WinAPI_DeleteFile($sFilePath) Then
+					If Not FileDelete($sFilePath) Then
 						Return SetError(20, _WinAPI_GetLastError(), 0)
 					Else
 						ContinueLoop
@@ -639,11 +641,14 @@ EndFunc   ;==>_WinAPI_RegSetValue
 ; Author.........: Yashied
 ; Modified.......: JPM
 ; ===============================================================================================================================
-Func _WinAPI_SfcIsKeyProtected($hKey, $sSubKey = 0, $iFlag = 0)
+Func _WinAPI_SfcIsKeyProtected($hKey, $sSubKey = Default, $iFlag = 0)
 	If Not __DLL('sfc.dll') Then Return SetError(103, 0, False)
 
 	Local $sSubKeyType = 'wstr'
-	If Not IsString($sSubKey) Then $sSubKeyType = 'ptr'
+	If Not IsString($sSubKey) Then
+		$sSubKeyType = 'ptr'
+		$sSubKey = 0
+	EndIf
 
 	Local $aRet = DllCall('sfc.dll', 'int', 'SfcIsKeyProtected', 'handle', $hKey, $sSubKeyType, $sSubKey, 'dword', $iFlag)
 	If @error Then Return SetError(@error, @extended, False)

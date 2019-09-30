@@ -1,16 +1,18 @@
-#include <GuiMenu.au3>
 #include <GUIConstantsEx.au3>
+#include <GuiMenu.au3>
 #include <MsgBoxConstants.au3>
+#include <WinAPIConv.au3>
+#include <WinAPISysWin.au3>
 
 Local $hForm = GUICreate('Test ' & StringReplace(@ScriptName, '.au3', '()'), 400, 400)
-Local $Button = GUICtrlCreateButton('New Window', 145, 366, 110, 23)
-GUISetState()
+Local $idButton = GUICtrlCreateButton('New Window', 145, 366, 110, 23)
+GUISetState(@SW_SHOW)
 
 While 1
 	Switch GUIGetMsg()
 		Case $GUI_EVENT_CLOSE
 			ExitLoop
-		Case $Button
+		Case $idButton
 			_PopupDlg($hForm)
 	EndSwitch
 WEnd
@@ -24,7 +26,7 @@ Func _PopupDlg($hParent)
 	Next
 	_WinAPI_ClientToScreen($hParent, $tPOINT)
 	Local $hDlg = GUICreate('New Window', 400, 400)
-	Local $Button = GUICtrlCreateButton('Close', 165, 366, 70, 23)
+	Local $idButton = GUICtrlCreateButton('Close', 165, 366, 70, 23)
 	Local $tRECT = _GUICtrlMenu_CalculatePopupWindowPosition(DllStructGetData($tPOINT, 1), DllStructGetData($tPOINT, 2), _WinAPI_GetWindowWidth($hDlg), _WinAPI_GetWindowHeight($hDlg))
 	If @error Then
 		MsgBox(BitOR($MB_ICONERROR, $MB_SYSTEMMODAL), 'Error', 'Require Windows 7 or later.')
@@ -35,7 +37,7 @@ Func _PopupDlg($hParent)
 
 	While 1
 		Switch GUIGetMsg()
-			Case $GUI_EVENT_CLOSE, $Button
+			Case $GUI_EVENT_CLOSE, $idButton
 				ExitLoop
 		EndSwitch
 	WEnd

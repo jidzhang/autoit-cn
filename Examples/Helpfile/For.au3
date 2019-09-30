@@ -1,4 +1,6 @@
+#include <MsgBoxConstants.au3>
+
 For $i = 5 To 1 Step -1
-	MsgBox(4096, "递减计数!", $i)
+	MsgBox($MB_SYSTEMMODAL, "", "Count down!" & @CRLF & $i)
 Next
-MsgBox(4096,"", "点火起飞!")
+MsgBox($MB_SYSTEMMODAL, "", "Blast Off!")

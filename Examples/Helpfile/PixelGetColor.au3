@@ -1,3 +1,6 @@
-Local $var = PixelGetColor(10, 100)
-MsgBox(4096,"十进制颜色为", $var)
-MsgBox(4096,"十六进制颜色为", Hex($var, 6))
+#include <MsgBoxConstants.au3>
+
+Local $iColor = PixelGetColor(10, 100)
+
+MsgBox($MB_SYSTEMMODAL, "", "The decimal color is: " & $iColor)
+MsgBox($MB_SYSTEMMODAL, "", "The hex color is: " & Hex($iColor, 6))

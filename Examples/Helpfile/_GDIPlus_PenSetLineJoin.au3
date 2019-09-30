@@ -1,11 +1,11 @@
-#include <GUIConstantsEx.au3>
 #include <GDIPlus.au3>
+#include <GUIConstantsEx.au3>
 
 Example()
 
 Func Example()
 	Local $hGUI = GUICreate("GDI+", 800, 400)
-	GUISetState()
+	GUISetState(@SW_SHOW)
 
 	_GDIPlus_Startup()
 	Local $hGraphics = _GDIPlus_GraphicsCreateFromHWND($hGUI)
@@ -43,10 +43,10 @@ Func Example()
 
 	Local $hBrush, $hPen
 
-	Local $iTimer = TimerInit()
-	; Loop until user exits
+	Local $hTimer = TimerInit()
+	; Loop until the user exits.
 	Do
-		If TimerDiff($iTimer) > 40 Then
+		If TimerDiff($hTimer) > 40 Then
 			_GDIPlus_MatrixTransformPoints($hMatrix, $aPoints)
 
 			$hBrush = _GDIPlus_PathBrushCreate($aPoints, 3)
@@ -61,7 +61,7 @@ Func Example()
 			_GDIPlus_PenDispose($hPen)
 
 			_GDIPlus_GraphicsDrawImage($hGraphics, $hBmp_Buffer, 0, 0)
-			$iTimer = TimerInit()
+			$hTimer = TimerInit()
 		EndIf
 	Until GUIGetMsg() = $GUI_EVENT_CLOSE
 

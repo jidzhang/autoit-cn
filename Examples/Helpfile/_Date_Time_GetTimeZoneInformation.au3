@@ -1,57 +1,59 @@
-#include <GUIConstantsEx.au3>
+;~ #RequireAdmin
+; the Windows API "SetTimeZoneInformation" need "SeTimeZonePrivilege" so you have to use #RequireAdmin
+
 #include <Date.au3>
+#include <GUIConstantsEx.au3>
+#include <MsgBoxConstants.au3>
+#include <WinAPIError.au3>
 #include <WindowsConstants.au3>
 
-; 由于系统安全性,在 Vista 中 Windows API "SetTimeZoneInformation" 可能被拒绝
+Global $g_idMemo
 
-Global $iMemo
+Example()
 
-_Main()
-
-Func _Main()
+Func Example()
 	Local $aOld, $aNew
 
-	; 创建 GUI
-	GUICreate("Time", 400, 300)
-	$iMemo = GUICtrlCreateEdit("", 2, 2, 396, 296, $WS_VSCROLL)
-	GUICtrlSetFont($iMemo, 9, 400, 0, "Courier New")
-	GUISetState()
+	; Create GUI
+	GUICreate("Time", 400, 460)
+	$g_idMemo = GUICtrlCreateEdit("", 2, 2, 396, 456, $WS_VSCROLL)
+	GUICtrlSetFont($g_idMemo, 9, 400, 0, "Courier New")
+	GUISetState(@SW_SHOW)
 
-	; 显示当前的时区信息
+	; Show current time zone information
 	$aOld = _Date_Time_GetTimeZoneInformation()
 	ShowTimeZoneInformation($aOld, "Current")
 
-	; 设置新的时区信息
+	; Set new time zone information , just name's updates
 	If Not _Date_Time_SetTimeZoneInformation($aOld[1], "A3L CST", $aOld[3], $aOld[4], "A3L CDT", $aOld[6], $aOld[7]) Then
-		MsgBox(4096, "错误", "System timezone cannot be SET" & @CRLF & @CRLF & _WinAPI_GetLastErrorMessage())
+		MsgBox($MB_SYSTEMMODAL, "Error", "System timezone cannot be SET @error=" & @error & @CRLF & @CRLF & _WinAPI_GetErrorMessage(@extended))
 		Exit
 	EndIf
 
-	; 显示新的时区信息
+	; Show new time zone information
 	$aNew = _Date_Time_GetTimeZoneInformation()
 	ShowTimeZoneInformation($aNew, "New")
 
-	; 重设为原来的时区信息
+	; Reset original time zone information
 	_Date_Time_SetTimeZoneInformation($aOld[1], $aOld[2], $aOld[3], $aOld[4], $aOld[5], $aOld[6], $aOld[7])
 
-	; 显示当前的时区信息
+	; Show current time zone information
 	$aOld = _Date_Time_GetTimeZoneInformation()
 	ShowTimeZoneInformation($aOld, "Reset")
 
-	; 循环直到用户退出
+	; Loop until the user exits.
 	Do
 	Until GUIGetMsg() = $GUI_EVENT_CLOSE
+EndFunc   ;==>Example
 
-EndFunc   ;==>_Main
-
-; 写入一行到 memo 控件
+; Write a line to the memo control
 Func MemoWrite($sMessage)
-	GUICtrlSetData($iMemo, $sMessage & @CRLF, 1)
+	GUICtrlSetData($g_idMemo, $sMessage & @CRLF, 1)
 EndFunc   ;==>MemoWrite
 
-; 显示时区信息
-Func ShowTimeZoneInformation(ByRef $aInfo, $comment)
-	MemoWrite("******************* " & $comment & " *******************")
+; Show time zone information
+Func ShowTimeZoneInformation(ByRef $aInfo, $sComment)
+	MemoWrite("******************* " & $sComment & " *******************")
 	MemoWrite("Result ............: " & $aInfo[0])
 	MemoWrite("Current bias ......: " & $aInfo[1])
 	MemoWrite("Standard name .....: " & $aInfo[2])

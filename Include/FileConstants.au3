@@ -2,7 +2,7 @@
 
 ; #INDEX# =======================================================================================================================
 ; Title .........: File_Constants
-; AutoIt Version : 3.3.13.12
+; AutoIt Version : 3.3.14.5
 ; Language ......: English
 ; Description ...: Constants to be included in an AutoIt v3 script when using File functions.
 ; Author(s) .....: Valik, Gary Frost, ...
@@ -19,6 +19,19 @@ Global Const $FT_MODIFIED = 0 ; Date and time file was last modified (default)
 Global Const $FT_CREATED = 1 ; Date and time file was created
 Global Const $FT_ACCESSED = 2 ; Date and time file was last accessed
 
+; FileGetTime Constants
+Global Const $FT_ARRAY = 0
+Global Const $FT_STRING = 1
+
+; FileSelectFolder Constants
+Global Const $FSF_CREATEBUTTON = 1
+Global Const $FSF_NEWDIALOG = 2
+Global Const $FSF_EDITCONTROL = 4
+
+; FileSetTime, FileSetAttrib
+Global Const $FT_NONRECURSIVE = 0
+Global Const $FT_RECURSIVE = 1
+
 ; Indicates the mode to open a file
 Global Const $FO_READ = 0 ; Read mode
 Global Const $FO_APPEND = 1 ; Write mode (append)
@@ -30,7 +43,11 @@ Global Const $FO_UTF16_LE = 32 ; Write mode Unicode UTF16-LE
 Global Const $FO_UTF16_BE = 64 ; Write mode Unicode UTF16-BE
 Global Const $FO_UTF8 = 128 ; Read/Write mode UTF8 with BOM
 Global Const $FO_UTF8_NOBOM = 256 ; Read/Write mode UTF8 with no BOM
+Global Const $FO_ANSI = 512 ; Read/Write mode ANSI
+Global Const $FO_UTF16_LE_NOBOM = 1024 ; Write mode Unicode UTF16-LE with no BOM
+Global Const $FO_UTF16_BE_NOBOM = 2048 ; Write mode Unicode UTF16-BE with no BOM
 Global Const $FO_UTF8_FULL = 16384 ; Use full file UTF8 detection if no BOM present
+Global Const $FO_FULLFILE_DETECT = 16384 ; Use full file UTF8 detection if no BOM present
 
 ; Indicates file read options
 Global Const $EOF = -1 ; End-of-file reached
@@ -82,6 +99,30 @@ Global Const $GENERIC_WRITE = 0x40000000
 Global Const $GENERIC_READ = 0x80000000
 Global Const $GENERIC_READWRITE = BitOR($GENERIC_READ, $GENERIC_WRITE)
 
+; FileGetEncoding Constants
+Global Const $FILE_ENCODING_UTF16LE = 32
+
+Global Const $FE_ENTIRE_UTF8 = 1
+Global Const $FE_PARTIALFIRST_UTF8 = 2
+
+; FileGetLongName and FileGetShortName
+Global Const $FN_FULLPATH = 0
+Global Const $FN_RELATIVEPATH = 1
+
+; FileGetVersion Constants _WinAPI_VerQueryValue, _WinAPI_VerQueryValueEx
+Global Const $FV_COMMENTS = "Comments"
+Global Const $FV_COMPANYNAME = "CompanyName"
+Global Const $FV_FILEDESCRIPTION = "FileDescription"
+Global Const $FV_FILEVERSION = "FileVersion"
+Global Const $FV_INTERNALNAME = "InternalName"
+Global Const $FV_LEGALCOPYRIGHT = "LegalCopyright"
+Global Const $FV_LEGALTRADEMARKS = "LegalTrademarks"
+Global Const $FV_ORIGINALFILENAME = "OriginalFilename"
+Global Const $FV_PRODUCTNAME = "ProductName"
+Global Const $FV_PRODUCTVERSION = "ProductVersion"
+Global Const $FV_PRIVATEBUILD = "PrivateBuild"
+Global Const $FV_SPECIALBUILD = "SpecialBuild"
+
 ; Indicates _FileReadToArray modes
 Global Const $FRTA_NOCOUNT = 0
 Global Const $FRTA_COUNT = 1
@@ -108,4 +149,11 @@ Global Const $FLTAR_FASTSORT = 2
 Global Const $FLTAR_NOPATH = 0
 Global Const $FLTAR_RELPATH = 1
 Global Const $FLTAR_FULLPATH = 2
+
+; _PathSplit Constants
+Global Const $PATH_ORIGINAL = 0
+Global Const $PATH_DRIVE = 1
+Global Const $PATH_DIRECTORY = 2
+Global Const $PATH_FILENAME = 3
+Global Const $PATH_EXTENSION = 4
 ; ===============================================================================================================================

@@ -1,12 +1,12 @@
 #include <FTPEx.au3>
+#include <GUIConstantsEx.au3>
 #include <Misc.au3>
 #include <ProgressConstants.au3>
-#include <GUIConstantsEx.au3>
 
-; This example NEED TO BE ADAPTED to valid $sRemoteFile/s$erver/$sUsername/$sPass
+; This example NEED TO BE ADAPTED to valid $g_sRemoteFile/$sServer/$sUsername/$sPass
 
-Global $sRemoteFile = "/pub/software/databases/rt/SRPMS/ucs-local-modperl-2.0.3-1.src.rpm"
-Global $s_LocalFile = @TempDir & "\temp.tmp"
+Global $g_sRemoteFile = "/pub/software/databases/rt/SRPMS/ucs-local-modperl-2.0.3-1.src.rpm"
+Global $g_sLocalFile = @TempDir & "\temp.tmp"
 
 Local $sServer = 'ftp.csx.cam.ac.uk'
 Local $sUsername = ''
@@ -21,9 +21,9 @@ Example()
 _FTP_Close($hInternetSession)
 
 Func Example()
-	Local $sFunctionToCall = "_UpdateProgress"
-	ProgressOn("Upload Progress", $sRemoteFile)
-	_FTP_ProgressUpload($hFTPSession, $s_LocalFile, $sRemoteFile, $sFunctionToCall)
+	Local $fuFunctionToCall = _UpdateProgress
+	ProgressOn("Upload Progress", $g_sRemoteFile)
+	_FTP_ProgressUpload($hFTPSession, $g_sLocalFile, $g_sRemoteFile, $fuFunctionToCall)
 	ProgressOff()
 EndFunc   ;==>Example
 

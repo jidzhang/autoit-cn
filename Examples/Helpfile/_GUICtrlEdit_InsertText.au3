@@ -1,33 +1,31 @@
-#include <GuiEdit.au3>
 #include <GUIConstantsEx.au3>
+#include <GuiEdit.au3>
 #include <WindowsConstants.au3>
 
-$Debug_Ed = False ; 检查传递给 Edit 函数的类名, 设置为真并使用另一控件的句柄可以看出它是否有效
+Example()
 
-_Main()
-
-Func _Main()
-	Local $hEdit
+Func Example()
+	Local $idEdit
 	Local $sWow64 = ""
 	If @AutoItX64 Then $sWow64 = "\Wow6432Node"
 	Local $sFile = RegRead("HKEY_LOCAL_MACHINE\SOFTWARE" & $sWow64 & "\AutoIt v3\AutoIt", "InstallDir") & "\include\_ReadMe_.txt"
 
-	; 创建 GUI
+	; Create GUI
 	GUICreate("Edit Insert Text", 400, 300)
-	$hEdit = GUICtrlCreateEdit("", 2, 2, 394, 268, BitOR($ES_WANTRETURN, $WS_VSCROLL))
-	GUISetState()
+	$idEdit = GUICtrlCreateEdit("", 2, 2, 394, 268, BitOR($ES_WANTRETURN, $WS_VSCROLL))
+	GUISetState(@SW_SHOW)
 
-	; 设置边距
-	_GUICtrlEdit_SetMargins($hEdit, BitOR($EC_LEFTMARGIN, $EC_RIGHTMARGIN), 10, 10)
+	; Set Margins
+	_GUICtrlEdit_SetMargins($idEdit, BitOR($EC_LEFTMARGIN, $EC_RIGHTMARGIN), 10, 10)
 
-	; 设置文本
-	_GUICtrlEdit_SetText($hEdit, FileRead($sFile))
+	; Set Text
+	_GUICtrlEdit_SetText($idEdit, FileRead($sFile))
 
-	; 插入文本
-	_GUICtrlEdit_InsertText($hEdit, "*** Excellent UDFs ***" & @CRLF & @CRLF, 0)
+	; Insert text
+	_GUICtrlEdit_InsertText($idEdit, "*** Excellent UDFs ***" & @CRLF & @CRLF, 0)
 
-	; 循环直到用户退出
+	; Loop until the user exits.
 	Do
 	Until GUIGetMsg() = $GUI_EVENT_CLOSE
 	GUIDelete()
-EndFunc   ;==>_Main
+EndFunc   ;==>Example

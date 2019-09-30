@@ -5,7 +5,7 @@ Example()
 
 Func Example()
 	; Generate 16 bytes of random data
-	Local $pBuff = DllStructCreate("byte[16]")
-	_Crypt_GenRandom($pBuff, DllStructGetSize($pBuff))
-	MsgBox($MB_SYSTEMMODAL, "Random data:", DllStructGetData($pBuff, 1))
+	Local $tBuff = DllStructCreate("byte[16]")
+	_Crypt_GenRandom($tBuff, DllStructGetSize($tBuff))
+	MsgBox($MB_SYSTEMMODAL, "Random data:", DllStructGetData($tBuff, 1))
 EndFunc   ;==>Example

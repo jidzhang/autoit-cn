@@ -1,11 +1,22 @@
-; 第一个例子:
-FileWrite("c:\test.txt","测试测试")
-FileMove("c:\test.txt", @DesktopDir & "\AU3_例子.au3")
+#include <FileConstants.au3>
+#include <MsgBoxConstants.au3>
+#include <WinAPIFiles.au3>
 
-; 第二个例子:
-;   使用标志 '1'(覆盖) 和 '8' (自动创建目标目录结构)
-;   从临时文件夹中移动所有的 txt 文件到 txtfiles 目录,而且预先检查
-;   目标目录结构是否存在, 如果不存在就自动创建.
-FileMove(@TempDir & "\*.txt", @TempDir & "\TxtFiles\", 9)
-MsgBox(32,"","所有临时文件夹下的文本文件已经移动到了临时目录下面的TxtFiles文件夹下面")
-DirRemove(@TempDir & "\TxtFiles\",1)
+Example()
+
+Func Example()
+	; Create a constant variable in Local scope of the filepath that will be read/written to.
+	Local Const $sFilePath = _WinAPI_GetTempFileName(@TempDir)
+
+	; Create a temporary file to move.
+	If Not FileWrite($sFilePath, "This is an example of using FileMove.") Then
+		MsgBox($MB_SYSTEMMODAL, "", "An error occurred whilst writing the temporary file.")
+		Return False
+	EndIf
+
+	; Move Au3 files in the temporary directory to a new folder/directory called Au3Files.
+	FileMove(@TempDir & "\*.au3", @TempDir & "\Au3Files\", $FC_OVERWRITE + $FC_CREATEPATH)
+
+	; Display the temporary directory.
+	ShellExecute(@TempDir)
+EndFunc   ;==>Example

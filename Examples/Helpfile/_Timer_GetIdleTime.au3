@@ -1,8 +1,9 @@
+#include <MsgBoxConstants.au3>
 #include <Timers.au3>
 
-; 在这 10 秒里鼠标/键盘的操作将改变报告的空闲时间
-Sleep(10 * 1000); 10秒
+; Mouse/Keyboard action during this 10 sec delay will change reported idle time
+Sleep(10 * 1000); 10sec
 
-Global $iIdleTime = _Timer_GetIdleTime()
+Local $iIdleTime = _Timer_GetIdleTime()
 
-MsgBox(4160, "_Timer_GetIdleTime", "Idle time = " & $iIdleTime & "ms")
+MsgBox($MB_SYSTEMMODAL, "_Timer_GetIdleTime", "Idle time = " & $iIdleTime & "ms")

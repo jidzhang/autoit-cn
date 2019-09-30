@@ -1,25 +1,26 @@
-#include <WinAPI.au3>
 #include <GUIConstantsEx.au3>
+#include <MsgBoxConstants.au3>
+#include <WinAPISysWin.au3>
 
-_Main()
+Example()
 
-Func _Main()
-	Local $msg, $btnFocus, $win, $text
+Func Example()
+	Local $iMsg, $idBtnFocus, $hWin, $sText
 	GUICreate("__WinAPI_GetFocus Example", 200, 200)
-	$btnFocus = GUICtrlCreateButton("Get Focus", 50, 85, 100, 30)
+	$idBtnFocus = GUICtrlCreateButton("Get Focus", 50, 85, 100, 30)
 	GUISetState(@SW_SHOW)
 	While 1
-		$msg = GUIGetMsg()
+		$iMsg = GUIGetMsg()
 		Select
-			Case $msg = $GUI_EVENT_CLOSE
+			Case $iMsg = $GUI_EVENT_CLOSE
 				Exit
-			Case $msg = $btnFocus
-				$win = _WinAPI_GetFocus()
-				$text = "Full Title: " & WinGetTitle($win) & @LF
-				$text &= "Full Text: " & WinGetText($win) & @LF
-				$text &= "Handle: " & WinGetHandle($win) & @LF
-				$text &= "Process: " & WinGetProcess($win) & @LF
-				MsgBox(4096, "", $text)
+			Case $iMsg = $idBtnFocus
+				$hWin = _WinAPI_GetFocus()
+				$sText = "Full Title: " & WinGetTitle($hWin) & @CRLF
+				$sText &= "Full Text: " & WinGetText($hWin) & @CRLF
+				$sText &= "Handle: " & WinGetHandle($hWin) & @CRLF
+				$sText &= "Process: " & WinGetProcess($hWin) & @CRLF
+				MsgBox($MB_SYSTEMMODAL, "", $sText)
 		EndSelect
 	WEnd
-EndFunc   ;==>_Main
+EndFunc   ;==>Example

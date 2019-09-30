@@ -1,40 +1,42 @@
+#include <GDIPlus.au3>
 #include <GUIConstantsEx.au3>
 #include <ScreenCapture.au3>
-#include <WinAPI.au3>
+#include <WinAPIHObj.au3>
 
-_Main()
+Example()
 
-Func _Main()
+Func Example()
 	Local $hBitmap1, $hBitmap2, $hImage1, $hImage2, $hGraphics
 
-	; 初始化 GDI+ 库
+	; Initialize GDI+ library
 	_GDIPlus_Startup()
 
-	; 捕获整个屏幕
+	; Capture full screen
 	$hBitmap1 = _ScreenCapture_Capture("")
 	$hImage1 = _GDIPlus_BitmapCreateFromHBITMAP($hBitmap1)
 
-	; 捕获屏幕区域
+	; Capture screen region
 	$hBitmap2 = _ScreenCapture_Capture("", 0, 0, 400, 300)
 	$hImage2 = _GDIPlus_BitmapCreateFromHBITMAP($hBitmap2)
 
-	; 在一幅图像上描绘另一幅图像
+	; Draw one image in another
 	$hGraphics = _GDIPlus_ImageGetGraphicsContext($hImage1)
 	_GDIPlus_GraphicsDrawImage($hGraphics, $hImage2, 100, 100)
 
-	; 在插入的图像周围描绘边框
+	; Draw a frame around the inserted image
 	_GDIPlus_GraphicsDrawRect($hGraphics, 100, 100, 400, 300)
 
-	; 保存由此产生的图像
+	; Save resultant image
 	_GDIPlus_ImageSaveToFile($hImage1, @MyDocumentsDir & "\GDIPlus_Image.jpg")
 
-	; 清理资源
+	; Clean up resources
 	_GDIPlus_ImageDispose($hImage1)
 	_GDIPlus_ImageDispose($hImage2)
 	_WinAPI_DeleteObject($hBitmap1)
 	_WinAPI_DeleteObject($hBitmap2)
 
-	; 关闭 GDI+ 库
+	; Shut down GDI+ library
 	_GDIPlus_Shutdown()
 
-EndFunc   ;==>_Main
+	ShellExecute(@MyDocumentsDir & "\GDIPlus_Image.jpg")
+EndFunc   ;==>Example

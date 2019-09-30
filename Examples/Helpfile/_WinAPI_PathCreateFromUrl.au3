@@ -1,9 +1,9 @@
 #include <WinAPIShPath.au3>
 
-Local $Path = @ScriptFullPath
+Local $sPath = @ScriptFullPath
 
-$Path = _WinAPI_UrlCreateFromPath($Path)
-ConsoleWrite($Path & @CRLF)
+$sPath = _WinAPI_UrlCreateFromPath($sPath)
+ConsoleWrite($sPath & @CRLF)
 
-$Path = _WinAPI_PathCreateFromUrl($Path)
-ConsoleWrite($Path & @CRLF)
+$sPath = _WinAPI_PathCreateFromUrl($sPath)
+ConsoleWrite($sPath & @CRLF)

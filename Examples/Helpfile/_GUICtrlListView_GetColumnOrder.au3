@@ -1,30 +1,29 @@
 #include <GUIConstantsEx.au3>
 #include <GuiListView.au3>
+#include <MsgBoxConstants.au3>
 
-$Debug_LV = False ; 检查传递给 ListView 函数的类名, 设置为真并使用另一控件的句柄可以看出它是否有效
+Example()
 
-_Main()
-
-Func _Main()
-	Local $a_order, $hListView
+Func Example()
+	Local $a_Order, $idListview
 
 	GUICreate("ListView Get Column Order", 400, 300)
-	$hListView = GUICtrlCreateListView("Column 1|Column 2|Column 3|Column 4", 2, 2, 394, 268)
-	_GUICtrlListView_SetExtendedListViewStyle($hListView, $LVS_EX_HEADERDRAGDROP)
-	_GUICtrlListView_SetColumnWidth($hListView, 0, 100)
-	_GUICtrlListView_SetColumnWidth($hListView, 1, 100)
-	_GUICtrlListView_SetColumnWidth($hListView, 2, 100)
-	_GUICtrlListView_SetColumnWidth($hListView, 3, 100)
-	GUISetState()
+	$idListview = GUICtrlCreateListView("Column 1|Column 2|Column 3|Column 4", 2, 2, 394, 268)
+	_GUICtrlListView_SetExtendedListViewStyle($idListview, $LVS_EX_HEADERDRAGDROP)
+	_GUICtrlListView_SetColumnWidth($idListview, 0, 100)
+	_GUICtrlListView_SetColumnWidth($idListview, 1, 100)
+	_GUICtrlListView_SetColumnWidth($idListview, 2, 100)
+	_GUICtrlListView_SetColumnWidth($idListview, 3, 100)
+	GUISetState(@SW_SHOW)
 
-	_GUICtrlListView_SetColumnOrder($hListView, "3|2|0|1")
+	_GUICtrlListView_SetColumnOrder($idListview, "3|2|0|1")
 
-	$a_order = StringSplit(_GUICtrlListView_GetColumnOrder($hListView), "|")
-	MsgBox(4160, "信息", StringFormat("Column order: [%d, %d, %d, %d]", $a_order[1], $a_order[2], $a_order[3], $a_order[4]))
+	$a_Order = StringSplit(_GUICtrlListView_GetColumnOrder($idListview), "|")
+	MsgBox($MB_SYSTEMMODAL, "Information", StringFormat("Column order: [%d, %d, %d, %d]", $a_Order[1], $a_Order[2], $a_Order[3], $a_Order[4]))
 
-	; 循环直到用户退出
+	; Loop until the user exits.
 	Do
 	Until GUIGetMsg() = $GUI_EVENT_CLOSE
 
 	GUIDelete()
-EndFunc   ;==>_Main
+EndFunc   ;==>Example

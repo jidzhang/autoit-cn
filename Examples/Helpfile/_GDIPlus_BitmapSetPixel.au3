@@ -1,5 +1,7 @@
-#include <ScreenCapture.au3>
+#include <GDIPlus.au3>
 #include <GUIConstantsEx.au3>
+#include <ScreenCapture.au3>
+#include <WinAPIHObj.au3>
 
 Example()
 
@@ -21,8 +23,8 @@ Func Example()
 			_GDIPlus_BitmapSetPixel($hBitmap, $iX, $iY, "0xFF" & $iGrey & $iGrey & $iGrey) ;set greyscaled pixel
 		Next
 	Next
-	Local $hGUI = GUICreate("GDI+ example", $iWidth, $iHeight) ;create a test GUI
-	GUISetState()
+	Local $hGUI = GUICreate("GDI+ Example (" & @ScriptName & ")", $iWidth, $iHeight) ;create a test GUI
+	GUISetState(@SW_SHOW)
 
 	Local $hGraphics = _GDIPlus_GraphicsCreateFromHWND($hGUI) ;create a graphics object from a window handle
 	_GDIPlus_GraphicsDrawImage($hGraphics, $hBitmap, 0, 0) ;copy negative bitmap to graphics object (GUI)

@@ -1,10 +1,13 @@
+#include <GUIConstantsEx.au3>
+#include <SendMessage.au3>
+#include <StaticConstants.au3>
 #include <WinAPIGdi.au3>
+#include <WinAPIGdiDC.au3>
+#include <WinAPIHObj.au3>
+#include <WinAPIIcons.au3>
+#include <WinAPIRes.au3>
 #include <WinAPIShellEx.au3>
 #include <WindowsConstants.au3>
-#include <GUIConstantsEx.au3>
-
-Global Const $STM_SETIMAGE = 0x0172
-Global Const $STM_GETIMAGE = 0x0173
 
 ; Extracts icon and get its AND bitmask bitmap
 Local $hIcon = _WinAPI_ShellExtractIcon(@ScriptDir & '\Extras\Arrow.ico', 0, 64, 64)
@@ -22,23 +25,23 @@ Local $hPattern = _WinAPI_LoadImage(0, @ScriptDir & '\Extras\Pattern.bmp', $IMAG
 Local $hForm = GUICreate('Test ' & StringReplace(@ScriptName, '.au3', '()'), 320, 64)
 GUICtrlCreateIcon(@ScriptDir & '\Extras\Arrow.ico', 0, 0, 0, 64, 64)
 GUICtrlCreatePic(@ScriptDir & '\Extras\Pattern.bmp', 192, 0, 64, 64)
-Local $Icon = GUICtrlCreateIcon('', 0, 256, 0, 64, 64)
-Local $Pic[2], $hPic[2]
-$Pic[0] = GUICtrlCreatePic('', 64, 0, 64, 64)
-$Pic[1] = GUICtrlCreatePic('', 128, 0, 64, 64)
+Local $idIcon = GUICtrlCreateIcon('', 0, 256, 0, 64, 64)
+Local $aidPic[2], $ahPic[2]
+$aidPic[0] = GUICtrlCreatePic('', 64, 0, 64, 64)
+$aidPic[1] = GUICtrlCreatePic('', 128, 0, 64, 64)
 For $i = 0 To 1
-	$hPic[$i] = GUICtrlGetHandle($Pic[$i])
+	$ahPic[$i] = GUICtrlGetHandle($aidPic[$i])
 Next
 
 ; Create XOR bitmask bitmap
-Local $hDC = _WinAPI_GetDC($hPic)
+Local $hDC = _WinAPI_GetDC($ahPic)
 Local $hSrcDC = _WinAPI_CreateCompatibleDC($hDC)
 Local $hSrcSv = _WinAPI_SelectObject($hSrcDC, $hPattern)
 Local $hDestDC = _WinAPI_CreateCompatibleDC($hDC)
 Local $hXOR = _WinAPI_CreateCompatibleBitmap($hDC, 64, 64)
 Local $hDestSv = _WinAPI_SelectObject($hDestDC, $hXOR)
 _WinAPI_MaskBlt($hDestDC, 0, 0, 64, 64, $hSrcDC, 0, 0, $aInfo[5], 0, 0, $SRCCOPY)
-_WinAPI_ReleaseDC($hPic, $hDC)
+_WinAPI_ReleaseDC($ahPic, $hDC)
 _WinAPI_SelectObject($hDestDC, $hDestSv)
 _WinAPI_DeleteDC($hDestDC)
 _WinAPI_SelectObject($hSrcDC, $hSrcSv)
@@ -53,18 +56,18 @@ _WinAPI_DeleteObject($hXOR)
 ; Set both bitmask bitmaps to controls
 Local $hObj
 For $i = 0 To 1
-	_SendMessage($hPic[$i], $STM_SETIMAGE, 0, $aInfo[$i + 4])
-	$hObj = _SendMessage($hPic[$i], $STM_GETIMAGE)
+	_SendMessage($ahPic[$i], $STM_SETIMAGE, 0, $aInfo[$i + 4])
+	$hObj = _SendMessage($ahPic[$i], $STM_GETIMAGE)
 	If $hObj <> $aInfo[$i + 4] Then
 		_WinAPI_DeleteObject($aInfo[$i + 4])
 	EndIf
 Next
 
 ; Set icon to control
-GUICtrlSendMsg($Icon, $STM_SETIMAGE, 1, $hIcon)
+GUICtrlSendMsg($idIcon, $STM_SETIMAGE, 1, $hIcon)
 
 ; Show GUI
-GUISetState()
+GUISetState(@SW_SHOW)
 
 Do
 Until GUIGetMsg() = $GUI_EVENT_CLOSE

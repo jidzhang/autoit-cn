@@ -1,11 +1,11 @@
 #include <GuiMenu.au3>
 
-_Main()
+Example()
 
-Func _Main()
+Func Example()
 	Local $hWnd, $hMain
 
-	; 打开记事本
+	; Open Notepad
 	Run("notepad.exe")
 	WinWaitActive("[CLASS:Notepad]")
 	$hWnd = WinGetHandle("[CLASS:Notepad]")
@@ -13,5 +13,4 @@ Func _Main()
 
 	; Remove Help menu
 	_GUICtrlMenu_RemoveMenu($hMain, 4)
-
-EndFunc   ;==>_Main
+EndFunc   ;==>Example

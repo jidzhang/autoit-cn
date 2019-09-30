@@ -1,8 +1,9 @@
+#include <MsgBoxConstants.au3>
 #include <Process.au3>
 
 Run("notepad.exe")
 WinWaitActive("[CLASS:Notepad]", "")
-Local $pid = WinGetProcess("[CLASS:Notepad]", "")
-Local $name = _ProcessGetName($pid)
+Local $iPid = WinGetProcess("[CLASS:Notepad]", "")
+Local $sName = _ProcessGetName($iPid)
 
-MsgBox(4096, "Notepad - " & $pid, $name)
+MsgBox($MB_SYSTEMMODAL, "Notepad - " & $iPid, $sName)

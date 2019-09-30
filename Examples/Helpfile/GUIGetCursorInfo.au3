@@ -1,29 +1,31 @@
 #include <GUIConstantsEx.au3>
 
-Global $x, $y
+Global $g_idX = 0, $g_idY = 0
 
 Example()
 
 Func Example()
-	Local $msg
-
-	HotKeySet("{Esc}", "GetPos")
+	HotKeySet("{ESC}", "GetPos")
 
 	GUICreate("Press Esc to Get Pos", 400, 400)
-	$x = GUICtrlCreateLabel("0", 10, 10, 50)
-	$y = GUICtrlCreateLabel("0", 10, 30, 50)
-	GUISetState()
+	$g_idX = GUICtrlCreateLabel("0", 10, 10, 50)
+	$g_idY = GUICtrlCreateLabel("0", 10, 30, 50)
+	GUISetState(@SW_SHOW)
 
-	; Run the GUI until the dialog is closed
-	Do
-		$msg = GUIGetMsg()
-	Until $msg = $GUI_EVENT_CLOSE
+	; Loop until the user exits.
+	While 1
+		Switch GUIGetMsg()
+			Case $GUI_EVENT_CLOSE
+				ExitLoop
+
+		EndSwitch
+	WEnd
+
+	GUIDelete()
 EndFunc   ;==>Example
 
 Func GetPos()
-	Local $a
-
-	$a = GUIGetCursorInfo()
-	GUICtrlSetData($x, $a[0])
-	GUICtrlSetData($y, $a[1])
+	Local $a = GUIGetCursorInfo()
+	GUICtrlSetData($g_idX, $a[0])
+	GUICtrlSetData($g_idY, $a[1])
 EndFunc   ;==>GetPos

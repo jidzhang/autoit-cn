@@ -1,3 +1,5 @@
+#include <MsgBoxConstants.au3>
+
 Example()
 
 Func Example()
@@ -6,5 +8,5 @@ Func Example()
 	Local $sEnvVar = EnvGet("APPDATA")
 
 	; Display the value of the environment variable %APPDATA%.
-	MsgBox(4096, "", "The environment variable %APPDATA% has the value of: " & @CRLF & @CRLF & $sEnvVar) ; This returns the same value as the macro @AppDataDir does.
+	MsgBox($MB_SYSTEMMODAL, "", "The environment variable %APPDATA% has the value of: " & @CRLF & @CRLF & $sEnvVar) ; This returns the same value as the macro @AppDataDir does.
 EndFunc   ;==>Example

@@ -1,9 +1,9 @@
 #include <WinAPIShPath.au3>
 
-Local $Path = _WinAPI_PathRelativePathTo(@ScriptDir, 1, @MyDocumentsDir, 1)
+Local $sPath = _WinAPI_PathRelativePathTo(@ScriptDir, 1, @MyDocumentsDir, 1)
 
-ConsoleWrite('Relative path: ' & $Path & @CRLF)
+ConsoleWrite('Relative path: ' & $sPath & @CRLF)
 
-If $Path Then
-	ShellExecute($Path)
+If $sPath Then
+	ShellExecute($sPath)
 EndIf

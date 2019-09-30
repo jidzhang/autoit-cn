@@ -1,41 +1,42 @@
-#include <GUIConstantsEx.au3>
 #include <GuiButton.au3>
+#include <GUIConstantsEx.au3>
+#include <MsgBoxConstants.au3>
 #include <WindowsConstants.au3>
 
-Global $iMemo
+Global $g_idMemo
 
-_Main()
+Example()
 
-Func _Main()
-	Local $hGUI, $btn, $rdo, $chk
+Func Example()
+	Local $hGUI, $hBtn, $hRdo, $hChk
 
 	$hGUI = GUICreate("Buttons", 400, 400)
-	$iMemo = GUICtrlCreateEdit("", 119, 10, 276, 374, $WS_VSCROLL)
-	GUICtrlSetFont($iMemo, 9, 400, 0, "Courier New")
+	$g_idMemo = GUICtrlCreateEdit("", 119, 10, 276, 374, $WS_VSCROLL)
+	GUICtrlSetFont($g_idMemo, 9, 400, 0, "Courier New")
 
-	$btn = _GUICtrlButton_Create($hGUI, "Button1", 10, 10, 90, 50)
+	$hBtn = _GUICtrlButton_Create($hGUI, "Button1", 10, 10, 90, 50)
 
-	$rdo = _GUICtrlButton_Create($hGUI, "Radio1", 10, 60, 90, 50, BitOR($BS_AUTORADIOBUTTON, $BS_NOTIFY))
+	$hRdo = _GUICtrlButton_Create($hGUI, "Radio1", 10, 60, 90, 50, BitOR($BS_AUTORADIOBUTTON, $BS_NOTIFY))
 
-	$chk = _GUICtrlButton_Create($hGUI, "Check1", 10, 120, 90, 50, BitOR($BS_AUTO3STATE, $BS_NOTIFY))
+	$hChk = _GUICtrlButton_Create($hGUI, "Check1", 10, 120, 90, 50, BitOR($BS_AUTO3STATE, $BS_NOTIFY))
 
-	GUISetState()
+	GUISetState(@SW_SHOW)
 
-	MemoWrite("$btn handle: " & $btn)
-	MemoWrite("$rdo handle: " & $rdo)
-	MemoWrite("$chk handle: " & $chk & @CRLF)
+	MemoWrite("$hBtn handle: " & $hBtn)
+	MemoWrite("$hRdo handle: " & $hRdo)
+	MemoWrite("$hChk handle: " & $hChk & @CRLF)
 
-	MsgBox(4096, "信息", "About to Destroy Buttons")
+	MsgBox($MB_SYSTEMMODAL, "Information", "About to Destroy Buttons")
 
 	Send("^{END}")
 
-	MemoWrite("Destroyed $btn: " & _GUICtrlButton_Destroy($btn))
-	MemoWrite("Destroyed $rdo: " & _GUICtrlButton_Destroy($rdo))
-	MemoWrite("Destroyed $chk: " & _GUICtrlButton_Destroy($chk) & @CRLF)
+	MemoWrite("Destroyed $hBtn: " & _GUICtrlButton_Destroy($hBtn))
+	MemoWrite("Destroyed $hRdo: " & _GUICtrlButton_Destroy($hRdo))
+	MemoWrite("Destroyed $hChk: " & _GUICtrlButton_Destroy($hChk) & @CRLF)
 
-	MemoWrite("$btn handle: " & $btn)
-	MemoWrite("$rdo handle: " & $rdo)
-	MemoWrite("$chk handle: " & $chk & @CRLF)
+	MemoWrite("$hBtn handle: " & $hBtn)
+	MemoWrite("$hRdo handle: " & $hRdo)
+	MemoWrite("$hChk handle: " & $hChk & @CRLF)
 
 	While 1
 		Switch GUIGetMsg()
@@ -45,9 +46,9 @@ Func _Main()
 	WEnd
 
 	Exit
-EndFunc   ;==>_Main
+EndFunc   ;==>Example
 
-; 定义函数 MemoWrite 功能动作: 向编辑框写入数据
+; Write a line to the memo control
 Func MemoWrite($sMessage)
-	GUICtrlSetData($iMemo, $sMessage & @CRLF, 1)
+	GUICtrlSetData($g_idMemo, $sMessage & @CRLF, 1)
 EndFunc   ;==>MemoWrite

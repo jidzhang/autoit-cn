@@ -1,87 +1,85 @@
 #include <GuiComboBoxEx.au3>
-#include <WindowsConstants.au3>
 #include <GUIConstantsEx.au3>
+#include <WindowsConstants.au3>
 
-$Debug_CB = False ;检查传递给 ComboBox/ComboBoxEx 函数的类名, 设置为True并输出到一个控件的句柄,用于检查它是否工作
+Global $g_hCombo
 
-Global $hCombo
+Example()
 
-_Main()
-
-Func _Main()
+Func Example()
 	Local $hGUI
 
-	; 创建 GUI
+	; Create GUI
 	$hGUI = GUICreate("ComboBoxEx Create", 400, 300)
-	$hCombo = _GUICtrlComboBoxEx_Create($hGUI, "This is a test|Line 2", 2, 2, 394, 268)
-	GUISetState()
+	$g_hCombo = _GUICtrlComboBoxEx_Create($hGUI, "This is a test|Line 2", 2, 2, 394, 268)
+	GUISetState(@SW_SHOW)
 
 	GUIRegisterMsg($WM_NOTIFY, "WM_NOTIFY")
 
-	_GUICtrlComboBoxEx_AddString($hCombo, "Some More Text")
-	_GUICtrlComboBoxEx_InsertString($hCombo, "Inserted Text", 1)
+	_GUICtrlComboBoxEx_AddString($g_hCombo, "Some More Text")
+	_GUICtrlComboBoxEx_InsertString($g_hCombo, "Inserted Text", 1)
 
-	; 循环直到用户退出
+	; Loop until the user exits.
 	Do
 	Until GUIGetMsg() = $GUI_EVENT_CLOSE
-EndFunc   ;==>_Main
+EndFunc   ;==>Example
 
-Func WM_NOTIFY($hWnd, $iMsg, $iwParam, $ilParam)
-	#forceref $hWnd, $iMsg, $iwParam
+Func WM_NOTIFY($hWnd, $iMsg, $wParam, $lParam)
+	#forceref $hWnd, $iMsg, $wParam
 	Local $hWndFrom, $iIDFrom, $iCode, $tNMHDR, $tInfo
 
-	$tNMHDR = DllStructCreate($tagNMHDR, $ilParam)
+	$tNMHDR = DllStructCreate($tagNMHDR, $lParam)
 	$hWndFrom = HWnd(DllStructGetData($tNMHDR, "hWndFrom"))
 	$iIDFrom = DllStructGetData($tNMHDR, "IDFrom")
 	$iCode = DllStructGetData($tNMHDR, "Code")
 	Switch $hWndFrom
-		Case $hCombo
+		Case $g_hCombo
 			Switch $iCode
 				Case $CBEN_BEGINEDIT ; Sent when the user activates the drop-down list or clicks in the control's edit box.
-					_DebugPrint("$CBEN_BEGINEDIT" & @LF & "--> hWndFrom:" & @TAB & $hWndFrom & @LF & _
-							"-->IDFrom:" & @TAB & $iIDFrom & @LF & _
+					_DebugPrint("$CBEN_BEGINEDIT" & @CRLF & "--> hWndFrom:" & @TAB & $hWndFrom & @CRLF & _
+							"-->IDFrom:" & @TAB & $iIDFrom & @CRLF & _
 							"-->Code:" & @TAB & $iCode)
 					Return 0
 				Case $CBEN_DELETEITEM
-					_DebugPrint("$CBEN_DELETEITEM" & _GetComboBoxEx($ilParam))
+					_DebugPrint("$CBEN_DELETEITEM" & _GetComboBoxEx($lParam))
 					Return 0
 				Case $CBEN_DRAGBEGINA, $CBEN_DRAGBEGINW
-					$tInfo = DllStructCreate($tagNMCBEDRAGBEGIN, $ilParam)
-					If DllStructGetData($tInfo, "ItemID") Then _DebugPrint("$CBEN_DRAGBEGIN" & _GetComboBoxEx($ilParam))
-					_DebugPrint("$CBEN_DRAGBEGIN" & @LF & "--> hWndFrom:" & @TAB & DllStructGetData($tInfo, "hWndFrom") & @LF & _
-							"-->IDFrom:" & @TAB & DllStructGetData($tInfo, "IDFrom") & @LF & _
-							"-->Code:" & @TAB & DllStructGetData($tInfo, "Code") & @LF & _
-							"-->ItemID:" & @TAB & DllStructGetData($tInfo, "ItemID") & @LF & _
+					$tInfo = DllStructCreate($tagNMCBEDRAGBEGIN, $lParam)
+					If DllStructGetData($tInfo, "ItemID") Then _DebugPrint("$CBEN_DRAGBEGIN" & _GetComboBoxEx($lParam))
+					_DebugPrint("$CBEN_DRAGBEGIN" & @CRLF & "--> hWndFrom:" & @TAB & DllStructGetData($tInfo, "hWndFrom") & @CRLF & _
+							"-->IDFrom:" & @TAB & DllStructGetData($tInfo, "IDFrom") & @CRLF & _
+							"-->Code:" & @TAB & DllStructGetData($tInfo, "Code") & @CRLF & _
+							"-->ItemID:" & @TAB & DllStructGetData($tInfo, "ItemID") & @CRLF & _
 							"-->Text:" & @TAB & DllStructGetData($tInfo, "Text"))
 					; return is ignored
 				Case $CBEN_ENDEDITA, $CBEN_ENDEDITW ; Sent when the user has concluded an operation within the edit box or has selected an item from the control's drop-down list.
-					$tInfo = DllStructCreate($tagNMCBEENDEDIT, $ilParam)
-					_DebugPrint("$CBEN_ENDEDIT" & @LF & "--> hWndFrom:" & @TAB & DllStructGetData($tInfo, "hWndFrom") & @LF & _
-							"-->IDFrom:" & @TAB & DllStructGetData($tInfo, "IDFrom") & @LF & _
-							"-->Code:" & @TAB & DllStructGetData($tInfo, "Code") & @LF & _
-							"-->fChanged:" & @TAB & DllStructGetData($tInfo, "fChanged") & @LF & _
-							"-->NewSelection:" & @TAB & DllStructGetData($tInfo, "NewSelection") & @LF & _
-							"-->Text:" & @TAB & DllStructGetData($tInfo, "Text") & @LF & _
+					$tInfo = DllStructCreate($tagNMCBEENDEDIT, $lParam)
+					_DebugPrint("$CBEN_ENDEDIT" & @CRLF & "--> hWndFrom:" & @TAB & DllStructGetData($tInfo, "hWndFrom") & @CRLF & _
+							"-->IDFrom:" & @TAB & DllStructGetData($tInfo, "IDFrom") & @CRLF & _
+							"-->Code:" & @TAB & DllStructGetData($tInfo, "Code") & @CRLF & _
+							"-->fChanged:" & @TAB & DllStructGetData($tInfo, "fChanged") & @CRLF & _
+							"-->NewSelection:" & @TAB & DllStructGetData($tInfo, "NewSelection") & @CRLF & _
+							"-->Text:" & @TAB & DllStructGetData($tInfo, "Text") & @CRLF & _
 							"-->Why:" & @TAB & DllStructGetData($tInfo, "Why"))
 					Return False ; accept the notification and allow the control to display the selected item
-;~ 					Return True  ; otherwise
+					; Return True  ; otherwise
 				Case $CBEN_GETDISPINFOA, $CBEN_GETDISPINFOW ; Sent to retrieve display information about a callback item
-					_DebugPrint("$CBEN_GETDISPINFO" & _GetComboBoxEx($ilParam))
+					_DebugPrint("$CBEN_GETDISPINFO" & _GetComboBoxEx($lParam))
 					Return 0
 				Case $CBEN_INSERTITEM
-					$tInfo = DllStructCreate($tagNMCOMBOBOXEX, $ilParam)
+					$tInfo = DllStructCreate($tagNMCOMBOBOXEX, $lParam)
 					Local $tBuffer = DllStructCreate("wchar Text[" & DllStructGetData($tInfo, "TextMax") & "]", DllStructGetData($tInfo, "Text"))
-					_DebugPrint("$CBEN_INSERTITEM" & @LF & "--> hWndFrom:" & @TAB & DllStructGetData($tInfo, "hWndFrom") & @LF & _
-							"-->IDFrom:" & @TAB & DllStructGetData($tInfo, "IDFrom") & @LF & _
-							"-->Code:" & @TAB & DllStructGetData($tInfo, "Code") & @LF & _
-							"-->Mask:" & @TAB & DllStructGetData($tInfo, "Mask") & @LF & _
-							"-->Item:" & @TAB & DllStructGetData($tInfo, "Item") & @LF & _
-							"-->Text:" & @TAB & DllStructGetData($tBuffer, "Text") & @LF & _
-							"-->TextMax:" & @TAB & DllStructGetData($tInfo, "TextMax") & @LF & _
-							"-->Indent:" & @TAB & DllStructGetData($tInfo, "Indent") & @LF & _
-							"-->Image:" & @TAB & DllStructGetData($tInfo, "Image") & @LF & _
-							"-->SelectedImage:" & @TAB & DllStructGetData($tInfo, "SelectedImage") & @LF & _
-							"-->OverlayImage:" & @TAB & DllStructGetData($tInfo, "OverlayImage") & @LF & _
+					_DebugPrint("$CBEN_INSERTITEM" & @CRLF & "--> hWndFrom:" & @TAB & DllStructGetData($tInfo, "hWndFrom") & @CRLF & _
+							"-->IDFrom:" & @TAB & DllStructGetData($tInfo, "IDFrom") & @CRLF & _
+							"-->Code:" & @TAB & DllStructGetData($tInfo, "Code") & @CRLF & _
+							"-->Mask:" & @TAB & DllStructGetData($tInfo, "Mask") & @CRLF & _
+							"-->Item:" & @TAB & DllStructGetData($tInfo, "Item") & @CRLF & _
+							"-->Text:" & @TAB & DllStructGetData($tBuffer, "Text") & @CRLF & _
+							"-->TextMax:" & @TAB & DllStructGetData($tInfo, "TextMax") & @CRLF & _
+							"-->Indent:" & @TAB & DllStructGetData($tInfo, "Indent") & @CRLF & _
+							"-->Image:" & @TAB & DllStructGetData($tInfo, "Image") & @CRLF & _
+							"-->SelectedImage:" & @TAB & DllStructGetData($tInfo, "SelectedImage") & @CRLF & _
+							"-->OverlayImage:" & @TAB & DllStructGetData($tInfo, "OverlayImage") & @CRLF & _
 							"-->Param:" & @TAB & DllStructGetData($tInfo, "Param"))
 					Return 0
 			EndSwitch
@@ -89,27 +87,27 @@ Func WM_NOTIFY($hWnd, $iMsg, $iwParam, $ilParam)
 	Return $GUI_RUNDEFMSG
 EndFunc   ;==>WM_NOTIFY
 
-Func _GetComboBoxEx($ilParam)
-	Local $tInfo = DllStructCreate($tagNMCOMBOBOXEX, $ilParam)
-	Local $aItem = _GUICtrlComboBoxEx_GetItem($hCombo, DllStructGetData($tInfo, "Item"))
-	Return @LF & "--> hWndFrom:" & @TAB & DllStructGetData($tInfo, "hWndFrom") & @LF & _
-			"-->IDFrom:" & @TAB & DllStructGetData($tInfo, "IDFrom") & @LF & _
-			"-->Code:" & @TAB & DllStructGetData($tInfo, "Code") & @LF & _
-			"-->Mask:" & @TAB & DllStructGetData($tInfo, "Mask") & @LF & _
-			"-->Item:" & @TAB & DllStructGetData($tInfo, "Item") & @LF & _
-			"-->Text:" & @TAB & $aItem[0] & @LF & _
-			"-->TextMax:" & @TAB & $aItem[1] & @LF & _
-			"-->Indent:" & @TAB & $aItem[2] & @LF & _
-			"-->Image:" & @TAB & $aItem[3] & @LF & _
-			"-->SelectedImage:" & @TAB & $aItem[4] & @LF & _
-			"-->OverlayImage:" & @TAB & $aItem[5] & @LF & _
+Func _GetComboBoxEx($lParam)
+	Local $tInfo = DllStructCreate($tagNMCOMBOBOXEX, $lParam)
+	Local $aItem = _GUICtrlComboBoxEx_GetItem($g_hCombo, DllStructGetData($tInfo, "Item"))
+	Return @CRLF & "--> hWndFrom:" & @TAB & DllStructGetData($tInfo, "hWndFrom") & @CRLF & _
+			"-->IDFrom:" & @TAB & DllStructGetData($tInfo, "IDFrom") & @CRLF & _
+			"-->Code:" & @TAB & DllStructGetData($tInfo, "Code") & @CRLF & _
+			"-->Mask:" & @TAB & DllStructGetData($tInfo, "Mask") & @CRLF & _
+			"-->Item:" & @TAB & DllStructGetData($tInfo, "Item") & @CRLF & _
+			"-->Text:" & @TAB & $aItem[0] & @CRLF & _
+			"-->TextMax:" & @TAB & $aItem[1] & @CRLF & _
+			"-->Indent:" & @TAB & $aItem[2] & @CRLF & _
+			"-->Image:" & @TAB & $aItem[3] & @CRLF & _
+			"-->SelectedImage:" & @TAB & $aItem[4] & @CRLF & _
+			"-->OverlayImage:" & @TAB & $aItem[5] & @CRLF & _
 			"-->Param:" & @TAB & $aItem[5]
 EndFunc   ;==>_GetComboBoxEx
 
-Func _DebugPrint($s_text, $line = @ScriptLineNumber)
+Func _DebugPrint($s_Text, $sLine = @ScriptLineNumber)
 	ConsoleWrite( _
-			"!===========================================================" & @LF & _
-			"+======================================================" & @LF & _
-			"-->Line(" & StringFormat("%04d", $line) & "):" & @TAB & $s_text & @LF & _
-			"+======================================================" & @LF)
+			"!===========================================================" & @CRLF & _
+			"+======================================================" & @CRLF & _
+			"-->Line(" & StringFormat("%04d", $sLine) & "):" & @TAB & $s_Text & @CRLF & _
+			"+======================================================" & @CRLF)
 EndFunc   ;==>_DebugPrint

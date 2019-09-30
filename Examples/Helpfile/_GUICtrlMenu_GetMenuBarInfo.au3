@@ -1,11 +1,11 @@
 #include <GuiMenu.au3>
 
-_Main()
+Example()
 
-Func _Main()
+Func Example()
 	Local $hWnd, $aInfo
 
-	; 打开记事本
+	; Open Notepad
 	Run("notepad.exe")
 	WinWaitActive("[CLASS:Notepad]")
 	$hWnd = WinGetHandle("[CLASS:Notepad]")
@@ -20,10 +20,9 @@ Func _Main()
 	Writeln("Submenu Handle ..: 0x" & Hex($aInfo[5]))
 	Writeln("Menu bar focused : " & $aInfo[6])
 	Writeln("Menu item focused: " & $aInfo[7])
+EndFunc   ;==>Example
 
-EndFunc   ;==>_Main
-
-; 写入一行文本到记事本
+; Write a line of text to Notepad
 Func Writeln($sText)
-	ControlSend("[CLASS:Notepad]", "", "Edit1", $sText & @CR)
+	ControlSend("[CLASS:Notepad]", "", "Edit1", $sText & @CRLF)
 EndFunc   ;==>Writeln

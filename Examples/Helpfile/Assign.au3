@@ -1,4 +1,10 @@
-﻿Local $sString
+#include <MsgBoxConstants.au3>
 
-; 判断是否指定的变量赋值，是的话将会修改变量数据，并且输出至对话框中.
-If Assign("sString", "你好") Then MsgBox(4096, "Assign", $sString) 
+; Assign the variable string sString with data.
+Assign("sString", "This is a string which is declared using the function Assign")
+
+; Find the value of the variable string sString and assign to the variable $sEvalString.
+Local $sEvalString = Eval("sString")
+
+; Display the value of $sEvalString. This should be the same value as $sString.
+MsgBox($MB_SYSTEMMODAL, "", $sEvalString)

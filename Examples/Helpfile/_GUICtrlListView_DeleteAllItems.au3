@@ -1,85 +1,39 @@
 #include <GUIConstantsEx.au3>
 #include <GuiListView.au3>
+#include <MsgBoxConstants.au3>
 
-$Debug_LV = False ; 检查传递给 ListView 函数的类名, 设置为True并输出到一个控件的句柄,用于检查它是否工作
+Example()
 
-Example1()
-Example2()
-Example_UDF_Created()
+Func Example()
+	GUICreate("ListView Item Deletion", 400, 500)
+	Local $idListview = GUICtrlCreateListView("Col 1               |Col 2      |Col 3      ", 10, 10, 380, 480, $LVS_SHOWSELALWAYS)
 
-Func Example1()
-	Local $hListView
+	; Display the GUI.
+	GUISetState(@SW_SHOW)
 
-	GUICreate("ListView Delete All Items", 400, 300)
-
-	$hListView = GUICtrlCreateListView("col1|col2|col3", 2, 2, 394, 268)
-	GUISetState()
-
-	; 3 column load
-	For $iI = 0 To 9
-		GUICtrlCreateListViewItem("Item " & $iI & "|Item " & $iI & "-1|Item " & $iI & "-2", $hListView)
+	For $i = 0 To 9
+		GUICtrlCreateListViewItem("Native Item " & $i & "|Item " & $i & "-1|Item " & $i & "-2", $idListview)
+	Next
+	For $i = 10 To 20
+		_GUICtrlListView_AddItem($idListview, "UDF Item " & $i, -1, 1000 + $i)
+		_GUICtrlListView_AddSubItem($idListview, $i, "Item " & $i & "-1", 1)
+		_GUICtrlListView_AddSubItem($idListview, $i, "Item " & $i & "-2", 2)
 	Next
 
-	MsgBox(4160, "信息", "Delete All Items")
-	; Items created using built-in function, pass the control ID
-	MsgBox(4160, "Deleted?", _GUICtrlListView_DeleteAllItems($hListView))
+	MsgBox($MB_SYSTEMMODAL, "Delete all", "Deleting both native and UDF Items")
 
-	; 循环直到用户退出
-	Do
-	Until GUIGetMsg() = $GUI_EVENT_CLOSE
+	; Pass the controlID of a native-created ListView
+	_GUICtrlListView_DeleteAllItems($idListview)
+
+	; Loop until the user exits
+	While 1
+		Switch GUIGetMsg()
+			Case $GUI_EVENT_CLOSE
+				ExitLoop
+
+		EndSwitch
+	WEnd
+
+	; Delete the previous GUI and all controls.
 	GUIDelete()
-EndFunc   ;==>Example1
-
-Func Example2()
-	Local $hListView, $aItems[10][3]
-
-	GUICreate("ListView Delete All Items", 400, 300)
-
-	$hListView = GUICtrlCreateListView("col1|col2|col3", 2, 2, 394, 268)
-	GUISetState()
-
-	; 3 column load
-	For $iI = 0 To UBound($aItems) - 1
-		$aItems[$iI][0] = "Item " & $iI
-		$aItems[$iI][1] = "Item " & $iI & "-1"
-		$aItems[$iI][2] = "Item " & $iI & "-2"
-	Next
-
-	_GUICtrlListView_AddArray($hListView, $aItems)
-
-	MsgBox(4160, "信息", "Delete All Items")
-	; Items created using UDF function(s), pass the handle to the control
-	MsgBox(4160, "Deleted?", _GUICtrlListView_DeleteAllItems(GUICtrlGetHandle($hListView)))
-
-	; 循环直到用户退出
-	Do
-	Until GUIGetMsg() = $GUI_EVENT_CLOSE
-	GUIDelete()
-EndFunc   ;==>Example2
-
-Func Example_UDF_Created()
-	Local $GUI, $hListView, $aItems[10][3]
-
-	$GUI = GUICreate("(UDF Created) ListView Delete All Items", 400, 300)
-
-	$hListView = _GUICtrlListView_Create($GUI, "col1|col2|col3", 2, 2, 394, 268)
-	GUISetState()
-
-	; 3 column load
-	For $iI = 0 To UBound($aItems) - 1
-		$aItems[$iI][0] = "Item " & $iI
-		$aItems[$iI][1] = "Item " & $iI & "-1"
-		$aItems[$iI][2] = "Item " & $iI & "-2"
-	Next
-
-	_GUICtrlListView_AddArray($hListView, $aItems)
-
-	MsgBox(4160, "信息", "Delete All Items")
-	; This is already a handle
-	MsgBox(4160, "Deleted?", _GUICtrlListView_DeleteAllItems($hListView))
-
-	; 循环直到用户退出
-	Do
-	Until GUIGetMsg() = $GUI_EVENT_CLOSE
-	GUIDelete()
-EndFunc   ;==>Example_UDF_Created
+EndFunc   ;==>Example

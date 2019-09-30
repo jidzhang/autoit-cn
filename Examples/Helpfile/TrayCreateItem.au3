@@ -1,76 +1,38 @@
-; ****************
-; * 第一个例子	 *
-; ****************
-
 #NoTrayIcon
+#include <AutoItConstants.au3>
+#include <MsgBoxConstants.au3>
+#include <StringConstants.au3>
+#include <TrayConstants.au3> ; Required for the $TRAY_CHECKED and $TRAY_ICONSTATE_SHOW constants.
 
-Opt("TrayMenuMode", 3) ; 默认菜单项目 (脚本暂停中/退出)(Script Paused/Exit) 将不会显示,并且所选项目不能被选中(checkbox不会打勾) . 请参考TrayMenuMode选项1和2(3=1+2).
+Opt("TrayMenuMode", 3) ; The default tray menu items will not be shown and items are not checked when selected. These are options 1 and 2 for TrayMenuMode.
 
-Local $prefsitem	= TrayCreateItem("参数")
-TrayCreateItem("")
-Local $aboutitem	= TrayCreateItem("关于")
-TrayCreateItem("")
-Local $exititem	= TrayCreateItem("退出")
+Example()
 
-TraySetState()
+Func Example()
+	; Create a tray item with the radio item parameter selected.
+	TrayCreateItem("Radio 1", -1, -1, $TRAY_ITEM_RADIO)
+	TrayItemSetState(-1, $TRAY_CHECKED)
+	TrayCreateItem("Radio 2", -1, -1, $TRAY_ITEM_RADIO)
+	TrayCreateItem("Radio 3", -1, -1, $TRAY_ITEM_RADIO)
 
-While 1
-	Local $msg = TrayGetMsg()
-	Select
-		Case $msg = 0
-			ContinueLoop
-		Case $msg = $prefsitem
-			MsgBox(64, "参数:", "系统版本:" & @OSVersion)
-		Case $msg = $aboutitem
-			MsgBox(64, "关于:", "AutoIt3-托盘-例子.")
-		Case $msg = $exititem
-			ExitLoop
-	EndSelect
-WEnd
+	TrayCreateItem("") ; Create a separator line.
 
-Exit
+	Local $idAbout = TrayCreateItem("About")
+	TrayCreateItem("") ; Create a separator line.
 
+	Local $idExit = TrayCreateItem("Exit")
 
-; *****************
-; * 第二个例子	 *
-; *****************
+	TraySetState($TRAY_ICONSTATE_SHOW) ; Show the tray menu.
 
-#NoTrayIcon
-#include <Constants.au3> ; Required for the $TRAY_CHECKED constant.
+	While 1
+		Switch TrayGetMsg()
+			Case $idAbout ; Display a message box about the AutoIt version and installation path of the AutoIt executable.
+				MsgBox($MB_SYSTEMMODAL, "", "AutoIt tray menu example." & @CRLF & @CRLF & _
+						"Version: " & @AutoItVersion & @CRLF & _
+						"Install Path: " & StringLeft(@AutoItExe, StringInStr(@AutoItExe, "\", $STR_NOCASESENSEBASIC, -1) - 1)) ; Find the folder of a full path.
 
-Opt("TrayMenuMode",1)	; 默认托盘菜单项目(脚本已暂停/退出脚本) (Script Paused/Exit) 将不显示.
-
-; Let's create 2 radio menuitem groups
-Local $radio1	= TrayCreateItem("单选1", -1, -1, 1)
-TrayItemSetState(-1, $TRAY_CHECKED)
-TrayCreateItem("单选2", -1, -1, 1)
-TrayCreateItem("单选3", -1, -1, 1)
-
-TrayCreateItem("")	; 单选按钮可以使用分隔符进行分割,或者其它类型的菜单项目.
-
-TrayCreateItem("单选4", -1, -1, 1)
-TrayCreateItem("单选5", -1, -1, 1)
-TrayItemSetState(-1, $TRAY_CHECKED)
-TrayCreateItem("单选6", -1, -1, 1)
-
-TrayCreateItem("")
-
-$aboutitem	= TrayCreateItem("关于")
-TrayCreateItem("")
-$exititem	= TrayCreateItem("退出")
-
-TraySetState()
-
-While 1
-	$msg = TrayGetMsg()
-	Select
-		Case $msg = 0
-			ContinueLoop
-		Case $msg = $aboutitem
-			MsgBox(64, "关于:", "AutoIt3-托盘-例子 使用单选子菜单.")
-		Case $msg = $exititem
-			ExitLoop
-	EndSelect
-WEnd
-
-Exit
+			Case $idExit ; Exit the loop.
+				ExitLoop
+		EndSwitch
+	WEnd
+EndFunc   ;==>Example

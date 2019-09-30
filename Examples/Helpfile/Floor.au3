@@ -1,14 +1,19 @@
-Local $msg
+#include <MsgBoxConstants.au3>
 
-$msg = ""
+Example()
 
-$msg = $msg & "Floor(4.8) = " & Floor(4.8) & @CR
-$msg = $msg & "Floor(4.5) = " & Floor(4.5) & @CR
-$msg = $msg & "Floor(4.3) = " & Floor(4.3) & @CR
-$msg = $msg & "Floor(4) = " & Floor(4) & @CR
-$msg = $msg & "Floor(-4.3) = " & Floor(-4.3) & @CR
-$msg = $msg & "Floor(-4.5) = " & Floor(-4.5) & @CR
-$msg = $msg & "Floor(-4.8) = " & Floor(-4.8) & @CR
-$msg = $msg & "Floor(-4) = " & Floor(-4) & @CR
+Func Example()
+	; Assign a Local variable an array containing the numbers.
+	Local $aNumber[8] = [4.8, 4.5, 4.3, 4, -4.8, -4.5, -4.3, -4]
 
-MsgBox(4160, "²âÊÔ", $msg)
+	; Assign a Local variable a string which will contain the results.
+	Local $sResults = ""
+
+	; Loop through the array: calculate the floor and format the result.
+	For $i = 0 To 7
+		$sResults &= "Floor(" & $aNumber[$i] & ") = " & Floor($aNumber[$i]) & @CRLF & ($i = 3 ? @CRLF : "")
+	Next
+
+	; Display the results.
+	MsgBox($MB_SYSTEMMODAL, "", $sResults)
+EndFunc   ;==>Example

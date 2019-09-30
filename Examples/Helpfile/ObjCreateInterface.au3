@@ -1,3 +1,5 @@
+#include <MsgBoxConstants.au3>
+
 Example()
 
 Func Example()
@@ -19,15 +21,14 @@ Func Example()
 	; Wait for the Notepad window to appear and get a handle to it.
 	Local $hNotepad = WinWait("[CLASS:Notepad]")
 
-
 	; Tell the user what to look for.
-	MsgBox(4096, "", "Look in the Taskbar and you should see an entry for Notepad." & @CRLF & @CRLF & "Press OK to continue.")
+	MsgBox($MB_SYSTEMMODAL, "", "Look in the Taskbar and you should see an entry for Notepad." & @CRLF & @CRLF & "Press OK to continue.")
 
 	; Delete the Notepad entry from the Taskbar.
 	$oTaskbarList.DeleteTab($hNotepad)
 
 	; Tell the user to look again.
-	MsgBox(4096, "", "Look in the Taskbar.  There should no longer be a Notepad entry but Notepad is still running." & @CRLF & @CRLF & "Press OK to continue.")
+	MsgBox($MB_SYSTEMMODAL, "", "Look in the Taskbar.  There should no longer be a Notepad entry but Notepad is still running." & @CRLF & @CRLF & "Press OK to continue.")
 
 	; Close Notepad.
 	WinClose($hNotepad)

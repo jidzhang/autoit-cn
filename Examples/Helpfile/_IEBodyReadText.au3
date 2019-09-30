@@ -1,10 +1,11 @@
-; *******************************************************
-; 示例 1 - 打开含基本示例的浏览器, 准备好文本主体
-;				(所有 HTML 标签被移除后的内容) 并显示在 MsgBox
-; *******************************************************
+; Open a browser with the basic example, read the body Text
+; (the content with all HTML tags removed) and display it in a MsgBox
 
 #include <IE.au3>
+#include <MsgBoxConstants.au3>
 
 Local $oIE = _IE_Example("basic")
 Local $sText = _IEBodyReadText($oIE)
-MsgBox(4096, "Body Text", $sText)
+MsgBox($MB_SYSTEMMODAL, "Body Text", $sText)
+
+_IEQuit($oIE)

@@ -1,7 +1,10 @@
-#include <WinAPIGdi.au3>
 #include <GUIConstantsEx.au3>
-
-Global Const $STM_SETIMAGE = 0x0172
+#include <StaticConstants.au3>
+#include <WinAPIGdi.au3>
+#include <WinAPIGdiDC.au3>
+#include <WinAPIHObj.au3>
+#include <WinAPIIcons.au3>
+#include <WinAPIMisc.au3>
 
 ; Create XOR bitmap
 Local $hDC = _WinAPI_GetDC(0)
@@ -55,7 +58,7 @@ _WinAPI_DeleteObject($hAND)
 GUICreate('Test ' & StringReplace(@ScriptName, '.au3', '()'), 128, 128)
 GUICtrlCreateIcon('', 0, 48, 48, 32, 32)
 GUICtrlSendMsg(-1, $STM_SETIMAGE, 1, $hIcon)
-GUISetState()
+GUISetState(@SW_SHOW)
 
 Do
 Until GUIGetMsg() = $GUI_EVENT_CLOSE

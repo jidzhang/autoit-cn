@@ -2,22 +2,22 @@
 #include <NetShare.au3>
 #include <WindowsConstants.au3>
 
-Global $iMemo
+Global $g_idMemo
 
-_Main()
+Example()
 
-Func _Main()
+Func Example()
 	Local $aInfo
 
-	; 创建 GUI
+	; Create GUI
 	GUICreate("NetShare", 400, 300)
 
-	; 创建 memo 控件
-	$iMemo = GUICtrlCreateEdit("", 2, 2, 396, 296, $WS_VSCROLL)
-	GUICtrlSetFont($iMemo, 9, 400, 0, "Courier New")
-	GUISetState()
+	; Create memo control
+	$g_idMemo = GUICtrlCreateEdit("", 2, 2, 396, 296, $WS_VSCROLL)
+	GUICtrlSetFont($g_idMemo, 9, 400, 0, "Courier New")
+	GUISetState(@SW_SHOW)
 
-	; 获取服务器统计信息
+	; Get server statistics
 	$aInfo = _Net_Share_StatisticsGetSvr(@ComputerName)
 	MemoWrite("Statistics started ......: " & $aInfo[0])
 	MemoWrite("Times file opened .......: " & $aInfo[1])
@@ -35,12 +35,12 @@ Func _Main()
 	MemoWrite("Req buffer failures .....: " & $aInfo[13])
 	MemoWrite("Big buffer failures .....: " & $aInfo[14])
 
-	; 循环直到用户退出
+	; Loop until the user exits.
 	Do
 	Until GUIGetMsg() = $GUI_EVENT_CLOSE
-EndFunc   ;==>_Main
+EndFunc   ;==>Example
 
-; 写入消息到 memo
+; Write message to memo
 Func MemoWrite($sMessage = "")
-	GUICtrlSetData($iMemo, $sMessage & @CRLF, 1)
+	GUICtrlSetData($g_idMemo, $sMessage & @CRLF, 1)
 EndFunc   ;==>MemoWrite

@@ -1,9 +1,10 @@
 #include <Date.au3>
-;#include <ACN_Date.au3>	;如果要使用中文的星期名称或者月名称请使用这个 #include
-; 返回长名
+#include <MsgBoxConstants.au3>
+
+; Retrieve the long name
 Local $sLongDayName = _DateDayOfWeek(@WDAY)
 
-; 返回短名
-Local $sShortDayName = _DateDayOfWeek(@WDAY, 1)
+; Retrieve the abbreviated name
+Local $sShortDayName = _DateDayOfWeek(@WDAY, $DMW_SHORTNAME)
 
-MsgBox( 4096, "一周中的一天", "今天是: " & $sLongDayName & " (" & $sShortDayName & ")" )
+MsgBox($MB_SYSTEMMODAL, "Day of Week", "Today is: " & $sLongDayName & " (" & $sShortDayName & ")")

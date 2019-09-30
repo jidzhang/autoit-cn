@@ -1,4 +1,5 @@
 #include <Color.au3>
+#include <MsgBoxConstants.au3>
 
 Local $iGreenColor = _ColorGetGreen(0x8080ff)
-MsgBox(4096, "AutoIt", $iGreenColor)
+MsgBox($MB_SYSTEMMODAL, "AutoIt", $iGreenColor)

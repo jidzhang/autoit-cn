@@ -1,15 +1,15 @@
-﻿Example()
+Example()
 
 Func Example()
-	; 运行记事本程序
+	; Run Notepad
 	Run("notepad.exe")
 
-    ; 10秒内暂停脚本执行,直至记事本窗口被激活(成为活动状态)为止
+	; Wait 10 seconds for the Notepad window to appear.
 	WinWaitActive("[CLASS:Notepad]", "", 10)
 
-	; 设置2秒等待时间
+	; Wait for 2 seconds to display the Notepad window.
 	Sleep(2000)
 
-	; 通过记事本的类名来关闭记事本窗口.
+	; Close the Notepad window using the classname of Notepad.
 	WinClose("[CLASS:Notepad]")
 EndFunc   ;==>Example

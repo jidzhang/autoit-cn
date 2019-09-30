@@ -1,27 +1,27 @@
+#include <GUIConstantsEx.au3>
 #include <GuiToolbar.au3>
 #include <GuiToolTip.au3>
-#include <GUIConstantsEx.au3>
+#include <MsgBoxConstants.au3>
+#include <WinAPIConstants.au3>
 #include <WindowsConstants.au3>
-#include <Constants.au3>
 
-$Debug_TB = False ; 检查传递给函数的类名, 设置为True并输出到一个控件的句柄,用于检查它是否工作
-Global Enum $idNew = 1000, $idOpen, $idSave, $idHelp
+Global Enum $e_idNew = 1000, $e_idOpen, $e_idSave, $e_idHelp
 
-_Main()
+Example()
 
-Func _Main()
+Func Example()
 	Local $hGUI, $hToolbar, $hToolTip
 
-	; 创建 GUI
+	; Create GUI
 	$hGUI = GUICreate("Toolbar", 400, 300)
 	$hToolbar = _GUICtrlToolbar_Create($hGUI)
-	GUISetState()
+	GUISetState(@SW_SHOW)
 
 	; Create ToolTip
 	$hToolTip = _GUIToolTip_Create($hToolbar)
 	_GUICtrlToolbar_SetToolTips($hToolbar, $hToolTip)
 
-	; 添加标准系统位图
+	; Add standard system bitmaps
 	Switch _GUICtrlToolbar_GetBitmapFlags($hToolbar)
 		Case 0
 			_GUICtrlToolbar_AddBitmap($hToolbar, 1, -1, $IDB_STD_SMALL_COLOR)
@@ -29,43 +29,41 @@ Func _Main()
 			_GUICtrlToolbar_AddBitmap($hToolbar, 1, -1, $IDB_STD_LARGE_COLOR)
 	EndSwitch
 
-	; 添加按钮
-	_GUICtrlToolbar_AddButton($hToolbar, $idNew, $STD_FILENEW)
-	_GUICtrlToolbar_AddButton($hToolbar, $idOpen, $STD_FILEOPEN)
-	_GUICtrlToolbar_AddButton($hToolbar, $idSave, $STD_FILESAVE)
+	; Add buttons
+	_GUICtrlToolbar_AddButton($hToolbar, $e_idNew, $STD_FILENEW)
+	_GUICtrlToolbar_AddButton($hToolbar, $e_idOpen, $STD_FILEOPEN)
+	_GUICtrlToolbar_AddButton($hToolbar, $e_idSave, $STD_FILESAVE)
 	_GUICtrlToolbar_AddButtonSep($hToolbar)
-	_GUICtrlToolbar_AddButton($hToolbar, $idHelp, $STD_HELP)
+	_GUICtrlToolbar_AddButton($hToolbar, $e_idHelp, $STD_HELP)
 
 	; Show ToolTip handle
-	MsgBox(4096, "信息", "ToolTip handle .: 0x" & Hex(_GUICtrlToolbar_GetToolTips($hToolbar)) & @CRLF & _
+	MsgBox($MB_SYSTEMMODAL, "Information", "ToolTip handle .: 0x" & Hex(_GUICtrlToolbar_GetToolTips($hToolbar)) & @CRLF & _
 			"IsPtr = " & IsPtr(_GUICtrlToolbar_GetToolTips($hToolbar)) & " IsHWnd = " & IsHWnd(_GUICtrlToolbar_GetToolTips($hToolbar)))
 
-	; 循环直到用户退出
 	GUIRegisterMsg($WM_NOTIFY, "WM_NOTIFY")
 
-	; 循环直到用户退出
+	; Loop until the user exits.
 	Do
 	Until GUIGetMsg() = $GUI_EVENT_CLOSE
-
-EndFunc   ;==>_Main
+EndFunc   ;==>Example
 
 ; Handle WM_NOTIFY messages
-Func WM_NOTIFY($hWnd, $iMsg, $iwParam, $ilParam)
-	#forceref $hWnd, $iMsg, $iwParam, $ilParam
+Func WM_NOTIFY($hWnd, $iMsg, $wParam, $lParam)
+	#forceref $hWnd, $iMsg, $wParam, $lParam
 	Local $tInfo, $iID, $iCode
 
-	$tInfo = DllStructCreate($tagNMTTDISPINFO, $ilParam)
+	$tInfo = DllStructCreate($tagNMTTDISPINFO, $lParam)
 	$iCode = DllStructGetData($tInfo, "Code")
 	If $iCode = $TTN_GETDISPINFOW Then
 		$iID = DllStructGetData($tInfo, "IDFrom")
 		Switch $iID
-			Case $idNew
+			Case $e_idNew
 				DllStructSetData($tInfo, "aText", "New")
-			Case $idOpen
+			Case $e_idOpen
 				DllStructSetData($tInfo, "aText", "Open")
-			Case $idSave
+			Case $e_idSave
 				DllStructSetData($tInfo, "aText", "Save")
-			Case $idHelp
+			Case $e_idHelp
 				DllStructSetData($tInfo, "aText", "Help")
 		EndSwitch
 	EndIf

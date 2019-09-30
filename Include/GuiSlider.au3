@@ -4,11 +4,12 @@
 #include "SliderConstants.au3"
 #include "StructureConstants.au3"
 #include "UDFGlobalID.au3"
-#include "WinAPI.au3"
+#include "WinAPIConv.au3"
+#include "WinAPISysInternals.au3"
 
 ; #INDEX# =======================================================================================================================
 ; Title .........: Slider
-; AutoIt Version : 3.3.13.12
+; AutoIt Version : 3.3.14.5
 ; Language ......: English
 ; Description ...: Functions that assist with Slider Control "Trackbar" management.
 ; Author(s) .....: Gary Frost (gafrost)
@@ -91,7 +92,7 @@ EndFunc   ;==>_GUICtrlSlider_ClearTics
 ; Author ........: Gary Frost
 ; Modified.......:
 ; ===============================================================================================================================
-Func _GUICtrlSlider_Create($hWnd, $iX, $iY, $iWidth = 100, $iHeight = 20, $iStyle = 0x0001, $iExStyle = 0x00000000)
+Func _GUICtrlSlider_Create($hWnd, $iX, $iY, $iWidth = 100, $iHeight = 20, $iStyle = $TBS_AUTOTICKS, $iExStyle = 0x00000000)
 	If Not IsHWnd($hWnd) Then Return SetError(1, 0, 0) ; Invalid Window handle for _GUICtrlSlider_Create 1st parameter
 
 	If $iWidth = -1 Then $iWidth = 100

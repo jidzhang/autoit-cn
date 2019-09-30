@@ -1,21 +1,31 @@
+#include <ColorConstants.au3>
 #include <GUIConstantsEx.au3>
 
 Example()
 
 Func Example()
-	Local $msg
+	; Create a GUI with various controls.
+	Local $hGUI = GUICreate("Example", 300, 200)
 
-	GUICreate("My GUI background color") ; will create a dialog box that when displayed is centered
+	; Create a label control.
+	Local $idLabel = GUICtrlCreateLabel("A string of text", 10, 10, 185, 17)
+	Local $idButton_Close = GUICtrlCreateButton("Close", 210, 170, 85, 25)
 
-	GUICtrlCreateLabel("my label", 10, 20)
-	GUICtrlSetBkColor(-1, 0x00ff00) ; Green
+	; Set the background color of the label control.
+	GUICtrlSetBkColor($idLabel, $COLOR_RED)
 
-	GUISetState()
+	; Display the GUI.
+	GUISetState(@SW_SHOW, $hGUI)
 
-	; Run the GUI until the dialog is closed
+	; Loop until the user exits.
 	While 1
-		$msg = GUIGetMsg()
+		Switch GUIGetMsg()
+			Case $GUI_EVENT_CLOSE, $idButton_Close
+				ExitLoop
 
-		If $msg = $GUI_EVENT_CLOSE Then ExitLoop
+		EndSwitch
 	WEnd
+
+	; Delete the previous GUI and all controls.
+	GUIDelete($hGUI)
 EndFunc   ;==>Example

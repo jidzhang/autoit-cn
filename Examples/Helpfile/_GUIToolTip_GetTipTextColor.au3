@@ -1,30 +1,31 @@
 #include <GUIConstantsEx.au3>
 #include <GUIToolTip.au3>
 #include <MsgBoxConstants.au3>
+#include <WinAPITheme.au3>
 
 Example()
 
 Func Example()
-	Local $hGUI = GUICreate(StringTrimRight(@ScriptName, 4), 350, 200)
+	Local $hGUI = GUICreate(StringTrimRight(@ScriptName, StringLen(".exe")), 350, 200)
 
-	Local $iAdd = GUICtrlCreateButton("Button", 30, 32, 130, 28)
-	Local $hAdd = GUICtrlGetHandle($iAdd)
+	Local $idAdd = GUICtrlCreateButton("Button", 30, 32, 130, 28)
+	Local $hAdd = GUICtrlGetHandle($idAdd)
 
-    ; Create a tooltip control
+	; Create a tooltip control
 	Local $hToolTip = _GUIToolTip_Create($hGUI, $TTS_BALLOON)
-	DllCall("UxTheme.dll", "int", "SetWindowTheme", "hwnd", $hToolTip, "wstr", 0, "wstr", 0)
+	_WinAPI_SetWindowTheme($hToolTip, "", "")
 
-    ; Change the color settings for the tooltip
-    ; The color value used in the _GUIToolTip_SetTipBkColor function is a COLORREF (BGR) value
+	; Change the color settings for the tooltip
+	; The color value used in the _GUIToolTip_SetTipBkColor function is a COLORREF (BGR) value
 	_GUIToolTip_SetTipBkColor($hToolTip, 0x395A00)
-    ; The color value used in the _GUIToolTip_SetTipTextColor function is a COLORREF (BGR) value
+	; The color value used in the _GUIToolTip_SetTipTextColor function is a COLORREF (BGR) value
 	_GUIToolTip_SetTipTextColor($hToolTip, 0x1EBFFF)
 
-    ; Add a tool to the tooltip control
+	; Add a tool to the tooltip control
 	_GUIToolTip_AddTool($hToolTip, 0, "This is the ToolTip text", $hAdd)
-	GUISetState()
+	GUISetState(@SW_SHOW)
 
-    ; Retrieve the text color of the tooltip.
+	; Retrieve the text color of the tooltip.
 	MsgBox($MB_SYSTEMMODAL, 'Message', 'Text color : 0x' & Hex(_GUIToolTip_GetTipTextColor($hToolTip), 6))
 
 	While 1
@@ -32,5 +33,5 @@ Func Example()
 	WEnd
 	; Destroy the tooltip control
 	_GUIToolTip_Destroy($hToolTip)
-    GUIDelete($hGUI)
+	GUIDelete($hGUI)
 EndFunc   ;==>Example

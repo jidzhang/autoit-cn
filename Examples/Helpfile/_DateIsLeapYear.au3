@@ -1,7 +1,8 @@
 #include <Date.au3>
+#include <MsgBoxConstants.au3>
 
 If _DateIsLeapYear(@YEAR) Then
-	MsgBox( 4096, "闰年", "今年是闰年,有366天(有闰月除外)." )
+	MsgBox($MB_SYSTEMMODAL, "Leap Year", "This year is a leap year.")
 Else
-	MsgBox( 4096, "闰年", "今年不是闰年." )
+	MsgBox($MB_SYSTEMMODAL, "Leap Year", "This year is not a leap year.")
 EndIf

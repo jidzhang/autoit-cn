@@ -1,16 +1,17 @@
+#include <MsgBoxConstants.au3>
 #include <Sound.au3>
 
 Local $aSound = _SoundOpen(@WindowsDir & "\media\tada.wav")
 If @error = 2 Then
-	MsgBox(4096, "错误", "文件不存在")
+	MsgBox($MB_SYSTEMMODAL, "Error", "The file does not exist")
 	Exit
 ElseIf @extended <> 0 Then
-	Local $iExtended = @extended ;赋值, 因为 @extended 可能会在 DllCall 后被设置成其它返回值
+	Local $iExtended = @extended ; Assign because @extended will be set after DllStructCreate().
 	Local $tText = DllStructCreate("char[128]")
-	DllCall("winmm.dll", "short", "mciGetErrorStringA", "str", $iExtended, "ptr", DllStructGetPtr($tText), "int", 128)
-	MsgBox(4096, "错误", "The open failed." & @CRLF & "Error Number: " & $iExtended & @CRLF & "Error Description: " & DllStructGetData($tText, 1) & @CRLF & "Please Note: The sound may still play correctly.")
+	DllCall("winmm.dll", "short", "mciGetErrorStringA", "str", $iExtended, "struct*", $tText, "int", 128)
+	MsgBox($MB_SYSTEMMODAL, "Error", "The open failed." & @CRLF & "Error Number: " & $iExtended & @CRLF & "Error Description: " & DllStructGetData($tText, 1) & @CRLF & "Please Note: The sound may still play correctly.")
 Else
-	MsgBox(4096, "Success", "The file opened successfully")
+	MsgBox($MB_SYSTEMMODAL, "Success", "The file opened successfully")
 EndIf
 
 _SoundPlay($aSound)

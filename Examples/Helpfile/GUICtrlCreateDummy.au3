@@ -3,28 +3,29 @@
 Example()
 
 Func Example()
-	Local $user, $button, $cancel, $msg
 
 	GUICreate("GUICtrlCreateDummy", 250, 200, 100, 200)
 	GUISetBkColor(0x00E0FFFF) ; will change background color
 
-	$user = GUICtrlCreateDummy()
-	$button = GUICtrlCreateButton("event", 75, 170, 70, 20)
-	$cancel = GUICtrlCreateButton("Cancel", 150, 170, 70, 20)
-	GUISetState()
+	Local $idUser = GUICtrlCreateDummy()
+	Local $idButton_Event = GUICtrlCreateButton("event", 75, 170, 70, 20)
+	Local $idButton_Cancel = GUICtrlCreateButton("Cancel", 150, 170, 70, 20)
+	GUISetState(@SW_SHOW)
 
+	Local $idMsg
+	; Loop until the user exits.
 	Do
-		$msg = GUIGetMsg()
+		$idMsg = GUIGetMsg()
 
 		Select
-			Case $msg = $button
-				GUICtrlSendToDummy($user)
-			Case $msg = $cancel
-				GUICtrlSendToDummy($user)
-			Case $msg = $user
+			Case $idMsg = $idButton_Event
+				GUICtrlSendToDummy($idUser)
+			Case $idMsg = $idButton_Cancel
+				GUICtrlSendToDummy($idUser)
+			Case $idMsg = $idUser
 				; special action before closing
 				; ...
 				Exit
 		EndSelect
-	Until $msg = $GUI_EVENT_CLOSE
+	Until $idMsg = $GUI_EVENT_CLOSE
 EndFunc   ;==>Example

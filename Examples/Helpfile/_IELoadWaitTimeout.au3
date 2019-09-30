@@ -1,15 +1,7 @@
-; *******************************************************
-; 示例 1 - 获取当前超时值
-; *******************************************************
+; Obtain current timeout value
 
 #include <IE.au3>
+#include <MsgBoxConstants.au3>
 
 Local $iCurrentTimeout = _IELoadWaitTimeout()
-
-; *******************************************************
-; 示例 2 - 设置超时为 1 分钟 (60000 毫秒)
-; *******************************************************
-
-#include <IE.au3>
-
-_IELoadWaitTimeout(60000)
+MsgBox($MB_SYSTEMMODAL, "_IELoadWaitTimeout", $iCurrentTimeout / 1000 & " sec")

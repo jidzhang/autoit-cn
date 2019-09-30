@@ -1,8 +1,23 @@
-﻿; 求某个数的反余弦值(arcCosine).
-Local $x = ACos(0.5)
-MsgBox(4096, "ACos函数", "值为：" & $x)
+#include <MsgBoxConstants.au3>
 
-Local $pi = 3.14159265358979
-Local $radToDeg = 180 / $pi
-Local $y = ACos(-1) * $radToDeg ; -1的反余弦值是 180°
-MsgBox(4096, "ACos函数", "值为：" & $y & "°")
+Example()
+
+Func Example()
+	; Assign a Local variable the arcCosine of 0.5.
+	Local $fArcCos1 = ACos(0.5)
+
+	; Display the result.
+	MsgBox($MB_SYSTEMMODAL, "", $fArcCos1 & " rad.")
+
+	; Assign a Local constant variable the approximate PI number.
+	Local Const $PI = 3.141592653589793
+
+	; Assign a Local variable the formula to switch from radian to degree (equals to one radian in degree).
+	Local $fRadToDeg = 180 / $PI
+
+	; Assign a Local variable a number in degree.
+	Local $fArcCos2 = $fRadToDeg * ACos(-1)
+
+	; Display the result.
+	MsgBox($MB_SYSTEMMODAL, "", $fArcCos2 & " deg.")
+EndFunc   ;==>Example

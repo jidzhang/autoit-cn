@@ -1,34 +1,33 @@
-#include <GuiListBox.au3>
 #include <GUIConstantsEx.au3>
+#include <GuiListBox.au3>
+#include <MsgBoxConstants.au3>
 
-$Debug_LB = False ;检查传递给 ListBox 函数的类名, 设置为True并输出到一个控件的句柄,用于检查它是否工作
+Example()
 
-_Main()
+Func Example()
+	Local $sText, $idListBox
 
-Func _Main()
-	Local $sText, $hListBox
-
-	; 创建 GUI
+	; Create GUI
 	GUICreate("List Box Get Text Len", 400, 296)
-	$hListBox = GUICtrlCreateList("", 2, 2, 396, 296, BitOR($LBS_STANDARD, $LBS_EXTENDEDSEL))
-	GUISetState()
+	$idListBox = GUICtrlCreateList("", 2, 2, 396, 296, BitOR($LBS_STANDARD, $LBS_EXTENDEDSEL))
+	GUISetState(@SW_SHOW)
 
-	; 添加字符串
-	_GUICtrlListBox_BeginUpdate($hListBox)
+	; Add strings
+	_GUICtrlListBox_BeginUpdate($idListBox)
 	For $iI = 1 To 9
 		$sText = StringFormat("%03d : Random string ", Random(1, 100, 1))
 		For $iX = 1 To Random(1, 20, 1)
 			$sText &= Chr(Random(65, 90, 1))
 		Next
-		_GUICtrlListBox_AddString($hListBox, $sText)
+		_GUICtrlListBox_AddString($idListBox, $sText)
 	Next
-	_GUICtrlListBox_EndUpdate($hListBox)
+	_GUICtrlListBox_EndUpdate($idListBox)
 
 	; Show item text length
-	MsgBox(4160, "信息", "Item 5 Text Length: " & _GUICtrlListBox_GetTextLen($hListBox, 4))
+	MsgBox($MB_SYSTEMMODAL, "Information", "Item 5 Text Length: " & _GUICtrlListBox_GetTextLen($idListBox, 4))
 
-	; 循环直到用户退出
+	; Loop until the user exits.
 	Do
 	Until GUIGetMsg() = $GUI_EVENT_CLOSE
 	GUIDelete()
-EndFunc   ;==>_Main
+EndFunc   ;==>Example

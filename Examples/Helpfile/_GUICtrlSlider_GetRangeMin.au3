@@ -1,29 +1,28 @@
 #include <GUIConstantsEx.au3>
 #include <GuiSlider.au3>
+#include <MsgBoxConstants.au3>
 
-$Debug_S = False ; 检查传递给函数的类名, 设置为真并使用另一控件的句柄可以看出它是否有效
+Example()
 
-_Main()
+Func Example()
+	Local $idSlider
 
-Func _Main()
-	Local $hSlider
-
-	; 创建 GUI
+	; Create GUI
 	GUICreate("Slider Get Range Min", 400, 296)
-	$hSlider = GUICtrlCreateSlider(2, 2, 396, 20, BitOR($TBS_TOOLTIPS, $TBS_AUTOTICKS, $TBS_ENABLESELRANGE))
-	GUISetState()
+	$idSlider = GUICtrlCreateSlider(2, 2, 396, 20, BitOR($TBS_TOOLTIPS, $TBS_AUTOTICKS, $TBS_ENABLESELRANGE))
+	GUISetState(@SW_SHOW)
 
-	; 获取范围的最小位置
-	MsgBox(4160, "信息", "Range Min: " & _GUICtrlSlider_GetRangeMin($hSlider))
+	; Get Range Min
+	MsgBox($MB_SYSTEMMODAL, "Information", "Range Min: " & _GUICtrlSlider_GetRangeMin($idSlider))
 
-	; 设置范围的最小位置
-	_GUICtrlSlider_SetRangeMin($hSlider, 20)
+	; Set Range Min
+	_GUICtrlSlider_SetRangeMin($idSlider, 20)
 
-	; 获取范围的最小位置
-	MsgBox(4160, "信息", "Range Min: " & _GUICtrlSlider_GetRangeMin($hSlider))
+	; Get Range Min
+	MsgBox($MB_SYSTEMMODAL, "Information", "Range Min: " & _GUICtrlSlider_GetRangeMin($idSlider))
 
-	; 循环直到用户退出
+	; Loop until the user exits.
 	Do
 	Until GUIGetMsg() = $GUI_EVENT_CLOSE
 	GUIDelete()
-EndFunc   ;==>_Main
+EndFunc   ;==>Example

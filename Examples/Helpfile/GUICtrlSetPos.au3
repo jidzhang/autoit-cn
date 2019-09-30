@@ -3,29 +3,25 @@
 Example()
 
 Func Example()
-	Local $right, $label, $button, $msg
 
 	GUICreate("My GUI position") ; will create a dialog box that when displayed is centered
 
-	$right = 0
-	$label = GUICtrlCreateLabel("my moving label", 10, 20)
+	GUISetFont(16)
+	Local $idLabel = GUICtrlCreateLabel("my moving label", 10, 20)
 
-	$button = GUICtrlCreateButton("Click to close", 50, 50)
-	GUICtrlSetState(-1, $GUI_FOCUS) ; the focus is on this button
+	GUISetState(@SW_SHOW)
 
-	GUISetState()
-
+	Local $idMsg, $bToggle = False
 	While 1
-		$msg = GUIGetMsg()
+		$idMsg = GUIGetMsg()
 
-		If $msg = $button Or $msg = $GUI_EVENT_CLOSE Then Exit
-		If $right = 0 Then
-			$right = 1
-			GUICtrlSetPos($label, 20, 20)
+		If $idMsg = $GUI_EVENT_CLOSE Then Exit
+		$bToggle = Not $bToggle
+		If $bToggle Then
+			GUICtrlSetPos($idLabel, 20, 20)
 		Else
-			$right = 0
-			GUICtrlSetPos($label, 10, 20)
+			GUICtrlSetPos($idLabel, 20, 30)
 		EndIf
-		Sleep(100)
+		Sleep(160)
 	WEnd
 EndFunc   ;==>Example

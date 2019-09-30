@@ -1,3 +1,4 @@
+#include <MsgBoxConstants.au3>
 #include <SQLite.au3>
 #include <SQLite.dll.au3>
 
@@ -12,13 +13,13 @@ _SQLite_Exec(-1, "INSERT INTO Test VALUES (" & $sData & ");")
 $vData = Binary(Chr(0) & @CRLF); = 000D0A
 $sData = _SQLite_Encode($vData)
 _SQLite_Exec(-1, "INSERT INTO Test VALUES (" & $sData & ");")
-$vData = Binary(Chr(0)); = 00 不过它被解释为数字并返回 0000000000000000
+$vData = Binary(Chr(0)); = 00 but this is interpreted as Number and returns 0000000000000000
 $sData = _SQLite_Encode($vData)
 _SQLite_Exec(-1, "INSERT INTO Test VALUES ( " & $sData & " );")
 _SQLite_Query(-1, "SELECT * FROM Test;", $hQuery)
 While _SQLite_FetchData($hQuery, $aRow, 1) = $SQLITE_OK
-	$sMsg &= Hex($aRow[0]) & @CR
+	$sMsg &= Hex($aRow[0]) & @CRLF
 WEnd
-MsgBox(4096, "Result", $sMsg)
+MsgBox($MB_SYSTEMMODAL, "Result", $sMsg)
 _SQLite_Close()
 _SQLite_Shutdown()

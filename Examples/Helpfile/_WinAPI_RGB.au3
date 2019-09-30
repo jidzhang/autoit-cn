@@ -1,6 +1,6 @@
 #include <WinAPIGdi.au3>
 
-Local $RGB = 0xFF8040
+Local Const $RGB = 0xFF8040
 
 Local $R = _WinAPI_GetRValue($RGB)
 Local $G = _WinAPI_GetGValue($RGB)

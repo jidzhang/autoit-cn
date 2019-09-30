@@ -1,10 +1,34 @@
-﻿Local $x = BitRotate(7, 2)
-; x == 28 因为 111b 左移两次是 1 1100b == 28
+#include <MsgBoxConstants.au3>
 
-Local $y = BitRotate(14, -2)
-; y == 32771 因为 1110b 右移两次在16位下为 1000 0000 0000 0011b == 32771
+Example()
 
-Local $z = BitRotate(14, -2, "D")
-; z == -2147483645 因为 1110b 右移两次在16位下为 1000 0000 0000 0000 0000 0000 0000 0011b == 2147483645
+Func Example()
+	; Note: "b" is the symbol for byte.
 
-MsgBox(4096, "BitRotate", "X=" & $x & @CRLF & @CRLF & "Y=" & $y & @CRLF & @CRLF & "Z=" & $z)
+	; Assign a Local variable the bitwise left-rotate operation of 2.
+	Local $iBitRotate1 = BitRotate(2, 1) ; 2 = 0010b left-rotated once -> 4 = 0100b
+
+	; Note: It is equivalent to do this: BitShift(2, -1)
+
+	; Display the result.
+	MsgBox($MB_SYSTEMMODAL, "", $iBitRotate1)
+
+	; Assign a Local variable the bitwise right-rotate operation of 1.
+	Local $iBitRotate2 = BitRotate(1, -1) ; 1 = 0001b right-rotated once -> 32768 (32 bits) = 1000 0000 0000 0000b
+
+	; Display the result.
+	MsgBox($MB_SYSTEMMODAL, "", $iBitRotate2)
+
+	; Assign a Local variable the bitwise right-rotate operation of 14.
+	Local $iBitRotate3 = BitRotate(14, -2) ; 14 = 1110b right-rotated twice -> 32771 (16 bits) = 1000 0000 0000 0011b
+
+	; Display the result.
+	MsgBox($MB_SYSTEMMODAL, "", $iBitRotate3)
+
+	; Assign a Local variable the bitwise right-rotate operation of 14 on 32 bits.
+	Local $iBitRotate4 = BitRotate(14, -2, "D")
+	; 14 = 1110b right-rotated twice -> -2147483645 (32 bits) = 1000 0000 0000 0000 0000 0000 0000 0011b (the first bit is signed)
+
+	; Display the result.
+	MsgBox($MB_SYSTEMMODAL, "", $iBitRotate4)
+EndFunc   ;==>Example

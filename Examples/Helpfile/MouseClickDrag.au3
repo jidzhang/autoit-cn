@@ -1,3 +1,5 @@
-MouseClickDrag("left", 0, 200, 600, 700) ; 左键点击拖动从 0,200 到 600, 700
+#include <AutoItConstants.au3>
 
+; Left click drag from 0, 200 to 600, 700
 
+MouseClickDrag($MOUSE_CLICK_LEFT, 0, 200, 600, 700)

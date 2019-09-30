@@ -1,6 +1,5 @@
 #include <File.au3>
+#include <MsgBoxConstants.au3>
 
-Local $CountLines = _FileCountLines("error.log")
-MsgBox(4160, "Error log recordcount", "There are " & $CountLines & " in the error.log.")
-Exit
-
+Local $iCountLines = _FileCountLines(@ScriptFullPath) ; Retrieve the number of lines in the current script.
+MsgBox($MB_SYSTEMMODAL, "", "There are " & $iCountLines & " lines in this file.")

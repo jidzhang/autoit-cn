@@ -1,19 +1,19 @@
-#include <GuiRichEdit.au3>
 #include <GUIConstantsEx.au3>
+#include <GuiRichEdit.au3>
 #include <WindowsConstants.au3>
 
-Global $lblMsg, $hRichEdit
+Global $g_idLblMsg, $g_hRichEdit
 
-Main()
+Example()
 
-Func Main()
-	Local $hGui, $iMsg, $btnNext, $iStep = 0
-	$hGui = GUICreate("Example (" & StringTrimRight(@ScriptName, 4) & ")", 320, 350, -1, -1)
-	$hRichEdit = _GUICtrlRichEdit_Create($hGui, "This is a test.", 10, 10, 300, 220, _
+Func Example()
+	Local $hGui, $iMsg, $idBtnNext, $iStep = 0
+	$hGui = GUICreate("Example (" & StringTrimRight(@ScriptName, StringLen(".exe")) & ")", 320, 350, -1, -1)
+	$g_hRichEdit = _GUICtrlRichEdit_Create($hGui, "This is a test.", 10, 10, 300, 220, _
 			BitOR($ES_MULTILINE, $WS_VSCROLL, $ES_AUTOVSCROLL))
-	$lblMsg = GUICtrlCreateLabel("", 10, 235, 300, 60)
-	$btnNext = GUICtrlCreateButton("Next", 270, 310, 40, 30)
-	GUISetState()
+	$g_idLblMsg = GUICtrlCreateLabel("", 10, 235, 300, 60)
+	$idBtnNext = GUICtrlCreateButton("Next", 270, 310, 40, 30)
+	GUISetState(@SW_SHOW)
 
 	Report("Initial state after creation:")
 
@@ -21,32 +21,31 @@ Func Main()
 		$iMsg = GUIGetMsg()
 		Select
 			Case $iMsg = $GUI_EVENT_CLOSE
-				_GUICtrlRichEdit_Destroy($hRichEdit) ; 除非脚本崩溃才需要
-;~ 				GUIDelete() 	; 同样行
+				_GUICtrlRichEdit_Destroy($g_hRichEdit) ; needed unless script crashes
+				; GUIDelete() 	; is OK too
 				Exit
-			Case $iMsg = $btnNext
+			Case $iMsg = $idBtnNext
 				$iStep += 1
 				Switch $iStep
 					Case 1
-						_GUICtrlRichEdit_SetPasswordChar($hRichEdit, "*")
+						_GUICtrlRichEdit_SetPasswordChar($g_hRichEdit, "*")
 						Report("Changed password character. Type some text")
 					Case 2
-						_GUICtrlRichEdit_SetPasswordChar($hRichEdit, "")
+						_GUICtrlRichEdit_SetPasswordChar($g_hRichEdit, "")
 						Report("Changed it back")
-						GUICtrlSetState($btnNext, $GUI_DISABLE)
+						GUICtrlSetState($idBtnNext, $GUI_DISABLE)
 				EndSwitch
 		EndSelect
 	WEnd
-EndFunc   ;==>Main
+EndFunc   ;==>Example
 
 Func Report($sMsg)
-	Local $ch
-	$ch = _GUICtrlRichEdit_GetPasswordChar($hRichEdit)
-	If $ch = "" Then
-		$sMsg &= @CR & "Characters appear as typed"
+	Local $sPasswordChar
+	$sPasswordChar = _GUICtrlRichEdit_GetPasswordChar($g_hRichEdit)
+	If $sPasswordChar = "" Then
+		$sMsg &= @CRLF & "Characters appear as typed"
 	Else
-		$sMsg = $sMsg & @CR & "Typed characters appear as " & $ch & "s"
+		$sMsg = $sMsg & @CRLF & "Typed characters appear as " & $sPasswordChar & "s"
 	EndIf
-	GUICtrlSetData($lblMsg, $sMsg)
-	ControlFocus($hRichEdit, "", "")
+	GUICtrlSetData($g_idLblMsg, $sMsg)
 EndFunc   ;==>Report

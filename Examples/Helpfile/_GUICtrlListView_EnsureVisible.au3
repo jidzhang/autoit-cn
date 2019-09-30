@@ -1,30 +1,29 @@
 #include <GUIConstantsEx.au3>
 #include <GuiListView.au3>
+#include <MsgBoxConstants.au3>
 
-$Debug_LV = False ; 检查传递给 ListView 函数的类名, 设置为True并输出到一个控件的句柄,用于检查它是否工作
+Example()
 
-_Main()
-
-Func _Main()
-	Local $hListView
+Func Example()
+	Local $idListview
 
 	GUICreate("ListView Ensure Visible", 400, 300)
-	$hListView = GUICtrlCreateListView("Items", 2, 2, 394, 268)
-	_GUICtrlListView_SetColumnWidth($hListView, 0, 100)
-	_GUICtrlListView_SetExtendedListViewStyle($hListView, BitOR($LVS_EX_GRIDLINES, $LVS_EX_FULLROWSELECT))
-	GUISetState()
+	$idListview = GUICtrlCreateListView("Items", 2, 2, 394, 268)
+	_GUICtrlListView_SetColumnWidth($idListview, 0, 100)
+	_GUICtrlListView_SetExtendedListViewStyle($idListview, BitOR($LVS_EX_GRIDLINES, $LVS_EX_FULLROWSELECT))
+	GUISetState(@SW_SHOW)
 
-	_GUICtrlListView_BeginUpdate($hListView)
+	_GUICtrlListView_BeginUpdate($idListview)
 	For $i = 1 To 100
-		GUICtrlCreateListViewItem("Item " & $i, $hListView)
+		GUICtrlCreateListViewItem("Item " & $i, $idListview)
 	Next
-	_GUICtrlListView_EndUpdate($hListView)
+	_GUICtrlListView_EndUpdate($idListview)
 
-	MsgBox(4160, "信息", "Making item 50 visible")
-	_GUICtrlListView_EnsureVisible($hListView, 49)
+	MsgBox($MB_SYSTEMMODAL, "Information", "Making item 50 visible")
+	_GUICtrlListView_EnsureVisible($idListview, 49)
 
-	; 循环直到用户退出
+	; Loop until the user exits.
 	Do
 	Until GUIGetMsg() = $GUI_EVENT_CLOSE
 	GUIDelete()
-EndFunc   ;==>_Main
+EndFunc   ;==>Example

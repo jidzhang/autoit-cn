@@ -1,24 +1,38 @@
 #include <GUIConstantsEx.au3>
+#include <StaticConstants.au3>
+#include <WindowsConstants.au3>
 
 Example()
 
 Func Example()
-	Local $msg
+	; Create a GUI with various controls.
+	Local $hGUI = GUICreate("Example", 420, 200, -1, -1, -1, $WS_EX_ACCEPTFILES)
 
-	GUICreate("My GUI state") ; will create a dialog box that when displayed is centered
+	; Create a label and set the state as drop accepted.
+	Local $idLabel = GUICtrlCreateLabel("Drop a file on this label.", 10, 10, 400, 40, $WS_BORDER)
+	GUICtrlSetState($idLabel, $GUI_DROPACCEPTED)
 
-	GUICtrlCreateLabel("my disable label", 10, 20)
-	GUICtrlSetState(-1, $GUI_DISABLE) ; the label is in disable state
+	; Create an input and set the state as drop accepted.
+	Local $idInput = GUICtrlCreateInput("", 10, 60, 400, 22)
+	GUICtrlSetState($idInput, $GUI_DROPACCEPTED)
 
-	GUICtrlCreateButton("my button", 50, 50)
-	GUICtrlSetState(-1, $GUI_FOCUS) ; the focus is on this button
+	Local $idButton_OK = GUICtrlCreateButton("OK", 310, 170, 85, 25)
 
-	GUISetState()
+	; Display the GUI.
+	GUISetState(@SW_SHOW, $hGUI)
 
-	; Run the GUI until the dialog is closed
 	While 1
-		$msg = GUIGetMsg()
+		Switch GUIGetMsg()
+			Case $GUI_EVENT_CLOSE, $idButton_OK
+				ExitLoop
 
-		If $msg = $GUI_EVENT_CLOSE Then ExitLoop
+			Case $GUI_EVENT_DROPPED
+				; If the value of @GUI_DropId is $idLabel, then set the label of the dragged file.
+				If @GUI_DropId = $idLabel Then GUICtrlSetData($idLabel, @GUI_DragFile)
+
+		EndSwitch
 	WEnd
+
+	; Delete the previous GUI and all controls.
+	GUIDelete($hGUI)
 EndFunc   ;==>Example

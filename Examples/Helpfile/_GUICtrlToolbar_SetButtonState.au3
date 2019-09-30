@@ -1,25 +1,24 @@
-#include <GuiToolbar.au3>
 #include <GUIConstantsEx.au3>
+#include <GuiToolbar.au3>
+#include <WinAPIConstants.au3>
 #include <WindowsConstants.au3>
-#include <Constants.au3>
 
-$Debug_TB = False ; 检查传递给函数的类名, 设置为True并输出到一个控件的句柄,用于检查它是否工作
-Global $iMemo
+Global $g_idMemo
 
-_Main()
+Example()
 
-Func _Main()
+Func Example()
 	Local $hGUI, $hToolbar
-	Local Enum $idNew = 1000, $idOpen, $idSave, $idHelp
+	Local Enum $e_idNew = 1000, $e_idOpen, $e_idSave, $idHelp
 
-	; 创建 GUI
+	; Create GUI
 	$hGUI = GUICreate("Toolbar", 400, 300)
 	$hToolbar = _GUICtrlToolbar_Create($hGUI)
-	$iMemo = GUICtrlCreateEdit("", 2, 36, 396, 262, $WS_VSCROLL)
-	GUICtrlSetFont($iMemo, 10, 400, 0, "Courier New")
-	GUISetState()
+	$g_idMemo = GUICtrlCreateEdit("", 2, 36, 396, 262, $WS_VSCROLL)
+	GUICtrlSetFont($g_idMemo, 10, 400, 0, "Courier New")
+	GUISetState(@SW_SHOW)
 
-	; 添加标准系统位图
+	; Add standard system bitmaps
 	Switch _GUICtrlToolbar_GetBitmapFlags($hToolbar)
 		Case 0
 			_GUICtrlToolbar_AddBitmap($hToolbar, 1, -1, $IDB_STD_SMALL_COLOR)
@@ -27,32 +26,31 @@ Func _Main()
 			_GUICtrlToolbar_AddBitmap($hToolbar, 1, -1, $IDB_STD_LARGE_COLOR)
 	EndSwitch
 
-	; 添加按钮
-	_GUICtrlToolbar_AddButton($hToolbar, $idNew, $STD_FILENEW)
-	_GUICtrlToolbar_AddButton($hToolbar, $idOpen, $STD_FILEOPEN)
-	_GUICtrlToolbar_AddButton($hToolbar, $idSave, $STD_FILESAVE)
+	; Add buttons
+	_GUICtrlToolbar_AddButton($hToolbar, $e_idNew, $STD_FILENEW)
+	_GUICtrlToolbar_AddButton($hToolbar, $e_idOpen, $STD_FILEOPEN)
+	_GUICtrlToolbar_AddButton($hToolbar, $e_idSave, $STD_FILESAVE)
 	_GUICtrlToolbar_AddButtonSep($hToolbar)
 	_GUICtrlToolbar_AddButton($hToolbar, $idHelp, $STD_HELP)
 
 	; Show Save button state
-	MemoWrite("Save button state: " & _GUICtrlToolbar_GetButtonState($hToolbar, $idSave))
+	MemoWrite("Save button state: " & _GUICtrlToolbar_GetButtonState($hToolbar, $e_idSave))
 
 	Sleep(1000)
 
 	; Set Save button state
-	Local $bool = _GUICtrlToolbar_SetButtonState($hToolbar, $idSave, BitOR($TBSTATE_ENABLED, $TBSTATE_PRESSED))
-	MemoWrite("Set button state: " & $bool)
+	Local $bBalloon = _GUICtrlToolbar_SetButtonState($hToolbar, $e_idSave, BitOR($TBSTATE_ENABLED, $TBSTATE_PRESSED))
+	MemoWrite("Set button state: " & $bBalloon)
 
 	; Show Save button state
-	MemoWrite("Save button state: " & _GUICtrlToolbar_GetButtonState($hToolbar, $idSave))
+	MemoWrite("Save button state: " & _GUICtrlToolbar_GetButtonState($hToolbar, $e_idSave))
 
-	; 循环直到用户退出
+	; Loop until the user exits.
 	Do
 	Until GUIGetMsg() = $GUI_EVENT_CLOSE
+EndFunc   ;==>Example
 
-EndFunc   ;==>_Main
-
-; 写入消息到 memo
+; Write message to memo
 Func MemoWrite($sMessage = "")
-	GUICtrlSetData($iMemo, $sMessage & @CRLF, 1)
+	GUICtrlSetData($g_idMemo, $sMessage & @CRLF, 1)
 EndFunc   ;==>MemoWrite

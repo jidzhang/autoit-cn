@@ -1,67 +1,65 @@
 #include <GUIConstantsEx.au3>
-#include <GuiTreeView.au3>
 #include <GuiImageList.au3>
+#include <GuiTreeView.au3>
+#include <MsgBoxConstants.au3>
 #include <WindowsConstants.au3>
 
-$Debug_TV = False ; 检查传递给函数的类名, 设置为True并输出到一个控件的句柄,用于检查它是否工作
+Global $g_hImage, $g_hStateImage
 
-Global $hImage, $hStateImage
+Example()
 
-_Main()
-
-Func _Main()
-
-	Local $hItem[4], $hChildItem[120], $iYItem = 0, $iRand, $hTreeView
+Func Example()
+	Local $ahItem[4], $aidChildItem[120], $iYItem = 0, $iRand, $idTreeView
 	Local $iStyle = BitOR($TVS_EDITLABELS, $TVS_HASBUTTONS, $TVS_HASLINES, $TVS_LINESATROOT, $TVS_DISABLEDRAGDROP, $TVS_SHOWSELALWAYS)
 
 	GUICreate("TreeView Level", 400, 300)
 
-	$hTreeView = GUICtrlCreateTreeView(2, 2, 396, 268, $iStyle, $WS_EX_CLIENTEDGE)
-	GUISetState()
+	$idTreeView = GUICtrlCreateTreeView(2, 2, 396, 268, $iStyle, $WS_EX_CLIENTEDGE)
+	GUISetState(@SW_SHOW)
 
 	_CreateNormalImageList()
-	_GUICtrlTreeView_SetNormalImageList($hTreeView, $hImage)
+	_GUICtrlTreeView_SetNormalImageList($idTreeView, $g_hImage)
 
 	_CreateStateImageList()
-	_GUICtrlTreeView_SetStateImageList($hTreeView, $hStateImage)
+	_GUICtrlTreeView_SetStateImageList($idTreeView, $g_hStateImage)
 
-	_GUICtrlTreeView_BeginUpdate($hTreeView)
+	_GUICtrlTreeView_BeginUpdate($idTreeView)
 	For $x = 0 To 3
-		$hItem[$x] = _GUICtrlTreeView_Add($hTreeView, 0, StringFormat("[%02d] New Item", $x), 4, 5)
-		_GUICtrlTreeView_SetStateImageIndex($hTreeView, $hItem[$x], 1)
+		$ahItem[$x] = _GUICtrlTreeView_Add($idTreeView, 0, StringFormat("[%02d] New Item", $x), 4, 5)
+		_GUICtrlTreeView_SetStateImageIndex($idTreeView, $ahItem[$x], 1)
 		For $y = 0 To 4
-			$hChildItem[$iYItem] = _GUICtrlTreeView_AddChild($hTreeView, $hItem[$x], StringFormat("[%02d] New Child", $iYItem), 0, 3)
-			_GUICtrlTreeView_SetStateImageIndex($hTreeView, $hChildItem[$iYItem], 1)
+			$aidChildItem[$iYItem] = _GUICtrlTreeView_AddChild($idTreeView, $ahItem[$x], StringFormat("[%02d] New Child", $iYItem), 0, 3)
+			_GUICtrlTreeView_SetStateImageIndex($idTreeView, $aidChildItem[$iYItem], 1)
 			For $z = 1 To 5
-				$hChildItem[$iYItem + $z] = _GUICtrlTreeView_AddChild($hTreeView, $hChildItem[$iYItem], StringFormat("[%02d] New Child", $iYItem + $z), 0, 3)
+				$aidChildItem[$iYItem + $z] = _GUICtrlTreeView_AddChild($idTreeView, $aidChildItem[$iYItem], StringFormat("[%02d] New Child", $iYItem + $z), 0, 3)
 			Next
 			$iYItem += 6
 		Next
 	Next
-	_GUICtrlTreeView_EndUpdate($hTreeView)
+	_GUICtrlTreeView_EndUpdate($idTreeView)
 
 	$iRand = Random(0, 99, 1)
-	MsgBox(4160, "信息", StringFormat("Index %d Levl: %d", $iRand, _GUICtrlTreeView_Level($hTreeView, $hChildItem[$iRand])))
-	_GUICtrlTreeView_SelectItem($hTreeView, $hChildItem[$iRand])
+	MsgBox($MB_SYSTEMMODAL, "Information", StringFormat("Index %d Levl: %d", $iRand, _GUICtrlTreeView_Level($idTreeView, $aidChildItem[$iRand])))
+	_GUICtrlTreeView_SelectItem($idTreeView, $aidChildItem[$iRand])
 
-	; 循环直到用户退出
+	; Loop until the user exits.
 	Do
 	Until GUIGetMsg() = $GUI_EVENT_CLOSE
 	GUIDelete()
-EndFunc   ;==>_Main
+EndFunc   ;==>Example
 
 Func _CreateNormalImageList()
-	$hImage = _GUIImageList_Create(16, 16, 5, 3)
-	_GUIImageList_AddIcon($hImage, "shell32.dll", 110)
-	_GUIImageList_AddIcon($hImage, "shell32.dll", 131)
-	_GUIImageList_AddIcon($hImage, "shell32.dll", 165)
-	_GUIImageList_AddIcon($hImage, "shell32.dll", 168)
-	_GUIImageList_AddIcon($hImage, "shell32.dll", 137)
-	_GUIImageList_AddIcon($hImage, "shell32.dll", 146)
+	$g_hImage = _GUIImageList_Create(16, 16, 5, 3)
+	_GUIImageList_AddIcon($g_hImage, "shell32.dll", 110)
+	_GUIImageList_AddIcon($g_hImage, "shell32.dll", 131)
+	_GUIImageList_AddIcon($g_hImage, "shell32.dll", 165)
+	_GUIImageList_AddIcon($g_hImage, "shell32.dll", 168)
+	_GUIImageList_AddIcon($g_hImage, "shell32.dll", 137)
+	_GUIImageList_AddIcon($g_hImage, "shell32.dll", 146)
 EndFunc   ;==>_CreateNormalImageList
 
 Func _CreateStateImageList()
-	$hStateImage = _GUIImageList_Create(16, 16, 5, 3)
-	_GUIImageList_AddIcon($hStateImage, "shell32.dll", 3)
-	_GUIImageList_AddIcon($hStateImage, "shell32.dll", 4)
+	$g_hStateImage = _GUIImageList_Create(16, 16, 5, 3)
+	_GUIImageList_AddIcon($g_hStateImage, "shell32.dll", 3)
+	_GUIImageList_AddIcon($g_hStateImage, "shell32.dll", 4)
 EndFunc   ;==>_CreateStateImageList

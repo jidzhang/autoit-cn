@@ -1,40 +1,45 @@
 #include <GUIConstantsEx.au3>
 #include <GUIToolTip.au3>
 #include <MsgBoxConstants.au3>
-Global $hToolTip, $aPos, $hAdd
+#include <WinAPIIcons.au3>
+
+Global $g_hToolTip, $g_aPos, $g_hAdd
+
 ; Press g to display the current tooltip information.
 HotKeySet("g", "GetInfo")
+
 Example()
 
 Func Example()
-	Local $hGUI = GUICreate(StringTrimRight(@ScriptName, 4), 350, 200)
+	Local $hGUI = GUICreate(StringTrimRight(@ScriptName, StringLen(".exe")), 350, 200)
 
-	Local $iAdd = GUICtrlCreateButton("Button ToolTip", 30, 32, 130, 28)
-	$hAdd = GUICtrlGetHandle($iAdd)
+	Local $idAdd = GUICtrlCreateButton("Button ToolTip", 30, 32, 130, 28)
+	$g_hAdd = GUICtrlGetHandle($idAdd)
 
-	$hToolTip = _GUIToolTip_Create($hGUI, $TTS_CLOSE + $TTS_BALLOON)
+	$g_hToolTip = _GUIToolTip_Create($hGUI, $TTS_CLOSE + $TTS_BALLOON)
 
-	_GUIToolTip_AddTool($hToolTip, 0, "X: " &@TAB & " Y: " & @TAB, $hAdd)
+	_GUIToolTip_AddTool($g_hToolTip, 0, "X: " & @TAB & " Y: " & @TAB, $g_hAdd)
 
 	Local $hIcon = _WinAPI_LoadShell32Icon(15)
 
-	_GUIToolTip_SetTitle($hToolTip, 'Title', $hIcon)
-	GUISetState()
-	$aPos = MouseGetPos()
-	_GUIToolTip_TrackPosition($hToolTip, $aPos[0] + 10, $aPos[1] + 20)
-	_GUIToolTip_TrackActivate($hToolTip, True, 0, $hAdd)
-	_GUIToolTip_UpdateTipText($hToolTip, 0, $hAdd, "X: " & $aPos[0] & " Y: " & $aPos[1])
+	_GUIToolTip_SetTitle($g_hToolTip, 'Title', $hIcon)
+	GUISetState(@SW_SHOW)
+	$g_aPos = MouseGetPos()
+	_GUIToolTip_TrackPosition($g_hToolTip, $g_aPos[0] + 10, $g_aPos[1] + 20)
+	_GUIToolTip_TrackActivate($g_hToolTip, True, 0, $g_hAdd)
+	_GUIToolTip_UpdateTipText($g_hToolTip, 0, $g_hAdd, "X: " & $g_aPos[0] & " Y: " & $g_aPos[1])
 	While 1
 		Sleep(10)
-		$aPos = MouseGetPos()
-		_GUIToolTip_TrackPosition($hToolTip, $aPos[0] + 10, $aPos[1] + 20)
-		_GUIToolTip_UpdateTipText($hToolTip, 0, $hAdd, "X: " & $aPos[0] & " Y: " & $aPos[1])
+		$g_aPos = MouseGetPos()
+		_GUIToolTip_TrackPosition($g_hToolTip, $g_aPos[0] + 10, $g_aPos[1] + 20)
+		_GUIToolTip_UpdateTipText($g_hToolTip, 0, $g_hAdd, "X: " & $g_aPos[0] & " Y: " & $g_aPos[1])
 		If GUIGetMsg() = $GUI_EVENT_CLOSE Then ExitLoop
 	WEnd
-	_GUIToolTip_Destroy($hToolTip)
+	_GUIToolTip_Destroy($g_hToolTip)
 EndFunc   ;==>Example
+
 Func GetInfo()
-	$aTool = _GUIToolTip_HitTest($hToolTip, $hAdd, $aPos[0], $aPos[1])
+	Local $aTool = _GUIToolTip_HitTest($g_hToolTip, $g_hAdd, $g_aPos[0], $g_aPos[1])
 	MsgBox($MB_SYSTEMMODAL, "Tooltip info", "Flags: " & @TAB & _GUIToolTip_BitsToTTF($aTool[0]) & @CRLF & _
 			"HWnd: " & @TAB & $aTool[1] & @CRLF & _
 			"ID: " & @TAB & $aTool[2] & @CRLF & _

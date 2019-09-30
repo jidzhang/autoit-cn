@@ -1,9 +1,14 @@
-﻿; 修改当前目录中所有 *.au3 文件的属性为(只读+系统)属性. 
-If Not FileSetAttrib("*.au3", "+RS") Then
-    MsgBox(4096,"错误", "属性设置问题.")
-EndIf
+#include <FileConstants.au3>
+#include <MsgBoxConstants.au3>
 
-; 修改 C:\ 目录及其所有子目录中的所有 *.bmp 文件的属性为(可写+存档)属性.
-If Not FileSetAttrib("C:\*.bmp", "-R+A", 1) Then
-    MsgBox(4096,"错误", "属性设置问题.")
+If MsgBox(BitOR($MB_YESNO, $MB_SYSTEMMODAL), "", "Note: This is an example and shouldn't be run under normal circumstances. " & @CRLF & @CRLF & "Do you wish to run the example?") = $IDYES Then
+	; Mark all .au3 files in current directory as read-only and system.
+	If Not FileSetAttrib(@ScriptDir & "\*.au3", "+RS") Then
+		MsgBox($MB_SYSTEMMODAL, "Error", "Problem setting attributes.")
+	EndIf
+
+	; Mark all .bmp files in @HomeDrive and sub-directories writable and archived.
+	If Not FileSetAttrib(@HomeDrive & "\*.bmp", "-R+A", $FT_RECURSIVE) Then
+		MsgBox($MB_SYSTEMMODAL, "Error", "Problem setting attributes.")
+	EndIf
 EndIf

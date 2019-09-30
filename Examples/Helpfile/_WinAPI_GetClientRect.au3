@@ -1,14 +1,15 @@
-#include <WinAPI.au3>
+#include <MsgBoxConstants.au3>
+#include <WinAPISysWin.au3>
 
-_Main()
+Example()
 
-Func _Main()
-	Local $hwnd, $tRect
-	$hwnd = GUICreate("test")
-	$tRect = _WinAPI_GetClientRect($hwnd)
-	MsgBox(4096, "Rect", _
-			"Left..: " & DllStructGetData($tRect, "Left") & @LF & _
-			"Right.: " & DllStructGetData($tRect, "Right") & @LF & _
-			"Top...: " & DllStructGetData($tRect, "Top") & @LF & _
-			"Bottom: " & DllStructGetData($tRect, "Bottom"))
-EndFunc   ;==>_Main
+Func Example()
+	Local $hWnd, $tRECT
+	$hWnd = GUICreate("test")
+	$tRECT = _WinAPI_GetClientRect($hWnd)
+	MsgBox($MB_SYSTEMMODAL, "Rect", _
+			"Left..: " & DllStructGetData($tRECT, "Left") & @CRLF & _
+			"Right.: " & DllStructGetData($tRECT, "Right") & @CRLF & _
+			"Top...: " & DllStructGetData($tRECT, "Top") & @CRLF & _
+			"Bottom: " & DllStructGetData($tRECT, "Bottom"))
+EndFunc   ;==>Example

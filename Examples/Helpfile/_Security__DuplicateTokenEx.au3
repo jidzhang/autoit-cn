@@ -1,7 +1,9 @@
+#include <MsgBoxConstants.au3>
 #include <ProcessConstants.au3>
-#include <SecurityConstants.au3>
 #include <Security.au3>
-#include <WinAPI.au3>
+#include <SecurityConstants.au3>
+#include <WinAPIHObj.au3>
+#include <WinAPIProc.au3>
 
 Local $hProcess = _WinAPI_OpenProcess($PROCESS_ALL_ACCESS, 0, ProcessExists("explorer.exe"))
 ; If successful
@@ -19,10 +21,9 @@ If $hProcess Then
 		; What's created is a primary token (!)
 		; ... Do whatever with that token here ...
 
-		MsgBox(262144, "DuplicateTokenEx", "$hTokDuplicate = " & $hTokDuplicate)
+		MsgBox($MB_SYSTEMMODAL, "DuplicateTokenEx", "$hTokDuplicate = " & $hTokDuplicate)
 
 		; Close that token when done
 		_WinAPI_CloseHandle($hTokDuplicate)
 	EndIf
 EndIf
-

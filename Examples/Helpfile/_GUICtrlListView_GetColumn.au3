@@ -1,35 +1,34 @@
 #include <GUIConstantsEx.au3>
 #include <GuiListView.au3>
+#include <MsgBoxConstants.au3>
 
-$Debug_LV = False ; 检查传递给 ListView 函数的类名, 设置为True并输出到一个控件的句柄,用于检查它是否工作
+Example()
 
-_Main()
-
-Func _Main()
-	Local $aInfo, $hListView
+Func Example()
+	Local $aInfo, $idListview
 
 	GUICreate("ListView Get Column", 400, 300)
-	$hListView = GUICtrlCreateListView("col1|col2|col3", 2, 2, 394, 268)
-	_GUICtrlListView_SetExtendedListViewStyle($hListView, BitOR($LVS_EX_FULLROWSELECT, $LVS_EX_CHECKBOXES))
-	_GUICtrlListView_SetColumnWidth($hListView, 0, 100)
-	GUISetState()
+	$idListview = GUICtrlCreateListView("col1|col2|col3", 2, 2, 394, 268)
+	_GUICtrlListView_SetExtendedListViewStyle($idListview, BitOR($LVS_EX_FULLROWSELECT, $LVS_EX_CHECKBOXES))
+	_GUICtrlListView_SetColumnWidth($idListview, 0, 100)
+	GUISetState(@SW_SHOW)
 
-	GUICtrlCreateListViewItem("index 0|data1|more1", $hListView)
-	GUICtrlCreateListViewItem("index 1|data2|more2", $hListView)
-	GUICtrlCreateListViewItem("index 2|data3|more3", $hListView)
-	GUICtrlCreateListViewItem("index 3|data4|more4", $hListView)
-	GUICtrlCreateListViewItem("index 4|data5|more5", $hListView)
+	GUICtrlCreateListViewItem("index 0|data1|more1", $idListview)
+	GUICtrlCreateListViewItem("index 1|data2|more2", $idListview)
+	GUICtrlCreateListViewItem("index 2|data3|more3", $idListview)
+	GUICtrlCreateListViewItem("index 3|data4|more4", $idListview)
+	GUICtrlCreateListViewItem("index 4|data5|more5", $idListview)
 
 	; Change column
-	$aInfo = _GUICtrlListView_GetColumn($hListView, 0)
-	MsgBox(4160, "信息", "Column 1 Width: " & $aInfo[4])
-	_GUICtrlListView_SetColumn($hListView, 0, "New Column 1", 150)
-	$aInfo = _GUICtrlListView_GetColumn($hListView, 0)
-	MsgBox(4160, "信息", "Column 1 Width: " & $aInfo[4])
+	$aInfo = _GUICtrlListView_GetColumn($idListview, 0)
+	MsgBox($MB_SYSTEMMODAL, "Information", "Column 1 Width: " & $aInfo[4])
+	_GUICtrlListView_SetColumn($idListview, 0, "New Column 1", 150)
+	$aInfo = _GUICtrlListView_GetColumn($idListview, 0)
+	MsgBox($MB_SYSTEMMODAL, "Information", "Column 1 Width: " & $aInfo[4])
 
-	; 循环直到用户退出
+	; Loop until the user exits.
 	Do
 	Until GUIGetMsg() = $GUI_EVENT_CLOSE
 
 	GUIDelete()
-EndFunc   ;==>_Main
+EndFunc   ;==>Example

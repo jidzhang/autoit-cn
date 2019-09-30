@@ -1,5 +1,5 @@
-#include <GUIConstantsEx.au3>
 #include <GDIPlus.au3>
+#include <GUIConstantsEx.au3>
 
 Example()
 
@@ -8,7 +8,7 @@ Func Example()
 
 	; Create GUI
 	$hGUI = GUICreate("GDI+", 600, 600)
-	GUISetState()
+	GUISetState(@SW_SHOW)
 
 	_GDIPlus_Startup()
 	$hGraphic = _GDIPlus_GraphicsCreateFromHWND($hGUI) ;Create a graphics object from a window handle
@@ -27,7 +27,6 @@ Func Example()
 	$hMatrix_Rotate = _GDIPlus_MatrixCreate()
 	_GDIPlus_MatrixRotate($hMatrix_Rotate, 40, True)
 
-
 	For $i = 1 To 32
 		$hMatrix_Clone = _GDIPlus_MatrixClone($hMatrix_Scale)
 		_GDIPlus_MatrixMultiply($hMatrix_Clone, $hMatrix_Rotate, 1)
@@ -39,9 +38,7 @@ Func Example()
 		_GDIPlus_GraphicsDrawPath($hGraphic, $hPath, $hPen)
 	Next
 
-
-
-	; Loop until user exits
+	; Loop until the user exits.
 	Do
 	Until GUIGetMsg() = $GUI_EVENT_CLOSE
 

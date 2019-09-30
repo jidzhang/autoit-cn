@@ -1,32 +1,32 @@
-#include <GuiMenu.au3>
 #include <GUIConstantsEx.au3>
+#include <GuiMenu.au3>
 
-_Main()
+Example()
 
-Func _Main()
+Func Example()
 	Local $hGUI, $hFile, $hEdit, $hHelp, $hMain
-	Local Enum $idNew = 1000, $idOpen, $idSave, $idExit, $idCut, $idCopy, $idPaste, $idAbout
+	Local Enum $e_idNew = 1000, $e_idOpen, $e_idSave, $e_idExit, $e_idCut, $e_idCopy, $e_idPaste, $e_idAbout
 
-	; 创建 GUI
+	; Create GUI
 	$hGUI = GUICreate("Menu", 400, 300)
 
 	; Create File menu
 	$hFile = _GUICtrlMenu_CreateMenu()
-	InsertItem($hFile, 0, "&New", $idNew)
-	InsertItem($hFile, 1, "&Open", $idOpen)
-	InsertItem($hFile, 2, "&Save", $idSave)
+	InsertItem($hFile, 0, "&New", $e_idNew)
+	InsertItem($hFile, 1, "&Open", $e_idOpen)
+	InsertItem($hFile, 2, "&Save", $e_idSave)
 	InsertItem($hFile, 3, "", 0)
-	InsertItem($hFile, 4, "E&xit", $idExit)
+	InsertItem($hFile, 4, "E&xit", $e_idExit)
 
 	; Create Edit menu
 	$hEdit = _GUICtrlMenu_CreateMenu()
-	InsertItem($hEdit, 0, "&Cut", $idCut)
-	InsertItem($hEdit, 1, "C&opy", $idCopy)
-	InsertItem($hEdit, 2, "&Paste", $idPaste)
+	InsertItem($hEdit, 0, "&Cut", $e_idCut)
+	InsertItem($hEdit, 1, "C&opy", $e_idCopy)
+	InsertItem($hEdit, 2, "&Paste", $e_idPaste)
 
 	; Create Help menu
 	$hHelp = _GUICtrlMenu_CreateMenu()
-	InsertItem($hHelp, 0, "&About", $idAbout)
+	InsertItem($hHelp, 0, "&About", $e_idAbout)
 
 	; Create Main menu
 	$hMain = _GUICtrlMenu_CreateMenu()
@@ -36,12 +36,12 @@ Func _Main()
 
 	; Set window menu
 	_GUICtrlMenu_SetMenu($hGUI, $hMain)
-	GUISetState()
+	GUISetState(@SW_SHOW)
 
-	; 循环直到用户退出
+	; Loop until the user exits.
 	Do
 	Until GUIGetMsg() = $GUI_EVENT_CLOSE
-EndFunc   ;==>_Main
+EndFunc   ;==>Example
 
 ; Insert menu item (the hard way)
 Func InsertItem($hMenu, $iIndex, $sText, $iCmdID = 0, $hSubMenu = 0)

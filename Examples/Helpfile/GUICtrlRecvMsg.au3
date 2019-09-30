@@ -1,26 +1,52 @@
-#include <GUIConstantsEx.au3>
 #include <EditConstants.au3>
+#include <GUIConstantsEx.au3>
+#include <MsgBoxConstants.au3>
 
-GUICreate("My GUI")  ; 创建一个居中显示的 GUI 窗口
+Example()
 
-Local $nEdit = GUICtrlCreateEdit("line 0", 10, 10)
-GUICtrlCreateButton("Ok", 20, 200, 50)
+Func Example()
+	; Create a GUI with an edit control.
+	Local $hGUI = GUICreate("Example")
+	Local $idEdit = GUICtrlCreateEdit("Line 0" & @CRLF, 0, 0, 400, 350)
+	Local $idButton_Ok = GUICtrlCreateButton("OK", 310, 370, 85, 25)
 
-GUISetState()
+	; Set data of the edit control.
+	For $i = 1 To 25
+		GUICtrlSetData($idEdit, "Line " & $i & @CRLF, 1)
+	Next
 
-For $n = 1 To 5
-	GUICtrlSetData($nEdit, @CRLF & "line " & $n)
-Next
+	; Set focus to the edit control.
+	GUICtrlSetState($idEdit, $GUI_FOCUS)
 
+	; Display the GUI.
+	GUISetState(@SW_SHOW, $hGUI)
 
-; 运行界面,直到窗口被关闭
-Do
-	Local $msg = GUIGetMsg()
-	If $msg > 0 Then
-		Local $a = GUICtrlRecvMsg($nEdit, $EM_GETSEL)
-		GUICtrlSetState($nEdit, $GUI_FOCUS) ; set focus back on edit control
+	; Initialize the variable $aCtrlRecvMsg for storing the value returned by GUICtrlRecvMsg.
+	Local $aCtrlRecvMsg = 0
 
-		; will display the wParam and lParam values return by the control
-		MsgBox(4096, "Current selection", StringFormat("start=%d end=%d", $a[0], $a[1]))
-	EndIf
-Until $msg = $GUI_EVENT_CLOSE
+	; Loop until the user exits.
+	While 1
+		Switch GUIGetMsg()
+			Case $GUI_EVENT_CLOSE
+				ExitLoop
+
+			Case $idButton_Ok
+				; Send the message EM_GETSEL, to retrieve the current selection of the edit control.
+				$aCtrlRecvMsg = GUICtrlRecvMsg($idEdit, $EM_GETSEL)
+
+				; Set focus to the edit control.
+				GUICtrlSetState($idEdit, $GUI_FOCUS)
+
+				; If GUICtrlRecvMsg returned the value of 0, then an error occurred otherwise display the contents of the array.
+				If $aCtrlRecvMsg = 0 Then
+					MsgBox($MB_SYSTEMMODAL, "", "An error occurred. The value returned was - " & $aCtrlRecvMsg)
+				Else
+					MsgBox($MB_SYSTEMMODAL, "", "Start: " & $aCtrlRecvMsg[0] & " End: " & $aCtrlRecvMsg[1])
+				EndIf
+
+		EndSwitch
+	WEnd
+
+	; Delete the previous GUI and all controls.
+	GUIDelete($hGUI)
+EndFunc   ;==>Example

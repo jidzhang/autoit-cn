@@ -1,52 +1,54 @@
 #include <GDIPlus.au3>
 #include <ScreenCapture.au3>
-#include <WinAPI.au3>
+#include <WinAPIHObj.au3>
 
-_Main()
+Example()
 
-Func _Main()
-	Local $hBitmap1, $hBitmap2, $hImage1, $hImage2, $hGraphic, $width, $height
+Func Example()
+	Local $hBitmap1, $hBitmap2, $hImage1, $hImage2, $hGraphic, $iWidth, $iHeight
 
-	; 初始化 GDI+ 库
+	; Initialize GDI+ library
 	_GDIPlus_Startup()
 
-	; 捕获整个屏幕
+	; Capture full screen
 	$hBitmap1 = _ScreenCapture_Capture("")
 	$hImage1 = _GDIPlus_BitmapCreateFromHBITMAP($hBitmap1)
 
-	; 捕获屏幕区域
+	; Capture screen region
 	$hBitmap2 = _ScreenCapture_Capture("", 0, 0, 400, 300)
 	$hImage2 = _GDIPlus_BitmapCreateFromHBITMAP($hBitmap2)
 
-	$width = _GDIPlus_ImageGetWidth($hImage2)
-	$height = _GDIPlus_ImageGetHeight($hImage2)
+	$iWidth = _GDIPlus_ImageGetWidth($hImage2)
+	$iHeight = _GDIPlus_ImageGetHeight($hImage2)
 
-	; 在一幅图像上描绘另一幅图像
+	; Draw one image in another
 	$hGraphic = _GDIPlus_ImageGetGraphicsContext($hImage1)
 
-	;DrawInsert($hGraphic, $hImage2, $iX, $iY, $nAngle,    $iWidth,    $iHeight, $iARGB = 0xFF000000, $nWidth = 1)
-	DrawInsert($hGraphic, $hImage2, 350, 100, 0, $width + 2, $height + 2, 0xFFFF8000, 2)
+	;DrawInsert($hGraphic, $hImage2, $iX, $iY, $fAngle,    $iWidth,    $iHeight, $iARGB = 0xFF000000, $iPenWidth = 1)
+	DrawInsert($hGraphic, $hImage2, 350, 100, 0, $iWidth + 2, $iHeight + 2, 0xFFFF8000, 2)
 	DrawInsert($hGraphic, $hImage2, 340, 50, 15, 200, 150, 0xFFFF8000, 4)
-	DrawInsert($hGraphic, $hImage2, 310, 30, 35, $width + 4, $height + 4, 0xFFFF00FF, 4)
-	DrawInsert($hGraphic, $hImage2, 320, 790, -35, $width, $height)
+	DrawInsert($hGraphic, $hImage2, 310, 30, 35, $iWidth + 4, $iHeight + 4, 0xFFFF00FF, 4)
+	DrawInsert($hGraphic, $hImage2, 320, 790, -35, $iWidth, $iHeight)
 
-	; 保存由此产生的图像
+	; Save resultant image
 	_GDIPlus_ImageSaveToFile($hImage1, @MyDocumentsDir & "\GDIPlus_Image.jpg")
 
-	; 清理资源
+	; Clean up resources
 	_GDIPlus_ImageDispose($hImage1)
 	_GDIPlus_ImageDispose($hImage2)
 	_WinAPI_DeleteObject($hBitmap1)
 	_WinAPI_DeleteObject($hBitmap2)
-	; 关闭 GDI+ 库
+
+	; Shut down GDI+ library
 	_GDIPlus_Shutdown()
 
-EndFunc   ;==>_Main
+	ShellExecute(@MyDocumentsDir & "\GDIPlus_Image.jpg")
+EndFunc   ;==>Example
 
 ; #FUNCTION# ==================================================================================================
-;Name...........: DrawInsert
+; Name...........: DrawInsert
 ; Description ...: Draw one image in another
-; Syntax.........: DrawInsert($hGraphic, $hImage2, $iX, $iY, $nAngle, $iWidth, $iHeight, $iARGB = 0xFF000000, $nWidth = 1)
+; Syntax.........: DrawInsert($hGraphic, $hImage2, $iX, $iY, $fAngle, $iWidth, $iHeight, $iARGB = 0xFF000000, $iPenWidth = 1)
 ; inserts Graphics $hImage2 into $hGraphic
 ; Parameters ....: $hGraphics   - Handle to a Graphics object
 ;                  $hImage      - Handle to an Image object to be inserted
@@ -54,29 +56,29 @@ EndFunc   ;==>_Main
 ;                  $iY          - The Y coordinate of the upper left corner of the inserted image
 ;                  $iWidth      - The width of the rectangle Border around insert
 ;                  $iHeight     - The height of the rectangle Border around insert
-;                  $iARGB       - Alpha, Red, Green and Blue components of pen color - Border colour
-;                  $nWidth      - The width of the pen measured in the units specified in the $iUnit parameter - Border Width
+;                  $iARGB       - Alpha, Red, Green and Blue components of pen color - Border color
+;                  $iPenWidth      - The width of the pen measured in the units specified in the $iUnit parameter - Border Width
 
 ; Return values .: Success      - True
 ;                  Failure      - False
-;==================================================================================================
-Func DrawInsert($hGraphic, $hImage2, $iX, $iY, $nAngle, $iWidth, $iHeight, $iARGB = 0xFF000000, $nWidth = 1)
+; ==================================================================================================
+Func DrawInsert($hGraphic, $hImage2, $iX, $iY, $fAngle, $iWidth, $iHeight, $iARGB = 0xFF000000, $iPenWidth = 1)
 	Local $hMatrix, $hPen2
 
-	;旋转矩阵
+	;Rotation Matrix
 	$hMatrix = _GDIPlus_MatrixCreate()
-	_GDIPlus_MatrixRotate($hMatrix, $nAngle, "False")
+	_GDIPlus_MatrixRotate($hMatrix, $fAngle, "False")
 	_GDIPlus_GraphicsSetTransform($hGraphic, $hMatrix)
 
 	_GDIPlus_GraphicsDrawImage($hGraphic, $hImage2, $iX, $iY)
 
 	;get pen + color
-	$hPen2 = _GDIPlus_PenCreate($iARGB, $nWidth)
+	$hPen2 = _GDIPlus_PenCreate($iARGB, $iPenWidth)
 
-	; 在插入的图像周围描绘边框
+	; Draw a frame around the inserted image
 	_GDIPlus_GraphicsDrawRect($hGraphic, $iX, $iY, $iWidth, $iHeight, $hPen2)
 
-	; 清理资源
+	; Clean up resources
 	_GDIPlus_MatrixDispose($hMatrix)
 	_GDIPlus_PenDispose($hPen2)
 	Return 1

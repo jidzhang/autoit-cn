@@ -1,5 +1,6 @@
+#include <AutoItConstants.au3>
+#include <MsgBoxConstants.au3>
 #include <Array.au3> ; Required for _ArrayDisplay only.
-#include <Constants.au3>
 
 ; Recursively display a list of files in a directory.
 Example()
@@ -35,10 +36,10 @@ Func Example()
 		EndIf
 	WEnd
 
-	; Use StringSplit to split the output of StdoutRead to an array. All carriage returns (@CR) are stripped and @LF (line feed) is used as the delimiter.
-	Local $aArray = StringSplit(StringTrimRight(StringStripCR($sOutput), StringLen(@LF)), @LF)
+	; Use StringSplit to split the output of StdoutRead to an array. All carriage returns (@CRLF) are stripped and @CRLF (line feed) is used as the delimiter.
+	Local $aArray = StringSplit(StringTrimRight(StringStripCR($sOutput), StringLen(@CRLF)), @CRLF)
 	If @error Then
-		MsgBox(4096, "", "It appears there was an error trying to find all the files in the current script directory.")
+		MsgBox($MB_SYSTEMMODAL, "", "It appears there was an error trying to find all the files in the current script directory.")
 	Else
 		; Display the results.
 		_ArrayDisplay($aArray)

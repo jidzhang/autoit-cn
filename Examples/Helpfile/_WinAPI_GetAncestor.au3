@@ -1,13 +1,14 @@
-#include <WinAPI.au3>
+#include <MsgBoxConstants.au3>
+#include <WinAPISysWin.au3>
 #include <WindowsConstants.au3>
 
-_Main()
+Example()
 
-Func _Main()
-	Local $hwnd, $hparent
-	$hwnd = GUICreate("test")
-	$hparent = _WinAPI_GetAncestor($hwnd, $GA_PARENT)
-	MsgBox(4096, "Parent", "Get Ancestor of " & $hwnd & ": " & $hparent)
-	MsgBox(4096, "Root", "Get Ancestor of " & $hparent & ": " & _WinAPI_GetAncestor($hwnd, $GA_ROOT))
-	MsgBox(4096, "Root Owner", "Get Ancestor of " & $hparent & ": " & _WinAPI_GetAncestor($hwnd, $GA_ROOTOWNER))
-EndFunc   ;==>_Main
+Func Example()
+	Local $hWnd, $hParent
+	$hWnd = GUICreate("test")
+	$hParent = _WinAPI_GetAncestor($hWnd, $GA_PARENT)
+	MsgBox($MB_SYSTEMMODAL, "Parent", "Get Ancestor of " & $hWnd & ": " & $hParent)
+	MsgBox($MB_SYSTEMMODAL, "Root", "Get Ancestor of " & $hParent & ": " & _WinAPI_GetAncestor($hWnd, $GA_ROOT))
+	MsgBox($MB_SYSTEMMODAL, "Root Owner", "Get Ancestor of " & $hParent & ": " & _WinAPI_GetAncestor($hWnd, $GA_ROOTOWNER))
+EndFunc   ;==>Example

@@ -1,14 +1,15 @@
-#include <WinAPI.au3>
+#include <MsgBoxConstants.au3>
+#include <WinAPIRes.au3>
 
-_Main()
+Example()
 
-Func _Main()
-	Local $cursor, $text
-	$cursor = _WinAPI_GetCursorInfo()
-	$text = "Was the operation sucessful? " & $cursor[0] & @LF
-	$text &= "Is the cursor showing? " & $cursor[1] & @LF & @LF
-	$text &= "Cursor Handle: " & $cursor[2] & @LF
-	$text &= "X Coordinate: " & $cursor[3] & @LF
-	$text &= "Y Coordinate: " & $cursor[4]
-	MsgBox(4096, "_WinApi_GetCursorInfo Example", $text)
-EndFunc   ;==>_Main
+Func Example()
+	Local $aCursor, $sText
+	$aCursor = _WinAPI_GetCursorInfo()
+	$sText = "Was the operation sucessful? " & $aCursor[0] & @CRLF
+	$sText &= "Is the cursor showing? " & $aCursor[1] & @CRLF & @CRLF
+	$sText &= "Cursor Handle: " & $aCursor[2] & @CRLF
+	$sText &= "X Coordinate: " & $aCursor[3] & @CRLF
+	$sText &= "Y Coordinate: " & $aCursor[4]
+	MsgBox($MB_SYSTEMMODAL, "_WinAPI_GetCursorInfo Example", $sText)
+EndFunc   ;==>Example

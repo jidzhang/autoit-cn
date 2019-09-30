@@ -1,9 +1,11 @@
-#include <WinAPIReg.au3>
 #include <APIRegConstants.au3>
-#include <WinAPIDiag.au3>
 #include <MsgBoxConstants.au3>
+#include <WinAPIError.au3>
+#include <WinAPIHObj.au3>
+#include <WinAPIProc.au3>
+#include <WinAPIReg.au3>
 
-Global $aPrivileges[2] = [$SE_BACKUP_NAME, $SE_RESTORE_NAME]
+Local $aPrivileges[2] = [$SE_BACKUP_NAME, $SE_RESTORE_NAME]
 
 ; Enable "SeBackupPrivilege" and "SeRestorePrivilege" privileges to save and restore registry hive
 Local $hToken = _WinAPI_OpenProcessToken(BitOR($TOKEN_ADJUST_PRIVILEGES, $TOKEN_QUERY))

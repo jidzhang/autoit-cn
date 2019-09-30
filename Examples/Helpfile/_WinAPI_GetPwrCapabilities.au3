@@ -1,7 +1,7 @@
-#include <WinAPISys.au3>
 #include <Array.au3>
+#include <WinAPISys.au3>
 
-Local $Info[25][2] = _
+Local $aInfo[25][2] = _
 		[['Power button', 0], _
 		['Sleep button', 0], _
 		['Lid switch', 0], _
@@ -27,14 +27,14 @@ Local $Info[25][2] = _
 		['Lid lowest wake state', 0], _
 		['RTC lowest wake state', 0], _
 		['Minimum device wake state', 0]]
-Local $Data = _WinAPI_GetPwrCapabilities()
+Local $aData = _WinAPI_GetPwrCapabilities()
 
-If @error Then
-	For $i = 0 To UBound($Info) - 1
-		$Info[$i][1] = $Data[$i]
+If Not @error Then
+	For $i = 0 To UBound($aInfo) - 1
+		$aInfo[$i][1] = $aData[$i]
 	Next
 Else
 	Exit
 EndIf
 
-_ArrayDisplay($Info, '_WinAPI_GetPwrCapabilities')
+_ArrayDisplay($aInfo, '_WinAPI_GetPwrCapabilities')

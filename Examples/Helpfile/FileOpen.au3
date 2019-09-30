@@ -1,31 +1,35 @@
-;================================================
-;示例 1 官方默认例子
-;================================================
-Local $file = FileOpen("test.txt", 0)
+#include <FileConstants.au3>
+#include <MsgBoxConstants.au3>
+#include <WinAPIFiles.au3>
 
-; 检查打开的文件是否可读
-If $file = -1 Then
-	MsgBox(4096, "错误", "不能打开文件.")
-	Exit
-EndIf
+Example()
 
-FileClose($file)
+Func Example()
+	; Create a constant variable in Local scope of the filepath that will be read/written to.
+	Local Const $sFilePath = _WinAPI_GetTempFileName(@TempDir)
 
-;================================================
-;示例 2 官方默认例子
-;================================================
-; 自动创建目录结构的另外一个例子.
-$file = FileOpen(@ScriptDir & "\test\test.txt", 10) ; 等同 2 + 8 (清除内容 + 目录不存在就创建)
+	; Create a temporary file to read data from.
+	If Not FileWrite($sFilePath, "This is an example of using FileOpen.") Then
+		MsgBox($MB_SYSTEMMODAL, "", "An error occurred whilst writing the temporary file.")
+		Return False
+	EndIf
 
-If $file = -1 Then
-	MsgBox(4096, "错误", "不能打开文件.")
-	Exit
-EndIf
+	; Open the file for reading and store the handle to a variable.
+	Local $hFileOpen = FileOpen($sFilePath, $FO_READ)
+	If $hFileOpen = -1 Then
+		MsgBox($MB_SYSTEMMODAL, "", "An error occurred when reading the file.")
+		Return False
+	EndIf
 
-FileClose($file)
+	; Read the contents of the file using the handle returned by FileOpen.
+	Local $sFileRead = FileRead($hFileOpen)
 
-;================================================
-;示例 3 ACN例子
-;================================================
-;脚本目录创建一个名字叫file的文件夹，并且在文件夹内创建一个LOG.TXT文本.
-FileClose(FileOpen("file\LOG.TXT",10))
+	; Close the handle returned by FileOpen.
+	FileClose($hFileOpen)
+
+	; Display the contents of the file.
+	MsgBox($MB_SYSTEMMODAL, "", "Contents of the file:" & @CRLF & $sFileRead)
+
+	; Delete the temporary file.
+	FileDelete($sFilePath)
+EndFunc   ;==>Example

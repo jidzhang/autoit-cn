@@ -1,13 +1,16 @@
-; Register Example1 and Example2 to be called when AutoIt starts.
-#OnAutoItStartRegister "Example1"
-#OnAutoItStartRegister "Example2"
+#include <MsgBoxConstants.au3>
+
+; Register Example() and SomeFunc() to be called when AutoIt starts.
+
+#OnAutoItStartRegister "Example"
+#OnAutoItStartRegister "SomeFunc"
 
 Sleep(1000)
 
-Func Example1()
-	MsgBox(4096, "", '首先调用了 Example1() 函数')
-EndFunc   ;==>Example1
+Func Example()
+	MsgBox($MB_SYSTEMMODAL, "", "Function 'Example' is called first.")
+EndFunc   ;==>Example
 
-Func Example2()
-	MsgBox(4096, "", '然后调用了 Example2() 函数')
-EndFunc   ;==>Example2
+Func SomeFunc()
+	MsgBox($MB_SYSTEMMODAL, "", "Function 'SomeFunc' is called second.")
+EndFunc   ;==>SomeFunc

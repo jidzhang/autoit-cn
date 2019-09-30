@@ -1,13 +1,16 @@
-Local $msg
+#include <MsgBoxConstants.au3>
+
+Local $sMsg = ""
+
 Switch @HOUR
 	Case 6 To 11
-		$msg = "Good Morning"
+		$sMsg = "Good Morning"
 	Case 12 To 17
-		$msg = "Good Afternoon"
+		$sMsg = "Good Afternoon"
 	Case 18 To 21
-		$msg = "Good Evening"
+		$sMsg = "Good Evening"
 	Case Else
-		$msg = "What are you still doing up?"
+		$sMsg = "What are you still doing up?"
 EndSwitch
 
-MsgBox(4096, Default, $msg)
+MsgBox($MB_SYSTEMMODAL, "", $sMsg)

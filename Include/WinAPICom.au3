@@ -5,7 +5,7 @@
 
 ; #INDEX# =======================================================================================================================
 ; Title .........: WinAPI Extended UDF Library for AutoIt3
-; AutoIt Version : 3.3.13.12
+; AutoIt Version : 3.3.14.5
 ; Description ...: Additional variables, constants and functions for the WinAPICom.au3
 ; Author(s) .....: Yashied, jpm
 ; ===============================================================================================================================
@@ -161,7 +161,7 @@ Func _WinAPI_ProgIDFromCLSID($sCLSID)
 	Local $tGUID = DllStructCreate($__tagWinAPICom_GUID)
 	Local $aReturn = DllCall('ole32.dll', 'uint', 'CLSIDFromString', 'wstr', $sCLSID, 'struct*', $tGUID)
 	If @error Or $aReturn[0] Then Return SetError(@error + 20, @extended, '')
-	$aReturn = DllCall('ole32.dll', 'uint', 'ProgIDFromCLSID', 'ptr', DllStructGetPtr($tGUID), 'ptr*', 0)
+	$aReturn = DllCall('ole32.dll', 'uint', 'ProgIDFromCLSID', 'struct*', $tGUID, 'ptr*', 0)
 	If @error Then Return SetError(@error, @extended, '')
 	If $aReturn[0] Then Return SetError(10, $aReturn[0], '')
 

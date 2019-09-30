@@ -1,21 +1,20 @@
-#include <WinAPISys.au3>
 #include <APISysConstants.au3>
 #include <Array.au3>
+#include <WinAPISys.au3>
 
-Local $tText, $pText, $Data = _WinAPI_EnumRawInputDevices()
+Local $tText, $aData = _WinAPI_EnumRawInputDevices()
 
-If IsArray($Data) Then
-	ReDim $Data[$Data[0][0] + 1][3]
+If IsArray($aData) Then
+	ReDim $aData[$aData[0][0] + 1][3]
 	$tText = DllStructCreate('wchar[256]')
-	$pText = DllStructGetPtr($tText)
-	For $i = 1 To $Data[0][0]
-		If _WinAPI_GetRawInputDeviceInfo($Data[$i][0], $pText, 256, $RIDI_DEVICENAME) Then
-			$Data[$i][2] = DllStructGetData($tText, 1)
+	For $i = 1 To $aData[0][0]
+		If _WinAPI_GetRawInputDeviceInfo($aData[$i][0], $tText, 256, $RIDI_DEVICENAME) Then
+			$aData[$i][2] = DllStructGetData($tText, 1)
 		Else
-			$Data[$i][2] = ''
+			$aData[$i][2] = ''
 		EndIf
 	Next
 
 EndIf
 
-_ArrayDisplay($Data, '_WinAPI_EnumRawInputDevices')
+_ArrayDisplay($aData, '_WinAPI_EnumRawInputDevices')

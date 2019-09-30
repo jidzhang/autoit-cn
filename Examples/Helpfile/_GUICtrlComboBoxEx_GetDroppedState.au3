@@ -1,22 +1,20 @@
 #include <GuiComboBoxEx.au3>
-#include <GuiImageList.au3>
 #include <GUIConstantsEx.au3>
+#include <GuiImageList.au3>
 
-$Debug_CB = False ; 检查传递给 ComboBox/ComboBoxEx 函数的类名, 设置为真并使用另一控件的句柄可以看出它是否有效
+Global $g_idMemo
 
-Global $iMemo
+Example()
 
-_Main()
-
-Func _Main()
+Func Example()
 	Local $hGUI, $hImage, $hCombo
 
-	; 创建 GUI
+	; Create GUI
 	$hGUI = GUICreate("ComboBoxEx Get Dropped State", 400, 300)
 	$hCombo = _GUICtrlComboBoxEx_Create($hGUI, "", 2, 2, 394, 100)
-	$iMemo = GUICtrlCreateEdit("", 2, 32, 396, 266, 0)
-	GUICtrlSetFont($iMemo, 9, 400, 0, "Courier New")
-	GUISetState()
+	$g_idMemo = GUICtrlCreateEdit("", 2, 32, 396, 266, 0)
+	GUICtrlSetFont($g_idMemo, 9, 400, 0, "Courier New")
+	GUISetState(@SW_SHOW)
 
 	$hImage = _GUIImageList_Create(16, 16, 5, 3)
 	_GUIImageList_AddIcon($hImage, @SystemDir & "\shell32.dll", 110)
@@ -34,31 +32,31 @@ Func _Main()
 		_GUICtrlComboBoxEx_AddString($hCombo, StringFormat("%03d : Random string", Random(1, 100, 1)), $x, $x)
 	Next
 
-	; 获取下拉状态
+	; get dropped state
 	MemoWrite("Dropped Down State......: " & _GUICtrlComboBoxEx_GetDroppedState($hCombo))
 
 	Sleep(500)
 
-	; 显示下拉框
+	; show drop down
 	_GUICtrlComboBoxEx_ShowDropDown($hCombo, True)
 
 	Sleep(500)
 
-	; 获取下拉状态
+	; get dropped state
 	MemoWrite("Dropped Down State......: " & _GUICtrlComboBoxEx_GetDroppedState($hCombo))
 
 	Sleep(500)
 
-	; 隐藏下拉框
+	; hide drop down
 	_GUICtrlComboBoxEx_ShowDropDown($hCombo)
 
-	; 循环直到用户退出
+	; Loop until the user exits.
 	Do
 	Until GUIGetMsg() = $GUI_EVENT_CLOSE
 	GUIDelete()
-EndFunc   ;==>_Main
+EndFunc   ;==>Example
 
-; 写入一行到 memo 控件
+; Write a line to the memo control
 Func MemoWrite($sMessage)
-	GUICtrlSetData($iMemo, $sMessage & @CRLF, 1)
+	GUICtrlSetData($g_idMemo, $sMessage & @CRLF, 1)
 EndFunc   ;==>MemoWrite

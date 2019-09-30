@@ -2,52 +2,52 @@
 
 _DebugSetup("_DebugReportVar examples", True)
 
-Local $Array2D[5][2]
-For $r = 0 To UBound($Array2D, 1) - 1
-	For $c = 0 To UBound($Array2D, 2) - 1
-		$Array2D[$r][$c] = $r & "," & $c
+Local $aArray2D[5][2]
+For $r = 0 To UBound($aArray2D, 1) - 1
+	For $c = 0 To UBound($aArray2D, 2) - 1
+		$aArray2D[$r][$c] = $r & "," & $c
 	Next
 Next
-_DebugReportVar("Array2D", $Array2D)
+_DebugReportVar("Array2D", $aArray2D)
 
-Local $Array[7] = [1, 1.1, "string", Binary(0x010203), Ptr(-1), False, Default]
-_DebugReportVar("Array", $Array)
+Local $aArray[7] = [1, 1.1, "string", Binary(0x010203), Ptr(-1), False, Default]
+_DebugReportVar("Array", $aArray)
 
-Local $Array3D[5][2][10]
-_DebugReportVar("Array3D", $Array3D)
+Local $aArray3D[5][2][10]
+_DebugReportVar("Array3D", $aArray3D)
 
-Local $int = -1
-_DebugReportVar("int", $int)
+Local $iInt = -1
+_DebugReportVar("int", $iInt)
 
-Local $int64 = 2 ^ 63
-_DebugReportVar("int64", $int64)
+Local $iInt64 = 2 ^ 63
+_DebugReportVar("int64", $iInt64)
 
-Local $bool = True
-_DebugReportVar("bool", $bool)
+Local $bBool = True
+_DebugReportVar("bool", $bBool)
 
-Local $float = 1.1
-_DebugReportVar("float", $float)
+Local $fFloat = 1.1
+_DebugReportVar("float", $fFloat)
 
-Local $keyword = Default
-_DebugReportVar("keyword", $keyword)
+Local $vKeyword = Default
+_DebugReportVar("keyword", $vKeyword)
 
-Local $string = "stringstring"
-_DebugReportVar("string", $string)
+Local $sString = "stringstring"
+_DebugReportVar("string", $sString)
 
-Local $binary = Binary("0x0102030405060708")
-_DebugReportVar("binary", $binary)
+Local $dBinary = Binary("0x0102030405060708")
+_DebugReportVar("binary", $dBinary)
 
-$binary = Binary("abcdefghij")
-_DebugReportVar("binary", $binary)
+$dBinary = Binary("abcdefghij")
+_DebugReportVar("binary", $dBinary)
 
-Local $ptr = Ptr(0)
-_DebugReportVar("ptr", $ptr)
+Local $pPtr = Ptr(0)
+_DebugReportVar("ptr", $pPtr)
 
-Local $hwnd = WinActive("", "")
-_DebugReportVar("hwnd", $hwnd)
+Local $hWnd = WinActive("", "")
+_DebugReportVar("hwnd", $hWnd)
 
-Local $dllstruct = DllStructCreate("int")
-_DebugReportVar("dllstruct", $dllstruct)
+Local $tDllstruct = DllStructCreate("int")
+_DebugReportVar("dllstruct", $tDllstruct)
 
-Local $obj = ObjCreate("shell.application")
-_DebugReportVar("obj", $obj)
+Local $oObj = ObjCreate("shell.application")
+_DebugReportVar("obj", $oObj)

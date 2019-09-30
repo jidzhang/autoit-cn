@@ -4,10 +4,10 @@
 Example()
 
 Func Example()
-	Local $hGUI = GUICreate(StringTrimRight(@ScriptName, 4), 350, 200)
+	Local $hGUI = GUICreate(StringTrimRight(@ScriptName, StringLen(".exe")), 350, 200)
 
-	Local $iAdd = GUICtrlCreateButton("Button", 30, 32, 130, 28)
-	Local $hAdd = GUICtrlGetHandle($iAdd)
+	Local $idAdd = GUICtrlCreateButton("Button", 30, 32, 130, 28)
+	Local $hAdd = GUICtrlGetHandle($idAdd)
 
 	; Create a tooltip control
 	Local $hToolTip = _GUIToolTip_Create($hGUI)
@@ -18,12 +18,12 @@ Func Example()
 	; Set the title of the tooltip
 	_GUIToolTip_SetTitle($hToolTip, 'This is the ToolTip title', $TTI_INFO)
 
-	GUISetState()
+	GUISetState(@SW_SHOW)
 
 	While 1
 		If GUIGetMsg() = $GUI_EVENT_CLOSE Then ExitLoop
 	WEnd
 	; Destroy the tooltip control
 	_GUIToolTip_Destroy($hToolTip)
-    GUIDelete($hGUI)
+	GUIDelete($hGUI)
 EndFunc   ;==>Example

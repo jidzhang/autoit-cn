@@ -1,3 +1,5 @@
+#include <MsgBoxConstants.au3>
+
 Example()
 
 Func Example()
@@ -11,7 +13,7 @@ Func Example()
 	Local $iPID = WinGetProcess($hWnd)
 
 	; Display the PID of the window.
-	MsgBox(4096, "", "The PID is: " & $iPID)
+	MsgBox($MB_SYSTEMMODAL, "", "The PID is: " & $iPID)
 
 	; Close the Notepad window using the handle returned by WinWait.
 	WinClose($hWnd)

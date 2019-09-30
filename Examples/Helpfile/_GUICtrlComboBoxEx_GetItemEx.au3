@@ -1,22 +1,20 @@
 #include <GuiComboBoxEx.au3>
-#include <GuiImageList.au3>
 #include <GUIConstantsEx.au3>
+#include <GuiImageList.au3>
 
-$Debug_CB = False ;检查传递给 ComboBox/ComboBoxEx 函数的类名, 设置为True并输出到一个控件的句柄,用于检查它是否工作
+Global $g_idMemo
 
-Global $iMemo
+Example()
 
-_Main()
-
-Func _Main()
+Func Example()
 	Local $hGUI, $hImage, $tItem, $sText, $iLen, $hCombo
 
-	; 创建 GUI
+	; Create GUI
 	$hGUI = GUICreate("ComboBoxEx Get ItemEx", 400, 300)
 	$hCombo = _GUICtrlComboBoxEx_Create($hGUI, "", 2, 2, 394, 100)
-	$iMemo = GUICtrlCreateEdit("", 2, 32, 396, 266, 0)
-	GUICtrlSetFont($iMemo, 9, 400, 0, "Courier New")
-	GUISetState()
+	$g_idMemo = GUICtrlCreateEdit("", 2, 32, 396, 266, 0)
+	GUICtrlSetFont($g_idMemo, 9, 400, 0, "Courier New")
+	GUISetState(@SW_SHOW)
 
 	$hImage = _GUIImageList_Create(16, 16, 5, 3)
 	_GUIImageList_AddIcon($hImage, @SystemDir & "\shell32.dll", 110)
@@ -49,16 +47,16 @@ Func _Main()
 	MemoWrite("Item Text : " & $sText)
 	MemoWrite("Item Len ..........................: " & $iLen)
 	MemoWrite("# image widths to indent ..........: " & DllStructGetData($tItem, "Indent"))
-	MemoWrite("Zero based item image index .......: " & DllStructGetData($tItem, "Image"))
-	MemoWrite("Zero based item state image index .: " & DllStructGetData($tItem, "SelectedImage"))
-	MemoWrite("Zero based item image overlay index: " & DllStructGetData($tItem, "OverlayImage"))
+	MemoWrite("0-based item image index .......: " & DllStructGetData($tItem, "Image"))
+	MemoWrite("0-based item state image index .: " & DllStructGetData($tItem, "SelectedImage"))
+	MemoWrite("0-based item image overlay index: " & DllStructGetData($tItem, "OverlayImage"))
 	MemoWrite("Item application defined value ....: " & DllStructGetData($tItem, "Param"))
 
 	Do
 	Until GUIGetMsg() = $GUI_EVENT_CLOSE
-EndFunc   ;==>_Main
+EndFunc   ;==>Example
 
-; 写入一行到 memo 控件
+; Write a line to the memo control
 Func MemoWrite($sMessage)
-	GUICtrlSetData($iMemo, $sMessage & @CRLF, 1)
+	GUICtrlSetData($g_idMemo, $sMessage & @CRLF, 1)
 EndFunc   ;==>MemoWrite

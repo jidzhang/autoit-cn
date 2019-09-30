@@ -1,37 +1,35 @@
 #include <GUIConstantsEx.au3>
 #include <GuiTreeView.au3>
+#include <MsgBoxConstants.au3>
 #include <WindowsConstants.au3>
 
-$Debug_TV = False ; 检查传递给函数的类名, 设置为True并输出到一个控件的句柄,用于检查它是否工作
+Example()
 
-_Main()
-
-Func _Main()
-
-	Local $hItem[10], $iYIndex = 0, $iRand, $hTreeView
+Func Example()
+	Local $aidItem[10], $iYIndex = 0, $iRand, $idTreeView
 	Local $iStyle = BitOR($TVS_EDITLABELS, $TVS_HASBUTTONS, $TVS_HASLINES, $TVS_LINESATROOT, $TVS_DISABLEDRAGDROP, $TVS_SHOWSELALWAYS, $TVS_CHECKBOXES)
 
 	GUICreate("TreeView Get Last Child", 400, 300)
 
-	$hTreeView = GUICtrlCreateTreeView(2, 2, 396, 268, $iStyle, $WS_EX_CLIENTEDGE)
-	GUISetState()
+	$idTreeView = GUICtrlCreateTreeView(2, 2, 396, 268, $iStyle, $WS_EX_CLIENTEDGE)
+	GUISetState(@SW_SHOW)
 
-	_GUICtrlTreeView_BeginUpdate($hTreeView)
+	_GUICtrlTreeView_BeginUpdate($idTreeView)
 	For $x = 0 To 9
-		$hItem[$x] = GUICtrlCreateTreeViewItem(StringFormat("[%02d] New Item", $x), $hTreeView)
+		$aidItem[$x] = GUICtrlCreateTreeViewItem(StringFormat("[%02d] New Item", $x), $idTreeView)
 		For $y = $iYIndex To $iYIndex + 2
-			GUICtrlCreateTreeViewItem(StringFormat("[%02d] New Child Item", $y), $hItem[$x])
+			GUICtrlCreateTreeViewItem(StringFormat("[%02d] New Child Item", $y), $aidItem[$x])
 		Next
 		$iYIndex += 3
 	Next
-	_GUICtrlTreeView_EndUpdate($hTreeView)
+	_GUICtrlTreeView_EndUpdate($idTreeView)
 
 	$iRand = Random(0, 9, 1)
-	MsgBox(4160, "信息", StringFormat("Last Child for Item %d: %s", $iRand, _GUICtrlTreeView_GetLastChild($hTreeView, $hItem[$iRand])))
-	_GUICtrlTreeView_SelectItem($hTreeView, _GUICtrlTreeView_GetLastChild($hTreeView, $hItem[$iRand]))
+	MsgBox($MB_SYSTEMMODAL, "Information", StringFormat("Last Child for Item %d: %s", $iRand, _GUICtrlTreeView_GetLastChild($idTreeView, $aidItem[$iRand])))
+	_GUICtrlTreeView_SelectItem($idTreeView, _GUICtrlTreeView_GetLastChild($idTreeView, $aidItem[$iRand]))
 
-	; 循环直到用户退出
+	; Loop until the user exits.
 	Do
 	Until GUIGetMsg() = $GUI_EVENT_CLOSE
 	GUIDelete()
-EndFunc   ;==>_Main
+EndFunc   ;==>Example

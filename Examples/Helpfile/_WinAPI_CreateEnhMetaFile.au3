@@ -1,7 +1,9 @@
-#include <WinAPIGdi.au3>
 #include <MsgBoxConstants.au3>
+#include <WinAPIGdi.au3>
+#include <WinAPIHObj.au3>
+#include <WinAPIMisc.au3>
 
-Global Const $sEmf = @TempDir & '\Test.emf'
+Local Const $sEmf = @TempDir & '\Test.emf'
 
 If FileExists($sEmf) Then
 	If MsgBox(BitOR($MB_YESNOCANCEL, $MB_ICONQUESTION, $MB_DEFBUTTON2, $MB_SYSTEMMODAL), 'Create Enhanced Metafile', $sEmf & ' is already exists.' & @CRLF & @CRLF & 'Do you want to replace it?') <> 6 Then
@@ -23,7 +25,7 @@ Local $hPen = _WinAPI_SelectObject($hDC, _WinAPI_GetStockObject($NULL_PEN))
 _WinAPI_SetDCBrushColor($hDC, 0xAA0000)
 _WinAPI_Rectangle($hDC, $tRECT)
 _WinAPI_SetDCBrushColor($hDC, 0xFFFFFF)
-Global $aPoint[10][2] = [[0, 90],[95, 90],[125, 0],[154, 90],[250, 90],[172, 147],[202, 238],[125, 181],[47, 238],[77, 147]]
+Local $aPoint[10][2] = [[0, 90], [95, 90], [125, 0], [154, 90], [250, 90], [172, 147], [202, 238], [125, 181], [47, 238], [77, 147]]
 Local $hRgn = _WinAPI_CreatePolygonRgn($aPoint)
 _WinAPI_OffsetRgn($hRgn, 0, 6)
 _WinAPI_PaintRgn($hDC, $hRgn)

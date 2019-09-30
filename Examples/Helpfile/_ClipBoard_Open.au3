@@ -1,39 +1,38 @@
-#include <WindowsConstants.au3>
-#include <GUIConstantsEx.au3>
 #include <Clipboard.au3>
-#include <WinAPI.au3>
+#include <GUIConstantsEx.au3>
+#include <WinAPIError.au3>
+#include <WindowsConstants.au3>
 
-Global $iMemo
+Global $g_idMemo
 
-_Main()
+Example()
 
-Func _Main()
+Func Example()
 	Local $hGUI
 
-	; 创建 GUI
+	; Create GUI
 	$hGUI = GUICreate("Clipboard", 600, 400)
-	$iMemo = GUICtrlCreateEdit("", 2, 2, 596, 396, $WS_VSCROLL)
-	GUICtrlSetFont($iMemo, 9, 400, 0, "Courier New")
-	GUISetState()
+	$g_idMemo = GUICtrlCreateEdit("", 2, 2, 596, 396, $WS_VSCROLL)
+	GUICtrlSetFont($g_idMemo, 9, 400, 0, "Courier New")
+	GUISetState(@SW_SHOW)
 
-	; 打开剪贴板
+	; Open the clipboard
 	If _ClipBoard_Open($hGUI) Then
 
 		ShowData($hGUI)
 
-	; 关闭剪贴板
+		; Close the clipboard
 		_ClipBoard_Close()
 	Else
-		_WinAPI_ShowError("_ClipBoard_Open 失败")
+		_WinAPI_ShowError("_ClipBoard_Open failed")
 	EndIf
 
-	; 循环直到用户退出
+	; Loop until the user exits.
 	Do
 	Until GUIGetMsg() = $GUI_EVENT_CLOSE
+EndFunc   ;==>Example
 
-EndFunc   ;==>_Main
-
-; 显示剪贴板统计信息
+; Show clipboard statistics
 Func ShowData($hGUI)
 	MemoWrite("GUI handle ............: " & $hGUI)
 	MemoWrite("Clipboard owner .......: " & _ClipBoard_GetOwner())
@@ -42,7 +41,7 @@ Func ShowData($hGUI)
 	MemoWrite()
 EndFunc   ;==>ShowData
 
-; 写入消息到 memo
+; Write message to memo
 Func MemoWrite($sMessage = "")
-	GUICtrlSetData($iMemo, $sMessage & @CRLF, 1)
+	GUICtrlSetData($g_idMemo, $sMessage & @CRLF, 1)
 EndFunc   ;==>MemoWrite

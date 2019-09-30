@@ -1,31 +1,31 @@
-#include <GuiToolbar.au3>
 #include <GUIConstantsEx.au3>
+#include <GuiToolbar.au3>
 
-$Debug_TB = False ; 检查传递给函数的类名, 设置为True并输出到一个控件的句柄,用于检查它是否工作
+Example()
 
-_Main()
-
-Func _Main()
+Func Example()
 	Local $hGUI, $hToolbar
-	Local Enum $idRed = 1000, $idGreen, $idBlue
+	Local Enum $e_idRed = 1000, $e_idGreen, $e_idBlue
+	Local $sWow64 = ""
+	If @AutoItX64 Then $sWow64 = "\Wow6432Node"
+	Local $sPath = RegRead("HKEY_LOCAL_MACHINE\SOFTWARE" & $sWow64 & "\AutoIt v3\AutoIt", "InstallDir") & "\Examples\GUI\Advanced\Images"
 
-	; 创建 GUI
+	; Create GUI
 	$hGUI = GUICreate("Toolbar", 400, 300)
 	$hToolbar = _GUICtrlToolbar_Create($hGUI)
-	GUISetState()
+	GUISetState(@SW_SHOW)
 
 	; Add bitmaps
-	_GUICtrlToolbar_LoadBitmap($hToolbar, @ScriptDir & "\images\Red.bmp")
-	_GUICtrlToolbar_LoadBitmap($hToolbar, @ScriptDir & "\Images\Green.bmp")
-	_GUICtrlToolbar_LoadBitmap($hToolbar, @ScriptDir & "\Images\Blue.bmp")
+	_GUICtrlToolbar_LoadBitmap($hToolbar, $sPath & "\red.bmp")
+	_GUICtrlToolbar_LoadBitmap($hToolbar, $sPath & "\green.bmp")
+	_GUICtrlToolbar_LoadBitmap($hToolbar, $sPath & "\blue.bmp")
 
-	; 添加按钮
-	_GUICtrlToolbar_AddButton($hToolbar, $idRed, 0)
-	_GUICtrlToolbar_AddButton($hToolbar, $idGreen, 1)
-	_GUICtrlToolbar_AddButton($hToolbar, $idBlue, 2)
+	; Add buttons
+	_GUICtrlToolbar_AddButton($hToolbar, $e_idRed, 0)
+	_GUICtrlToolbar_AddButton($hToolbar, $e_idGreen, 1)
+	_GUICtrlToolbar_AddButton($hToolbar, $e_idBlue, 2)
 
-	; 循环直到用户退出
+	; Loop until the user exits.
 	Do
 	Until GUIGetMsg() = $GUI_EVENT_CLOSE
-
-EndFunc   ;==>_Main
+EndFunc   ;==>Example

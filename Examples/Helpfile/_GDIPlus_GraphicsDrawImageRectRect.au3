@@ -1,47 +1,37 @@
-#include <GUIConstantsEx.au3>
 #include <GDIPlus.au3>
+#include <GUIConstantsEx.au3>
 #include <ScreenCapture.au3>
+#include <WinAPIHObj.au3>
 
-_Main()
+Example()
 
-Func _Main()
-	Local $hGUI1, $hGUI2, $hImage, $hGraphic1, $hGraphic2
+Func Example()
+	_GDIPlus_Startup() ;initialize GDI+
+	Local Const $iWidth = 600, $iHeight = 600
 
-	; 捕获屏幕的左上角区域
-	_ScreenCapture_Capture(@MyDocumentsDir & "\GDIPlus_Image.jpg", 0, 0, 400, 300)
+	Local $hGUI = GUICreate("GDI+ Example (" & @ScriptName & ")", $iWidth, $iHeight) ;create a test GUI
+	GUISetState(@SW_SHOW)
 
-	; 为原始的图像创建 GUI
-	$hGUI1 = GUICreate("Original", 400, 300, 0, 0)
-	GUISetState()
+	Local $hGraphics = _GDIPlus_GraphicsCreateFromHWND($hGUI) ;create a graphics object from a window handle
+	Local $pIA = _GDIPlus_ImageAttributesCreate() ;create an ImageAttribute object
 
-	; 为放大的图像创建 GUI
-	$hGUI2 = GUICreate("Zoomed", 400, 300, 0, 400)
-	GUISetState()
+	;create the color matrix used to adjust the colors of the image
+	Local $tColorMatrix = _GDIPlus_ColorMatrixCreateTranslate(-1, -1, 0) ;use translation color matrix to create a blue scaled image
 
-	; 初始化 GDI+ 库并加载图像
-	_GDIPlus_Startup()
-	$hImage = _GDIPlus_ImageLoadFromFile(@MyDocumentsDir & "\GDIPlus_Image.jpg")
+	_GDIPlus_ImageAttributesSetColorMatrix($pIA, 0, True, $tColorMatrix) ;adjust the ImageAttribute color-key color matrix
 
-	; 描绘原始图像
-	$hGraphic1 = _GDIPlus_GraphicsCreateFromHWND($hGUI1)
-	_GDIPlus_GraphicsDrawImage($hGraphic1, $hImage, 0, 0)
+	Local $hHBmp = _ScreenCapture_Capture("", 0, 0, $iWidth, $iHeight) ;create a GDI bitmap by capturing an area on desktop
+	Local $hBitmap = _GDIPlus_BitmapCreateFromHBITMAP($hHBmp) ;convert GDI to GDI+ bitmap
+	_WinAPI_DeleteObject($hHBmp) ;release GDI bitmap resource because not needed anymore
+	_GDIPlus_GraphicsDrawImageRectRect($hGraphics, $hBitmap, 0, 0, $iWidth, $iHeight, 0, 0, $iWidth, $iHeight, $pIA) ;draw the bitmap while applying the color adjustment
 
-	; 描绘放大两倍后的图像
-	$hGraphic2 = _GDIPlus_GraphicsCreateFromHWND($hGUI2)
-	_GDIPlus_GraphicsDrawImageRectRect($hGraphic2, $hImage, 0, 0, 200, 200, 0, 0, 400, 300)
-
-	; 释放资源
-	_GDIPlus_GraphicsDispose($hGraphic1)
-	_GDIPlus_GraphicsDispose($hGraphic2)
-	_GDIPlus_ImageDispose($hImage)
-	_GDIPlus_Shutdown()
-
-	; 清理屏幕遗留文件
-	FileDelete(@MyDocumentsDir & "\GDIPlus_Image.jpg")
-
-	; 循环直到用户退出
 	Do
 	Until GUIGetMsg() = $GUI_EVENT_CLOSE
 
-
-EndFunc   ;==>_Main
+	;cleanup GDI+ resources
+	_GDIPlus_ImageAttributesDispose($pIA)
+	_GDIPlus_GraphicsDispose($hGraphics)
+	_GDIPlus_BitmapDispose($hBitmap)
+	_GDIPlus_Shutdown()
+	GUIDelete($hGUI)
+EndFunc   ;==>Example

@@ -1,21 +1,19 @@
 ; using standard UDF
 
-#include <GUIConstantsEx.au3>
 #include <GuiAVI.au3>
-
-Global $hAVI
+#include <GUIConstantsEx.au3>
 
 _Example_External()
 
 Func _Example_External()
-	Local $hGUI
+	Local $hGUI, $hAVI
 
 	; Create GUI
 	$hGUI = GUICreate("(External) AVI Seek", 300, 100)
 	$hAVI = _GUICtrlAVI_Create($hGUI, @SystemDir & "\Shell32.dll", 160, 10, 10)
-	GUISetState()
+	GUISetState(@SW_SHOW)
 
-	; Loop until user exits
+	; Loop until the user exits.
 	Do
 		Sleep(100)
 		; Seek to a random frame in the AVI Clip

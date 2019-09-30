@@ -1,6 +1,6 @@
-#include <Constants.au3>
-#include <GUIConstantsEx.au3>
 #include <GDIPlus.au3>
+#include <GUIConstantsEx.au3>
+#include <MsgBoxConstants.au3>
 
 Example()
 
@@ -52,7 +52,7 @@ Func Example()
 
 	;display manipulated image
 	Local $hGUI = GUICreate("_GDIPlus_BitmapLockBits Demo", $iW, $iH)
-	GUISetState()
+	GUISetState(@SW_SHOW)
 
 	Local $hGraphic = _GDIPlus_GraphicsCreateFromHWND($hGUI) ;create a Graphics object from a window handle
 	_GDIPlus_GraphicsDrawImageRect($hGraphic, $hBitmap, 0, 0, $iW, $iH) ;copy manipulated image to graphics handle

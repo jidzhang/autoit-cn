@@ -1,10 +1,10 @@
 ; Force download from www.autoitscript.com
 
-;~ #RequireAdmin ; needed if storing in @systemdir is wanted
+; #RequireAdmin ; needed if storing in @systemdir is wanted
 
+#include <MsgBoxConstants.au3>
 #include <SQLite.au3>
 #include <SQLite.dll.au3>
-#include <Constants.au3>
 
 Local $sSQliteDll = _SQLite_Startup("", False, -1)
 If @error Then

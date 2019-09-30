@@ -7,9 +7,9 @@
 
 Local $oIE = _IE_Example("form")
 Local $oSubmit = _IEGetObjByName($oIE, "submitExample")
-Local $hwnd = _IEPropertyGet($oIE, "hwnd")
+Local $hWnd = _IEPropertyGet($oIE, "hwnd")
 _IEAction($oSubmit, "focus")
-ControlSend($hwnd, "", "[CLASS:Internet Explorer_Server; INSTANCE:1]", "{Enter}")
+ControlSend($hWnd, "", "[CLASS:Internet Explorer_Server; INSTANCE:1]", "{Enter}")
 
 ; Wait for Alert window, then click on OK
 WinWait("", "ExampleFormSubmitted")

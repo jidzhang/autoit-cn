@@ -1,31 +1,29 @@
 #include <GUIConstantsEx.au3>
 #include <GuiTreeView.au3>
+#include <MsgBoxConstants.au3>
 #include <WindowsConstants.au3>
 
-$Debug_TV = False ; 检查传递给函数的类名, 设置为True并输出到一个控件的句柄,用于检查它是否工作
+Example()
 
-_Main()
-
-Func _Main()
-
-	Local $hTreeView
+Func Example()
+	Local $idTreeView
 	Local $iStyle = BitOR($TVS_EDITLABELS, $TVS_HASBUTTONS, $TVS_HASLINES, $TVS_LINESATROOT, $TVS_DISABLEDRAGDROP, $TVS_SHOWSELALWAYS)
 
 	GUICreate("TreeView Get Visible Count", 400, 300)
 
-	$hTreeView = GUICtrlCreateTreeView(2, 2, 396, 268, $iStyle, $WS_EX_CLIENTEDGE)
-	GUISetState()
+	$idTreeView = GUICtrlCreateTreeView(2, 2, 396, 268, $iStyle, $WS_EX_CLIENTEDGE)
+	GUISetState(@SW_SHOW)
 
-	_GUICtrlTreeView_BeginUpdate($hTreeView)
+	_GUICtrlTreeView_BeginUpdate($idTreeView)
 	For $x = 0 To 99
-		_GUICtrlTreeView_Add($hTreeView, 0, StringFormat("[%02d] New Item", $x))
+		_GUICtrlTreeView_Add($idTreeView, 0, StringFormat("[%02d] New Item", $x))
 	Next
-	_GUICtrlTreeView_EndUpdate($hTreeView)
+	_GUICtrlTreeView_EndUpdate($idTreeView)
 
-	MsgBox(4160, "信息", "Visible: " & _GUICtrlTreeView_GetVisibleCount($hTreeView))
+	MsgBox($MB_SYSTEMMODAL, "Information", "Visible: " & _GUICtrlTreeView_GetVisibleCount($idTreeView))
 
-	; 循环直到用户退出
+	; Loop until the user exits.
 	Do
 	Until GUIGetMsg() = $GUI_EVENT_CLOSE
 	GUIDelete()
-EndFunc   ;==>_Main
+EndFunc   ;==>Example

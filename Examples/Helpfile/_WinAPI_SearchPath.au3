@@ -1,6 +1,6 @@
 #include <WinAPIFiles.au3>
 
-Global Const $File = 'Notepad.exe'
+Local $sFile = 'Notepad.exe'
 
-ConsoleWrite(_WinAPI_SearchPath($File) & @CRLF)
-ConsoleWrite(_WinAPI_SearchPath($File, @SystemDir) & @CRLF)
+ConsoleWrite(_WinAPI_SearchPath($sFile) & @CRLF)
+ConsoleWrite(_WinAPI_SearchPath($sFile, @SystemDir) & @CRLF)

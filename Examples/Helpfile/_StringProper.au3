@@ -1,6 +1,8 @@
+#include <MsgBoxConstants.au3>
 #include <String.au3>
-;将返回 : Somebody Lastnames
-MsgBox(4096, '', _StringProper("somebody lastnames"))
-;将返回 : Some.Body Last(Name)
-MsgBox(4096, '', _StringProper("SOME.BODY LAST(NAME)"))
+
+; Will return : Somebody Lastnames
+MsgBox($MB_SYSTEMMODAL, '', _StringProper("somebody lastnames"))
+; Will return : Some.Body Last(Name)
+MsgBox($MB_SYSTEMMODAL, '', _StringProper("SOME.BODY LAST(NAME)"))
 Exit

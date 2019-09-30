@@ -1,6 +1,8 @@
-Local $fBoolean = True
-If IsBool($fBoolean) Then
-	MsgBox(4096, "成功", "变量是一个布尔值")
+#include <MsgBoxConstants.au3>
+
+Local $bBoolean = True
+If IsBool($bBoolean) Then
+	MsgBox($MB_SYSTEMMODAL, "", "The variable is boolean")
 Else
-	MsgBox(4096, "失败", "变量不是一个布尔值")
+	MsgBox($MB_SYSTEMMODAL, "", "The variable is not boolean")
 EndIf

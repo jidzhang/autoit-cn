@@ -1,7 +1,8 @@
 ; I am the client, start me after the server! (Start first the example 2 of the TCPSend function).
 
-#include <MsgBoxConstants.au3>
+#include <AutoItConstants.au3>
 #include <FileConstants.au3>
+#include <MsgBoxConstants.au3>
 
 Example()
 
@@ -50,10 +51,10 @@ Func Example()
 	Local $iDataLen = 0
 
 	; Assign a Local variable a boolean.
-	Local $fEOFReached = False
+	Local $bEOFReached = False
 
 	Do
-		$bData = TCPRecv($iSocket, $i4KiB, 1)
+		$bData = TCPRecv($iSocket, $i4KiB, $TCP_DATA_BINARY)
 
 		; If an error occurred display the error code and return False.
 		If @error Then
@@ -73,11 +74,11 @@ Func Example()
 			$bData = BinaryMid($bData, 1, $iDataLen - $iEOFLen)
 
 			; Set the EOFReached to True.
-			$fEOFReached = True
+			$bEOFReached = True
 		EndIf
 
 		FileWrite($hFile, $bData)
-	Until $fEOFReached
+	Until $bEOFReached
 
 	; Close the file handle.
 	FileClose($hFile)

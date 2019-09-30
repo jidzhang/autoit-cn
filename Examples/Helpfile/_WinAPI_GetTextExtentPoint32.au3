@@ -1,5 +1,9 @@
 #include <GUIConstantsEx.au3>
-#include <WinAPI.au3>
+#include <MsgBoxConstants.au3>
+#include <SendMessage.au3>
+#include <WinAPIGdi.au3>
+#include <WinAPIGdiDC.au3>
+#include <WinAPIHObj.au3>
 #include <WindowsConstants.au3>
 
 Example()
@@ -10,11 +14,10 @@ Func Example()
 
 	Local $sText = "This is  some text" ; The text we want to find the height & width of.
 	Local $aStringDimension = GetStringDimensions($hGUI, $sText) ; Retrieve a 1 dimensional array with $aArray[0] = width & $aArray[1] = height.
-	MsgBox(4096, "String Height and Width", 'The height and width of the string "' & $sText & '" is:' & @CRLF & _
+	MsgBox($MB_SYSTEMMODAL, "String Height and Width", 'The height and width of the string "' & $sText & '" is:' & @CRLF & _
 			"Width: " & $aStringDimension[0] & @CRLF & _
 			"Height: " & $aStringDimension[1] & @CRLF)
 	Do
-		Sleep(50)
 	Until GUIGetMsg() = $GUI_EVENT_CLOSE
 EndFunc   ;==>Example
 

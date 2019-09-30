@@ -5,11 +5,13 @@
 #include "SendMessage.au3"
 #include "StructureConstants.au3"
 #include "UDFGlobalID.au3"
-#include "WinAPI.au3"
+#include "WinAPIConv.au3"
+#include "WinAPIHObj.au3"
+#include "WinAPISysInternals.au3"
 
 ; #INDEX# =======================================================================================================================
 ; Title .........: ComboBox
-; AutoIt Version : 3.3.13.12
+; AutoIt Version : 3.3.14.5
 ; Language ......: English
 ; Description ...: Functions that assist with ComboBox control management.
 ; Author(s) .....: gafrost, PaulIA, Valik
@@ -127,14 +129,14 @@ Global Const $tagCOMBOBOXINFO = "dword Size;struct;long EditLeft;long EditTop;lo
 ; Author ........: Gary Frost (gafrost)
 ; Modified.......:
 ; ===============================================================================================================================
-Func _GUICtrlComboBox_AddDir($hWnd, $sFile, $iAttributes = 0, $bBrackets = True)
+Func _GUICtrlComboBox_AddDir($hWnd, $sFilePath, $iAttributes = 0, $bBrackets = True)
 	If Not IsHWnd($hWnd) Then $hWnd = GUICtrlGetHandle($hWnd)
 
 	If BitAND($iAttributes, $DDL_DRIVES) = $DDL_DRIVES And Not $bBrackets Then
 		Local $sText
 		Local $hGui_no_brackets = GUICreate("no brackets")
 		Local $idCombo_no_brackets = GUICtrlCreateCombo("", 240, 40, 120, 120)
-		Local $iRet = GUICtrlSendMsg($idCombo_no_brackets, $CB_DIR, $iAttributes, $sFile)
+		Local $iRet = GUICtrlSendMsg($idCombo_no_brackets, $CB_DIR, $iAttributes, $sFilePath)
 		For $i = 0 To _GUICtrlComboBox_GetCount($idCombo_no_brackets) - 1
 			_GUICtrlComboBox_GetLBText($idCombo_no_brackets, $i, $sText)
 			$sText = StringReplace(StringReplace(StringReplace($sText, "[", ""), "]", ":"), "-", "")
@@ -143,7 +145,7 @@ Func _GUICtrlComboBox_AddDir($hWnd, $sFile, $iAttributes = 0, $bBrackets = True)
 		GUIDelete($hGui_no_brackets)
 		Return $iRet
 	Else
-		Return _SendMessage($hWnd, $CB_DIR, $iAttributes, $sFile, 0, "wparam", "wstr")
+		Return _SendMessage($hWnd, $CB_DIR, $iAttributes, $sFilePath, 0, "wparam", "wstr")
 	EndIf
 EndFunc   ;==>_GUICtrlComboBox_AddDir
 

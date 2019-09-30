@@ -1,5 +1,5 @@
-#include <GUIConstantsEx.au3>
 #include <GDIPlus.au3>
+#include <GUIConstantsEx.au3>
 
 Example()
 
@@ -8,13 +8,12 @@ Func Example()
 
 	; Create GUI
 	$hGUI = GUICreate("GDI+", 400, 400)
-	GUISetState()
+	GUISetState(@SW_SHOW)
 
 	_GDIPlus_Startup()
 	$hGraphic = _GDIPlus_GraphicsCreateFromHWND($hGUI) ;Create a graphics object from a window handle
 	_GDIPlus_GraphicsSetSmoothingMode($hGraphic, $GDIP_SMOOTHINGMODE_HIGHQUALITY) ;Sets the graphics object rendering quality (antialiasing)
 	_GDIPlus_GraphicsClear($hGraphic, 0xFFFFFFFF)
-
 
 	$hPath = _GDIPlus_PathCreate() ;Create new path object
 	_GDIPlus_PathAddEllipse($hPath, 10, 10, 380, 380)
@@ -25,7 +24,6 @@ Func Example()
 	_GDIPlus_PathBrushSetSurroundColor($hBrush, 0xFFAA00FF)
 	_GDIPlus_PathBrushSetSigmaBlend($hBrush, 1)
 	_GDIPlus_PathBrushSetGammaCorrection($hBrush, True)
-
 
 	$hMatrix = _GDIPlus_MatrixCreate()
 	_GDIPlus_MatrixTranslate($hMatrix, -200, -200)
@@ -38,7 +36,7 @@ Func Example()
 		Sleep(10)
 	Next
 
-	; Loop until user exits
+	; Loop until the user exits.
 	Do
 	Until GUIGetMsg() = $GUI_EVENT_CLOSE
 

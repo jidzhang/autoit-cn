@@ -4,13 +4,15 @@
 #include "GuiStatusBar.au3"
 #include "Memory.au3"
 #include "SendMessage.au3"
-#include "UDFGlobalID.au3"
-#include "WinAPI.au3"
 #include "ToolTipConstants.au3" ; for _GUICtrlEdit_ShowBalloonTip()
+#include "UDFGlobalID.au3"
+#include "WinAPIConv.au3"
+#include "WinAPIHObj.au3"
+#include "WinAPISysInternals.au3"
 
 ; #INDEX# =======================================================================================================================
 ; Title .........: Edit
-; AutoIt Version : 3.3.13.12
+; AutoIt Version : 3.3.14.5
 ; Language ......: English
 ; Description ...: Functions that assist with Edit control management.
 ;                  An edit control is a rectangular control window typically used in a dialog box to permit the user to enter
@@ -70,6 +72,7 @@ Global Const $__EDITCONSTANT_SB_SCROLLCARET = 4
 ; _GUICtrlEdit_EndUpdate
 ; _GUICtrlEdit_FmtLines
 ; _GUICtrlEdit_Find
+; _GUICtrlEdit_GetCueBanner
 ; _GUICtrlEdit_GetFirstVisibleLine
 ; _GUICtrlEdit_GetLimitText
 ; _GUICtrlEdit_GetLine
@@ -91,6 +94,7 @@ Global Const $__EDITCONSTANT_SB_SCROLLCARET = 4
 ; _GUICtrlEdit_PosFromChar
 ; _GUICtrlEdit_ReplaceSel
 ; _GUICtrlEdit_Scroll
+; _GUICtrlEdit_SetCueBanner
 ; _GUICtrlEdit_SetLimitText
 ; _GUICtrlEdit_SetMargins
 ; _GUICtrlEdit_SetModify
@@ -362,6 +366,18 @@ Func _GUICtrlEdit_Find($hWnd, $bReplace = False)
 	GUIDelete($hGuiSearch)
 	Opt("GUIOnEventMode", $iOldMode)
 EndFunc   ;==>_GUICtrlEdit_Find
+
+; #FUNCTION# ====================================================================================================================
+; Author ........: Guinness
+; Modified.......:
+; ===============================================================================================================================
+Func _GUICtrlEdit_GetCueBanner($hWnd)
+	If Not IsHWnd($hWnd) Then $hWnd = GUICtrlGetHandle($hWnd)
+
+	Local $tText = DllStructCreate("wchar[4096]")
+	If _SendMessage($hWnd, $EM_GETCUEBANNER, $tText, 4096, 0, "struct*") <> 1 Then Return SetError(-1, 0, "")
+	Return _WinAPI_WideCharToMultiByte($tText)
+EndFunc   ;==>_GUICtrlEdit_GetCueBanner
 
 ; #INTERNAL_USE_ONLY# ===========================================================================================================
 ; Name...........: __GUICtrlEdit_FindText
@@ -793,6 +809,18 @@ Func _GUICtrlEdit_Scroll($hWnd, $iDirection)
 		Return _SendMessage($hWnd, $EM_SCROLL, $iDirection)
 	EndIf
 EndFunc   ;==>_GUICtrlEdit_Scroll
+
+; #FUNCTION# ====================================================================================================================
+; Author ........: Guinness
+; Modified.......:
+; ===============================================================================================================================
+Func _GUICtrlEdit_SetCueBanner($hWnd, $sText, $bOnFocus = False)
+	If Not IsHWnd($hWnd) Then $hWnd = GUICtrlGetHandle($hWnd)
+
+	Local $tText = _WinAPI_MultiByteToWideChar($sText)
+
+	Return _SendMessage($hWnd, $EM_SETCUEBANNER, $bOnFocus, $tText, 0, "wparam", "struct*") = 1
+EndFunc   ;==>_GUICtrlEdit_SetCueBanner
 
 ; #NO_DOC_FUNCTION# =============================================================================================================
 ; Name...........: _GUICtrlEdit_SetHandle

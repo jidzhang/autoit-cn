@@ -1,13 +1,12 @@
 #include <GDIPlus.au3>
 #include <GUIConstantsEx.au3>
-#include <WinAPIShellEx.au3>
-#include <GUIMenu.au3>
+#include <GuiMenu.au3>
+#include <WinAPIGdi.au3>
 
 #NoTrayIcon
 Opt('TrayMenuMode', 3)
 
-
-;Create Bitmap with transparency
+; Create Bitmap with transparency
 _GDIPlus_Startup()
 Local $hBitmap = _GDIPlus_BitmapCreateFromScan0(48, 48)
 Local $hContext = _GDIPlus_ImageGetGraphicsContext($hBitmap)
@@ -18,16 +17,15 @@ _GDIPlus_BrushDispose($hBrush)
 
 _GDIPlus_GraphicsDispose($hContext)
 
-
-;create icon from bitmap
+; create icon from bitmap
 Local $hIcon = _GDIPlus_HICONCreateFromBitmap($hBitmap)
 _GDIPlus_BitmapDispose($hBitmap)
 _GDIPlus_Shutdown()
 
 Local $hMenu = TrayItemGetHandle(0)
-Local $Options = TrayCreateItem('Options')
+Local $idOptions = TrayCreateItem('Options')
 TrayCreateItem('')
-Local $Exit = TrayCreateItem('Exit')
+Local $idExit = TrayCreateItem('Exit')
 
 _GUICtrlMenu_SetItemBmp($hMenu, 0, _WinAPI_Create32BitHBITMAP($hIcon, 1, 1))
 
@@ -35,6 +33,5 @@ TraySetState()
 
 TrayTip("Information", "Check out tray menu", 30)
 
-
 Do
-Until TrayGetMsg() = $Exit
+Until TrayGetMsg() = $idExit

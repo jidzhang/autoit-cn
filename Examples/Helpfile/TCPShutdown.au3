@@ -1,3 +1,14 @@
-TCPStartup()	; 开始 TCP 服务
+; == Close the TCP service.
 
-TCPShutdown ( )	; 停止 TCP 服务
+Example()
+
+Func Example()
+	TCPStartup() ; Start the TCP service.
+
+	; Register OnAutoItExit to be called when the script is closed.
+	OnAutoItExitRegister("OnAutoItExit")
+EndFunc   ;==>Example
+
+Func OnAutoItExit()
+	TCPShutdown() ; Close the TCP service.
+EndFunc   ;==>OnAutoItExit

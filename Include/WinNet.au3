@@ -1,11 +1,11 @@
 #include-once
 
 #include "StructureConstants.au3"
-#include "WinAPI.au3"
+#include "WinAPIConv.au3"
 
 ; #INDEX# =======================================================================================================================
 ; Title .........: WindowsNetworking
-; AutoIt Version : 3.3.13.12
+; AutoIt Version : 3.3.14.5
 ; Language ......: English
 ; Description ...: Functions that assist with Windows Networking management.
 ;                  The Windows Networking (WNet) functions allow you to implement networking  capabilities  in  your  application
@@ -480,7 +480,7 @@ EndFunc   ;==>_WinNet_DisconnectDialog1
 ; Modified.......:
 ; ===============================================================================================================================
 Func _WinNet_EnumResource($hEnum, ByRef $iCount, $pBuffer, ByRef $iBufSize)
-	Local $aResult = DllCall("mpr.dll", "dword", "WNetEnumResourceW", "handle", $hEnum, "dword*", $iCount, "ptr", $pBuffer, "dword*", $iBufSize)
+	Local $aResult = DllCall("mpr.dll", "dword", "WNetEnumResourceW", "handle", $hEnum, "dword*", $iCount, "struct*", $pBuffer, "dword*", $iBufSize)
 	If @error Then Return SetError(@error, @extended, False)
 	$iCount = $aResult[2]
 	$iBufSize = $aResult[4]
@@ -763,9 +763,9 @@ EndFunc   ;==>__WinNet_NETRESOURCEToArray
 
 ; #FUNCTION# ====================================================================================================================
 ; Author ........: Paul Campbell (PaulIA)
-; Modified.......:
+; Modified.......: jpm
 ; ===============================================================================================================================
-Func _WinNet_OpenEnum($iScope, $iType, $iUsage, $pResource, ByRef $hEnum)
+Func _WinNet_OpenEnum($iScope, $iType, $iUsage, $tResource, ByRef $hEnum)
 	Switch $iScope
 		Case 1
 			$iScope = $RESOURCE_GLOBALNET
@@ -782,7 +782,7 @@ Func _WinNet_OpenEnum($iScope, $iType, $iUsage, $pResource, ByRef $hEnum)
 	If BitAND($iUsage, 2) <> 0 Then $iFlags = BitOR($iFlags, $RESOURCEUSAGE_CONTAINER)
 	If BitAND($iUsage, 4) <> 0 Then $iFlags = BitOR($iFlags, $RESOURCEUSAGE_ATTACHED)
 
-	Local $aResult = DllCall("mpr.dll", "dword", "WNetOpenEnum", "dword", $iScope, "dword", $iType, "dword", $iFlags, "ptr", $pResource, "handle*", 0)
+	Local $aResult = DllCall("mpr.dll", "dword", "WNetOpenEnum", "dword", $iScope, "dword", $iType, "dword", $iFlags, "struct*", $tResource, "handle*", 0)
 	If @error Then Return SetError(@error, @extended, False)
 
 	$hEnum = $aResult[5]

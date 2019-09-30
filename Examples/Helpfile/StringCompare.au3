@@ -1,8 +1,23 @@
-Local $result = StringCompare("MELÓN", "melón")
-MsgBox(4096, "StringCompare Result (mode 0):", $result)
+#include <MsgBoxConstants.au3>
+#include <StringConstants.au3>
 
-$result = StringCompare("MELÓN", "melón", 1)
-MsgBox(4096, "StringCompare Result (mode 1):", $result)
+Local $sStr1 = "Ti雜to"
+Local $sStr2 = "TI薙TO"
 
-$result = StringCompare("MELÓN", "melón", 2)
-MsgBox(4096, "StringCompare Result (mode 2):", $result)
+; Compare two strings without using case sensitivity.
+Local $iCmp = StringCompare($sStr1, $sStr2)
+MsgBox($MB_SYSTEMMODAL, "", _
+		"Comparing '" & $sStr1 & "' To '" & $sStr2 & "'" & @CRLF & _
+		"StringCompare Result (mode $STR_NOCASESENSE): " & $iCmp)
+
+; Compare two strings with using case sensitivity.
+$iCmp = StringCompare($sStr1, $sStr2, $STR_CASESENSE)
+MsgBox($MB_SYSTEMMODAL, "", _
+		"Comparing '" & $sStr1 & "' To '" & $sStr2 & "'" & @CRLF & _
+		"StringCompare Result (mode $STR_CASESENSE): " & $iCmp)
+
+; Compare two strings without using case sensitivity.
+$iCmp = StringCompare($sStr1, $sStr2, $STR_NOCASESENSEBASIC)
+MsgBox($MB_SYSTEMMODAL, "", _
+		"Comparing '" & $sStr1 & "' To '" & $sStr2 & "'" & @CRLF & _
+		"StringCompare Result (mode $STR_NOCASESENSEBASIC): " & $iCmp)

@@ -1,49 +1,50 @@
-#include <GUIConstantsEx.au3>
 #include <Date.au3>
+#include <GUIConstantsEx.au3>
+#include <MsgBoxConstants.au3>
+#include <WinAPIError.au3>
 #include <WindowsConstants.au3>
 
-; 由于系统安全性在 Vista 中 Windows API "SetLocalime" 可能被拒绝
+; Under Vista the Windows API "SetLocalime" may be rejected due to system security
 
-Global $iMemo
+Global $g_idMemo
 
-_Main()
+Example()
 
-Func _Main()
+Func Example()
 	Local $tCur, $tNew
 
-	; 创建 GUI
+	; Create GUI
 	GUICreate("Time", 400, 300)
-	$iMemo = GUICtrlCreateEdit("", 2, 2, 396, 296, $WS_VSCROLL)
-	GUICtrlSetFont($iMemo, 9, 400, 0, "Courier New")
-	GUISetState()
+	$g_idMemo = GUICtrlCreateEdit("", 2, 2, 396, 296, $WS_VSCROLL)
+	GUICtrlSetFont($g_idMemo, 9, 400, 0, "Courier New")
+	GUISetState(@SW_SHOW)
 
-	; 显示当前的本地时间
+	; Show current local time
 	$tCur = _Date_Time_GetLocalTime()
 	MemoWrite("Current date/time .: " & _Date_Time_SystemTimeToDateTimeStr($tCur))
 
-	; 设置新的本地时间
+	; Set new local time
 	$tNew = _Date_Time_EncodeSystemTime(8, 19, @YEAR, 3, 10, 45)
-	If Not _Date_Time_SetLocalTime(DllStructGetPtr($tNew)) Then
-		MsgBox(4096, "错误", "System clock cannot be SET" & @CRLF & @CRLF & _WinAPI_GetLastErrorMessage())
+	If Not _Date_Time_SetLocalTime($tNew) Then
+		MsgBox($MB_SYSTEMMODAL, "Error", "System clock cannot be SET" & @CRLF & @CRLF & _WinAPI_GetLastErrorMessage())
 		Exit
 	EndIf
 	$tNew = _Date_Time_GetLocalTime()
 	MemoWrite("New date/time .....: " & _Date_Time_SystemTimeToDateTimeStr($tNew))
 
-	; 重设本地时间
-	_Date_Time_SetLocalTime(DllStructGetPtr($tCur))
+	; Reset local time
+	_Date_Time_SetLocalTime($tCur)
 
-	; 显示当前的本地时间
+	; Show current local time
 	$tCur = _Date_Time_GetLocalTime()
 	MemoWrite("Current date/time .: " & _Date_Time_SystemTimeToDateTimeStr($tCur))
 
-	; 循环直到用户退出
+	; Loop until the user exits.
 	Do
 	Until GUIGetMsg() = $GUI_EVENT_CLOSE
+EndFunc   ;==>Example
 
-EndFunc   ;==>_Main
-
-; 写入一行到 memo 控件
+; Write a line to the memo control
 Func MemoWrite($sMessage)
-	GUICtrlSetData($iMemo, $sMessage & @CRLF, 1)
+	GUICtrlSetData($g_idMemo, $sMessage & @CRLF, 1)
 EndFunc   ;==>MemoWrite

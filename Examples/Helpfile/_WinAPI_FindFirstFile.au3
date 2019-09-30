@@ -1,32 +1,31 @@
-#include <WinAPIFiles.au3>
-#include <WinAPI.au3>
-#include <WinAPIDiag.au3>
 #include <Array.au3>
 #include <MsgBoxConstants.au3>
+#include <WinAPIConv.au3>
+#include <WinAPIError.au3>
+#include <WinAPIFiles.au3>
 
-Global $List[101][2] = [[0]]
+Local $aList[101][2] = [[0]]
 
 Local $tData = DllStructCreate($tagWIN32_FIND_DATA)
-Local $pData = DllStructGetPtr($tData)
 
-Local $File
-Local $hSearch = _WinAPI_FindFirstFile(@ScriptDir & '\*', $pData)
+Local $sFile
+Local $hSearch = _WinAPI_FindFirstFile(@ScriptDir & '\*', $tData)
 While Not @error
-	$File = DllStructGetData($tData, 'cFileName')
-	Switch $File
+	$sFile = DllStructGetData($tData, 'cFileName')
+	Switch $sFile
 		Case '.', '..'
 
 		Case Else
 			If Not BitAND(DllStructGetData($tData, 'dwFileAttributes'), $FILE_ATTRIBUTE_DIRECTORY) Then
-				$List[0][0] += 1
-				If $List[0][0] > UBound($List) - 1 Then
-					ReDim $List[UBound($List) + 100][2]
+				$aList[0][0] += 1
+				If $aList[0][0] > UBound($aList) - 1 Then
+					ReDim $aList[UBound($aList) + 100][2]
 				EndIf
-				$List[$List[0][0]][0] = $File
-				$List[$List[0][0]][1] = _WinAPI_MakeQWord(DllStructGetData($tData, 'nFileSizeLow'), DllStructGetData($tData, 'nFileSizeHigh'))
+				$aList[$aList[0][0]][0] = $sFile
+				$aList[$aList[0][0]][1] = _WinAPI_MakeQWord(DllStructGetData($tData, 'nFileSizeLow'), DllStructGetData($tData, 'nFileSizeHigh'))
 			EndIf
 	EndSwitch
-	_WinAPI_FindNextFile($hSearch, $pData)
+	_WinAPI_FindNextFile($hSearch, $tData)
 WEnd
 
 Switch @extended
@@ -39,4 +38,4 @@ EndSwitch
 
 _WinAPI_FindClose($hSearch)
 
-_ArrayDisplay($List, '_WinAPI_Find...', $List[0][0])
+_ArrayDisplay($aList, '_WinAPI_Find...', $aList[0][0])

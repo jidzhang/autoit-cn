@@ -1,32 +1,31 @@
-#include <GUIConstantsEx.au3>
 #include <Date.au3>
+#include <GUIConstantsEx.au3>
 #include <WindowsConstants.au3>
 
-Global $iMemo
+Global $g_idMemo
 
-_Main()
+Example()
 
-Func _Main()
+Func Example()
 	Local $tFile, $tSystem
 
-	; 创建 GUI
+	; Create GUI
 	GUICreate("Time", 400, 300)
-	$iMemo = GUICtrlCreateEdit("", 2, 2, 396, 296, $WS_VSCROLL)
-	GUICtrlSetFont($iMemo, 9, 400, 0, "Courier New")
-	GUISetState()
+	$g_idMemo = GUICtrlCreateEdit("", 2, 2, 396, 296, $WS_VSCROLL)
+	GUICtrlSetFont($g_idMemo, 9, 400, 0, "Courier New")
+	GUISetState(@SW_SHOW)
 
-	; 获取系统时间
+	; Get system time
 	$tSystem = _Date_Time_GetSystemTime()
-	$tFile = _Date_Time_SystemTimeToFileTime(DllStructGetPtr($tSystem))
+	$tFile = _Date_Time_SystemTimeToFileTime($tSystem)
 	MemoWrite("File time .: " & _Date_Time_FileTimeToStr($tFile))
 
-	; 循环直到用户退出
+	; Loop until the user exits.
 	Do
 	Until GUIGetMsg() = $GUI_EVENT_CLOSE
+EndFunc   ;==>Example
 
-EndFunc   ;==>_Main
-
-; 写入一行到 memo 控件
+; Write a line to the memo control
 Func MemoWrite($sMessage)
-	GUICtrlSetData($iMemo, $sMessage & @CRLF, 1)
+	GUICtrlSetData($g_idMemo, $sMessage & @CRLF, 1)
 EndFunc   ;==>MemoWrite

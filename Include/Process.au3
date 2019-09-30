@@ -4,7 +4,7 @@
 
 ; #INDEX# =======================================================================================================================
 ; Title .........: Process
-; AutoIt Version : 3.3.13.12
+; AutoIt Version : 3.3.14.5
 ; Language ......: English
 ; Description ...: Functions that assist with Process management.
 ; Author(s) .....: Erifash, Wouter, Matthew Tucker, Jeremy Landes, Valik
@@ -21,17 +21,13 @@
 ; Author ........: Erifash <erifash [at] gmail [dot] com>, Wouter van Kesteren. guinness - Removed ProcessExists for speed.
 ; ===============================================================================================================================
 Func _ProcessGetName($iPID)
-	Local $aProcessList = ProcessList(), _
-			$iError = 1, _
-			$sProcessName = ""
-	For $i = 1 To $aProcessList[0][0]
+	Local $aProcessList = ProcessList()
+	For $i = 1 To UBound($aProcessList) - 1
 		If $aProcessList[$i][1] = $iPID Then
-			$iError = 0
-			$sProcessName = $aProcessList[$i][0]
-			ExitLoop
+			Return $aProcessList[$i][0]
 		EndIf
 	Next
-	Return SetError($iError, 0, $sProcessName)
+	Return SetError(1, 0, "")
 EndFunc   ;==>_ProcessGetName
 
 ; #FUNCTION# ====================================================================================================================
@@ -91,6 +87,6 @@ EndFunc   ;==>_ProcessGetPriority
 ; Author ........: Jeremy Landes <jlandes at landeserve dot com>
 ; ===============================================================================================================================
 Func _RunDos($sCommand)
-	Local $nResult = RunWait(@ComSpec & " /C " & $sCommand, "", @SW_HIDE)
-	Return SetError(@error, @extended, $nResult)
+	Local $iResult = RunWait(@ComSpec & " /C " & $sCommand, "", @SW_HIDE)
+	Return SetError(@error, @extended, $iResult)
 EndFunc   ;==>_RunDos

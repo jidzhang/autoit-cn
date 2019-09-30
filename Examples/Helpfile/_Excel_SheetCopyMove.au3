@@ -4,13 +4,6 @@
 ; Create application object and open an example workbook
 Local $oExcel = _Excel_Open()
 If @error Then Exit MsgBox($MB_SYSTEMMODAL, "Excel UDF: _Excel_SheetCopyMove Example", "Error creating the Excel application object." & @CRLF & "@error = " & @error & ", @extended = " & @extended)
-; Open Workbook 2
-Local $oWorkbook2 = _Excel_BookOpen($oExcel, @ScriptDir & "\Extras\_Excel3.xls")
-If @error Then
-	MsgBox($MB_SYSTEMMODAL, "Excel UDF: _Excel_SheetCopyMove Example", "Error opening workbook '" & @ScriptDir & "\Extras\_Excel3.xls'." & @CRLF & "@error = " & @error & ", @extended = " & @extended)
-	_Excel_Close($oExcel)
-	Exit
-EndIf
 ; Open Workbook 1
 Local $oWorkbook1 = _Excel_BookOpen($oExcel, @ScriptDir & "\Extras\_Excel1.xls")
 If @error Then
@@ -19,9 +12,7 @@ If @error Then
 	Exit
 EndIf
 
-; *****************************************************************************
-; Copy sheet 1 after sheet 3. Set the name of the new sheet
-; *****************************************************************************
+; Copy Sheet 1 after Sheet 3. Set the name of the new Sheet
 Local $oCopiedSheet = _Excel_SheetCopyMove($oWorkbook1, 1, Default, 3, False)
 If @error Then Exit MsgBox($MB_SYSTEMMODAL, "Excel UDF: _Excel_SheetCopyMove Example 1", "Error copying sheet." & @CRLF & "@error = " & @error & ", @extended = " & @extended)
 ; Set the name of the new sheet

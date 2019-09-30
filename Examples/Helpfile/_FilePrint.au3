@@ -1,11 +1,12 @@
 #include <File.au3>
+#include <MsgBoxConstants.au3>
 
-Local $file = FileOpenDialog("Print File", "", "Text Documents (*.txt)", 1)
+Local $sFilePath = FileOpenDialog("Print File", "", "Text Documents (*.txt)", $FD_FILEMUSTEXIST)
 If @error Then Exit
 
-Local $print = _FilePrint($file)
-If $print Then
-	MsgBox(4096, "Print", "The file was printed.")
+Local $iIsPrinted = _FilePrint($sFilePath)
+If $iIsPrinted Then
+	MsgBox($MB_SYSTEMMODAL, "", "The file was printed.")
 Else
-	MsgBox(4096, "Print", "Error: " & @error & @CRLF & "The file was not printed.")
+	MsgBox($MB_SYSTEMMODAL, "", "Error: " & @error & @CRLF & "The file was not printed.")
 EndIf

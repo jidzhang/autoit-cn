@@ -1,10 +1,11 @@
-#include <WinAPI.au3>
+#include <MsgBoxConstants.au3>
+#include <WinAPIDlg.au3>
 
-_Main()
+Example()
 
-Func _Main()
-	Local $button
+Func Example()
+	Local $idButton
 	GUICreate("test")
-	$button = GUICtrlCreateButton("testing", 0, 0)
-	MsgBox(4096, "ID", "Dialog Control ID: " & _WinAPI_GetDlgCtrlID(GUICtrlGetHandle($button)))
-EndFunc   ;==>_Main
+	$idButton = GUICtrlCreateButton("testing", 0, 0)
+	MsgBox($MB_SYSTEMMODAL, "ID", "Dialog Control ID: " & _WinAPI_GetDlgCtrlID(GUICtrlGetHandle($idButton)))
+EndFunc   ;==>Example

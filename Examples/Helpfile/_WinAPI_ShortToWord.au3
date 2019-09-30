@@ -1,5 +1,5 @@
-#include <WinAPIMisc.au3>
+#include <WinAPIConv.au3>
 
-Local $Value = -1
+Local $iValue = -1
 
-ConsoleWrite(_WinAPI_ShortToWord($Value) & @CRLF)
+ConsoleWrite(_WinAPI_ShortToWord($iValue) & @CRLF)

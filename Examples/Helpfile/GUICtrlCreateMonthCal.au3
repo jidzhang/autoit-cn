@@ -1,20 +1,25 @@
 #include <GUIConstantsEx.au3>
+#include <MsgBoxConstants.au3>
 
 Example()
 
 Func Example()
-	Local $Date, $msg
 	GUICreate("Get date", 210, 190)
 
-	$Date = GUICtrlCreateMonthCal("1953/03/25", 10, 10)
-	GUISetState()
+	Local $idDate = GUICtrlCreateMonthCal("1953/03/25", 10, 10)
+	GUISetState(@SW_SHOW)
 
-	; Run the GUI until the dialog is closed or timeout
+	; Loop until the user exits.
+	While 1
+		Switch GUIGetMsg()
+			Case $GUI_EVENT_CLOSE
+				ExitLoop
 
-	Do
-		$msg = GUIGetMsg()
-		If $msg = $Date Then MsgBox(4096, "debug", "calendar clicked")
-	Until $msg = $GUI_EVENT_CLOSE
+			Case $idDate
+				MsgBox($MB_SYSTEMMODAL, "debug", "calendar clicked")
 
-	MsgBox(4096, $msg, GUICtrlRead($Date), 2)
+		EndSwitch
+	WEnd
+
+	MsgBox($MB_SYSTEMMODAL, "Date", GUICtrlRead($idDate), 2)
 EndFunc   ;==>Example

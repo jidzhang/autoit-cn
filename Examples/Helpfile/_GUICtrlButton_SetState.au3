@@ -1,53 +1,53 @@
-#include <GUIConstantsEx.au3>
 #include <GuiButton.au3>
+#include <GUIConstantsEx.au3>
 #include <WindowsConstants.au3>
 
-Global $iMemo
+Global $g_idMemo
 
-_Main()
+Example()
 
-Func _Main()
-	Local $rdo, $rdo2, $chk, $chk2, $chk3, $btn, $btn2
+Func Example()
+	Local $idRdo, $idRdo2, $idChk, $idChk2, $idChk3, $idBtn, $idBtn2
 
 	GUICreate("Buttons", 400, 400)
-	$iMemo = GUICtrlCreateEdit("", 119, 10, 276, 374, $WS_VSCROLL)
-	GUICtrlSetFont($iMemo, 9, 400, 0, "Courier New")
+	$g_idMemo = GUICtrlCreateEdit("", 119, 10, 276, 374, $WS_VSCROLL)
+	GUICtrlSetFont($g_idMemo, 9, 400, 0, "Courier New")
 
-	$btn = GUICtrlCreateButton("Button1", 10, 10, 90, 25)
-	_GUICtrlButton_SetState($btn)
+	$idBtn = GUICtrlCreateButton("Button1", 10, 10, 90, 25)
+	_GUICtrlButton_SetState($idBtn)
 
-	$btn2 = GUICtrlCreateButton("Button2", 10, 60, 90, 25)
+	$idBtn2 = GUICtrlCreateButton("Button2", 10, 60, 90, 25)
 
-	$rdo = GUICtrlCreateRadio("Radio1", 10, 110, 90, 25)
-	_GUICtrlButton_SetFocus($rdo)
+	$idRdo = GUICtrlCreateRadio("Radio1", 10, 110, 90, 25)
+	_GUICtrlButton_SetFocus($idRdo)
 
-	$rdo2 = GUICtrlCreateRadio("Radio2", 10, 170, 90, 25)
-	_GUICtrlButton_SetCheck($rdo2)
+	$idRdo2 = GUICtrlCreateRadio("Radio2", 10, 170, 90, 25)
+	_GUICtrlButton_SetCheck($idRdo2)
 
-	$chk = GUICtrlCreateCheckbox("Check1", 10, 230, 90, 25, BitOR($BS_AUTO3STATE, $BS_NOTIFY))
-	_GUICtrlButton_SetCheck($chk, $BST_INDETERMINATE)
+	$idChk = GUICtrlCreateCheckbox("Check1", 10, 230, 90, 25, BitOR($BS_AUTO3STATE, $BS_NOTIFY))
+	_GUICtrlButton_SetCheck($idChk, $BST_INDETERMINATE)
 
-	$chk2 = GUICtrlCreateCheckbox("Check2", 10, 290, 90, 25, BitOR($BS_AUTO3STATE, $BS_NOTIFY))
+	$idChk2 = GUICtrlCreateCheckbox("Check2", 10, 290, 90, 25, BitOR($BS_AUTO3STATE, $BS_NOTIFY))
 
-	$chk3 = GUICtrlCreateCheckbox("Check3", 10, 350, 90, 25, BitOR($BS_AUTO3STATE, $BS_NOTIFY))
-	_GUICtrlButton_SetCheck($chk3, $BST_CHECKED)
+	$idChk3 = GUICtrlCreateCheckbox("Check3", 10, 350, 90, 25, BitOR($BS_AUTO3STATE, $BS_NOTIFY))
+	_GUICtrlButton_SetCheck($idChk3, $BST_CHECKED)
 
-	GUISetState()
+	GUISetState(@SW_SHOW)
 
 	MemoWrite("Button1 status:" & @CRLF & "--------------------------------" & _
-			_ExplainState(_GUICtrlButton_GetState($btn), True))
+			_ExplainState(_GUICtrlButton_GetState($idBtn), True))
 	MemoWrite("Button2 status:" & @CRLF & "--------------------------------" & _
-			_ExplainState(_GUICtrlButton_GetState($btn2), True))
+			_ExplainState(_GUICtrlButton_GetState($idBtn2), True))
 	MemoWrite("Radio1 status: " & @CRLF & "--------------------------------" & _
-			_ExplainState(_GUICtrlButton_GetState($rdo)))
+			_ExplainState(_GUICtrlButton_GetState($idRdo)))
 	MemoWrite("Radio2 status: " & @CRLF & "--------------------------------" & _
-			_ExplainState(_GUICtrlButton_GetState($rdo2)))
+			_ExplainState(_GUICtrlButton_GetState($idRdo2)))
 	MemoWrite("Check1 status: " & @CRLF & "--------------------------------" & _
-			_ExplainState(_GUICtrlButton_GetState($chk)))
+			_ExplainState(_GUICtrlButton_GetState($idChk)))
 	MemoWrite("Check2 status: " & @CRLF & "--------------------------------" & _
-			_ExplainState(_GUICtrlButton_GetState($chk2)))
+			_ExplainState(_GUICtrlButton_GetState($idChk2)))
 	MemoWrite("Check3 status: " & @CRLF & "--------------------------------" & _
-			_ExplainState(_GUICtrlButton_GetState($chk3)))
+			_ExplainState(_GUICtrlButton_GetState($idChk3)))
 
 	While 1
 		Switch GUIGetMsg()
@@ -57,28 +57,28 @@ Func _Main()
 	WEnd
 
 	Exit
-EndFunc   ;==>_Main
+EndFunc   ;==>Example
 
-; 写入Memo控件
+; Write a line to the memo control
 Func MemoWrite($sMessage)
-	GUICtrlSetData($iMemo, $sMessage & @CRLF, 1)
+	GUICtrlSetData($g_idMemo, $sMessage & @CRLF, 1)
 EndFunc   ;==>MemoWrite
 
-Func _ExplainState($iState, $fPushButton = False)
+Func _ExplainState($iState, $bPushButton = False)
 	Local $sText = ""
-	If Not $fPushButton And Not $iState Then Return _
-			@CRLF & "Indicates the button is cleared. Same as a return value of zero." & @CRLF ;按钮已被清除. 等同于返回0
+	If Not $bPushButton And Not $iState Then Return _
+			@CRLF & "Indicates the button is cleared. Same as a return value of zero." & @CRLF
 	If BitAND($iState, $BST_CHECKED) = $BST_CHECKED Then _
-			$sText &= @CRLF & "Indicates the button is checked." & @CRLF ;按钮已选中
+			$sText &= @CRLF & "Indicates the button is checked." & @CRLF
 	If BitAND($iState, $BST_FOCUS) = $BST_FOCUS Then _
-			$sText &= @CRLF & "Specifies the focus state. A nonzero value indicates that the button has the keyboard focus." & @CRLF ;按钮具有焦点. 非0值表示有键盘焦点
+			$sText &= @CRLF & "Specifies the focus state. A nonzero value indicates that the button has the keyboard focus." & @CRLF
 	If BitAND($iState, $BST_INDETERMINATE) = $BST_INDETERMINATE Then _
-			$sText &= @CRLF & "Indicates the button is grayed because the state of the button is indeterminate." & @CRLF ;按钮处于灰色状态
-	If $fPushButton Then
+			$sText &= @CRLF & "Indicates the button is grayed because the state of the button is indeterminate." & @CRLF
+	If $bPushButton Then
 		If BitAND($iState, $BST_PUSHED) = $BST_PUSHED Then
-			$sText &= @CRLF & "Specifies the highlight state." & @CRLF ;按钮处于高亮状态
+			$sText &= @CRLF & "Specifies the highlight state." & @CRLF
 		Else
-			$sText &= @CRLF & "Specifies not highlighted state." & @CRLF ;按钮未处于高亮状态
+			$sText &= @CRLF & "Specifies not highlighted state." & @CRLF
 		EndIf
 	EndIf
 	Return $sText

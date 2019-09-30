@@ -1,6 +1,6 @@
 #include <WinAPIShPath.au3>
 
-Local $Data = _WinAPI_ParseUserName('ALX\Alexander')
+Local $aData = _WinAPI_ParseUserName('ALX\Alexander')
 
-ConsoleWrite('Domain: ' & $Data[0] & @CRLF)
-ConsoleWrite('User:   ' & $Data[1] & @CRLF)
+ConsoleWrite('Domain: ' & $aData[0] & @CRLF)
+ConsoleWrite('User:   ' & $aData[1] & @CRLF)

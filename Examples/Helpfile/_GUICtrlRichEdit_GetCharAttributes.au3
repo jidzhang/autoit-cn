@@ -1,21 +1,21 @@
-#include <GuiRichEdit.au3>
 #include <GUIConstantsEx.au3>
+#include <GuiRichEdit.au3>
 #include <WindowsConstants.au3>
 
-Global $lblMsg, $hRichEdit
+Global $g_idLblMsg
 
-Main()
+Example()
 
-Func Main()
-	Local $hGui, $iMsg, $iCp1
-	$hGui = GUICreate("Example (" & StringTrimRight(@ScriptName, 4) & ")", 320, 350, -1, -1)
+Func Example()
+	Local $hGui, $iMsg, $iCp1, $hRichEdit
+	$hGui = GUICreate("Example (" & StringTrimRight(@ScriptName, StringLen(".exe")) & ")", 320, 350, -1, -1)
 	$hRichEdit = _GUICtrlRichEdit_Create($hGui, "This is a test.", 10, 10, 300, 220, _
 			BitOR($ES_MULTILINE, $WS_VSCROLL, $ES_AUTOVSCROLL))
-	$lblMsg = GUICtrlCreateLabel("", 10, 235, 300, 60)
-	GUISetState()
+	$g_idLblMsg = GUICtrlCreateLabel("", 10, 235, 300, 60)
+	GUISetState(@SW_SHOW)
 
 	_GUICtrlRichEdit_AutoDetectURL($hRichEdit, True)
-	_GUICtrlRichEdit_AppendText($hRichEdit, @CR & "http://www.autoitscript.com")
+	_GUICtrlRichEdit_AppendText($hRichEdit, @CRLF & "http://www.autoitscript.com")
 	$iCp1 = _GUICtrlRichEdit_GetFirstCharPosOnLine($hRichEdit, 2)
 	_GUICtrlRichEdit_SetSel($hRichEdit, $iCp1, $iCp1 + 3)
 	Report("Character attributes at start of line 2 are " & _
@@ -24,13 +24,13 @@ Func Main()
 		$iMsg = GUIGetMsg()
 		Select
 			Case $iMsg = $GUI_EVENT_CLOSE
-				_GUICtrlRichEdit_Destroy($hRichEdit) ; 除非脚本崩溃才需要
-;~ 				GUIDelete() 	; 同样行
+				_GUICtrlRichEdit_Destroy($hRichEdit) ; needed unless script crashes
+				; GUIDelete() 	; is OK too
 				Exit
 		EndSelect
 	WEnd
-EndFunc   ;==>Main
+EndFunc   ;==>Example
 
 Func Report($sMsg)
-	GUICtrlSetData($lblMsg, $sMsg)
+	GUICtrlSetData($g_idLblMsg, $sMsg)
 EndFunc   ;==>Report

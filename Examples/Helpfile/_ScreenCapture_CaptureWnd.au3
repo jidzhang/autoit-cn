@@ -1,15 +1,17 @@
 #include <ScreenCapture.au3>
 
-_Main()
+Example()
 
-Func _Main()
+Func Example()
 	Local $hGUI
 
-	; 创建 GUI
+	; Create GUI
 	$hGUI = GUICreate("Screen Capture", 400, 300)
-	GUISetState()
+	GUISetState(@SW_SHOW)
+	Sleep(250)
 
-	; 捕获窗口
+	; Capture window
 	_ScreenCapture_CaptureWnd(@MyDocumentsDir & "\GDIPlus_Image.jpg", $hGUI)
 
-EndFunc   ;==>_Main
+	ShellExecute(@MyDocumentsDir & "\GDIPlus_Image.jpg")
+EndFunc   ;==>Example

@@ -1,40 +1,42 @@
-#include <WinAPIGdi.au3>
-#include <WinAPIShellEx.au3>
-#include <WindowsConstants.au3>
 #include <GUIConstantsEx.au3>
+#include <SendMessage.au3>
+#include <StaticConstants.au3>
+#include <WinAPIGdi.au3>
+#include <WinAPIGdiDC.au3>
+#include <WinAPIHObj.au3>
+#include <WinAPIShellEx.au3>
+#include <WinAPISysWin.au3>
+#include <WindowsConstants.au3>
 
 Opt('MouseCoordMode', 2)
 
-Global Const $STM_SETIMAGE = 0x0172
-Global Const $STM_GETIMAGE = 0x0173
-
-Global $Count = 0
+Global $g_iCount = 0
 
 OnAutoItExitRegister('OnAutoItExit')
 
 ; Create GUI
 Local $hForm = GUICreate('Test ' & StringReplace(@ScriptName, '.au3', '()'), 400, 400)
-Local $Pic = GUICtrlCreatePic('', 0, 0, 400, 400)
+Local $idPic = GUICtrlCreatePic('', 0, 0, 400, 400)
 GUICtrlSetCursor(-1, 0)
-Local $hPic = GUICtrlGetHandle($Pic)
-Local $Label = GUICtrlCreateLabel('', 176, 176, 48, 48)
+Local $hPic = GUICtrlGetHandle($idPic)
+Local $idLabel = GUICtrlCreateLabel('', 176, 176, 48, 48)
 GUICtrlSetBkColor(-1, $GUI_BKCOLOR_TRANSPARENT)
-Global $hLabel = GUICtrlGetHandle($Label)
+Global $g_hLabel = GUICtrlGetHandle($idLabel)
 
 ; Extract icon
-Local $hIcon = _WinAPI_ShellExtractIcon(@SystemDir & '\shell32.dll', 130, 48, 48)
+Global $g_hIcon = _WinAPI_ShellExtractIcon(@SystemDir & '\shell32.dll', 130, 48, 48)
 
 ; Register label window proc
-Local $hDll = DllCallbackRegister('_WinProc', 'ptr', 'hwnd;uint;wparam;lparam')
-Local $pDll = DllCallbackGetPtr($hDll)
-Global $hProc = _WinAPI_SetWindowLong($hLabel, $GWL_WNDPROC, $pDll)
+Global $g_hDll = DllCallbackRegister('_WinProc', 'ptr', 'hwnd;uint;wparam;lparam')
+Local $pDll = DllCallbackGetPtr($g_hDll)
+Global $g_hProc = _WinAPI_SetWindowLong($g_hLabel, $GWL_WNDPROC, $pDll)
 
 ; Create gradient
 Local $hDC = _WinAPI_GetDC($hPic)
 Local $hDestDC = _WinAPI_CreateCompatibleDC($hDC)
 Local $hBitmap = _WinAPI_CreateCompatibleBitmap($hDC, 400, 400)
 Local $hDestSv = _WinAPI_SelectObject($hDestDC, $hBitmap)
-Local $aVertex[2][3] = [[0, 0, 0xAA00FF],[400, 400, 0x33004D]]
+Local $aVertex[2][3] = [[0, 0, 0xAA00FF], [400, 400, 0x33004D]]
 _WinAPI_GradientFill($hDestDC, $aVertex)
 
 _WinAPI_ReleaseDC($hPic, $hDC)
@@ -48,17 +50,17 @@ If $hObj <> $hBitmap Then
 	_WinAPI_DeleteObject($hBitmap)
 EndIf
 
-GUISetState()
+GUISetState(@SW_SHOW)
 
-Local $Pos
+Local $aPos
 While 1
 	Switch GUIGetMsg()
 		Case $GUI_EVENT_CLOSE
 			ExitLoop
 		Case $GUI_EVENT_PRIMARYDOWN
-			$Pos = MouseGetPos()
-			If _WinAPI_PtInRectEx($Pos[0], $Pos[1], 0, 0, 400, 400) Then
-				GUICtrlSetPos($Label, $Pos[0] - 24, $Pos[1] - 24)
+			$aPos = MouseGetPos()
+			If _WinAPI_PtInRectEx($aPos[0], $aPos[1], 0, 0, 400, 400) Then
+				GUICtrlSetPos($idLabel, $aPos[0] - 24, $aPos[1] - 24)
 			EndIf
 	EndSwitch
 WEnd
@@ -66,21 +68,21 @@ WEnd
 Func _WinProc($hWnd, $iMsg, $wParam, $lParam)
 	Switch $iMsg
 		Case $WM_PAINT
-			If $Count = 0 Then
+			If $g_iCount = 0 Then
 				Local $tPAINTSTRUCT, $hDC
 
-				$Count += 1
+				$g_iCount += 1
 				$hDC = _WinAPI_BeginPaint($hWnd, $tPAINTSTRUCT)
-				_WinAPI_DrawIconEx($hDC, 0, 0, $hIcon, 48, 48)
+				_WinAPI_DrawIconEx($hDC, 0, 0, $g_hIcon, 48, 48)
 				_WinAPI_EndPaint($hWnd, $tPAINTSTRUCT)
-				$Count -= 1
+				$g_iCount -= 1
 				Return 0
 			EndIf
 	EndSwitch
-	Return _WinAPI_CallWindowProc($hProc, $hWnd, $iMsg, $wParam, $lParam)
+	Return _WinAPI_CallWindowProc($g_hProc, $hWnd, $iMsg, $wParam, $lParam)
 EndFunc   ;==>_WinProc
 
 Func OnAutoItExit()
-	_WinAPI_SetWindowLong($hLabel, $GWL_WNDPROC, $hProc)
-	DllCallbackFree($hDll)
+	_WinAPI_SetWindowLong($g_hLabel, $GWL_WNDPROC, $g_hProc)
+	DllCallbackFree($g_hDll)
 EndFunc   ;==>OnAutoItExit

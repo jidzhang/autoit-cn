@@ -1,11 +1,12 @@
-#include <WinAPI.au3>
+#include <MsgBoxConstants.au3>
+#include <WinAPIGdiDC.au3>
 
-_Main()
+Example()
 
-Func _Main()
-	Local $hwnd, $hDC
-	$hwnd = GUICreate("test")
-	$hDC = _WinAPI_GetDC($hwnd)
-	MsgBox(4096, "Handle", "Display Device: " & $hDC)
-	_WinAPI_ReleaseDC($hwnd, $hDC)
-EndFunc   ;==>_Main
+Func Example()
+	Local $hWnd, $hDC
+	$hWnd = GUICreate("test")
+	$hDC = _WinAPI_GetDC($hWnd)
+	MsgBox($MB_SYSTEMMODAL, "Handle", "Display Device: " & $hDC)
+	_WinAPI_ReleaseDC($hWnd, $hDC)
+EndFunc   ;==>Example

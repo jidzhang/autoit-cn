@@ -1,40 +1,41 @@
-#include <GUIConstantsEx.au3>
 #include <GDIPlus.au3>
+#include <GUIConstantsEx.au3>
+#include <MsgBoxConstants.au3>
 
-_Main()
+Example()
 
-Func _Main()
+Func Example()
 	Local $hGUI, $hGraphic, $hPen, $hEndCap
 
-	; 创建 GUI
+	; Create GUI
 	$hGUI = GUICreate("GDI+", 400, 300)
-	GUISetState()
+	GUISetState(@SW_SHOW)
 
-	; 创建资源
+	; Create resources
 	_GDIPlus_Startup()
 	$hGraphic = _GDIPlus_GraphicsCreateFromHWND($hGUI)
 	$hPen = _GDIPlus_PenCreate(0xFF000000, 4)
 	$hEndCap = _GDIPlus_ArrowCapCreate(4, 6)
 
-	; 显示填充状态
-	MsgBox(4096, "信息", "Fill state: " & _GDIPlus_ArrowCapGetFillState($hEndCap))
+	; Show fill state
+	MsgBox($MB_SYSTEMMODAL, "Information", "Fill state: " & _GDIPlus_ArrowCapGetFillState($hEndCap))
 
-	; 描绘箭头 1
+	; Draw arrow 1
 	_GDIPlus_PenSetCustomEndCap($hPen, $hEndCap)
 	_GDIPlus_GraphicsDrawLine($hGraphic, 10, 130, 390, 130, $hPen)
 
-	; 描绘箭头 2
+	; Draw arrow 2
 	_GDIPlus_ArrowCapSetFillState($hEndCap, False)
 	_GDIPlus_PenSetCustomEndCap($hPen, $hEndCap)
 	_GDIPlus_GraphicsDrawLine($hGraphic, 10, 160, 390, 160, $hPen)
 
-	; 循环直到用户退出
+	; Loop until the user exits.
 	Do
 	Until GUIGetMsg() = $GUI_EVENT_CLOSE
 
-	; 清理资源
+	; Clean up resources
 	_GDIPlus_ArrowCapDispose($hEndCap)
 	_GDIPlus_PenDispose($hPen)
 	_GDIPlus_GraphicsDispose($hGraphic)
 	_GDIPlus_Shutdown()
-EndFunc   ;==>_Main
+EndFunc   ;==>Example

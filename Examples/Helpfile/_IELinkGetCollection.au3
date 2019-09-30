@@ -1,14 +1,15 @@
-; *******************************************************
-; 示例 1 - 打开含基本示例的浏览器, 获取链接集合,
-;				循环其中的每项并显示关联的 URL 引用
-; *******************************************************
+; Open browser with basic example, get link collection,
+; loop through items and display the associated link URL references
 
 #include <IE.au3>
+#include <MsgBoxConstants.au3>
 
 Local $oIE = _IE_Example("basic")
 Local $oLinks = _IELinkGetCollection($oIE)
 Local $iNumLinks = @extended
-MsgBox(4096, "Link Info", $iNumLinks & " links found")
+
+Local $sTxt = $iNumLinks & " links found" & @CRLF & @CRLF
 For $oLink In $oLinks
-	MsgBox(4096, "Link Info", $oLink.href)
+	$sTxt &= $oLink.href & @CRLF
 Next
+MsgBox($MB_SYSTEMMODAL, "Link Info", $sTxt)

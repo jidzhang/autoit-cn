@@ -1,8 +1,9 @@
+#include <MsgBoxConstants.au3>
 #include <SQLite.au3>
 #include <SQLite.dll.au3>
 
 Local $hFile, $vData, $sFileName, $sData, $hQuery, $aRow, $sMsg
-_SQLite_Startup()
+ConsoleWrite("_SQLite_Startup=" & _SQLite_Startup() & @CRLF)
 ConsoleWrite("_SQLite_LibVersion=" & _SQLite_LibVersion() & @CRLF)
 _SQLite_Open()
 _SQLite_Exec(-1, "CREATE TABLE IF NOT EXISTS Test (data blob);")
@@ -17,8 +18,8 @@ $sData = _SQLite_FastEncode($vData)
 _SQLite_Exec(-1, "INSERT INTO Test VALUES ( " & $sData & " );")
 _SQLite_Query(-1, "SELECT * FROM Test;", $hQuery)
 While _SQLite_FetchData($hQuery, $aRow, 1) = $SQLITE_OK
-	$sMsg &= Hex($aRow[0]) & @CR
+	$sMsg &= Hex($aRow[0]) & @CRLF
 WEnd
-MsgBox(4096, "Result", $sMsg)
+MsgBox($MB_SYSTEMMODAL, "Result", $sMsg)
 _SQLite_Close()
 _SQLite_Shutdown()

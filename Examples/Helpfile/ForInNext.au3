@@ -1,32 +1,38 @@
-;使用一个数组
-Local $aArray[4]
+#include <MsgBoxConstants.au3>
 
-$aArray[0] = "a"
-$aArray[1] = 0
-$aArray[2] = 1.3434
-$aArray[3]="测试"
+Example()
 
-Local $string = ""
-For $element In $aArray
-	$string = $string & $element & @CRLF
-Next
+Func Example()
+	; Using an Array
+	Local $aArray[4]
 
-MsgBox(4096,"For..IN 数组测试","结果: " & @CRLF & $string)
+	$aArray[0] = "a"
+	$aArray[1] = 0
+	$aArray[2] = 1.3434
+	$aArray[3] = "test"
 
-;使用一个对象集合
-
-Local $oShell = ObjCreate("shell.application")
-Local $oShellWindows = $oShell.windows
-
-If IsObj($oShellWindows) Then
-	$string = ""
-
-	For $Window In $oShellWindows
-		$string = $string & $Window.LocationName & @CRLF
+	Local $sString = ""
+	For $vElement In $aArray
+		$sString = $sString & $vElement & @CRLF
 	Next
 
-  MsgBox(4096,"","您打开了下列窗口:" & @CRLF & $string)
-Else
+	MsgBox($MB_SYSTEMMODAL, "", "For..IN Arraytest:" & @CRLF & "Result is: " & @CRLF & $sString)
 
-  MsgBox(4096,"","您没有打开外壳窗口.")
-EndIf
+	; Using an Object Collection
+
+	Local $oShell = ObjCreate("shell.application")
+	Local $oShellWindows = $oShell.windows
+
+	If IsObj($oShellWindows) Then
+		$sString = ""
+
+		For $Window In $oShellWindows
+			$sString = $sString & $Window.LocationName & @CRLF
+		Next
+
+		MsgBox($MB_SYSTEMMODAL, "", "You have the following windows open:" & @CRLF & $sString)
+	Else
+
+		MsgBox($MB_SYSTEMMODAL, "", "You have no open shell windows.")
+	EndIf
+EndFunc   ;==>Example

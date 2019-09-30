@@ -1,12 +1,12 @@
-#include <WinAPIShPath.au3>
-#include <WinAPIReg.au3>
 #include <APIRegConstants.au3>
+#include <WinAPIReg.au3>
+#include <WinAPIShPath.au3>
 
-Local $Data = _WinAPI_AssocQueryString('.txt', $ASSOCSTR_DEFAULTICON)
-Local $Icon = _WinAPI_PathParseIconLocation($Data)
+Local $sData = _WinAPI_AssocQueryString('.txt', $ASSOCSTR_DEFAULTICON)
+Local $aIcon = _WinAPI_PathParseIconLocation($sData)
 
-If IsArray($Icon) Then
-	ConsoleWrite('DefaultIcon: ' & $Data & @CRLF)
-	ConsoleWrite('Icon: ' & $Icon[0] & @CRLF)
-	ConsoleWrite('Index: ' & $Icon[1] & @CRLF)
+If IsArray($aIcon) Then
+	ConsoleWrite('DefaultIcon: ' & $sData & @CRLF)
+	ConsoleWrite('Icon: ' & $aIcon[0] & @CRLF)
+	ConsoleWrite('Index: ' & $aIcon[1] & @CRLF)
 EndIf

@@ -1,36 +1,37 @@
-#include <GUIConstantsEx.au3>
 #include <Clipboard.au3>
-#include <WinAPI.au3>
+#include <GUIConstantsEx.au3>
+#include <Memory.au3>
+#include <WinAPIError.au3>
 #include <WindowsConstants.au3>
 
-Global $iMemo
+Global $g_idMemo
 
-_Main()
+Example()
 
-Func _Main()
-	Local $btn_SetData, $btn_GetData, $hMemory, $hLock, $tData, $sData, $iSize
+Func Example()
+	Local $id_SetData, $id_GetData, $hMemory, $hLock, $tData, $sData, $iSize
 
-	; 创建 GUI
+	; Create GUI
 	GUICreate("Clipboard", 600, 450)
-	$iMemo = GUICtrlCreateEdit("", 2, 2, 596, 396, $WS_VSCROLL)
-	GUICtrlSetFont($iMemo, 9, 400, 0, "Courier New")
-	$btn_SetData = GUICtrlCreateButton("Set ClipBoard Data", 150, 410, 120, 30)
-	$btn_GetData = GUICtrlCreateButton("Get ClipBoard Data", 300, 410, 120, 30)
-	GUISetState()
+	$g_idMemo = GUICtrlCreateEdit("", 2, 2, 596, 396, $WS_VSCROLL)
+	GUICtrlSetFont($g_idMemo, 9, 400, 0, "Courier New")
+	$id_SetData = GUICtrlCreateButton("Set ClipBoard Data", 150, 410, 120, 30)
+	$id_GetData = GUICtrlCreateButton("Get ClipBoard Data", 300, 410, 120, 30)
+	GUISetState(@SW_SHOW)
 
-	; 循环直到用户退出
+	; Loop until the user exits.
 	While 1
 		Switch GUIGetMsg()
 			Case $GUI_EVENT_CLOSE
 				ExitLoop
-			Case $btn_SetData
-				; 打开剪贴板
+			Case $id_SetData
+				; Open clipboard
 				If _ClipBoard_Open(0) Then
 
-					; 清空剪贴板
+					; Empty clipboard
 					If _ClipBoard_Empty() Then
 
-						; 创建全局的内存缓冲区 (显示为什么使用 _ClipBoard_SetData 会更容易!)
+						; Create global memory buffer (show why using _ClipBoard_SetData is MUCH easier!)
 						$sData = "Hello from AutoIt"
 						$iSize = StringLen($sData) + 1
 						$hMemory = _MemGlobalAlloc($iSize, $GHND)
@@ -41,31 +42,30 @@ Func _Main()
 							DllStructSetData($tData, "Text", $sData)
 							_MemGlobalUnlock($hMemory)
 
-							; 写入文本到剪贴板
+							; Write clipboard text
 							If Not _ClipBoard_SetDataEx($hMemory, $CF_TEXT) Then _WinAPI_ShowError("_ClipBoard_SetDataEx failed")
 						Else
 							_WinAPI_ShowError("_Mem_GlobalAlloc failed")
 						EndIf
 
-						; 关闭剪贴板
+						; Close clipboard
 						_ClipBoard_Close()
 					Else
-						; 关闭剪贴板
+						; Close clipboard
 						_ClipBoard_Close()
 						_WinAPI_ShowError("_ClipBoard_Empty failed")
 					EndIf
 				Else
-					 _WinAPI_ShowError("_ClipBoard_Open 失败")
+					_WinAPI_ShowError("_ClipBoard_Open failed")
 				EndIf
 
-			Case $btn_GetData
+			Case $id_GetData
 				MemoWrite(_ClipBoard_GetData())
 		EndSwitch
 	WEnd
+EndFunc   ;==>Example
 
-EndFunc   ;==>_Main
-
-; 写入消息到 memo
+; Write message to memo
 Func MemoWrite($sMessage = "")
-	GUICtrlSetData($iMemo, $sMessage & @CRLF, 1)
+	GUICtrlSetData($g_idMemo, $sMessage & @CRLF, 1)
 EndFunc   ;==>MemoWrite

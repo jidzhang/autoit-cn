@@ -1,7 +1,23 @@
-﻿Local $x = ASin(0.5)
-MsgBox(4096, "ASin 函数", "反正弦值：" & $x)
+#include <MsgBoxConstants.au3>
 
-Local $pi = 4 * ATan(1) ; 等于 3.14159265358979
-Local $radToDeg = 180 / $pi
-Local $y = ASin(1) * $radToDeg; 1的反正弦值是 90°
-MsgBox(4096, "ASin 函数", "反正弦值：" & $y & "°")
+Example()
+
+Func Example()
+	; Assign a Local variable the arcSine of 0.5.
+	Local $fArcSin1 = ASin(0.5)
+
+	; Display the result.
+	MsgBox($MB_SYSTEMMODAL, "", $fArcSin1 & " rad.")
+
+	; Assign a Local constant variable the approximate PI number.
+	Local Const $PI = 3.141592653589793
+
+	; Assign a Local variable the formula to switch from radian to degree (equals to one radian in degree).
+	Local $fRadToDeg = 180 / $PI
+
+	; Assign a Local variable a number in degree.
+	Local $fArcSin2 = $fRadToDeg * ASin(1)
+
+	; Display the result.
+	MsgBox($MB_SYSTEMMODAL, "", $fArcSin2 & " deg.")
+EndFunc   ;==>Example

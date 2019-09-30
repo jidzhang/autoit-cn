@@ -1,26 +1,25 @@
 #include <GuiMenu.au3>
 
-_Main()
+Example()
 
-Func _Main()
+Func Example()
 	Local $hWnd, $hMain, $hFile
 
-	; 打开记事本
+	; Open Notepad
 	Run("notepad.exe")
 	WinWaitActive("[CLASS:Notepad]")
 	$hWnd = WinGetHandle("[CLASS:Notepad]")
 	$hMain = _GUICtrlMenu_GetMenu($hWnd)
 	$hFile = _GUICtrlMenu_GetItemSubMenu($hMain, 0)
 
-	; 改变打开项类型
+	; Change Open item type
 	Writeln("Open item type: 0x" & Hex(_GUICtrlMenu_GetItemType($hFile, 1)))
 	_GUICtrlMenu_SetItemType($hFile, 1, $MFT_RADIOCHECK)
 	_GUICtrlMenu_CheckRadioItem($hFile, 0, 8, 1)
 	Writeln("Open item type: 0x" & Hex(_GUICtrlMenu_GetItemType($hFile, 1)))
+EndFunc   ;==>Example
 
-EndFunc   ;==>_Main
-
-; 写入一行文本到记事本
+; Write a line of text to Notepad
 Func Writeln($sText)
-	ControlSend("[CLASS:Notepad]", "", "Edit1", $sText & @CR)
+	ControlSend("[CLASS:Notepad]", "", "Edit1", $sText & @CRLF)
 EndFunc   ;==>Writeln

@@ -1,6 +1,8 @@
+#include <GDIPlus.au3>
 #include <GUIConstantsEx.au3>
-#include <Constants.au3>
+#include <MsgBoxConstants.au3>
 #include <ScreenCapture.au3>
+#include <WinAPIHObj.au3>
 
 Example()
 
@@ -8,7 +10,7 @@ Func Example()
 	_GDIPlus_Startup()
 	Local Const $iW = @DesktopWidth / 4, $iH = @DesktopHeight / 4
 	Local $hGUI = GUICreate("GDI+ test", $iW, $iH, -1, 10)
-	GUISetState()
+	GUISetState(@SW_SHOW)
 
 	Local $aIM[8] = ["Default", "Low Quality", "High Quality", "Bilinear", "Bicubic", "Nearest Neighbor", "High Quality Bilinear", "High Quality Bicubic"]
 

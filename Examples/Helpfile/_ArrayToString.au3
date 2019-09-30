@@ -1,12 +1,18 @@
 #include <Array.au3>
+#include <MsgBoxConstants.au3>
 
-Local $avArray[20]
-
-; 为测试数组的元素赋值.
-For $i = 0 To UBound($avArray) - 1
-	$avArray[$i] = Random(-20000, 20000, 1)
+Local $aArray[20]
+For $i = 0 To 19
+	$aArray[$i] = $i
 Next
+_ArrayDisplay($aArray, "1D Array")
+MsgBox($MB_SYSTEMMODAL, "Items 1-7", _ArrayToString($aArray, @TAB, 1, 7))
 
-_ArrayDisplay($avArray, "$avArray")
-
-MsgBox(4096, "_ArrayToString() getting $avArray items 1 to 7", _ArrayToString($avArray, @TAB, 1, 7))
+Local $aArray[10][10]
+For $i = 0 To 9
+	For $j = 0 To 9
+		$aArray[$i][$j] = $i & "-" & $j
+	Next
+Next
+_ArrayDisplay($aArray, "2D Array")
+MsgBox($MB_SYSTEMMODAL, "Rows 4-7,  cols 2-5", _ArrayToString($aArray, " :: ", 4, 7, @CRLF, 2, 5))

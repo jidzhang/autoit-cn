@@ -5,14 +5,14 @@ Example()
 
 Func Example()
 	Local $hGUI, $hGraphics, $hPath, $hCustomLineCap, $hClonedLineCap, $hPen
-	Local $avPoints[4][2] = [[3],[-15, -15],[0, 0],[15, -15]]
+	Local $avPoints[4][2] = [[3], [-15, -15], [0, 0], [15, -15]]
 
 	; Initialize GDI+
 	_GDIPlus_Startup()
 
 	;create a Graphics object from a window handle
 	$hGUI = GUICreate("_GDIPlus_CustomLineCapCreate Example", 400, 200)
-	GUISetState()
+	GUISetState(@SW_SHOW)
 
 	$hGraphics = _GDIPlus_GraphicsCreateFromHWND($hGUI)
 

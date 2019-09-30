@@ -1,2 +1,4 @@
-Local $result = StringTrimRight("I am a string", 3)
-MsgBox(4096, "去掉最右方3个字符后的字符串为:", $result)
+#include <MsgBoxConstants.au3>
+
+Local $sString = StringTrimRight("This is a sentence with whitespace.", 5) ; Remove the 5 rightmost characters from the string.
+MsgBox($MB_SYSTEMMODAL, "", $sString)

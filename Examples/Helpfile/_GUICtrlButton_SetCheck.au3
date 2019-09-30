@@ -1,33 +1,32 @@
-#include <GUIConstantsEx.au3>
 #include <GuiButton.au3>
+#include <GUIConstantsEx.au3>
 #include <WindowsConstants.au3>
 
-Global $iMemo
+Global $g_idMemo
 
-_Main()
+Example()
 
-Func _Main()
-	Local $rdo, $rdo2, $chk
+Func Example()
+	Local $idRdo, $idRdo2, $idChk
 
 	GUICreate("Buttons", 400, 400)
-	$iMemo = GUICtrlCreateEdit("", 119, 10, 276, 374, $WS_VSCROLL)
-	GUICtrlSetFont($iMemo, 9, 400, 0, "Courier New")
+	$g_idMemo = GUICtrlCreateEdit("", 119, 10, 276, 374, $WS_VSCROLL)
+	GUICtrlSetFont($g_idMemo, 9, 400, 0, "Courier New")
 
-	$rdo = GUICtrlCreateRadio("Radio1", 10, 10, 90, 50)
+	$idRdo = GUICtrlCreateRadio("Radio1", 10, 10, 90, 50)
 
-	$rdo2 = GUICtrlCreateRadio("Radio2", 10, 60, 90, 50)
-	_GUICtrlButton_SetCheck($rdo2)
-	_GUICtrlButton_SetFocus($rdo2) ; set focus, shows this doesn't affect _GUICtrlButton_GetCheck
+	$idRdo2 = GUICtrlCreateRadio("Radio2", 10, 60, 90, 50)
+	_GUICtrlButton_SetCheck($idRdo2)
+	_GUICtrlButton_SetFocus($idRdo2) ; set focus, shows this doesn't affect _GUICtrlButton_GetCheck
 
-	$chk = GUICtrlCreateCheckbox("Check1", 10, 120, 90, 50, BitOR($BS_AUTO3STATE, $BS_NOTIFY))
-	_GUICtrlButton_SetCheck($chk, $BST_INDETERMINATE)
+	$idChk = GUICtrlCreateCheckbox("Check1", 10, 120, 90, 50, BitOR($BS_AUTO3STATE, $BS_NOTIFY))
+	_GUICtrlButton_SetCheck($idChk, $BST_INDETERMINATE)
 
-	GUISetState()
+	GUISetState(@SW_SHOW)
 
-	MemoWrite("$rdo checked status.: " & @CRLF & @TAB & _ExplainCheckState(_GUICtrlButton_GetCheck($rdo)) & @CRLF)
-	MemoWrite("$rdo2 checked status: " & @CRLF & @TAB & _ExplainCheckState(_GUICtrlButton_GetCheck($rdo2)) & @CRLF)
-	MemoWrite("$chk checked status.: " & @CRLF & @TAB & _ExplainCheckState(_GUICtrlButton_GetCheck($chk)) & @CRLF)
-
+	MemoWrite("$idRdo checked status.: " & @CRLF & @TAB & _ExplainCheckState(_GUICtrlButton_GetCheck($idRdo)) & @CRLF)
+	MemoWrite("$idRdo2 checked status: " & @CRLF & @TAB & _ExplainCheckState(_GUICtrlButton_GetCheck($idRdo2)) & @CRLF)
+	MemoWrite("$idChk checked status.: " & @CRLF & @TAB & _ExplainCheckState(_GUICtrlButton_GetCheck($idChk)) & @CRLF)
 
 	While 1
 		Switch GUIGetMsg()
@@ -37,11 +36,11 @@ Func _Main()
 	WEnd
 
 	Exit
-EndFunc   ;==>_Main
+EndFunc   ;==>Example
 
-; 写入一行到 memo 控件
+; Write a line to the memo control
 Func MemoWrite($sMessage)
-	GUICtrlSetData($iMemo, $sMessage & @CRLF, 1)
+	GUICtrlSetData($g_idMemo, $sMessage & @CRLF, 1)
 EndFunc   ;==>MemoWrite
 
 Func _ExplainCheckState($iState)

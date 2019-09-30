@@ -50,7 +50,7 @@ EndFunc   ;==>Example
 Func SocketToIP($iSocket)
 	Local $tSockAddr = 0, $aRet = 0
 	$tSockAddr = DllStructCreate("short;ushort;uint;char[8]")
-	$aRet = DllCall("Ws2_32.dll", "int", "getpeername", "int", $iSocket, "ptr", DllStructGetPtr($tSockAddr), "int*", DllStructGetSize($tSockAddr))
+	$aRet = DllCall("Ws2_32.dll", "int", "getpeername", "int", $iSocket, "struct*", $tSockAddr, "int*", DllStructGetSize($tSockAddr))
 	If Not @error And $aRet[0] = 0 Then
 		$aRet = DllCall("Ws2_32.dll", "str", "inet_ntoa", "int", DllStructGetData($tSockAddr, 3))
 		If Not @error Then Return $aRet[0]

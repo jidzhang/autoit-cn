@@ -1,8 +1,9 @@
-#include <WinAPIGdi.au3>
 #include <GUIConstantsEx.au3>
-
-Global Const $STM_SETIMAGE = 0x0172
-Global Const $STM_GETIMAGE = 0x0173
+#include <SendMessage.au3>
+#include <StaticConstants.au3>
+#include <WinAPIGdi.au3>
+#include <WinAPIHObj.au3>
+#include <WinAPIRes.au3>
 
 ; Load and resize (x2) image
 Local $hBitmap = _WinAPI_LoadImage(0, @ScriptDir & '\Extras\AutoIt.bmp', $IMAGE_BITMAP, 0, 0, $LR_LOADFROMFILE)
@@ -14,8 +15,8 @@ _WinAPI_DeleteObject($hBitmap)
 
 ; Create GUI
 Local $hForm = GUICreate('Test ' & StringReplace(@ScriptName, '.au3', '()'), $W, $H)
-Local $Pic = GUICtrlCreatePic('', 0, 0, $W, $H)
-Local $hPic = GUICtrlGetHandle($Pic)
+Local $idPic = GUICtrlCreatePic('', 0, 0, $W, $H)
+Local $hPic = GUICtrlGetHandle($idPic)
 
 ; Set bitmap to control
 _SendMessage($hPic, $STM_SETIMAGE, 0, $hResize)
@@ -24,7 +25,7 @@ If $hObj <> $hResize Then
 	_WinAPI_DeleteObject($hResize)
 EndIf
 
-GUISetState()
+GUISetState(@SW_SHOW)
 
 Do
 Until GUIGetMsg() = $GUI_EVENT_CLOSE

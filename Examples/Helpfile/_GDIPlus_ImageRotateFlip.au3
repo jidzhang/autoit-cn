@@ -1,6 +1,7 @@
+#include <GDIPlus.au3>
 #include <GUIConstantsEx.au3>
-#include <Constants.au3>
 #include <ScreenCapture.au3>
+#include <WinAPIHObj.au3>
 
 Example()
 
@@ -14,7 +15,7 @@ Func Example()
 	_GDIPlus_ImageRotateFlip($hBitmap, 1) ;rotate image by 90 degrees without flipping
 
 	Local $hGUI = GUICreate("GDI+ test", $iH, $iW, -1, -1) ;create a test gui to display the rotated image
-	GUISetState()
+	GUISetState(@SW_SHOW)
 
 	Local $hGraphics = _GDIPlus_GraphicsCreateFromHWND($hGUI) ;create a graphics object from a window handle
 	_GDIPlus_GraphicsDrawImage($hGraphics, $hBitmap, 0, 0) ;display rotated image

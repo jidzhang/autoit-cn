@@ -1,55 +1,39 @@
 #include <GUIConstantsEx.au3>
 #include <GuiListView.au3>
+#include <MsgBoxConstants.au3>
 
-$Debug_LV = False ; 检查传递给 ListView 函数的类名, 设置为真并使用另一控件的句柄可以看出它是否有效
+Example()
 
-Example1()
-Example_UDF_Created()
+Func Example()
+	GUICreate("ListView Item Deletion", 400, 500)
+	Local $idListview = GUICtrlCreateListView("Col 1               |Col 2      |Col 3      ", 10, 10, 380, 480, $LVS_SHOWSELALWAYS)
+	GUISetState(@SW_SHOW)
 
-Func Example1()
-	Local $hListView
-
-	GUICreate("ListView Delete Item", 400, 300)
-	$hListView = GUICtrlCreateListView("col1|col2|col3", 2, 2, 394, 268)
-	GUISetState()
-
-	; 加载三列
-	For $iI = 0 To 9
-		GUICtrlCreateListViewItem("Item " & $iI & "|Item " & $iI & "-1|Item " & $iI & "-2", $hListView)
+	For $i = 0 To 9
+		GUICtrlCreateListViewItem("Native Item " & $i & "|Item " & $i & "-1|Item " & $i & "-2", $idListview)
+	Next
+	For $i = 10 To 20
+		_GUICtrlListView_AddItem($idListview, "UDF Item " & $i, -1, 1000 + $i)
+		_GUICtrlListView_AddSubItem($idListview, $i, "Item " & $i & "-1", 1)
+		_GUICtrlListView_AddSubItem($idListview, $i, "Item " & $i & "-2", 2)
 	Next
 
-	MsgBox(4160, "信息", "Delete Item")
-	; 用内置函数创建项目, 传递控件 ID
-	MsgBox(4160, "Deleted?", _GUICtrlListView_DeleteItem(GUICtrlGetHandle($hListView), 1))
+	; Pass the controlID of a native-created ListView to delete both native- and UDF-created Items
+	MsgBox($MB_SYSTEMMODAL, "Delete item", "Deleting UDF-created Item 12")
+	_GUICtrlListView_DeleteItem($idListview, 12)
 
-	; 循环直到用户退出
-	Do
-	Until GUIGetMsg() = $GUI_EVENT_CLOSE
+	MsgBox($MB_SYSTEMMODAL, "Single", "Deleting native-created Item 5")
+	_GUICtrlListView_DeleteItem($idListview, 5)
+
+	; Loop until the user exits
+	While 1
+		Switch GUIGetMsg()
+			Case $GUI_EVENT_CLOSE
+				ExitLoop
+
+		EndSwitch
+	WEnd
+
+	; Delete the previous GUI and all controls.
 	GUIDelete()
-EndFunc   ;==>Example1
-
-Func Example_UDF_Created()
-	Local $GUI, $aItems[10][3], $hListView
-
-	$GUI = GUICreate("(UDF Created) ListView Delete Item", 400, 300)
-	$hListView = _GUICtrlListView_Create($GUI, "col1|col2|col3", 2, 2, 394, 268)
-	GUISetState()
-
-	; 加载三列
-	For $iI = 0 To UBound($aItems) - 1
-		$aItems[$iI][0] = "Item " & $iI
-		$aItems[$iI][1] = "Item " & $iI & "-1"
-		$aItems[$iI][2] = "Item " & $iI & "-2"
-	Next
-
-	_GUICtrlListView_AddArray($hListView, $aItems)
-
-	MsgBox(4160, "信息", "Delete Item")
-	; 这已经是个句柄
-	MsgBox(4160, "Deleted?", _GUICtrlListView_DeleteItem($hListView, 1))
-
-	; 循环直到用户退出
-	Do
-	Until GUIGetMsg() = $GUI_EVENT_CLOSE
-	GUIDelete()
-EndFunc   ;==>Example_UDF_Created
+EndFunc   ;==>Example

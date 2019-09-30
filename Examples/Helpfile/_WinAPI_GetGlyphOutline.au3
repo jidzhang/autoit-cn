@@ -1,12 +1,13 @@
-#include <WinAPIGdi.au3>
 #include <APIGdiConstants.au3>
-#include <WinAPISys.au3>
-#include <WindowsConstants.au3>
 #include <FontConstants.au3>
 #include <GUIConstantsEx.au3>
-
-Global Const $STM_SETIMAGE = 0x0172
-Global Const $STM_GETIMAGE = 0x0173
+#include <SendMessage.au3>
+#include <StaticConstants.au3>
+#include <WinAPIGdi.au3>
+#include <WinAPIGdiDC.au3>
+#include <WinAPIHObj.au3>
+#include <WinAPIMem.au3>
+#include <WindowsConstants.au3>
 
 ; Creates logical font ("Times") and retrieve bitmap bits for a random character
 Local $hDC = _WinAPI_CreateCompatibleDC(0)
@@ -36,8 +37,8 @@ _WinAPI_DeleteDC($hDC)
 
 ; Create GUI
 Local $hForm = GUICreate('Test ' & StringReplace(@ScriptName, '.au3', '()'), $W, $H)
-Local $Pic = GUICtrlCreatePic('', 0, 0, $W, $H)
-Local $hPic = GUICtrlGetHandle($Pic)
+Local $idPic = GUICtrlCreatePic('', 0, 0, $W, $H)
+Local $hPic = GUICtrlGetHandle($idPic)
 
 ; Set bitmap to control
 _SendMessage($hPic, $STM_SETIMAGE, 0, $hDib)
@@ -47,7 +48,7 @@ If $hBmp <> $hDib Then
 EndIf
 
 ; Show GUI
-GUISetState()
+GUISetState(@SW_SHOW)
 
 Do
 Until GUIGetMsg() = $GUI_EVENT_CLOSE

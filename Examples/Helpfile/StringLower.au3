@@ -1,2 +1,4 @@
-Local $var = StringLower("I Am A String")
-MsgBox(4096, "字符串转换为小写为:", $var)
+#include <MsgBoxConstants.au3>
+
+Local $sString = StringLower("This is a string") ; Convert the following string to lowercase.
+MsgBox($MB_SYSTEMMODAL, "", "StringLower returned: " & $sString)

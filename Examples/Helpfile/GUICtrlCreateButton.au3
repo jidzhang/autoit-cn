@@ -3,25 +3,34 @@
 Example()
 
 Func Example()
-	Local $Button_1, $Button_2, $msg
-	GUICreate("My GUI Button") ; 创建一个对话框,并居中显示
+	; Create a GUI with various controls.
+	Local $hGUI = GUICreate("Example", 300, 200)
 
-	Opt("GUICoordMode", 2)
-	$Button_1 = GUICtrlCreateButton("打开记事本", 10, 30, 100)
-	$Button_2 = GUICtrlCreateButton("测试按钮", 0, -1)
+	; Create a button control.
+	Local $idButton_Notepad = GUICtrlCreateButton("Run Notepad", 120, 170, 85, 25)
+	Local $idButton_Close = GUICtrlCreateButton("Close", 210, 170, 85, 25)
 
-	GUISetState()      ; 显示有两个按钮的对话框
+	; Display the GUI.
+	GUISetState(@SW_SHOW, $hGUI)
 
-	; 运行界面,直到窗口被关闭
+	Local $iPID = 0
+
+	; Loop until the user exits.
 	While 1
-		$msg = GUIGetMsg()
-		Select
-			Case $msg = $GUI_EVENT_CLOSE
+		Switch GUIGetMsg()
+			Case $GUI_EVENT_CLOSE, $idButton_Close
 				ExitLoop
-			Case $msg = $Button_1
-				Run('Notepad.exe')    ; 点击按钮 1 打开记事本
-			Case $msg = $Button_2
-				MsgBox(4096, '测试', '你点击了测试按钮')    ; 点击按钮 2 显示一个简单的对话框
-		EndSelect
+
+			Case $idButton_Notepad
+				; Run Notepad with the window maximized.
+				$iPID = Run("notepad.exe", "", @SW_SHOWMAXIMIZED)
+
+		EndSwitch
 	WEnd
+
+	; Delete the previous GUI and all controls.
+	GUIDelete($hGUI)
+
+	; Close the Notepad process using the PID returned by Run.
+	If $iPID Then ProcessClose($iPID)
 EndFunc   ;==>Example

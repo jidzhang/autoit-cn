@@ -1,3 +1,5 @@
+#include <MsgBoxConstants.au3>
+
 Example()
 
 Func Example()
@@ -7,5 +9,7 @@ Func Example()
 	Local $sFile = RegRead("HKEY_LOCAL_MACHINE\SOFTWARE" & $sWow64 & "\AutoIt v3\AutoIt", "InstallDir") & "\include\_ReadMe_.txt"
 
 	; Execute the readme file (.txt) with the default editor used for text files in Windows.
-	ShellExecute($sFile)
+	Local $iPID = ShellExecute($sFile)
+
+	MsgBox($MB_SYSTEMMODAL, "", "PID: " & $iPID)
 EndFunc   ;==>Example

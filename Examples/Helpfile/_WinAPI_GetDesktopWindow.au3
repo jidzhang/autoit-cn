@@ -1,9 +1,10 @@
-#include <WinAPI.au3>
+#include <MsgBoxConstants.au3>
+#include <WinAPISysWin.au3>
 
-_Main()
+Example()
 
-Func _Main()
-	Local $win = _WinAPI_GetDesktopWindow()
-	MsgBox(4096, "", WinGetTitle($win))
-	MsgBox(4096, "", $win)
-EndFunc   ;==>_Main
+Func Example()
+	Local $hWin = _WinAPI_GetDesktopWindow()
+	MsgBox($MB_SYSTEMMODAL, "", WinGetTitle($hWin))
+	MsgBox($MB_SYSTEMMODAL, "", $hWin)
+EndFunc   ;==>Example

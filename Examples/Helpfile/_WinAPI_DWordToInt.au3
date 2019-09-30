@@ -1,5 +1,5 @@
-#include <WinAPIMisc.au3>
+#include <WinAPIConv.au3>
 
-Local $Value = 4294967295
+Local $iValue = 4294967295
 
-ConsoleWrite(_WinAPI_DWordToInt($Value) & @CRLF)
+ConsoleWrite(_WinAPI_DWordToInt($iValue) & @CRLF)

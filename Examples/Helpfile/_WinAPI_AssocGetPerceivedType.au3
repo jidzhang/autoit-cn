@@ -1,12 +1,12 @@
 #include <WinAPIReg.au3>
 
-Local $Ext = '.wav'
-Local $Data = _WinAPI_AssocGetPerceivedType($Ext)
+Local $sExt = '.wav'
+Local $aData = _WinAPI_AssocGetPerceivedType($sExt)
 
-If IsArray($Data) Then
-	ConsoleWrite('(' & $Ext & ')' & @CRLF)
+If IsArray($aData) Then
+	ConsoleWrite('(' & $sExt & ')' & @CRLF)
 	ConsoleWrite('--------------------' & @CRLF)
-	ConsoleWrite('Type:   ' & $Data[0] & @CRLF)
-	ConsoleWrite('Source: ' & $Data[1] & @CRLF)
-	ConsoleWrite('String: ' & $Data[2] & @CRLF)
+	ConsoleWrite('Type:   ' & $aData[0] & @CRLF)
+	ConsoleWrite('Source: ' & $aData[1] & @CRLF)
+	ConsoleWrite('String: ' & $aData[2] & @CRLF)
 EndIf

@@ -1,28 +1,39 @@
+#include <FontConstants.au3>
 #include <GUIConstantsEx.au3>
 
 Example()
 
 Func Example()
-	Local $font, $msg
+	; Font type to be used for setting the font of the controls.
+	Local Const $sFont = "Comic Sans Ms"
 
-	GUICreate("My GUI") ; will create a dialog box that when displayed is centered
+	; Create a GUI with various controls.
+	Local $hGUI = GUICreate("Example", 300, 200)
 
-	$font = "Comic Sans MS"
-	GUICtrlCreateLabel("underlined label", 10, 20)
-	GUICtrlSetFont(-1, 9, 400, 4, $font) ; will display underlined characters
+	; Create label controls.
+	GUICtrlCreateLabel("A string of text underlined", 10, 10, 185, 17)
+	GUICtrlSetFont(-1, 9, $FW_NORMAL, $GUI_FONTUNDER, $sFont) ; Set the font of the previous control.
 
-	GUICtrlCreateLabel("italic label", 10, 40)
-	GUICtrlSetFont(-1, 9, 400, 2, $font) ; will display italic characters
+	Local $idLabel2 = GUICtrlCreateLabel("A string of italic text", 10, 30, 185, 17)
+	GUICtrlSetFont($idLabel2, 9, $FW_NORMAL,  $GUI_FONTITALIC, $sFont) ; Set the font of the controlID stored in $iLabel2.
 
-	GUISetFont(9, 400, 8, $font) ; will display strike characters
-	GUICtrlCreateLabel("strike label", 10, 60)
+	Local $idLabel3 = GUICtrlCreateLabel("A string of text with a strike through", 10, 50, 290, 17)
+	GUICtrlSetFont($idLabel3, 9, $FW_NORMAL, $GUI_FONTSTRIKE, $sFont) ; Set the font of the controlID stored in $iLabel3.
 
-	GUISetState() ; will display an empty dialog box
+	Local $idButton_Close = GUICtrlCreateButton("Close", 210, 170, 85, 25)
 
-	; Run the GUI until the dialog is closed
+	; Display the GUI.
+	GUISetState(@SW_SHOW, $hGUI)
+
+	; Loop until the user exits.
 	While 1
-		$msg = GUIGetMsg()
+		Switch GUIGetMsg()
+			Case $GUI_EVENT_CLOSE, $idButton_Close
+				ExitLoop
 
-		If $msg = $GUI_EVENT_CLOSE Then ExitLoop
+		EndSwitch
 	WEnd
+
+	; Delete the previous GUI and all controls.
+	GUIDelete($hGUI)
 EndFunc   ;==>Example

@@ -1,8 +1,22 @@
-Local $x = Log(1000) ;returns 6.90775527898214
+#include <MsgBoxConstants.au3>
 
-Local $y = Log10(1000) ;returns 3
+Example()
 
-; user-defined function for common log
-Func Log10($x)
-	Return Log($x) / Log(10) ;10 is the base
+Func Example()
+	; Assign a Local variable the natural logarithm of 1000.
+	Local $fLog1 = Log(1000)
+
+	; Display the result.
+	MsgBox($MB_SYSTEMMODAL, "", $fLog1)
+
+	; Assign a Local variable the base-10 natural logarithm of 1000.
+	Local $fLog2 = Log10(1000)
+
+	; Display the result.
+	MsgBox($MB_SYSTEMMODAL, "", $fLog2)
+EndFunc   ;==>Example
+
+; User-defined function for common log
+Func Log10($fNb)
+	Return Log($fNb) / Log(10) ; 10 is the base
 EndFunc   ;==>Log10

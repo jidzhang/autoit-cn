@@ -1,17 +1,18 @@
 #include <Date.au3>
+#include <MsgBoxConstants.au3>
 
-; 今天+5天
+; Add 5 days to today
 Local $sNewDate = _DateAdd('d', 5, _NowCalcDate())
-MsgBox( 4096, "", "今天 + 5 天:" & $sNewDate )
+MsgBox($MB_SYSTEMMODAL, "", "Today + 5 days: " & $sNewDate)
 
-; 今天减去两周
+; Subtract 2 weeks from today
 $sNewDate = _DateAdd('w', -2, _NowCalcDate())
-MsgBox( 4096, "", "今天减去两周: " & $sNewDate )
+MsgBox($MB_SYSTEMMODAL, "", "Today minus 2 weeks: " & $sNewDate)
 
-; 当前时间 +15 分钟
+; Add 15 minutes to current time
 $sNewDate = _DateAdd('n', 15, _NowCalc())
-MsgBox( 4096, "", "当前时间 +15 分钟: " & $sNewDate )
+MsgBox($MB_SYSTEMMODAL, "", "Current time +15 minutes: " & $sNewDate)
 
-; 计算从 1970/01/01 00:00:00 开始 经过 1087497645 秒后的时间
+; Calculated eventlogdate which returns second since 1970/01/01 00:00:00
 $sNewDate = _DateAdd('s', 1087497645, "1970/01/01 00:00:00")
-MsgBox( 4096, "", "计算时间: " & $sNewDate )
+MsgBox($MB_SYSTEMMODAL, "", "Date: " & $sNewDate)

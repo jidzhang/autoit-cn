@@ -1,26 +1,23 @@
-#include <GUIConstantsEx.au3>
 #include <GuiButton.au3>
+#include <GUIConstantsEx.au3>
 #include <WindowsConstants.au3>
-#include <GuiMenu.au3>
 
-Global $btn, $btn2
+; Note the controlID from these buttons can NOT be read with GUICtrlRead
 
-; 注意这些按钮的控件 ID 无法使用 GuiCtrlRead 读取
+Example()
 
-_Main()
-
-Func _Main()
-	Local $hGUI
+Func Example()
+	Local $hGUI, $hBtn, $hBtn2
 
 	$hGUI = GUICreate("Buttons", 400, 400)
 
-	$btn = _GUICtrlButton_Create($hGUI, "Button1", 10, 10, 90, 30)
-	_GUICtrlButton_SetShield($btn)
+	$hBtn = _GUICtrlButton_Create($hGUI, "Button1", 10, 10, 90, 30)
+	_GUICtrlButton_SetShield($hBtn)
 
-	$btn2 = _GUICtrlButton_Create($hGUI, "Button2", 10, 60, 90, 30, $BS_SPLITBUTTON)
-	_GUICtrlButton_SetShield($btn2)
+	$hBtn2 = _GUICtrlButton_Create($hGUI, "Button2", 10, 60, 90, 30, $BS_SPLITBUTTON)
+	_GUICtrlButton_SetShield($hBtn2)
 
-	GUISetState()
+	GUISetState(@SW_SHOW)
 
 	While 1
 		Switch GUIGetMsg()
@@ -30,5 +27,4 @@ Func _Main()
 	WEnd
 
 	Exit
-
-EndFunc   ;==>_Main
+EndFunc   ;==>Example

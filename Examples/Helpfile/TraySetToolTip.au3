@@ -1,13 +1,13 @@
 #NoTrayIcon
+#include <TrayConstants.au3>
 
 Example()
 
 Func Example()
-	TraySetState(1) ; Show the tray menu.
-	TraySetToolTip("An example of a tray menu tooltip.") ; 这是我一个新的托盘工具提示文本!
+	TraySetState($TRAY_ICONSTATE_SHOW) ; Show the tray menu.
+	TraySetToolTip("An example of a tray menu tooltip.") ; The tray menu icon must be shown before we can set some text.
 
 	While 1
-	Sleep(100)	; 空闲循环
+		Sleep(100) ; An idle loop.
 	WEnd
 EndFunc   ;==>Example
-

@@ -1,25 +1,26 @@
-#include <GuiRichEdit.au3>
 #include <GUIConstantsEx.au3>
+#include <GuiRichEdit.au3>
+#include <SendMessage.au3>
 #include <WindowsConstants.au3>
 
-Global $lblMsg, $hRichEdit
+Global $g_idLblMsg
 
-Main()
+Example()
 
-Func Main()
-	Local $hGui, $iMsg, $btnNext, $iCp = -1, $s
-	$hGui = GUICreate("Example (" & StringTrimRight(@ScriptName, 4) & ")", 320, 350, -1, -1)
+Func Example()
+	Local $hGui, $iMsg, $idBtnNext, $hRichEdit, $iCp = -1, $s
+	$hGui = GUICreate("Example (" & StringTrimRight(@ScriptName, StringLen(".exe")) & ")", 320, 350, -1, -1)
 	$hRichEdit = _GUICtrlRichEdit_Create($hGui, "This is a test.", 10, 10, 300, 220, _
 			BitOR($ES_MULTILINE, $WS_VSCROLL, $ES_AUTOVSCROLL))
-	$lblMsg = GUICtrlCreateLabel("", 10, 235, 300, 60)
-	$btnNext = GUICtrlCreateButton("Next", 270, 310, 40, 30)
-	GUISetState()
+	$g_idLblMsg = GUICtrlCreateLabel("", 10, 235, 300, 60)
+	$idBtnNext = GUICtrlCreateButton("Next", 270, 310, 40, 30)
+	GUISetState(@SW_SHOW)
 
 	$s = Chr(9)
 	For $i = 32 To 126
 		$s &= Chr($i)
 	Next
-	_GUICtrlRichEdit_AppendText($hRichEdit, $s & @CR)
+	_GUICtrlRichEdit_AppendText($hRichEdit, $s & @CRLF)
 	_GUICtrlRichEdit_AppendText($hRichEdit, "AutoIt v3 is a (freeware) BASIC-like scripting language designed for " _
 			 & "automating the Windows GUI and general scripting.")
 	_GUICtrlRichEdit_AppendText($hRichEdit, @CRLF & "Another paragraph")
@@ -27,46 +28,45 @@ Func Main()
 		$iMsg = GUIGetMsg()
 		Select
 			Case $iMsg = $GUI_EVENT_CLOSE
-				_GUICtrlRichEdit_Destroy($hRichEdit) ; 除非脚本崩溃才需要
-;~ 				GUIDelete() 	; 同样行
+				_GUICtrlRichEdit_Destroy($hRichEdit) ; needed unless script crashes
+				; GUIDelete() 	; is OK too
 				Exit
-			Case $iMsg = $btnNext
+			Case $iMsg = $idBtnNext
 				$iCp += 1
 				_GUICtrlRichEdit_GotoCharPos($hRichEdit, $iCp)
-				GUICtrlSetData($lblMsg, _GUICtrlRichEdit_GetCharWordBreakInfo($hRichEdit, $iCp))
-				ControlFocus($hRichEdit, "", "")
+				GUICtrlSetData($g_idLblMsg, _GUICtrlRichEdit_GetCharWordBreakInfo($hRichEdit, $iCp))
 		EndSelect
 	WEnd
-EndFunc   ;==>Main
+EndFunc   ;==>Example
 
 Func Report($sMsg)
-	GUICtrlSetData($lblMsg, $sMsg)
+	GUICtrlSetData($g_idLblMsg, $sMsg)
 EndFunc   ;==>Report
 
-Func GetWord($hWnd, $iCp, $fForward, $fStartOfWord, $fClass = False)
-	Local $iRet, $iWparam
-	If $fClass Then
-		If $fForward Then
-			$iWparam = $WB_MOVEWORDRIGHT
+Func GetWord($hWnd, $iCp, $bForward, $bStartOfWord, $bClass = False)
+	Local $iRet, $wParam
+	If $bClass Then
+		If $bForward Then
+			$wParam = $WB_MOVEWORDRIGHT
 		Else
-			$iWparam = $WB_MOVEWORDLEFT
+			$wParam = $WB_MOVEWORDLEFT
 		EndIf
 	Else
-		If $fForward Then
-			If $fStartOfWord Then
-				$iWparam = $WB_RIGHT
+		If $bForward Then
+			If $bStartOfWord Then
+				$wParam = $WB_RIGHT
 			Else
-				$iWparam = $WB_LEFT
+				$wParam = $WB_LEFT
 			EndIf
 		Else
-			If $fStartOfWord Then
-				$iWparam = $WB_RIGHTBREAK
+			If $bStartOfWord Then
+				$wParam = $WB_RIGHTBREAK
 			Else
-				$iWparam = $wb_LEFTBREAK
+				$wParam = $wb_LEFTBREAK
 			EndIf
 		EndIf
 	EndIf
-	$iRet = _SendMessage($hWnd, $EM_FINDWORDBREAK, $iWparam, $iCp)
-	ConsoleWrite('@@ Debug(' & @ScriptLineNumber & ') : $iWparam = ' & $iWparam & @CRLF & '>Error code: ' & @error & @CRLF) ;### Debug Console
+	$iRet = _SendMessage($hWnd, $EM_FINDWORDBREAK, $wParam, $iCp)
+	ConsoleWrite('@@ Debug(' & @ScriptLineNumber & ') : $wParam = ' & $wParam & @CRLF & '>Error code: ' & @error & @CRLF) ;### Debug Console
 	Return $iRet
 EndFunc   ;==>GetWord

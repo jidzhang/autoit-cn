@@ -1,27 +1,26 @@
-#include <GuiToolbar.au3>
-#include <GuiMenu.au3>
 #include <GUIConstantsEx.au3>
+#include <GuiMenu.au3>
+#include <GuiToolbar.au3>
+#include <WinAPIConstants.au3>
 #include <WindowsConstants.au3>
-#include <Constants.au3>
 
-$Debug_TB = False ; 检查传递给函数的类名, 设置为True并输出到一个控件的句柄,用于检查它是否工作
-Global $hGUI, $iMemo
+Global $g_hGUI, $g_idMemo
 
-_Main()
+Example()
 
-Func _Main()
+Func Example()
 	Local $hToolbar
-	Local Enum $idNew = 1000, $idOpen, $idSave, $idHelp
+	Local Enum $e_idNew = 1000, $e_idOpen, $e_idSave, $idHelp
 
-	; 创建 GUI
-	$hGUI = GUICreate("Toolbar", 400, 300)
-	$hToolbar = _GUICtrlToolbar_Create($hGUI)
+	; Create GUI
+	$g_hGUI = GUICreate("Toolbar", 400, 300)
+	$hToolbar = _GUICtrlToolbar_Create($g_hGUI)
 	_GUICtrlToolbar_SetExtendedStyle($hToolbar, $TBSTYLE_EX_DRAWDDARROWS)
-	$iMemo = GUICtrlCreateEdit("", 2, 36, 396, 262, $WS_VSCROLL)
-	GUICtrlSetFont($iMemo, 10, 400, 0, "Courier New")
-	GUISetState()
+	$g_idMemo = GUICtrlCreateEdit("", 2, 36, 396, 262, $WS_VSCROLL)
+	GUICtrlSetFont($g_idMemo, 10, 400, 0, "Courier New")
+	GUISetState(@SW_SHOW)
 
-	; 添加标准系统位图
+	; Add standard system bitmaps
 	Switch _GUICtrlToolbar_GetBitmapFlags($hToolbar)
 		Case 0
 			_GUICtrlToolbar_AddBitmap($hToolbar, 1, -1, $IDB_STD_SMALL_COLOR)
@@ -29,36 +28,34 @@ Func _Main()
 			_GUICtrlToolbar_AddBitmap($hToolbar, 1, -1, $IDB_STD_LARGE_COLOR)
 	EndSwitch
 
-	; 添加按钮
-	_GUICtrlToolbar_AddButton($hToolbar, $idNew, $STD_FILENEW, 0, $BTNS_DROPDOWN)
-	_GUICtrlToolbar_AddButton($hToolbar, $idOpen, $STD_FILEOPEN)
-	_GUICtrlToolbar_AddButton($hToolbar, $idSave, $STD_FILESAVE)
+	; Add buttons
+	_GUICtrlToolbar_AddButton($hToolbar, $e_idNew, $STD_FILENEW, 0, $BTNS_DROPDOWN)
+	_GUICtrlToolbar_AddButton($hToolbar, $e_idOpen, $STD_FILEOPEN)
+	_GUICtrlToolbar_AddButton($hToolbar, $e_idSave, $STD_FILESAVE)
 	_GUICtrlToolbar_AddButtonSep($hToolbar)
 	_GUICtrlToolbar_AddButton($hToolbar, $idHelp, $STD_HELP)
 
 	; Show extended styles in use
 	MemoWrite("Extended sytles: " & _GUICtrlToolbar_GetExtendedStyle($hToolbar))
 
-	; 循环直到用户退出
 	GUIRegisterMsg($WM_NOTIFY, "WM_NOTIFY")
 
-	; 循环直到用户退出
+	; Loop until the user exits.
 	Do
 	Until GUIGetMsg() = $GUI_EVENT_CLOSE
+EndFunc   ;==>Example
 
-EndFunc   ;==>_Main
-
-; 写入消息到 memo
+; Write message to memo
 Func MemoWrite($sMessage = "")
-	GUICtrlSetData($iMemo, $sMessage & @CRLF, 1)
+	GUICtrlSetData($g_idMemo, $sMessage & @CRLF, 1)
 EndFunc   ;==>MemoWrite
 
 ; Handle TBN_DROPDOWN message
-Func WM_NOTIFY($hWnd, $iMsg, $iwParam, $ilParam)
-	#forceref $hWnd, $iMsg, $iwParam
+Func WM_NOTIFY($hWnd, $iMsg, $wParam, $lParam)
+	#forceref $hWnd, $iMsg, $wParam
 	Local $tNMHDR, $iCode, $hMenu
 
-	$tNMHDR = DllStructCreate($tagNMHDR, $ilParam)
+	$tNMHDR = DllStructCreate($tagNMHDR, $lParam)
 	$iCode = DllStructGetData($tNMHDR, "Code")
 
 	If $iCode = $TBN_DROPDOWN Then
@@ -66,7 +63,7 @@ Func WM_NOTIFY($hWnd, $iMsg, $iwParam, $ilParam)
 		_GUICtrlMenu_AddMenuItem($hMenu, "Template 1", 2000)
 		_GUICtrlMenu_AddMenuItem($hMenu, "Template 2", 2001)
 		_GUICtrlMenu_AddMenuItem($hMenu, "Template 3", 2002)
-		_GUICtrlMenu_TrackPopupMenu($hMenu, $hGUI)
+		_GUICtrlMenu_TrackPopupMenu($hMenu, $g_hGUI)
 		_GUICtrlMenu_DestroyMenu($hMenu)
 	EndIf
 	Return $GUI_RUNDEFMSG

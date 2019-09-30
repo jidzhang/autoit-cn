@@ -1,39 +1,38 @@
 #include <GUIConstantsEx.au3>
 #include <GuiListView.au3>
+#include <MsgBoxConstants.au3>
 
-$Debug_LV = False ; 检查传递给 ListView 函数的类名, 设置为True并输出到一个控件的句柄,用于检查它是否工作
+Example()
 
-_Main()
+Func Example()
+	Local $iI, $idListview
 
-Func _Main()
-	Global $iI, $hListView
-
-	; 创建 GUI
+	; Create GUI
 	GUICreate("ListView Find Text", 400, 300)
-	$hListView = GUICtrlCreateListView("", 2, 2, 394, 268)
-	GUISetState()
+	$idListview = GUICtrlCreateListView("", 2, 2, 394, 268)
+	GUISetState(@SW_SHOW)
 
-	; 添加列
-	_GUICtrlListView_AddColumn($hListView, "Items", 100)
+	; Add columns
+	_GUICtrlListView_AddColumn($idListview, "Items", 100)
 
-	; 添加项目
-	_GUICtrlListView_BeginUpdate($hListView)
+	; Add items
+	_GUICtrlListView_BeginUpdate($idListview)
 	For $iI = 1 To 49
-		_GUICtrlListView_AddItem($hListView, "Item " & $iI)
+		_GUICtrlListView_AddItem($idListview, "Item " & $iI)
 	Next
-	_GUICtrlListView_AddItem($hListView, "Target item")
+	_GUICtrlListView_AddItem($idListview, "Target item")
 	For $iI = 51 To 100
-		_GUICtrlListView_AddItem($hListView, "Item " & $iI)
+		_GUICtrlListView_AddItem($idListview, "Item " & $iI)
 	Next
-	_GUICtrlListView_EndUpdate($hListView)
+	_GUICtrlListView_EndUpdate($idListview)
 
 	; Search for target item
-	$iI = _GUICtrlListView_FindText($hListView, "tArGeT")
-	MsgBox(4160, "信息", "Target Item Index: " & $iI)
-	_GUICtrlListView_EnsureVisible($hListView, $iI)
+	$iI = _GUICtrlListView_FindText($idListview, "tArGeT")
+	MsgBox($MB_SYSTEMMODAL, "Information", "Target Item Index: " & $iI)
+	_GUICtrlListView_EnsureVisible($idListview, $iI)
 
-	; 循环直到用户退出
+	; Loop until the user exits.
 	Do
 	Until GUIGetMsg() = $GUI_EVENT_CLOSE
 	GUIDelete()
-EndFunc   ;==>_Main
+EndFunc   ;==>Example

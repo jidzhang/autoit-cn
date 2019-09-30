@@ -12,16 +12,14 @@ Local $oTextArea = _IEFormElementGetObjByName($oForm, "textareaExample")
 ; Get coordinates and dimensions of the textarea
 Local $iScreenX = _IEPropertyGet($oTextArea, "screenx")
 Local $iScreenY = _IEPropertyGet($oTextArea, "screeny")
-Local $iBrowserX = _IEPropertyGet($oTextArea, "browserx")
-Local $iBrowserY = _IEPropertyGet($oTextArea, "browserY")
 Local $iWidth = _IEPropertyGet($oTextArea, "width")
 Local $iHeight = _IEPropertyGet($oTextArea, "height")
 
 ; Outline the textarea with the mouse, come to rest in the center
-Local $mousespeed = 50
-MouseMove($iScreenX, $iScreenY, $mousespeed)
-MouseMove($iScreenX + $iWidth, $iScreenY, $mousespeed)
-MouseMove($iScreenX + $iWidth, $iScreenY + $iHeight, $mousespeed)
-MouseMove($iScreenX, $iScreenY + $iHeight, $mousespeed)
-MouseMove($iScreenX, $iScreenY, $mousespeed)
-MouseMove($iScreenX + $iWidth / 2, $iScreenY + $iHeight / 2, $mousespeed)
+Local $iMousespeed = 50
+MouseMove($iScreenX, $iScreenY, $iMousespeed)
+MouseMove($iScreenX + $iWidth, $iScreenY, $iMousespeed)
+MouseMove($iScreenX + $iWidth, $iScreenY + $iHeight, $iMousespeed)
+MouseMove($iScreenX, $iScreenY + $iHeight, $iMousespeed)
+MouseMove($iScreenX, $iScreenY, $iMousespeed)
+MouseMove($iScreenX + $iWidth / 2, $iScreenY + $iHeight / 2, $iMousespeed)

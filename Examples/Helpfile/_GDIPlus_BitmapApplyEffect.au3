@@ -5,7 +5,7 @@
 _Example()
 
 Func _Example()
-	If Not _GDIPlus_Startup() Then
+    If Not _GDIPlus_Startup() Or @extended < 6 Then
 		MsgBox($MB_SYSTEMMODAL, "ERROR", "GDIPlus.dll v1.1 not available")
 		Return
 	EndIf
@@ -20,19 +20,19 @@ Func _Example()
 	Local $iWidth = 600
 	Local $iHeight = $iImgH * 600 / $iImgW
 
-	Local $hGui = GUICreate("GDI+ v1.1", $iWidth, $iHeight)
+	Local $hGui = GUICreate("GDI+ v1.1 (" & @ScriptName & ")", $iWidth, $iHeight)
 	Local $hGraphics = _GDIPlus_GraphicsCreateFromHWND($hGui)
-	GUISetState()
+	GUISetState(@SW_SHOW)
 
 	Local $hEffect = _GDIPlus_EffectCreateHueSaturationLightness(0, -100, 0)
 
-	Local $tRect = DllStructCreate($tagRECT)
-	$tRect.Left = $iImgW * 0.25
-	$tRect.Top = $iImgH * 0.25
-	$tRect.Right = $tRect.Left + $iImgW * 0.5
-	$tRect.Bottom = $tRect.Top + $iImgH * 0.5
+	Local $tRECT = DllStructCreate($tagRECT)
+	$tRECT.Left = $iImgW * 0.25
+	$tRECT.Top = $iImgH * 0.25
+	$tRECT.Right = $tRECT.Left + $iImgW * 0.5
+	$tRECT.Bottom = $tRECT.Top + $iImgH * 0.5
 
-	_GDIPlus_BitmapApplyEffect($hImage, $hEffect, $tRect)
+	_GDIPlus_BitmapApplyEffect($hImage, $hEffect, $tRECT)
 
 	_GDIPlus_GraphicsDrawImageRect($hGraphics, $hImage, 0, 0, $iWidth, $iHeight)
 

@@ -1,9 +1,9 @@
-#include <WinAPIGdi.au3>
 #include <APIGdiConstants.au3>
 #include <GUIConstantsEx.au3>
-
-Global Const $STM_SETIMAGE = 0x0172
-Global Const $STM_GETIMAGE = 0x0173
+#include <SendMessage.au3>
+#include <StaticConstants.au3>
+#include <WinAPIGdi.au3>
+#include <WinAPIHObj.au3>
 
 ; Create 32 bits-per-pixel device-independent bitmap (DIB) that use a mask
 Local $tBIV5HDR = DllStructCreate($tagBITMAPV5HEADER)
@@ -48,8 +48,8 @@ Next
 
 ; Create GUI
 Local $hForm = GUICreate('Test ' & StringReplace(@ScriptName, '.au3', '()'), 256, 256)
-Local $Pic = GUICtrlCreatePic('', 0, 0, 256, 256)
-Local $hPic = GUICtrlGetHandle($Pic)
+Local $idPic = GUICtrlCreatePic('', 0, 0, 256, 256)
+Local $hPic = GUICtrlGetHandle($idPic)
 
 ; Set bitmap to control
 _SendMessage($hPic, $STM_SETIMAGE, 0, $hBitmap)
@@ -60,7 +60,7 @@ EndIf
 
 ; Set background color to green and show GUI
 GUISetBkColor(0x0000FF)
-GUISetState()
+GUISetState(@SW_SHOW)
 
 Do
 Until GUIGetMsg() = $GUI_EVENT_CLOSE

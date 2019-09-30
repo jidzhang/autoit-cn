@@ -1,28 +1,31 @@
 #include <GUIConstantsEx.au3>
+#include <MsgBoxConstants.au3>
 #include <NetShare.au3>
 #include <WindowsConstants.au3>
 
-Global $iMemo
+#RequireAdmin ; needed for _Net_Share_ShareAdd()
 
-_Main()
+Global $g_idMemo
 
-Func _Main()
+Example()
+
+Func Example()
 	Local $aInfo
 	Local Const $sShareName = "AutoIt Share"
 
-	; 创建 GUI
+	; Create GUI
 	GUICreate("NetShare", 400, 300)
 
-	; 创建 memo 控件
-	$iMemo = GUICtrlCreateEdit("", 2, 2, 396, 296, $WS_VSCROLL)
-	GUICtrlSetFont($iMemo, 9, 400, 0, "Courier New")
-	GUISetState()
+	; Create memo control
+	$g_idMemo = GUICtrlCreateEdit("", 2, 2, 396, 296, $WS_VSCROLL)
+	GUICtrlSetFont($g_idMemo, 9, 400, 0, "Courier New")
+	GUISetState(@SW_SHOW)
 
 	; See if the share exists
 	If _Net_Share_ShareCheck(@ComputerName, $sShareName) = -1 Then
 		; Create a share on the local computer
 		_Net_Share_ShareAdd(@ComputerName, $sShareName, 0, "C:\", "AutoIt Share Comment")
-		If @error Then MsgBox(4096, "信息", "Share add error : " & @error)
+		If @error Then MsgBox($MB_SYSTEMMODAL, "Information", "Share add error : " & @error)
 		MemoWrite("Share added")
 	Else
 		MemoWrite("Share exists")
@@ -44,15 +47,15 @@ Func _Main()
 
 	; Delete the share
 	_Net_Share_ShareDel(@ComputerName, $sShareName)
-	If @error Then MsgBox(4096, "信息", "Share delete error : " & @error)
+	If @error Then MsgBox($MB_SYSTEMMODAL, "Information", "Share delete error : " & @error)
 	MemoWrite("Share deleted")
 
-	; 循环直到用户退出
+	; Loop until the user exits.
 	Do
 	Until GUIGetMsg() = $GUI_EVENT_CLOSE
-EndFunc   ;==>_Main
+EndFunc   ;==>Example
 
-; 写入消息到 memo
+; Write message to memo
 Func MemoWrite($sMessage = "")
-	GUICtrlSetData($iMemo, $sMessage & @CRLF, 1)
+	GUICtrlSetData($g_idMemo, $sMessage & @CRLF, 1)
 EndFunc   ;==>MemoWrite

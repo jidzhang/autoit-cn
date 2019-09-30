@@ -8,12 +8,12 @@ _Main()
 Func _Main()
 	Local $idYes, $idNo, $idExit, $iMsg
 
-	GUICreate("自定义 MsgBox", 210, 80)
+	GUICreate("Custom MsgBox", 210, 80)
 
-	GUICtrlCreateLabel("请单击一个按钮!", 10, 10)
-	$idYes = GUICtrlCreateButton("是", 10, 50, 50, 20)
-	$idNo = GUICtrlCreateButton("否", 80, 50, 50, 20)
-	$idExit = GUICtrlCreateButton("退出", 150, 50, 50, 20)
+	GUICtrlCreateLabel("Please click a button!", 10, 10)
+	$idYes = GUICtrlCreateButton("Yes", 10, 50, 50, 20)
+	$idNo = GUICtrlCreateButton("No", 80, 50, 50, 20)
+	$idExit = GUICtrlCreateButton("Exit", 150, 50, 50, 20)
 
 	GUISetState() ; display the GUI
 
@@ -22,13 +22,13 @@ Func _Main()
 
 		Select
 			Case $iMsg = $idYes
-			MsgBox($MB_SYSTEMMODAL,"您单击了:", "是")
+				MsgBox($MB_SYSTEMMODAL, "You clicked on", "Yes")
 			Case $iMsg = $idNo
-			MsgBox($MB_SYSTEMMODAL,"您单击了:", "否")
+				MsgBox($MB_SYSTEMMODAL, "You clicked on", "No")
 			Case $iMsg = $idExit
-			MsgBox($MB_SYSTEMMODAL,"您单击了:", "退出")
+				MsgBox($MB_SYSTEMMODAL, "You clicked on", "Exit")
 			Case $iMsg = $GUI_EVENT_CLOSE
-			MsgBox($MB_SYSTEMMODAL,"您单击了:", "关闭")
+				MsgBox($MB_SYSTEMMODAL, "You clicked on", "Close")
 		EndSelect
 	Until $iMsg = $GUI_EVENT_CLOSE Or $iMsg = $idExit
 EndFunc   ;==>_Main

@@ -1,10 +1,12 @@
+; Use #include-once when creating UDFs so the file isn't included multiple times
+; if you call the same UDF in multiple files.
 
-;;; SCRIPT.AU3 ;;;
-#include "include-library.au3"  ;throws an error if #include-once was not used
+#include-once
+#include <MsgBoxConstants.au3>
 
-MsgBox(4096, "Example", "This is from 'script.au3' file")
-myFunc()
+; Rename this file as IncludeFunc.au3 and place next to the main script.
+; Then add #include "IncludeFunc.au3" at the top of the script.
 
-; Running script.au3 will output the two message boxes:
-; one saying "This is from 'script.au3' file"
-; and another saying "Hello from library.au3"
+Func IncludeFunc()
+	MsgBox($MB_SYSTEMMODAL, "", "This is an example of including a file.")
+EndFunc   ;==>IncludeFunc

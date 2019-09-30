@@ -1,6 +1,6 @@
 #include <WinAPIShPath.au3>
 
-Local $Path = 'C:\Documents\Test.txt'
+Local $sPath = 'C:\Documents\Test.txt'
 
-ConsoleWrite('Before: ' & $Path & @CRLF)
-ConsoleWrite('After : ' & _WinAPI_PathRemoveExtension($Path) & @CRLF)
+ConsoleWrite('Before: ' & $sPath & @CRLF)
+ConsoleWrite('After : ' & _WinAPI_PathRemoveExtension($sPath) & @CRLF)

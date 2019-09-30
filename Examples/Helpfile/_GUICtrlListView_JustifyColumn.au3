@@ -1,31 +1,30 @@
 #include <GUIConstantsEx.au3>
 #include <GuiListView.au3>
+#include <MsgBoxConstants.au3>
 
-$Debug_LV = False ; 检查传递给 ListView 函数的类名, 设置为True并输出到一个控件的句柄,用于检查它是否工作
+Example()
 
-_Main()
-
-Func _Main()
-	Local $aInfo, $hListView
+Func Example()
+	Local $aInfo, $idListview
 
 	GUICreate("ListView Justify Column", 400, 300)
-	$hListView = GUICtrlCreateListView("", 2, 2, 394, 268)
-	GUISetState()
+	$idListview = GUICtrlCreateListView("", 2, 2, 394, 268)
+	GUISetState(@SW_SHOW)
 
-	; 添加列
-	_GUICtrlListView_AddColumn($hListView, "Column 1", 100)
-	_GUICtrlListView_AddColumn($hListView, "Column 2", 100)
-	_GUICtrlListView_AddColumn($hListView, "Column 3", 100)
+	; Add columns
+	_GUICtrlListView_AddColumn($idListview, "Column 1", 100)
+	_GUICtrlListView_AddColumn($idListview, "Column 2", 100)
+	_GUICtrlListView_AddColumn($idListview, "Column 3", 100)
 
 	; Change column
-	$aInfo = _GUICtrlListView_GetColumn($hListView, 0)
-	MsgBox(4160, "信息", "Column 1 Justification: " & $aInfo[0])
-	_GUICtrlListView_JustifyColumn($hListView, 0, 2)
-	$aInfo = _GUICtrlListView_GetColumn($hListView, 0)
-	MsgBox(4160, "信息", "Column 1 Justification: " & $aInfo[0])
+	$aInfo = _GUICtrlListView_GetColumn($idListview, 0)
+	MsgBox($MB_SYSTEMMODAL, "Information", "Column 1 Justification: " & $aInfo[0])
+	_GUICtrlListView_JustifyColumn($idListview, 0, 2)
+	$aInfo = _GUICtrlListView_GetColumn($idListview, 0)
+	MsgBox($MB_SYSTEMMODAL, "Information", "Column 1 Justification: " & $aInfo[0])
 
-	; 循环直到用户退出
+	; Loop until the user exits.
 	Do
 	Until GUIGetMsg() = $GUI_EVENT_CLOSE
 	GUIDelete()
-EndFunc   ;==>_Main
+EndFunc   ;==>Example

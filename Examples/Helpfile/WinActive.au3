@@ -1,7 +1,7 @@
-Run("notepad.exe")
-Sleep(1000)
+#include <MsgBoxConstants.au3>
+
 If WinActive("[CLASS:Notepad]") Then ; Check if Notepad is currently active.
-	MsgBox(4096, "WinActive", "记事本窗口是活动的")
+	MsgBox($MB_SYSTEMMODAL, "", "WinActive" & @CRLF & "Notepad is active.")
 Else
-	MsgBox(4096, "WinActive", "记事本窗口不是活动的.")
+	MsgBox($MB_SYSTEMMODAL, "", "WinActive" & @CRLF & "Notepad is not active.")
 EndIf

@@ -1,5 +1,5 @@
-Local $result = StringInStr("I am a String", "RING")
-MsgBox(4096, "搜索结果:", $result)
+#include <MsgBoxConstants.au3>
 
-Local $location = StringInStr("How much wood could a woodchuck chuck is a woodchuck could chuck wood?", "wood", 0, 3) ; 搜索第三个匹配的字符串
-MsgBox(4096, "搜索结果:", $location)
+; Retrieve the character position of where the string 'white' first occurs in the sentence.
+Local $iPosition = StringInStr("This is a sentence with whitespace.", "white")
+MsgBox($MB_SYSTEMMODAL, "", "The search string 'white' first appears at position: " & $iPosition)

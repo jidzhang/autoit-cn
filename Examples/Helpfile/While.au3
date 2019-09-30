@@ -1,5 +1,7 @@
+#include <MsgBoxConstants.au3>
+
 Local $i = 0
 While $i <= 10
-	MsgBox(4096, "$i µÄÖµÎª:", $i)
+	MsgBox($MB_SYSTEMMODAL, "", "Value of $i is: " & $i)
 	$i = $i + 1
 WEnd

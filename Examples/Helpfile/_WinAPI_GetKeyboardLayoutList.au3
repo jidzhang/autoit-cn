@@ -1,13 +1,13 @@
-#include <WinAPISys.au3>
-#include <WinAPILocale.au3>
 #include <APILocaleConstants.au3>
 #include <Array.au3>
+#include <WinAPILocale.au3>
+#include <WinAPISys.au3>
 
-Local $Data = _WinAPI_GetKeyboardLayoutList()
-If IsArray($Data) Then
-	For $i = 1 To $Data[0]
-		$Data[$i] = '0x' & Hex($Data[$i]) & ' (' & _WinAPI_GetLocaleInfo(BitAND($Data[$i], 0xFFFF), $LOCALE_SENGLANGUAGE) & ')'
+Local $aData = _WinAPI_GetKeyboardLayoutList()
+If IsArray($aData) Then
+	For $i = 1 To $aData[0]
+		$aData[$i] = '0x' & Hex($aData[$i]) & ' (' & _WinAPI_GetLocaleInfo(BitAND($aData[$i], 0xFFFF), $LOCALE_SENGLANGUAGE) & ')'
 	Next
 EndIf
 
-_ArrayDisplay($Data, '_WinAPI_GetKeyboardLayoutList')
+_ArrayDisplay($aData, '_WinAPI_GetKeyboardLayoutList')

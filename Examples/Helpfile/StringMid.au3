@@ -1,2 +1,5 @@
-Local $var = StringMid("I am a string", 3, 2)
-MsgBox(4096, "2 chars extracted from position 3 are:", $var)
+#include <MsgBoxConstants.au3>
+
+; Retrieve 5 characters from the 10th position in the string.
+Local $sString = StringMid("This is a sentence with whitespace.", 10, 5)
+MsgBox($MB_SYSTEMMODAL, "", $sString)

@@ -1,6 +1,6 @@
 #include <GDIPlus.au3>
-#include <MsgboxConstants.au3>
 #include <GUIConstantsEx.au3>
+#include <MsgboxConstants.au3>
 
 Example()
 
@@ -26,8 +26,8 @@ Func Example()
 		Return False
 	EndIf
 
-	Local $hGUI = GUICreate("GDI+ Example", 320, 200)
-	GUISetState()
+	Local $hGUI = GUICreate("GDI+ Example (" & @ScriptName & ")", 320, 200)
+	GUISetState(@SW_SHOW)
 
 	Local $hGraphics = _GDIPlus_GraphicsCreateFromHWND($hGUI) ;create a Graphics object from a window handle
 	_GDIPlus_GraphicsClear($hGraphics, 0xFF404040) ;clear graphic handle with dark grey (background)

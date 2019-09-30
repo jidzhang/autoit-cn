@@ -3,19 +3,24 @@
 Example()
 
 Func Example()
-	Local $msg
+	Local $hGUI = GUICreate("Example")
 
-	GUICreate("My GUI") ; will create a dialog box that when displayed is centered
+	Local $sAutoItInstallDir = RegRead("HKEY_LOCAL_MACHINE\SOFTWARE" & ((@OSArch = 'X64') ? "\Wow6432Node" : "") & "\AutoIt v3\AutoIt", "InstallDir")
+	If Not @error Then
+		GUISetHelp('hh.exe "' & $sAutoItInstallDir & '\AutoIt.chm"')
+	EndIf
 
-	GUISetHelp("notepad.exe") ; will run notepad if F1 is typed
+	; Display the GUI.
+	GUISetState(@SW_SHOW, $hGUI)
 
-
-	GUISetState() ; will display an empty dialog box
-
-	; Run the GUI until the dialog is closed
+	; Loop until the user exits.
 	While 1
-		$msg = GUIGetMsg()
+		Switch GUIGetMsg()
+			Case $GUI_EVENT_CLOSE
+				ExitLoop
 
-		If $msg = $GUI_EVENT_CLOSE Then ExitLoop
+		EndSwitch
 	WEnd
+
+	GUIDelete()
 EndFunc   ;==>Example

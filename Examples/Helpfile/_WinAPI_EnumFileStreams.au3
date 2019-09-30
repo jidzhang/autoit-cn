@@ -1,9 +1,12 @@
-#include <WinAPIFiles.au3>
-#include <WinAPISys.au3>
 #include <Array.au3>
 #include <MsgBoxConstants.au3>
+#include <WinAPIFiles.au3>
+#include <WinAPIHObj.au3>
+#include <WinAPIMem.au3>
+#include <WinAPIMisc.au3>
+#include <WinAPIShPath.au3>
 
-Global Const $sFile = @TempDir & '\Test.txt'
+Local Const $sFile = @TempDir & '\Test.txt'
 
 ; Check NTFS file system
 If StringCompare(DriveGetFileSystem(_WinAPI_PathStripToRoot($sFile)), 'NTFS') Then
@@ -11,7 +14,7 @@ If StringCompare(DriveGetFileSystem(_WinAPI_PathStripToRoot($sFile)), 'NTFS') Th
 	Exit
 EndIf
 
-Local $hFile, $pData, $sName, $Bytes
+Local $hFile, $pData, $sName, $iBytes
 ; Create text file with three alternative streams named AS1, AS2, and AS3 respectively
 For $i = 0 To 3
 	If $i Then
@@ -22,7 +25,7 @@ For $i = 0 To 3
 		$sName = ''
 	EndIf
 	$hFile = _WinAPI_CreateFile($sFile & $sName, 1, 4)
-	_WinAPI_WriteFile($hFile, $pData, _WinAPI_GetMemorySize($pData) - 2, $Bytes)
+	_WinAPI_WriteFile($hFile, $pData, _WinAPI_GetMemorySize($pData) - 2, $iBytes)
 	_WinAPI_CloseHandle($hFile)
 	_WinAPI_FreeMemory($pData)
 Next
@@ -36,7 +39,7 @@ _ArrayDisplay($aData, '_WinAPI_EnumFileStreams')
 $pData = _WinAPI_CreateBuffer(1024)
 For $i = 1 To $aData[0][0]
 	$hFile = _WinAPI_CreateFile($sFile & $aData[$i][0], 2, 2, 6)
-	_WinAPI_ReadFile($hFile, $pData, $aData[$i][1], $Bytes)
+	_WinAPI_ReadFile($hFile, $pData, $aData[$i][1], $iBytes)
 	_WinAPI_CloseHandle($hFile)
 	$aData[$i][1] = _WinAPI_GetString($pData)
 Next

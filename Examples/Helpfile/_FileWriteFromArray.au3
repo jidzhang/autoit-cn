@@ -1,16 +1,13 @@
-#include<File.au3>
+#include <File.au3>
 
-Local $avCommon = _FileListToArray(@CommonFilesDir)
-Local $avUser = _FileListToArray(@UserProfileDir)
-Local $sFile = @ScriptDir & "\Test.txt"
+; List all the files in the current script directory.
+Local $aScriptDir = _FileListToArray(@ScriptDir)
 
-; 写入首个数组到由字符串表示名称的文件
-_FileWriteFromArray($sFile, $avCommon, 1)
+; Create a file in the users %TEMP% directory.
+Local $sFilePath = @TempDir & "\Examples.txt"
 
-; 打开文件并附加第二个数组到文件
-Local $hFile = FileOpen($sFile, 1) ; 1 = 附加
-_FileWriteFromArray($hFile, $avUser, 1)
-FileClose($hFile)
+; Write array to a file by passing the file name.
+_FileWriteFromArray($sFilePath, $aScriptDir, 1)
 
-; 显示结果
-Run("notepad.exe " & $sFile)
+; Display the file.
+ShellExecute($sFilePath)

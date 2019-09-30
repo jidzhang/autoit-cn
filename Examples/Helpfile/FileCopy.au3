@@ -1,15 +1,22 @@
-﻿; 注：1、源文件路径及目录路径结尾建议增加斜杠号'\'.
-;     2、每个复制操作都建议使用标志参数操作.
-;     3、FileCopy只是复制文件而不能复制文件夹，需要复制文件夹的请使用DirCopy.
+#include <FileConstants.au3>
+#include <MsgBoxConstants.au3>
+#include <WinAPIFiles.au3>
 
-; 复制 C:\New\ 目录中所有 *.au3 文件至 D:\MyAu3\ 目录中，不覆盖已存在的目标文件.
-FileCopy("C:\New\*.au3", "D:\MyAu3\", 0)
+Example()
 
-; 复制 D:\MyAu3\ 目录中所有文件至 C:\New\ 目录中，覆盖已存在的目标文件.
-FileCopy("D:\MyAu3\*.*", "C:\New\", 1)
+Func Example()
+	; Create a constant variable in Local scope of the filepath that will be read/written to.
+	Local Const $sFilePath = _WinAPI_GetTempFileName(@TempDir)
 
-; 复制 D:\MyAu3\ 目录中所有文件至 C:\New\test\ 目录中，当目标文件夹不存在则自动创建一个.
-FileCopy("D:\MyAu3\*.*", "C:\New\test\", 8)
+	; Create a temporary file to copy.
+	If Not FileWrite($sFilePath, "This is an example of using FileCopy.") Then
+		MsgBox($MB_SYSTEMMODAL, "", "An error occurred whilst writing the temporary file.")
+		Return False
+	EndIf
 
-; 复制 C:\New\ 中所有文件至 D:\MyAu3\test\ 目录中，当目标文件夹不存在则自动创建一个，当目标文件存在，则覆盖已存在的文件.
-FileCopy("C:\New\*.*", "D:\MyAu3\test\", 9)
+	; Copy Au3 files in the temporary directory to a new folder/directory called Au3Files.
+	FileCopy(@TempDir & "\*.au3", @TempDir & "\Au3Files\", $FC_OVERWRITE + $FC_CREATEPATH)
+
+	; Display the temporary directory.
+	ShellExecute(@TempDir)
+EndFunc   ;==>Example

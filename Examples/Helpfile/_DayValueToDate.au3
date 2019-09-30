@@ -1,10 +1,11 @@
 #include <Date.au3>
+#include <MsgBoxConstants.au3>
 
-; 今天的儒略日 (Julian date).
+; Julian date of today.
 Local $sJulDate = _DateToDayValue(@YEAR, @MON, @MDAY)
-MsgBox(4096, "", "Todays Julian date is: " & $sJulDate)
+MsgBox($MB_SYSTEMMODAL, "", "Todays Julian date is: " & $sJulDate)
 
-; 计算 14 天之前.
+; 14 days ago calculation.
 Local $Y, $M, $D
 $sJulDate = _DayValueToDate($sJulDate - 14, $Y, $M, $D)
-MsgBox(4096, "", "14 days ago:" & $M & "/" & $D & "/" & $Y & "  (" & $sJulDate & ")")
+MsgBox($MB_SYSTEMMODAL, "", "14 days ago: " & $M & "/" & $D & "/" & $Y & "  (" & $sJulDate & ")")

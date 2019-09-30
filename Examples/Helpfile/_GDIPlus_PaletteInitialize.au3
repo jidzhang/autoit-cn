@@ -5,7 +5,7 @@
 _Example()
 
 Func _Example()
-	If Not _GDIPlus_Startup() Then
+    If Not _GDIPlus_Startup() Or @extended < 6 Then
 		MsgBox($MB_SYSTEMMODAL, "ERROR", "GDIPlus.dll v1.1 not available")
 		Return
 	EndIf
@@ -18,16 +18,15 @@ Func _Example()
 	Local $iWidth = 600
 	Local $iHeight = _GDIPlus_ImageGetHeight($hImage) * 600 / _GDIPlus_ImageGetWidth($hImage)
 
-	Local $hGui = GUICreate("GDI+ v1.1", $iWidth, $iHeight)
+	Local $hGui = GUICreate("GDI+ v1.1 (" & @ScriptName & ")", $iWidth, $iHeight)
 	Local $hGraphics = _GDIPlus_GraphicsCreateFromHWND($hGui)
-	GUISetState()
+	GUISetState(@SW_SHOW)
 
-	;Convert to a 16-color bitmap (4 bits per pixel) using diffusion dithering
-	Local $tPalette = _GDIPlus_PaletteInitialize(16, $GDIP_PaletteTypeOptimal, 16, False, $hImage)
-	_GDIPlus_BitmapConvertFormat($hImage, $GDIP_PXF04INDEXED, $GDIP_DitherTypeErrorDiffusion, $GDIP_PaletteTypeOptimal, $tPalette)
+	;Convert to a 16-color bitmap (4 bits per pixel) using FixedHalftone27 dithering
+	Local $tPalette = _GDIPlus_PaletteInitialize(16, $GDIP_PaletteTypeFixedHalftone27, 16, False, $hImage)
+	_GDIPlus_BitmapConvertFormat($hImage, $GDIP_PXF04INDEXED, $GDIP_DitherTypeDualSpiral8x8, $GDIP_PaletteTypeFixedHalftone27, $tPalette)
 
 	_GDIPlus_GraphicsDrawImageRect($hGraphics, $hImage, 0, 0, $iWidth, $iHeight)
-
 
 	Do
 	Until GUIGetMsg() = $GUI_EVENT_CLOSE

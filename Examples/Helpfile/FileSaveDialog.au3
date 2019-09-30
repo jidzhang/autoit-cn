@@ -1,21 +1,35 @@
-Local $MyDocsFolder = "::{450D8FBA-AD25-11D0-98A8-0800361B1103}"
+#include <FileConstants.au3>
+#include <MsgBoxConstants.au3>
+#include <StringConstants.au3>
 
-Local $var = FileSaveDialog( "输入一个名称.", $MyDocsFolder, "AU3脚本或文本 (*.txt;*.au3)", 2)
-; 选项 2 = 除非选择一个有效的路径/文件,或者按下取消按钮,对话框不能关闭.
+Example()
 
-If @error Then
-	MsgBox(4096,"","已取消保存.")
-Else
-	MsgBox(4096,"","你保存为了:" & $var)
-EndIf
+Func Example()
+	; Create a constant variable in Local scope of the message to display in FileSaveDialog.
+	Local Const $sMessage = "Choose a filename."
 
+	; Display a save dialog to select a file.
+	Local $sFileSaveDialog = FileSaveDialog($sMessage, "::{450D8FBA-AD25-11D0-98A8-0800361B1103}", "Scripts (*.au3)", $FD_PATHMUSTEXIST)
+	If @error Then
+		; Display the error message.
+		MsgBox($MB_SYSTEMMODAL, "", "No file was saved.")
+	Else
+		; Retrieve the filename from the filepath e.g. Example.au3.
+		Local $sFileName = StringTrimLeft($sFileSaveDialog, StringInStr($sFileSaveDialog, "\", $STR_NOCASESENSEBASIC, -1))
 
-; 多组筛选选项
-$var = FileSaveDialog( "输入一个名称.", $MyDocsFolder, "AU3脚本 (*.au3)|文本文件 (*.ini;*.txt)", 2)
-; 选项 2 = 除非选择一个有效的路径/文件,或者按下取消按钮,对话框不能关闭.
+		; Check if the extension .au3 is appended to the end of the filename.
+		Local $iExtension = StringInStr($sFileName, ".", $STR_NOCASESENSEBASIC)
 
-If @error Then
-	MsgBox(4096,"","已取消保存.")
-Else
-	MsgBox(4096,"","你保存为了:" & $var)
-EndIf
+		; If a period (dot) is found then check whether or not the extension is equal to .au3.
+		If $iExtension Then
+			; If the extension isn't equal to .au3 then append to the end of the filepath.
+			If Not (StringTrimLeft($sFileName, $iExtension - 1) = ".au3") Then $sFileSaveDialog &= ".au3"
+		Else
+			; If no period (dot) was found then append to the end of the file.
+			$sFileSaveDialog &= ".au3"
+		EndIf
+
+		; Display the saved file.
+		MsgBox($MB_SYSTEMMODAL, "", "You saved the following file:" & @CRLF & $sFileSaveDialog)
+	EndIf
+EndFunc   ;==>Example

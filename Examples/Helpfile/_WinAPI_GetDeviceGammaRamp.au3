@@ -1,13 +1,14 @@
-#include <WinAPIGdi.au3>
 #include <APIGdiConstants.au3>
 #include <Array.au3>
 #include <GUIConstantsEx.au3>
 #include <MsgBoxConstants.au3>
+#include <SendMessage.au3>
+#include <StaticConstants.au3>
+#include <WinAPIGdi.au3>
+#include <WinAPIGdiDC.au3>
+#include <WinAPIHObj.au3>
 
-Global Const $STM_SETIMAGE = 0x0172
-Global Const $STM_GETIMAGE = 0x0173
-
-Local $Ramp, $Rgb = 0xFF0000
+Local $aRamp, $iRgb = 0xFF0000
 
 ; Create GUI
 Local $hForm = GUICreate('Test ' & StringReplace(@ScriptName, '.au3', '()'), 256, 256)
@@ -22,16 +23,16 @@ Local $hSv1 = _WinAPI_SelectObject($hMemDC, $hBitmap)
 Local $hPen = _WinAPI_GetStockObject($DC_PEN)
 Local $hSv2 = _WinAPI_SelectObject($hMemDC, $hPen)
 _WinAPI_SetROP2($hMemDC, $R2_XORPEN)
-_WinAPI_GetDeviceGammaRamp($hDC, $Ramp)
+_WinAPI_GetDeviceGammaRamp($hDC, $aRamp)
 _WinAPI_ReleaseDC(0, $hDC)
-If IsArray($Ramp) Then
+If IsArray($aRamp) Then
 	For $i = 0 To 2
-		_WinAPI_SetDCPenColor($hMemDC, BitShift($Rgb, 8 * $i))
+		_WinAPI_SetDCPenColor($hMemDC, BitShift($iRgb, 8 * $i))
 		For $j = 0 To 255
 			If $j Then
-				_WinAPI_LineTo($hMemDC, $j + 1, Round(255 * (1 - $Ramp[$j][$i] / 65280)) - 1)
+				_WinAPI_LineTo($hMemDC, $j + 1, Round(255 * (1 - $aRamp[$j][$i] / 65280)) - 1)
 			Else
-				_WinAPI_MoveTo($hMemDC, 0, Round(255 * (1 - $Ramp[$j][$i] / 65280)))
+				_WinAPI_MoveTo($hMemDC, 0, Round(255 * (1 - $aRamp[$j][$i] / 65280)))
 			EndIf
 		Next
 	Next
@@ -54,10 +55,10 @@ If $hObj <> $hBitmap Then
 	_WinAPI_DeleteObject($hBitmap)
 EndIf
 
-GUISetState()
+GUISetState(@SW_SHOW)
 
-If IsArray($Ramp) Then
-	_ArrayDisplay($Ramp, '_WinAPI_GetDeviceGammaRamp')
+If IsArray($aRamp) Then
+	_ArrayDisplay($aRamp, '_WinAPI_GetDeviceGammaRamp')
 Else
 	MsgBox(BitOR($MB_ICONERROR, $MB_SYSTEMMODAL), 'Error', 'Your video board do not support loadable gamma ramps.', 0, $hForm)
 EndIf

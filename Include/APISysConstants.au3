@@ -2,7 +2,7 @@
 
 ; #INDEX# =======================================================================================================================
 ; Title .........: WinAPISys Constants UDF Library for AutoIt3
-; AutoIt Version : 3.3.13.12
+; AutoIt Version : 3.3.14.5
 ; Language ......: English
 ; Description ...: Constants that can be used with UDF library
 ; Author(s) .....: Yashied, Jpm
@@ -179,6 +179,7 @@ Global Const $VER_NT_WORKSTATION = 0x0000001
 
 ; _WinAPI_GetWindowDisplayAffinity(), _WinAPI_SetWindowDisplayAffinity()
 Global Const $WDA_MONITOR = 0x01
+Global Const $WDA_NONE = 0x00
 
 ; _WinAPI_IsProcessorFeaturePresent()
 Global Const $PF_3DNOW_INSTRUCTIONS_AVAILABLE = 7

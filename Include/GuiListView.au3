@@ -7,11 +7,14 @@
 #include "SendMessage.au3"
 #include "StructureConstants.au3"
 #include "UDFGlobalID.au3"
-#include "WinAPI.au3"
+#include "WinAPIConv.au3"
+#include "WinAPIGdi.au3"
+#include "WinAPIMisc.au3"
+#include "WinAPIRes.au3"
 
 ; #INDEX# =======================================================================================================================
 ; Title .........: ListView
-; AutoIt Version : 3.3.13.12
+; AutoIt Version : 3.3.14.5
 ; Language ......: English
 ; Description ...: Functions that assist with ListView control management.
 ;                  A ListView control is a window that displays a collection of items; each item consists of an icon and a label.
@@ -24,8 +27,8 @@
 Global $__g_hLVLastWnd
 
 ; for use with the sort call back functions
-Global $__g_iLListViewSortInfoSize = 11
-Global $__g_aListViewSortInfo[1][$__g_iLListViewSortInfoSize]
+Global Const $__LISTVIEWCONSTANT_SORTINFOSIZE = 11
+Global $__g_aListViewSortInfo[1][$__LISTVIEWCONSTANT_SORTINFOSIZE]
 ; ===============================================================================================================================
 
 ; #CONSTANTS# ===================================================================================================================
@@ -52,7 +55,7 @@ Global Const $__LISTVIEWCONSTANT_VK_UP = 0x26
 ; ===============================================================================================================================
 
 ; #NO_DOC_FUNCTION# =============================================================================================================
-; Not working/documented/implimented at this time
+; Not working/documented/implemented at this time
 ;
 ; _GUICtrlListView_GetEmptyText
 ; _GUICtrlListView_GetGroupState
@@ -644,7 +647,7 @@ Func __GUICtrlListView_ArrayDelete(ByRef $avArray, $iElement)
 		Return ""
 	EndIf
 
-	Local $avNewArray[$iUpper - 1][$__g_iLListViewSortInfoSize]
+	Local $avNewArray[$iUpper - 1][$__LISTVIEWCONSTANT_SORTINFOSIZE]
 	$avNewArray[0][0] = $avArray[0][0]
 	If $iElement < 0 Then
 		$iElement = 0
@@ -654,14 +657,14 @@ Func __GUICtrlListView_ArrayDelete(ByRef $avArray, $iElement)
 	EndIf
 	If $iElement > 0 Then
 		For $iCntr = 0 To $iElement - 1
-			For $x = 1 To $__g_iLListViewSortInfoSize - 1
+			For $x = 1 To $__LISTVIEWCONSTANT_SORTINFOSIZE - 1
 				$avNewArray[$iCntr][$x] = $avArray[$iCntr][$x]
 			Next
 		Next
 	EndIf
 	If $iElement < ($iUpper - 1) Then
 		For $iCntr = ($iElement + 1) To ($iUpper - 1)
-			For $x = 1 To $__g_iLListViewSortInfoSize - 1
+			For $x = 1 To $__LISTVIEWCONSTANT_SORTINFOSIZE - 1
 				$avNewArray[$iCntr - 1][$x] = $avArray[$iCntr][$x]
 			Next
 		Next
@@ -893,11 +896,10 @@ EndFunc   ;==>_GUICtrlListView_CreateSolidBitMap
 Func _GUICtrlListView_DeleteAllItems($hWnd)
 	; Check if deletion necessary
 	If _GUICtrlListView_GetItemCount($hWnd) = 0 Then Return True
-	Local Const $LV_WM_SETREDRAW = 0x000B
 	; Determine ListView type
 	Local $vCID = 0
 	If IsHWnd($hWnd) Then
-		; Check if the ListView has a ControlID
+		; Check ListView ControlID to detect UDF control
 		$vCID = _WinAPI_GetDlgCtrlID($hWnd)
 	Else
 		$vCID = $hWnd
@@ -905,9 +907,7 @@ Func _GUICtrlListView_DeleteAllItems($hWnd)
 		$hWnd = GUICtrlGetHandle($hWnd)
 	EndIf
 	; If native ListView - could be either type of item
-	If $vCID Then
-		; Disable the redrawing message
-		GUICtrlSendMsg($vCID, $LV_WM_SETREDRAW, False, 0)
+	If $vCID < $_UDF_STARTID Then
 		; Try deleting as native items
 		Local $iParam = 0
 		For $iIndex = _GUICtrlListView_GetItemCount($hWnd) - 1 To 0 Step -1
@@ -917,8 +917,6 @@ Func _GUICtrlListView_DeleteAllItems($hWnd)
 				GUICtrlDelete($iParam)
 			EndIf
 		Next
-		; Enable the redrawing message
-		GUICtrlSendMsg($vCID, $LV_WM_SETREDRAW, True, 0)
 		; Return if no items left
 		If _GUICtrlListView_GetItemCount($hWnd) = 0 Then Return True
 	EndIf
@@ -954,7 +952,7 @@ Func _GUICtrlListView_DeleteItem($hWnd, $iIndex)
 		$hWnd = GUICtrlGetHandle($hWnd)
 	EndIf
 	; If native ListView - could be either type of item
-	If $vCID Then
+	If $vCID < $_UDF_STARTID Then
 		; Try deleting as native item
 		Local $iParam = _GUICtrlListView_GetItemParam($hWnd, $iIndex)
 		; Check if LV item
@@ -978,7 +976,6 @@ Func _GUICtrlListView_DeleteItemsSelected($hWnd)
 	If _GUICtrlListView_GetSelectedCount($hWnd) = $iItemCount Then
 		Return _GUICtrlListView_DeleteAllItems($hWnd)
 	Else
-		Local Const $LV_WM_SETREDRAW = 0x000B
 		Local $aSelected = _GUICtrlListView_GetSelectedIndices($hWnd, True)
 		If Not IsArray($aSelected) Then Return SetError($LV_ERR, $LV_ERR, 0)
 		; Unselect all items
@@ -993,12 +990,10 @@ Func _GUICtrlListView_DeleteItemsSelected($hWnd)
 			; Get ListView handle
 			$hWnd = GUICtrlGetHandle($hWnd)
 		EndIf
-		; Disable the redrawing message
-		GUICtrlSendMsg($vCID, $LV_WM_SETREDRAW, False, 0)
 		; Loop through items
 		For $iIndex = $aSelected[0] To 1 Step -1
 			; If native ListView - could be either type of item
-			If $vCID Then
+			If $vCID < $_UDF_STARTID Then
 				; Try deleting as native item
 				Local $iParam = _GUICtrlListView_GetItemParam($hWnd, $aSelected[$iIndex])
 				; Check if LV item
@@ -1017,8 +1012,6 @@ Func _GUICtrlListView_DeleteItemsSelected($hWnd)
 				ExitLoop
 			EndIf
 		Next
-		; Enable the redrawing message
-		GUICtrlSendMsg($vCID, $LV_WM_SETREDRAW, True, 0)
 		; If all deleted return True; else return False
 		Return Not $iIndex
 	EndIf
@@ -2829,7 +2822,7 @@ EndFunc   ;==>_GUICtrlListView_GetView
 ; Modified.......:
 ; ===============================================================================================================================
 Func _GUICtrlListView_GetViewDetails($hWnd)
-	Return _GUICtrlListView_GetView($hWnd) = 0
+	Return _GUICtrlListView_GetView($hWnd) = $LV_VIEW_DETAILS
 EndFunc   ;==>_GUICtrlListView_GetViewDetails
 
 ; #FUNCTION# ====================================================================================================================
@@ -2837,7 +2830,7 @@ EndFunc   ;==>_GUICtrlListView_GetViewDetails
 ; Modified.......:
 ; ===============================================================================================================================
 Func _GUICtrlListView_GetViewLarge($hWnd)
-	Return _GUICtrlListView_GetView($hWnd) = 1
+	Return _GUICtrlListView_GetView($hWnd) = $LV_VIEW_ICON
 EndFunc   ;==>_GUICtrlListView_GetViewLarge
 
 ; #FUNCTION# ====================================================================================================================
@@ -2845,7 +2838,7 @@ EndFunc   ;==>_GUICtrlListView_GetViewLarge
 ; Modified.......:
 ; ===============================================================================================================================
 Func _GUICtrlListView_GetViewList($hWnd)
-	Return _GUICtrlListView_GetView($hWnd) = 2
+	Return _GUICtrlListView_GetView($hWnd) = $LV_VIEW_LIST
 EndFunc   ;==>_GUICtrlListView_GetViewList
 
 ; #FUNCTION# ====================================================================================================================
@@ -2853,7 +2846,7 @@ EndFunc   ;==>_GUICtrlListView_GetViewList
 ; Modified.......:
 ; ===============================================================================================================================
 Func _GUICtrlListView_GetViewSmall($hWnd)
-	Return _GUICtrlListView_GetView($hWnd) = 3
+	Return _GUICtrlListView_GetView($hWnd) = $LV_VIEW_SMALLICON
 EndFunc   ;==>_GUICtrlListView_GetViewSmall
 
 ; #FUNCTION# ====================================================================================================================
@@ -2861,7 +2854,7 @@ EndFunc   ;==>_GUICtrlListView_GetViewSmall
 ; Modified.......:
 ; ===============================================================================================================================
 Func _GUICtrlListView_GetViewTile($hWnd)
-	Return _GUICtrlListView_GetView($hWnd) = 4
+	Return _GUICtrlListView_GetView($hWnd) = $LV_VIEW_TILE
 EndFunc   ;==>_GUICtrlListView_GetViewTile
 
 ; #FUNCTION# ====================================================================================================================
@@ -3364,12 +3357,14 @@ EndFunc   ;==>_GUICtrlListView_RedrawItems
 ; Author ........: Gary Frost
 ; Modified.......:
 ; ===============================================================================================================================
-Func _GUICtrlListView_RegisterSortCallBack($hWnd, $bNumbers = True, $bArrows = True)
+Func _GUICtrlListView_RegisterSortCallBack($hWnd, $vCompareType = 1, $bArrows = True, $sPrivateCallback = "__GUICtrlListView_Sort")
+	#Au3Stripper_Ignore_Funcs=$sPrivateCallback
 	If Not IsHWnd($hWnd) Then $hWnd = GUICtrlGetHandle($hWnd)
+	If IsBool($vCompareType) Then $vCompareType = ($vCompareType) ? 1 : 0
 
 	Local $hHeader = _GUICtrlListView_GetHeader($hWnd)
 
-	ReDim $__g_aListViewSortInfo[UBound($__g_aListViewSortInfo) + 1][$__g_iLListViewSortInfoSize]
+	ReDim $__g_aListViewSortInfo[UBound($__g_aListViewSortInfo) + 1][$__LISTVIEWCONSTANT_SORTINFOSIZE]
 
 	$__g_aListViewSortInfo[0][0] = UBound($__g_aListViewSortInfo) - 1
 	Local $iIndex = $__g_aListViewSortInfo[0][0]
@@ -3377,13 +3372,13 @@ Func _GUICtrlListView_RegisterSortCallBack($hWnd, $bNumbers = True, $bArrows = T
 	$__g_aListViewSortInfo[$iIndex][1] = $hWnd ; Handle/ID of listview
 
 	$__g_aListViewSortInfo[$iIndex][2] = _
-			DllCallbackRegister("__GUICtrlListView_Sort", "int", "int;int;hwnd") ; Handle of callback
+			DllCallbackRegister($sPrivateCallback, "int", "int;int;hwnd") ; Handle of callback
 	$__g_aListViewSortInfo[$iIndex][3] = -1 ; $nColumn
 	$__g_aListViewSortInfo[$iIndex][4] = -1 ; nCurCol
 	$__g_aListViewSortInfo[$iIndex][5] = 1 ; $nSortDir
 	$__g_aListViewSortInfo[$iIndex][6] = -1 ; $nCol
 	$__g_aListViewSortInfo[$iIndex][7] = 0 ; $bSet
-	$__g_aListViewSortInfo[$iIndex][8] = $bNumbers ; Treat as numbers?
+	$__g_aListViewSortInfo[$iIndex][8] = $vCompareType ; Treat as Strings, Numbers or use Windows API to compare
 	$__g_aListViewSortInfo[$iIndex][9] = $bArrows ; Use arrows in the header of the columns?
 	$__g_aListViewSortInfo[$iIndex][10] = $hHeader ; Handle to the Header
 
@@ -4133,7 +4128,7 @@ Func _GUICtrlListView_SetItemGroupID($hWnd, $iIndex, $iGroupID)
 	DllStructSetData($tItem, "Mask", $LVIF_GROUPID)
 	DllStructSetData($tItem, "Item", $iIndex)
 	DllStructSetData($tItem, "GroupID", $iGroupID)
-	_GUICtrlListView_SetItemEx($hWnd, $tItem)
+	Return _GUICtrlListView_SetItemEx($hWnd, $tItem)
 EndFunc   ;==>_GUICtrlListView_SetItemGroupID
 
 ; #FUNCTION# ====================================================================================================================
@@ -4565,6 +4560,7 @@ EndFunc   ;==>_GUICtrlListView_SimpleSort
 ; Link ..........:
 ; Example .......:
 ; ===============================================================================================================================
+#Au3Stripper_Ignore_Funcs=__GUICtrlListView_Sort
 Func __GUICtrlListView_Sort($nItem1, $nItem2, $hWnd)
 	Local $iIndex, $sVal1, $sVal2, $nResult
 
@@ -4587,17 +4583,24 @@ Func __GUICtrlListView_Sort($nItem1, $nItem2, $hWnd)
 	$__g_aListViewSortInfo[$iIndex][6] = $__g_aListViewSortInfo[$iIndex][3] ; $nCol = $nColumn
 	$sVal1 = _GUICtrlListView_GetItemText($hWnd, $nItem1, $__g_aListViewSortInfo[$iIndex][3])
 	$sVal2 = _GUICtrlListView_GetItemText($hWnd, $nItem2, $__g_aListViewSortInfo[$iIndex][3])
-	If $__g_aListViewSortInfo[$iIndex][8] Then ; Treat As Number
+
+	If $__g_aListViewSortInfo[$iIndex][8] = 1 Then
+		; force Treat as Number if possible
 		If (StringIsFloat($sVal1) Or StringIsInt($sVal1)) Then $sVal1 = Number($sVal1)
 		If (StringIsFloat($sVal2) Or StringIsInt($sVal2)) Then $sVal2 = Number($sVal2)
 	EndIf
 
-	$nResult = 0 ; No change of item1 and item2 positions
-
-	If $sVal1 < $sVal2 Then
-		$nResult = -1 ; Put item2 before item1
-	ElseIf $sVal1 > $sVal2 Then
-		$nResult = 1 ; Put item2 behind item1
+	If $__g_aListViewSortInfo[$iIndex][8] < 2 Then
+		; Treat as String or Number
+		$nResult = 0 ; No change of item1 and item2 positions
+		If $sVal1 < $sVal2 Then
+			$nResult = -1 ; Put item2 before item1
+		ElseIf $sVal1 > $sVal2 Then
+			$nResult = 1 ; Put item2 behind item1
+		EndIf
+	Else
+		; Use API handling
+		$nResult = DllCall('shlwapi.dll', 'int', 'StrCmpLogicalW', 'wstr', $sVal1, 'wstr', $sVal2)[0]
 	EndIf
 
 	$nResult = $nResult * $__g_aListViewSortInfo[$iIndex][5] ; $nSortDir

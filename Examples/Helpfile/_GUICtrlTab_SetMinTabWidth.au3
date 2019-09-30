@@ -1,26 +1,24 @@
 #include <GUIConstantsEx.au3>
 #include <GuiTab.au3>
 
-$Debug_TAB = False ; 检查传递给函数的类名, 设置为真并使用另一控件的句柄可以看出它是否有效
+Example()
 
-_Main()
+Func Example()
+	Local $idTab
 
-Func _Main()
-	Local $hTab
-
-	; 创建 GUI
+	; Create GUI
 	GUICreate("Tab Control Set Min Tab Width", 400, 300)
-	$hTab = GUICtrlCreateTab(2, 2, 396, 296)
-	GUISetState()
+	$idTab = GUICtrlCreateTab(2, 2, 396, 296)
+	GUISetState(@SW_SHOW)
 
-	; 添加标签
-	_GUICtrlTab_SetMinTabWidth($hTab, 80)
-	_GUICtrlTab_InsertItem($hTab, 0, "Tab 1")
-	_GUICtrlTab_InsertItem($hTab, 1, "Tab 2")
-	_GUICtrlTab_InsertItem($hTab, 2, "Tab 3")
+	; Add tabs
+	_GUICtrlTab_SetMinTabWidth($idTab, 80)
+	_GUICtrlTab_InsertItem($idTab, 0, "Tab 1")
+	_GUICtrlTab_InsertItem($idTab, 1, "Tab 2")
+	_GUICtrlTab_InsertItem($idTab, 2, "Tab 3")
 
-	; 循环直到用户退出
+	; Loop until the user exits.
 	Do
 	Until GUIGetMsg() = $GUI_EVENT_CLOSE
 	GUIDelete()
-EndFunc   ;==>_Main
+EndFunc   ;==>Example

@@ -1,22 +1,19 @@
 #include <GUIConstantsEx.au3>
-#include <GuiTreeView.au3>
 #include <GuiImageList.au3>
+#include <GuiTreeView.au3>
+#include <MsgBoxConstants.au3>
 #include <WindowsConstants.au3>
-#include <Constants.au3>
 
-$Debug_TV = False ; 检查传递给函数的类名, 设置为真并使用另一控件的句柄可以看出它是否有效
+Example()
 
-_Main()
-
-Func _Main()
-
-	Local $hItem[6], $hImage, $iRand, $hTreeView
+Func Example()
+	Local $ahItem[6], $hImage, $iRand, $idTreeView
 	Local $iStyle = BitOR($TVS_EDITLABELS, $TVS_HASBUTTONS, $TVS_HASLINES, $TVS_LINESATROOT, $TVS_DISABLEDRAGDROP, $TVS_SHOWSELALWAYS, $TVS_CHECKBOXES)
 
 	GUICreate("TreeView Set Insert Mark Color", 400, 300)
 
-	$hTreeView = GUICtrlCreateTreeView(2, 2, 396, 268, $iStyle, $WS_EX_CLIENTEDGE)
-	GUISetState()
+	$idTreeView = GUICtrlCreateTreeView(2, 2, 396, 268, $iStyle, $WS_EX_CLIENTEDGE)
+	GUISetState(@SW_SHOW)
 
 	$hImage = _GUIImageList_Create(16, 16, 5, 3)
 	_GUIImageList_AddIcon($hImage, "shell32.dll", 110)
@@ -25,25 +22,25 @@ Func _Main()
 	_GUIImageList_AddIcon($hImage, "shell32.dll", 168)
 	_GUIImageList_AddIcon($hImage, "shell32.dll", 137)
 	_GUIImageList_AddIcon($hImage, "shell32.dll", 146)
-	_GUICtrlTreeView_SetNormalImageList($hTreeView, $hImage)
+	_GUICtrlTreeView_SetNormalImageList($idTreeView, $hImage)
 
-	_GUICtrlTreeView_BeginUpdate($hTreeView)
+	_GUICtrlTreeView_BeginUpdate($idTreeView)
 	For $x = 0 To _GUIImageList_GetImageCount($hImage) - 1
-		$hItem[$x] = _GUICtrlTreeView_Add($hTreeView, 0, StringFormat("[%02d] New Item", $x + 1), $x, $x)
+		$ahItem[$x] = _GUICtrlTreeView_Add($idTreeView, 0, StringFormat("[%02d] New Item", $x + 1), $x, $x)
 	Next
-	_GUICtrlTreeView_EndUpdate($hTreeView)
+	_GUICtrlTreeView_EndUpdate($idTreeView)
 
-	MsgBox(4160, "信息", "Insert Mark Color: " & _GUICtrlTreeView_GetInsertMarkColor($hTreeView))
+	MsgBox($MB_SYSTEMMODAL, "Information", "Insert Mark Color: " & _GUICtrlTreeView_GetInsertMarkColor($idTreeView))
 
-	_GUICtrlTreeView_SetInsertMarkColor($hTreeView, $COLOR_MONEYGREEN)
+	_GUICtrlTreeView_SetInsertMarkColor($idTreeView, $COLOR_MONEYGREEN)
 
 	$iRand = Random(0, 5, 1)
-	_GUICtrlTreeView_SetInsertMark($hTreeView, $hItem[$iRand])
+	_GUICtrlTreeView_SetInsertMark($idTreeView, $ahItem[$iRand])
 
-	MsgBox(4160, "信息", "Insert Mark Color: " & _GUICtrlTreeView_GetInsertMarkColor($hTreeView))
+	MsgBox($MB_SYSTEMMODAL, "Information", "Insert Mark Color: " & _GUICtrlTreeView_GetInsertMarkColor($idTreeView))
 
-	; 循环直到用户退出
+	; Loop until the user exits.
 	Do
 	Until GUIGetMsg() = $GUI_EVENT_CLOSE
 	GUIDelete()
-EndFunc   ;==>_Main
+EndFunc   ;==>Example

@@ -1,13 +1,13 @@
-#include <WinAPI.au3>
-#include <Constants.au3>
+#include <MsgBoxConstants.au3>
+#include <WinAPIIcons.au3>
 
-_Main()
+Example()
 
-Func _Main()
+Func Example()
 	Local $aInfo, $sInfo = ""
 	$aInfo = _WinAPI_GetIconInfo($IDC_WAIT)
 	For $x = 0 To UBound($aInfo) - 1
-		$sInfo &= $aInfo[$x] & @LF
+		$sInfo &= $aInfo[$x] & @CRLF
 	Next
-	MsgBox(4096, "Icon", "Get Icon Info: " & @LF & $sInfo)
-EndFunc   ;==>_Main
+	MsgBox($MB_SYSTEMMODAL, "Icon", "Get Icon Info: " & @CRLF & $sInfo)
+EndFunc   ;==>Example

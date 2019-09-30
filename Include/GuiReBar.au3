@@ -5,11 +5,13 @@
 #include "SendMessage.au3"
 #include "StructureConstants.au3"
 #include "UDFGlobalID.au3"
-#include "WinAPI.au3"
+#include "WinAPIConstants.au3"
+#include "WinAPIConv.au3"
+#include "WinAPISysInternals.au3"
 
 ; #INDEX# =======================================================================================================================
 ; Title .........: Rebar
-; AutoIt Version : 3.3.13.12
+; AutoIt Version : 3.3.14.5
 ; Language ......: English
 ; Description ...: Functions that assist with Rebar control management.
 ;                  Rebar controls act as containers for child windows. An application assigns child windows,
@@ -1022,16 +1024,16 @@ EndFunc   ;==>__GUICtrlRebar_SetBandInfo
 ; Author ........: Gary Frost
 ; Modified.......:
 ; ===============================================================================================================================
-Func _GUICtrlRebar_SetBandLength($hWnd, $iIndex, $iCx)
-	Return __GUICtrlRebar_SetBandInfo($hWnd, $iIndex, $RBBIM_SIZE, "cx", $iCx)
+Func _GUICtrlRebar_SetBandLength($hWnd, $iIndex, $iLength)
+	Return __GUICtrlRebar_SetBandInfo($hWnd, $iIndex, $RBBIM_SIZE, "cx", $iLength)
 EndFunc   ;==>_GUICtrlRebar_SetBandLength
 
 ; #FUNCTION# ====================================================================================================================
 ; Author ........: Gary Frost
 ; Modified.......:
 ; ===============================================================================================================================
-Func _GUICtrlRebar_SetBandLParam($hWnd, $iIndex, $ilParam)
-	Return __GUICtrlRebar_SetBandInfo($hWnd, $iIndex, $RBBIM_LPARAM, "lParam", $ilParam)
+Func _GUICtrlRebar_SetBandLParam($hWnd, $iIndex, $lParam)
+	Return __GUICtrlRebar_SetBandInfo($hWnd, $iIndex, $RBBIM_LPARAM, "lParam", $lParam)
 EndFunc   ;==>_GUICtrlRebar_SetBandLParam
 
 ; #FUNCTION# ====================================================================================================================

@@ -1,9 +1,11 @@
-#include <WinAPIGdi.au3>
-#include <WindowsConstants.au3>
 #include <GUIConstantsEx.au3>
-
-Global Const $STM_SETIMAGE = 0x0172
-Global Const $STM_GETIMAGE = 0x0173
+#include <SendMessage.au3>
+#include <StaticConstants.au3>
+#include <WinAPIGdi.au3>
+#include <WinAPIGdiDC.au3>
+#include <WinAPIHObj.au3>
+#include <WinAPIRes.au3>
+#include <WindowsConstants.au3>
 
 ; Load image
 Local $hSource = _WinAPI_LoadImage(0, @ScriptDir & '\Extras\Hatch.bmp', $IMAGE_BITMAP, 0, 0, $LR_LOADFROMFILE)
@@ -13,8 +15,8 @@ Local $H = DllStructGetData($tSIZE, 'Y')
 
 ; Create GUI
 Local $hForm = GUICreate('Test ' & StringReplace(@ScriptName, '.au3', '()'), @DesktopWidth, @DesktopHeight, 0, 0, $WS_POPUP, $WS_EX_TOPMOST)
-Local $Pic = GUICtrlCreatePic('', 0, 0, @DesktopWidth, @DesktopHeight)
-Local $hPic = GUICtrlGetHandle($Pic)
+Local $idPic = GUICtrlCreatePic('', 0, 0, @DesktopWidth, @DesktopHeight)
+Local $hPic = GUICtrlGetHandle($idPic)
 
 ; Create bitmap
 Local $hDC = _WinAPI_GetDC($hPic)
@@ -39,7 +41,7 @@ If $hObj <> $hBitmap Then
 	_WinAPI_DeleteObject($hBitmap)
 EndIf
 
-GUISetState()
+GUISetState(@SW_SHOW)
 
 Do
 Until GUIGetMsg() = $GUI_EVENT_CLOSE

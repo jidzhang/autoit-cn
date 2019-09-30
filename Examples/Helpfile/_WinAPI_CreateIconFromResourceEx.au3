@@ -1,9 +1,9 @@
-#include <WinAPIRes.au3>
 #include <APIResConstants.au3>
 #include <GUIConstantsEx.au3>
 #include <MsgBoxConstants.au3>
-
-Global Const $STM_SETIMAGE = 0x0172
+#include <StaticConstants.au3>
+#include <WinAPIIcons.au3>
+#include <WinAPIRes.au3>
 
 ; Load Resources.dll to memory
 Local $hInstance = _WinAPI_LoadLibraryEx(@ScriptDir & '\Extras\Resources.dll', $LOAD_LIBRARY_AS_DATAFILE)
@@ -36,7 +36,7 @@ _WinAPI_FreeLibrary($hInstance)
 GUICreate('Test ' & StringReplace(@ScriptName, '.au3', '()'), 128, 128)
 GUICtrlCreateIcon('', 0, 40, 40, 48, 48)
 GUICtrlSendMsg(-1, $STM_SETIMAGE, 1, $hIcon)
-GUISetState()
+GUISetState(@SW_SHOW)
 
 Do
 Until GUIGetMsg() = $GUI_EVENT_CLOSE

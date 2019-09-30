@@ -1,11 +1,11 @@
-#include <WinAPIReg.au3>
 #include <APIRegConstants.au3>
-#include <WinAPIDiag.au3>
-#include <WinAPISys.au3>
 #include <Array.au3>
 #include <MsgBoxConstants.au3>
+#include <WinAPIError.au3>
+#include <WinAPIMem.au3>
+#include <WinAPIReg.au3>
 
-Global $aValent[19][4]
+Local $aValent[19][4]
 
 ; Note that if at least one of the following value names is not found in the specified registry key, the function fails!
 

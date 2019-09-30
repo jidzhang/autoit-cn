@@ -1,5 +1,3 @@
-; 将会选择记事本的>文本>页面设置菜单
-Run("notepad.exe")
-WinWaitActive("[CLASS:Notepad]")
+; This will select File and then Page Setup in notepad
 
-WinMenuSelectItem("[CLASS:Notepad]", "", "文件(&F)", "页面设置(&U)..." )
+WinMenuSelectItem("[CLASS:Notepad]", "", "&File", "Page Set&up...")

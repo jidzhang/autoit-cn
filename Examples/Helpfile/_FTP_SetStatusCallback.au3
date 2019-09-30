@@ -1,27 +1,30 @@
-#include <FTPEx.au3>
 #include <Debug.au3>
+#include <FTPEx.au3>
+#include <WinAPIHOBj.au3>
+#include <WinAPIMem.au3>
 
-_DebugSetup(StringTrimRight(@ScriptName, 4) & ' example', True)
+_DebugSetup(StringTrimRight(@ScriptName, StringLen(".exe")) & ' example', True)
 
-Local $server = 'ftp.mozilla.org'
-Local $username = ''
-Local $pass = ''
+Local $sServer = 'ftp.mozilla.org'
+Local $sUsername = ''
+Local $sPass = ''
 
-Local $Open = _FTP_Open('MyFTP Control')
-Local $Callback = _FTP_SetStatusCallback($Open, 'FTPStatusCallbackHandler')
+Local $hOpen = _FTP_Open('MyFTP Control')
+Local $pCallback = _FTP_SetStatusCallback($hOpen, 'FTPStatusCallbackHandler')
 
-Local $Conn = _FTP_Connect($Open, $server, $username, $pass, 0, $INTERNET_DEFAULT_FTP_PORT, $INTERNET_SERVICE_FTP, 0, $Callback)
+Local $hConn = _FTP_Connect($hOpen, $sServer, $sUsername, $sPass, 0, $INTERNET_DEFAULT_FTP_PORT, $INTERNET_SERVICE_FTP, 0, $pCallback)
 
-Local $Ftpc = _FTP_Close($Open)
+Local $iFtpc = _FTP_Close($hConn)
+Local $iFtpo = _FTP_Close($hOpen)
 
-Func FTPStatusCallbackHandler($hInternet, $dwContent, $dwInternetStatus, $lpvStatusInformation, $dwStatusInformationLength)
-	#forceref $hInternet, $dwContent
-	If $dwInternetStatus = $INTERNET_STATUS_REQUEST_SENT Or $dwInternetStatus = $INTERNET_STATUS_RESPONSE_RECEIVED Then
-		Local $Size, $iBytesRead
-		$Size = DllStructCreate('dword')
-		_WinAPI_ReadProcessMemory(_WinAPI_GetCurrentProcess(), $lpvStatusInformation, DllStructGetPtr($Size), $dwStatusInformationLength, $iBytesRead)
-		_DebugOut(_FTP_DecodeInternetStatus($dwInternetStatus) & ' | Size = ' & DllStructGetData($Size, 1) & ' Bytes    Bytes read = ' & $iBytesRead)
+Func FTPStatusCallbackHandler($hInternet, $iContext, $iInternetStatus, $pStatusInformation, $iStatusInformationLength)
+	#forceref $hInternet, $iContext
+	If $iInternetStatus = $INTERNET_STATUS_REQUEST_SENT Or $iInternetStatus = $INTERNET_STATUS_RESPONSE_RECEIVED Then
+		Local $iBytesRead
+		Local $tStatus = DllStructCreate('dword')
+		_WinAPI_ReadProcessMemory(_WinAPI_GetCurrentProcess(), $pStatusInformation, $tStatus, $iStatusInformationLength, $iBytesRead)
+		_DebugOut(_FTP_DecodeInternetStatus($iInternetStatus) & ' | Size = ' & DllStructGetData($tStatus, 1) & ' Bytes    Bytes read = ' & $iBytesRead)
 	Else
-		_DebugOut(_FTP_DecodeInternetStatus($dwInternetStatus))
+		_DebugOut(_FTP_DecodeInternetStatus($iInternetStatus))
 	EndIf
 EndFunc   ;==>FTPStatusCallbackHandler

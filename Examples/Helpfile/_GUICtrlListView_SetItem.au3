@@ -1,31 +1,30 @@
 #include <GUIConstantsEx.au3>
 #include <GuiListView.au3>
+#include <MsgBoxConstants.au3>
 
-$Debug_LV = False ; 检查传递给 ListView 函数的类名, 设置为True并输出到一个控件的句柄,用于检查它是否工作
+Example()
 
-_Main()
-
-Func _Main()
-	Local $hListView
+Func Example()
+	Local $idListview
 
 	GUICreate("ListView Set Item", 400, 300)
-	$hListView = GUICtrlCreateListView("", 2, 2, 394, 268)
-	GUISetState()
+	$idListview = GUICtrlCreateListView("", 2, 2, 394, 268)
+	GUISetState(@SW_SHOW)
 
-	; 添加列
-	_GUICtrlListView_AddColumn($hListView, "Items", 100)
+	; Add columns
+	_GUICtrlListView_AddColumn($idListview, "Items", 100)
 
-	; 添加项目
-	GUICtrlCreateListViewItem("Item 1", $hListView)
-	GUICtrlCreateListViewItem("Item 2", $hListView)
-	GUICtrlCreateListViewItem("Item 3", $hListView)
+	; Add items
+	GUICtrlCreateListViewItem("Item 1", $idListview)
+	GUICtrlCreateListViewItem("Item 2", $idListview)
+	GUICtrlCreateListViewItem("Item 3", $idListview)
 
 	; Change item 2
-	MsgBox(4160, "信息", "Changing item 2")
-	_GUICtrlListView_SetItem($hListView, "New Item 2", 1)
+	MsgBox($MB_SYSTEMMODAL, "Information", "Changing item 2")
+	_GUICtrlListView_SetItem($idListview, "New Item 2", 1)
 
-	; 循环直到用户退出
+	; Loop until the user exits.
 	Do
 	Until GUIGetMsg() = $GUI_EVENT_CLOSE
 	GUIDelete()
-EndFunc   ;==>_Main
+EndFunc   ;==>Example

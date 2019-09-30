@@ -1,18 +1,17 @@
 #include <GuiComboBoxEx.au3>
-#include <GuiImageList.au3>
 #include <GUIConstantsEx.au3>
+#include <GuiImageList.au3>
+#include <MsgBoxConstants.au3>
 
-$Debug_CB = False ;检查传递给 ComboBox/ComboBoxEx 函数的类名, 设置为True并输出到一个控件的句柄,用于检查它是否工作
+Example()
 
-_Main()
+Func Example()
+	Local $hGUI, $hImage, $iImage, $hCombo
 
-Func _Main()
-	Local $hGUI, $hImage, $image, $hCombo
-
-	; 创建 GUI
+	; Create GUI
 	$hGUI = GUICreate("ComboBoxEx Get Item Overlay Image", 400, 300)
 	$hCombo = _GUICtrlComboBoxEx_Create($hGUI, "", 2, 2, 394, 100)
-	GUISetState()
+	GUISetState(@SW_SHOW)
 
 	$hImage = _GUIImageList_Create(16, 16, 5, 3)
 	_GUIImageList_AddIcon($hImage, @SystemDir & "\shell32.dll", 110)
@@ -28,16 +27,17 @@ Func _Main()
 
 	_GUICtrlComboBoxEx_BeginUpdate($hCombo)
 	For $x = 0 To 149
-		$image = Random(0, 8, 1)
-		_GUICtrlComboBoxEx_AddString($hCombo, StringFormat("%03d : Random string", Random(1, 100, 1)), $image, $image)
+		$iImage = Random(0, 8, 1)
+		_GUICtrlComboBoxEx_AddString($hCombo, StringFormat("%03d : Random string", Random(1, 100, 1)), $iImage, $iImage)
 	Next
 	_GUICtrlComboBoxEx_EndUpdate($hCombo)
+
 	_GUICtrlComboBoxEx_SetItemImage($hCombo, 0, 1)
 	_GUICtrlComboBoxEx_SetItemIndent($hCombo, 1, 1)
 	_GUICtrlComboBoxEx_SetItemIndent($hCombo, 2, 1)
 	_GUICtrlComboBoxEx_SetItemOverlayImage($hCombo, 2, 6)
-	MsgBox(4160, "信息", "Item Overlay Image: " & _GUICtrlComboBoxEx_GetItemOverlayImage($hCombo, 2))
+	MsgBox($MB_SYSTEMMODAL, "Information", "Item Overlay Image: " & _GUICtrlComboBoxEx_GetItemOverlayImage($hCombo, 2))
 
 	Do
 	Until GUIGetMsg() = $GUI_EVENT_CLOSE
-EndFunc   ;==>_Main
+EndFunc   ;==>Example

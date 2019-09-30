@@ -1,3 +1,5 @@
+#include <MsgBoxConstants.au3>
+
 Example()
 
 Func Example()
@@ -12,9 +14,9 @@ Func Example()
 
 	; Check if the variable is an array.
 	If IsArray($aPos) Then
-		MsgBox(4096, "", "Window height: " & $aPos[3])
+		MsgBox($MB_SYSTEMMODAL, "", "Window height: " & $aPos[3])
 	Else
-		MsgBox(4096, "", "An error occurred.")
+		MsgBox($MB_SYSTEMMODAL, "", "An error occurred.")
 	EndIf
 
 	; Close the Notepad window using the handle returned by WinWait.

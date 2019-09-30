@@ -1,30 +1,29 @@
+#include <ColorConstants.au3>
 #include <GUIConstantsEx.au3>
 #include <GuiDateTimePicker.au3>
-#include <Constants.au3>
+#include <MsgBoxConstants.au3>
 
-$Debug_DTP = False 检查传递给 DTP 函数的类名, 设置为True并输出到一个控件的句柄,用于检查它是否工作
+Global $g_idMemo
 
-Global $iMemo
+Example() ;use autoit built-in control
 
-_Main() ;使用 autoit 内置控件
-
-Func _Main()
+Func Example()
 	Local $hDTP
 
-	; 创建 GUI
+	; Create GUI
 	GUICreate("DateTimePick Get Month Calendar Color", 400, 300)
 	$hDTP = GUICtrlGetHandle(GUICtrlCreateDate("", 2, 6, 190))
-	$iMemo = GUICtrlCreateEdit("", 2, 32, 396, 266, 0)
-	GUICtrlSetFont($iMemo, 9, 400, 0, "Courier New")
-	GUISetState()
+	$g_idMemo = GUICtrlCreateEdit("", 2, 32, 396, 266, 0)
+	GUICtrlSetFont($g_idMemo, 9, 400, 0, "Courier New")
+	GUISetState(@SW_SHOW)
 
-	; 设置显示的格式
+	; Set the display format
 	_GUICtrlDTP_SetFormat($hDTP, "ddd MMM dd, yyyy hh:mm ttt")
 
-	; 设置月历背景颜色
+	; Set month calendar background color
 	_GUICtrlDTP_SetMCColor($hDTP, 2, $CLR_MONEYGREEN)
 
-	; 获取 DTP 颜色
+	; Get DTP colors
 	MemoWrite("Background between months: " & "0x" & Hex(_GUICtrlDTP_GetMCColor($hDTP, 0), 6))
 	MemoWrite("Text within months ......: " & "0x" & Hex(_GUICtrlDTP_GetMCColor($hDTP, 1), 6))
 	MemoWrite("Title background ........: " & "0x" & Hex(_GUICtrlDTP_GetMCColor($hDTP, 2), 6))
@@ -32,13 +31,13 @@ Func _Main()
 	MemoWrite("Background within months : " & "0x" & Hex(_GUICtrlDTP_GetMCColor($hDTP, 4), 6))
 	MemoWrite("Header trailing .........: " & "0x" & Hex(_GUICtrlDTP_GetMCColor($hDTP, 5), 6))
 
-	; 循环直到用户退出
+	; Loop until the user exits.
 	Do
 	Until GUIGetMsg() = $GUI_EVENT_CLOSE
 	GUIDelete()
-EndFunc   ;==>_Main
+EndFunc   ;==>Example
 
-; 写入一行到 memo 控件
+; Write a line to the memo control
 Func MemoWrite($sMessage)
-	GUICtrlSetData($iMemo, $sMessage & @CRLF, 1)
+	GUICtrlSetData($g_idMemo, $sMessage & @CRLF, 1)
 EndFunc   ;==>MemoWrite

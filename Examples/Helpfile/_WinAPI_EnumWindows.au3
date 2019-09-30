@@ -1,15 +1,17 @@
-#include <WinAPI.au3>
-_Main()
+#include <Array.au3>
+#include <WinAPISysWin.au3>
 
-Func _Main()
-	Local $aWindows, $i, $text
-	$aWindows = _WinAPI_EnumWindows()
+Example()
+
+Func Example()
+	Local $aWindows = _WinAPI_EnumWindows()
+	Local $aResult[$aWindows[0][0]][5]
 	For $i = 1 To $aWindows[0][0]
-		$text = "Window Handle: " & $aWindows[$i][0] & @LF
-		$text &= "Window Class: " & $aWindows[$i][1] & @LF
-		$text &= "Window Title: " & WinGetTitle($aWindows[$i][0]) & @LF
-		$text &= "Window Text: " & WinGetText($aWindows[$i][0]) & @LF
-		$text &= "Window Process: " & WinGetProcess($aWindows[$i][0])
-		MsgBox(4096, "Item " & $i & " of " & $aWindows[0][0], $text)
+		$aResult[$i - 1][0] = $aWindows[$i][0]
+		$aResult[$i - 1][1] = $aWindows[$i][1]
+		$aResult[$i - 1][2] = WinGetTitle($aWindows[$i][0])
+		$aResult[$i - 1][3] = WinGetText($aWindows[$i][0])
+		$aResult[$i - 1][4] = WinGetProcess($aWindows[$i][0])
 	Next
-EndFunc   ;==>_Main
+	_ArrayDisplay($aResult, "_WinAPI_EnumWindows", Default, Default, Default, Default, "#|Handle|Class|Title|Text|Process")
+EndFunc   ;==>Example

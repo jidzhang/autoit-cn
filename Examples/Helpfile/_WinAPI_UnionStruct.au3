@@ -1,11 +1,11 @@
+#include <WinAPIMem.au3>
 #include <WinAPIMisc.au3>
-#include <WinAPISys.au3>
 
 Local $tStruct1 = DllStructCreate('byte[4]')
-_WinAPI_FillMemory(DllStructGetPtr($tStruct1), 4, 0xAA)
+_WinAPI_FillMemory($tStruct1, 4, 0xAA)
 
 Local $tStruct2 = DllStructCreate('byte[4]')
-_WinAPI_FillMemory(DllStructGetPtr($tStruct2), 4, 0xDD)
+_WinAPI_FillMemory($tStruct2, 4, 0xDD)
 
 Local $tStruct3 = _WinAPI_UnionStruct($tStruct1, $tStruct2)
 
